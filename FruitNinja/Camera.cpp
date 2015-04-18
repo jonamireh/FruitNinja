@@ -2,6 +2,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace glm;
 
 std::shared_ptr<Camera> Camera::playerCamera = NULL;
 

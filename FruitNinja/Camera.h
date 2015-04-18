@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <memory>
 #include <GLFW/glfw3.h>
 
@@ -50,5 +51,5 @@ public:
 
     void movement();
 
-    mat4 get_view_matrix();
+	glm::mat4 get_view_matrix();
 };

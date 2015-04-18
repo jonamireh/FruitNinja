@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
