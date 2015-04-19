@@ -2,7 +2,6 @@
 
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <memory>
 #include <GLFW/glfw3.h>
