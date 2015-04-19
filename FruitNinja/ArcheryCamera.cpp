@@ -1,4 +1,7 @@
 #include "ArcheryCamera.h"
+#include <GL/glew.h>
+
+using namespace glm;
 
 /*
 Default constructor.

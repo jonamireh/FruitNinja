@@ -5,6 +5,7 @@
 #include <vector>
 #include "GameEntity.h"
 #include "PhongShader.h"
+#include "Camera.h"
 
 
 class World
@@ -15,10 +16,11 @@ public:
 	World();
     void update_key_callbacks();
     void update_mouse_callbacks();
-	std::map<std::string, std::auto_ptr<Shader>> shaders;
-	std::vector<GameEntity> entities;
+	std::map<std::string, std::shared_ptr<Shader>> shaders;
+	std::vector<std::shared_ptr<GameEntity>> entities;
 	void draw();
 private:
 	void init();
+	std::shared_ptr<Camera> camera;
 };
 

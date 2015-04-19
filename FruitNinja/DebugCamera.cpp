@@ -1,5 +1,7 @@
 #include "DebugCamera.h"
 
+using namespace glm;
+
 /*
 	Default constructor.
 */

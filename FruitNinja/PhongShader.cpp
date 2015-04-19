@@ -1,6 +1,7 @@
 #include "PhongShader.h"
 
 using namespace glm;
+using namespace std;
 
 PhongShader::PhongShader(std::string vertShader, std::string fragShader) : Shader(vertShader, fragShader)
 {
@@ -8,7 +9,7 @@ PhongShader::PhongShader(std::string vertShader, std::string fragShader) : Shade
 }
 
 
-void PhongShader::draw(std::auto_ptr<GameEntity> entity, mat4 view_mat)
+void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 {
 	//vertex attributes
 	int vertex = getAttributeHandle("aPosition");

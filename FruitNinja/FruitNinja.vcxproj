@@ -48,6 +48,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,9 +72,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArcheryCamera.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Camera_ian.cpp" />
     <ClCompile Include="ChewyEntity.cpp" />
+    <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="GLSL.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -85,10 +87,11 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArcheryCamera.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Camera_ian.h" />
     <ClInclude Include="ChewyEntity.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GLSL.h" />
     <ClInclude Include="Material.h" />

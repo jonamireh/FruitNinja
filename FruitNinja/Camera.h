@@ -3,9 +3,10 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
+#include <memory>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <memory>
 #include <GLFW/glfw3.h>
 
 static const float MaxVerticalAngle = 85.0f; //must be less than 90 to avoid gimbal lock
@@ -19,37 +20,22 @@ glfwSetCursorPos(window, 0.0, 0.0);
 
 class Camera
 {
-private:
-    // Camera Location
-    double xPos, yPos, xPrev, yPrev;
-    // Camera Angle
-    float theta, phi;
-    // Camera Vectors for lookAt
-    // Key Map for Strafing
-    bool keys[1024];
-    // Camera pointers for callbacks
-    static std::shared_ptr<Camera> playerCamera;
-    static std::shared_ptr<Camera> debugCamera;
+protected:
+	// DebugCamera Location
+	double xPos, yPos, xPrev, yPrev;
+	// DebugCamera Angle
+	float theta, phi;
+	// DebugCamera Vectors for lookAt
+	glm::vec3 cameraPosition;
+	glm::vec3 cameraFront;
+	glm::vec3 cameraUp;
+	// Key Map for Strafing
+	bool keys[1024];
 public:
-    glm::vec3 camera_position;
-    glm::vec3 camera_front;
-    glm::vec3 camera_up;
-
-    Camera();
-
-    static void set_player_camera(std::shared_ptr<Camera> camera);
-
-    static void player_mouse_callback(GLFWwindow*, double, double);
-
-    static void player_key_callback(GLFWwindow*, int, int, int, int);
-
-    static void set_debug_camera(std::shared_ptr<Camera> camera);
-
-    static void debug_mouse_callback(GLFWwindow*, double, double);
-
-    static void debug_key_callback(GLFWwindow*, int, int, int, int);
-
-    void movement();
-
-	glm::mat4 get_view_matrix();
+	Camera();
+	~Camera();
+	virtual void cursorPosCallback(double, double) = 0;
+	virtual void keyCallback(int, int, int, int) = 0;
+	virtual void movement(double) = 0;
+	glm::mat4 getViewMatrix();
 };

@@ -2,12 +2,12 @@
 
 #include "Camera.h"
 
-class DebugCamera : Camera
+class DebugCamera : public Camera
 {
 public:
 	DebugCamera();
 	~DebugCamera();
-	virtual void cursorPosCallback(double, double);
-	virtual void keyCallback(int, int, int, int);
-	virtual void movement(double);
+	void cursorPosCallback(double, double);
+	void keyCallback(int, int, int, int);
+	void movement(double);
 };

@@ -2,7 +2,7 @@
 
 #include "Camera.h"
 
-class ArcheryCamera : Camera
+class ArcheryCamera : public Camera
 {
 public:
 	ArcheryCamera();

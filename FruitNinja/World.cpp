@@ -1,6 +1,7 @@
 #include "World.h"
 #include "ChewyEntity.h"
 #include "PhongShader.h"
+#include "DebugCamera.h"
 
 using namespace std;
 using namespace glm;
@@ -12,19 +13,20 @@ World::World()
 
 void World::init()
 {
-	ChewyEntity chewy = ChewyEntity(MeshSet("chewy.obj"), Material(vec3(0.12, 0.12, 0.06), // Ambient
+	camera = shared_ptr<Camera>(new DebugCamera());
+	shared_ptr<GameEntity> chewy(new ChewyEntity(MeshSet("chewy.obj"), Material(vec3(0.12, 0.12, 0.06), // Ambient
 		vec3(1.0, 0.8, 0.0), // Diffuse
 		vec3(0.4, 0.4, 0.14), // Specular
-		200.0f));
+		200.0f)));
 	entities.push_back(chewy);
 
-	auto_ptr<Shader> phongShader = auto_ptr<Shader>(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
-	shaders.insert(pair<string, auto_ptr<PhongShader>>("phongShader", phongShader));
+	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
+	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
 }
 
 void World::draw()
 {
-	shaders.at("phongShader")->draw(auto_ptr<GameEntity>(&entities.at(0)));
+	shaders.at("phongShader")->draw(camera->getViewMatrix(), entities.at(0));
 }
 
 void World::update_key_callbacks()

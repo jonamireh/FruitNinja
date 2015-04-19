@@ -6,6 +6,7 @@ class GameEntity
 {
 
 public:
+	GameEntity();
 	GameEntity(MeshSet& mesh, Material material);
 	virtual void update() =0;
 	MeshSet& mesh;
