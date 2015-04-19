@@ -1,5 +1,7 @@
-attribute vec3 aPosition;
-attribute vec3 aNormal;
+#version 150
+
+in vec3 aPosition;
+in vec3 aNormal;
 
 uniform mat4 uProjMatrix;
 uniform mat4 uViewMatrix;
@@ -11,8 +13,8 @@ uniform vec3 UdColor;
 uniform vec3 UsColor;
 uniform float Ushine;
 
-varying vec3 vNormals;
-varying vec3 vLight;
+out vec3 vNormals;
+out vec3 vLight;
 
 void main()
 {

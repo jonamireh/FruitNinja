@@ -23,7 +23,9 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	glUniform1f(getUniformHandle("Ushine"), material.shininess);
 
 	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
-	glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(mat4(1.0f)));
+    glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(scale(mat4(1.0f), vec3(5.0f, 5.0f, 5.0f))));
+    glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(perspective((float)radians(45.0), (float)700 / 500, 0.1f, 100.f)));
+
 
 	for (int i = 0; i < meshes.size(); i++)
 	{

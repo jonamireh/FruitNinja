@@ -14,7 +14,7 @@ World::World()
 void World::init()
 {
 	camera = shared_ptr<Camera>(new DebugCamera());
-	shared_ptr<GameEntity> chewy(new ChewyEntity(shared_ptr<MeshSet>(new MeshSet("chewy.obj")), Material(vec3(0.12, 0.12, 0.06), // Ambient
+	shared_ptr<GameEntity> chewy(new ChewyEntity(shared_ptr<MeshSet>(new MeshSet("bunny.obj")), Material(vec3(0.12, 0.12, 0.06), // Ambient
 		vec3(1.0, 0.8, 0.0), // Diffuse
 		vec3(0.4, 0.4, 0.14), // Specular
 		200.0f)));
@@ -26,7 +26,10 @@ void World::init()
 
 void World::draw()
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(shaders.at("phongShader")->getProgramID());
 	shaders.at("phongShader")->draw(camera->getViewMatrix(), entities.at(0));
+    glUseProgram(0);
 }
 
 void World::update_key_callbacks()
