@@ -1,14 +1,15 @@
 #pragma once
 #include "MeshSet.h"
 #include "Material.h"
+#include <memory>
 
 class GameEntity
 {
 
 public:
-	GameEntity();
-	GameEntity(MeshSet& mesh, Material material);
+    GameEntity() {}
+    GameEntity(std::shared_ptr<MeshSet> mesh, Material material) : mesh(mesh), material(material) {}
 	virtual void update() =0;
-	MeshSet& mesh;
+	std::shared_ptr<MeshSet> mesh;
 	Material material;
 };

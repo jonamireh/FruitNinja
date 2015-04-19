@@ -10,7 +10,7 @@
 //    Created by zwood on 2/21/10.
 
 #include <GL/glew.h>
-
+#include <GL/freeglut.h>
 #pragma once
 #ifndef __GLSL__
 #define __GLSL__

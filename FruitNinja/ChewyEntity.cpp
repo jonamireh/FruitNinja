@@ -1,12 +1,12 @@
 #include "ChewyEntity.h"
 
-ChewyEntity::ChewyEntity() : GameEntity()
+ChewyEntity::ChewyEntity()
 {
 	
 }
 
 
-ChewyEntity::ChewyEntity(MeshSet& mesh, Material material) : GameEntity(mesh, material)
+ChewyEntity::ChewyEntity(std::shared_ptr<MeshSet> mesh, Material material) : GameEntity(mesh, material)
 {
 	
 }

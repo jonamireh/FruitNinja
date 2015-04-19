@@ -4,6 +4,6 @@ class ChewyEntity : public GameEntity
 {
 public:
 	ChewyEntity();
-	ChewyEntity(MeshSet& mesh, Material material);
+    ChewyEntity(std::shared_ptr<MeshSet> mesh, Material material);
 	void update();
 };

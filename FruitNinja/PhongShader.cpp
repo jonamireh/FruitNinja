@@ -15,7 +15,7 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	int vertex = getAttributeHandle("aPosition");
 	int normal = getAttributeHandle("aNormal");
 	
-	std::vector<Mesh *> meshes = entity->mesh.getMeshes();
+	std::vector<Mesh *> meshes = entity->mesh->getMeshes();
 	Material material = entity->material;
 	glUniform3fv(getUniformHandle("UaColor"), 1, value_ptr(material.ambient));
 	glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));
