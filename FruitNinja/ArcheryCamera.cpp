@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include "Global.h"
 #include "World.h"
+#include "ChewyEntity.h"
 
 using namespace glm;
 
@@ -53,9 +54,9 @@ void ArcheryCamera::cursorPosCallback(double xpos, double ypos)
 /**
 Call this at the end of the draw loop to update for strafing.
 */
-void ArcheryCamera::movement(double deltaTime)
+void ArcheryCamera::movement(double deltaTime, shared_ptr<GameEntity> chewy)
 {
-	float cameraSpeed = 0.006f * deltaTime;
+	float cameraSpeed = 0.01;
 	vec3 xzDisplacement = vec3(cameraFront.x, 0, cameraFront.z);
 	if (keys[GLFW_KEY_W])
 		cameraPosition += cameraSpeed * xzDisplacement;

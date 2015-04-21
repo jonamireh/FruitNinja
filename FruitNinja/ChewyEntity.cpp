@@ -6,7 +6,7 @@ ChewyEntity::ChewyEntity()
 }
 
 
-ChewyEntity::ChewyEntity(std::shared_ptr<MeshSet> mesh, Material material) : GameEntity(mesh, material)
+ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, Material material) : GameEntity(position, mesh, material)
 {
 	
 }

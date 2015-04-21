@@ -8,7 +8,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
+#include "GameEntity.h"
 
+class ChewyEntity;
 static const float MaxVerticalAngle = 85.0f; //must be less than 90 to avoid gimbal lock
 
 /*
@@ -27,12 +29,12 @@ protected:
 	float theta, phi;
 	// DebugCamera Vectors for lookAt
 	glm::vec3 cameraPosition;
-	glm::vec3 cameraFront;
 	glm::vec3 cameraUp;
 public:
 	Camera();
 	~Camera();
 	virtual void cursorPosCallback(double, double) = 0;
-	virtual void movement(double) = 0;
+    virtual void movement(double deltaTime, std::shared_ptr<GameEntity> chewy) = 0;
 	glm::mat4 getViewMatrix();
+	glm::vec3 cameraFront;
 };
