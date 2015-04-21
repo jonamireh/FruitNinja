@@ -1,4 +1,7 @@
 #include "PlayerCamera.h"
+#include "World.h"
+
+using namespace glm;
 
 const float PlayerCamera::MinVerticalAngle = 0.0f;
 
@@ -57,47 +60,36 @@ void PlayerCamera::cursorPosCallback(double xpos, double ypos)
 }
 
 /**
-Call the glfwSetKeyCallback to the window and this function.
-*/
-void PlayerCamera::keyCallback(int key, int scancode, int action, int mode)
-{
-	if (action == GLFW_PRESS)
-		keys[key] = true;
-	else if (action == GLFW_RELEASE)
-		keys[key] = false;
-}
-
-/**
 Call this at the end of the draw loop to update for strafing.
 */
 void PlayerCamera::movement(double deltaTime)
 {
-	float cameraSpeed = 0.006f * deltaTime;
-	vec3 xzDisplacement = vec3(cameraFront.x, 0, cameraFront.z);
-	if (keys[GLFW_KEY_W])
-	{
-		vec3 speedDisplacement = cameraSpeed * xzDisplacement;
-		cameraPosition += speedDisplacement;
-		lookAtPoint += speedDisplacement;
-	}
-	if (keys[GLFW_KEY_S])
-	{
-		vec3 speedDisplacement = cameraSpeed * xzDisplacement;
-		cameraPosition -= speedDisplacement;
-		lookAtPoint -= speedDisplacement;
-	}
-	if (keys[GLFW_KEY_A])
-	{
-		vec3 speedDisplacement = normalize(cross(xzDisplacement, cameraUp)) * cameraSpeed;
-		cameraPosition -= speedDisplacement;
-		lookAtPoint -= speedDisplacement;
-	}
-	if (keys[GLFW_KEY_D])
-	{
-		vec3 speedDisplacement = normalize(cross(xzDisplacement, cameraUp)) * cameraSpeed;
-		cameraPosition += speedDisplacement;
-		lookAtPoint += speedDisplacement;
-	}
+	//float cameraSpeed = 0.01;
+	//vec3 xzDisplacement = vec3(cameraFront.x, 0, cameraFront.z);
+	//if (keys[GLFW_KEY_W])
+	//{
+	//	vec3 speedDisplacement = cameraSpeed * xzDisplacement;
+	//	cameraPosition += speedDisplacement;
+	//	lookAtPoint += speedDisplacement;
+	//}
+	//if (keys[GLFW_KEY_S])
+	//{
+	//	vec3 speedDisplacement = cameraSpeed * xzDisplacement;
+	//	cameraPosition -= speedDisplacement;
+	//	lookAtPoint -= speedDisplacement;
+	//}
+	//if (keys[GLFW_KEY_A])
+	//{
+	//	vec3 speedDisplacement = normalize(cross(xzDisplacement, cameraUp)) * cameraSpeed;
+	//	cameraPosition -= speedDisplacement;
+	//	lookAtPoint -= speedDisplacement;
+	//}
+	//if (keys[GLFW_KEY_D])
+	//{
+	//	vec3 speedDisplacement = normalize(cross(xzDisplacement, cameraUp)) * cameraSpeed;
+	//	cameraPosition += speedDisplacement;
+	//	lookAtPoint += speedDisplacement;
+	//}
 }
 
 mat4 PlayerCamera::getViewMatrix()
