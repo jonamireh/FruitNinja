@@ -65,7 +65,7 @@ Call this at the end of the draw loop to update for strafing.
 */
 void PlayerCamera::movement(double deltaTime, std::shared_ptr<GameEntity> chewy)
 {
-    cameraPosition = chewy->position - 2.0f * cameraFront;
+    cameraPosition = chewy->position - 3.0f * cameraFront;
     lookAtPoint = chewy->position;
 }
 

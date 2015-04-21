@@ -73,6 +73,7 @@ void AppMain()
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, GL_TRUE);
 
+		world.update();
         world.draw();
         world.update_key_callbacks();
 

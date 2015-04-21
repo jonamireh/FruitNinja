@@ -9,10 +9,10 @@
 class ChewyMovementComponent : public Component
 {
 public:
-	ChewyMovementComponent(std::shared_ptr<GameEntity> entity, std::shared_ptr<Camera> camera) : entity(entity), camera(camera) {}
+	ChewyMovementComponent(GameEntity& entity, std::shared_ptr<Camera> camera) : entity(entity), camera(camera) {}
 	void update();
 
 private:
-	std::shared_ptr<GameEntity> entity;
+	GameEntity& entity;
 	std::shared_ptr<Camera> camera;
 };

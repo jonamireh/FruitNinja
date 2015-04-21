@@ -80,6 +80,7 @@
     <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="GLSL.cpp" />
     <ClCompile Include="ChewyMovementComponent.cpp" />
+    <ClCompile Include="GuardEntity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GLSL.h" />
     <ClInclude Include="ChewyMovementComponent.h" />
+    <ClInclude Include="GuardEntity.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshSet.h" />
