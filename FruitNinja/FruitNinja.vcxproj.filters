@@ -16,6 +16,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="phongFrag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="phongVert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="World.cpp">
