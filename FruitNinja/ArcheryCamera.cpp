@@ -1,5 +1,7 @@
 #include "ArcheryCamera.h"
 #include <GL/glew.h>
+#include "Global.h"
+#include "World.h"
 
 using namespace glm;
 
@@ -46,17 +48,6 @@ void ArcheryCamera::cursorPosCallback(double xpos, double ypos)
 	front.y = sin(radians(phi));
 	front.z = sin(radians(theta)) * cos(radians(phi));
 	cameraFront = normalize(front);
-}
-
-/**
-Call the glfwSetKeyCallback to the window and this function.
-*/
-void ArcheryCamera::keyCallback(int key, int scancode, int action, int mode)
-{
-	if (action == GLFW_PRESS)
-		keys[key] = true;
-	else if (action == GLFW_RELEASE)
-		keys[key] = false;
 }
 
 /**
