@@ -64,8 +64,7 @@ void World::change_camera()
 
 void World::update_key_callbacks()
 {
-
-    camera->movement(timer.end_timing());
+    camera->movement(timer.end_timing(), entities.at(0));
     change_camera();
 }
 

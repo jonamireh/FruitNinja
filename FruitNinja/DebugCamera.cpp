@@ -53,7 +53,7 @@ void DebugCamera::cursorPosCallback(double xpos, double ypos)
 /**
 Call this at the end of the draw loop to update for strafing.
 */
-void DebugCamera::movement(double deltaTime)
+void DebugCamera::movement(double deltaTime, std::shared_ptr<GameEntity> chewy)
 {
     float cameraSpeed = 0.01;
 
