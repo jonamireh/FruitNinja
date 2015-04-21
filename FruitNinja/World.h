@@ -9,6 +9,7 @@
 #include "Timer.h"
 
 extern bool keys[1024];
+extern double seconds_passed;
 
 class World
 {
@@ -17,6 +18,7 @@ public:
 	World();
     void update_key_callbacks();
     void update_mouse_callbacks();
+	void update();
 	std::map<std::string, std::shared_ptr<Shader>> shaders;
 	std::vector<std::shared_ptr<GameEntity>> entities;
 	void draw();

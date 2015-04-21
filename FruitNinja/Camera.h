@@ -27,7 +27,6 @@ protected:
 	float theta, phi;
 	// DebugCamera Vectors for lookAt
 	glm::vec3 cameraPosition;
-	glm::vec3 cameraFront;
 	glm::vec3 cameraUp;
 public:
 	Camera();
@@ -35,4 +34,5 @@ public:
 	virtual void cursorPosCallback(double, double) = 0;
 	virtual void movement(double) = 0;
 	glm::mat4 getViewMatrix();
+	glm::vec3 cameraFront;
 };

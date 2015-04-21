@@ -22,7 +22,7 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	glUniform3fv(getUniformHandle("UsColor"), 1, value_ptr(material.specular));
 	glUniform1f(getUniformHandle("Ushine"), material.shininess);
 
-	vec3 light_pos(0, 2, 0);
+	vec3 light_pos(0, 2, 2);
 	glUniform3fv(getUniformHandle("uLightPos"), 1, value_ptr(light_pos));
 
 	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));

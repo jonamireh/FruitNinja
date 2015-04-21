@@ -22,6 +22,6 @@ Camera::~Camera()
 
 mat4 Camera::getViewMatrix()
 {
-    std::cout << "camera x: " << cameraPosition.x << " y: " << cameraPosition.y << " z: " << cameraPosition.z << std::endl;
+    //std::cout << "camera x: " << cameraPosition.x << " y: " << cameraPosition.y << " z: " << cameraPosition.z << std::endl;
 	return lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
 }
