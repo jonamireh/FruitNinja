@@ -55,7 +55,7 @@ Call this at the end of the draw loop to update for strafing.
 */
 void ArcheryCamera::movement(double deltaTime)
 {
-	float cameraSpeed = 0.006f * deltaTime;
+	float cameraSpeed = 0.01;
 	vec3 xzDisplacement = vec3(cameraFront.x, 0, cameraFront.z);
 	if (keys[GLFW_KEY_W])
 		cameraPosition += cameraSpeed * xzDisplacement;

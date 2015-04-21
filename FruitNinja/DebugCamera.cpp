@@ -4,6 +4,7 @@
 
 using namespace glm;
 
+
 /*
 	Default constructor.
 */
@@ -54,9 +55,7 @@ Call this at the end of the draw loop to update for strafing.
 */
 void DebugCamera::movement(double deltaTime)
 {
-    //std::cout << "DEBUG CAMERA MOVEMENT WAS CALLED" << std::endl;
-    //float cameraSpeed = 0.006f * deltaTime;
-    float cameraSpeed = deltaTime;
+    float cameraSpeed = 0.01;
 
 	if (keys[GLFW_KEY_W])
 		cameraPosition += cameraSpeed * cameraFront;

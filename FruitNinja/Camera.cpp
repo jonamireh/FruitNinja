@@ -15,6 +15,7 @@ Camera::Camera()
 	cameraUp = vec3(0.0f, 1.0f, 0.0f);
 }
 
+
 Camera::~Camera()
 {
 
@@ -22,6 +23,5 @@ Camera::~Camera()
 
 mat4 Camera::getViewMatrix()
 {
-    //std::cout << "camera x: " << cameraPosition.x << " y: " << cameraPosition.y << " z: " << cameraPosition.z << std::endl;
 	return lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
 }
