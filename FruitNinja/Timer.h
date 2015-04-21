@@ -13,5 +13,5 @@ class Timer
 public:
     Timer();
     void start_timing(string);
-    void end_timing();
+    double end_timing();
 };

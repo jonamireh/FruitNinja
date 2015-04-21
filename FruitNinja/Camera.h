@@ -29,13 +29,10 @@ protected:
 	glm::vec3 cameraPosition;
 	glm::vec3 cameraFront;
 	glm::vec3 cameraUp;
-	// Key Map for Strafing
-	bool keys[1024];
 public:
 	Camera();
 	~Camera();
 	virtual void cursorPosCallback(double, double) = 0;
-	virtual void keyCallback(int, int, int, int) = 0;
 	virtual void movement(double) = 0;
 	glm::mat4 getViewMatrix();
 };

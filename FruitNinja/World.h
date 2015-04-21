@@ -6,11 +6,12 @@
 #include "GameEntity.h"
 #include "PhongShader.h"
 #include "Camera.h"
+#include "Timer.h"
 
+extern bool keys[1024];
 
 class World
 {
-    bool keys[1024];
 
 public:
 	World();
@@ -19,8 +20,11 @@ public:
 	std::map<std::string, std::shared_ptr<Shader>> shaders;
 	std::vector<std::shared_ptr<GameEntity>> entities;
 	void draw();
+    static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 private:
+    Timer timer;
+    std::shared_ptr<Camera> camera;
+
 	void init();
-	std::shared_ptr<Camera> camera;
 };
 

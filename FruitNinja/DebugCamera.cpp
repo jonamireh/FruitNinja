@@ -1,4 +1,6 @@
 #include "DebugCamera.h"
+#include "Global.h"
+#include "World.h"
 
 using namespace glm;
 
@@ -48,22 +50,14 @@ void DebugCamera::cursorPosCallback(double xpos, double ypos)
 }
 
 /**
-Call the glfwSetKeyCallback to the window and this function.
-*/
-void DebugCamera::keyCallback(int key, int scancode, int action, int mode)
-{
-	if (action == GLFW_PRESS)
-		keys[key] = true;
-	else if (action == GLFW_RELEASE)
-		keys[key] = false;
-}
-
-/**
 Call this at the end of the draw loop to update for strafing.
 */
 void DebugCamera::movement(double deltaTime)
 {
-	float cameraSpeed = 0.006f * deltaTime;
+    //std::cout << "DEBUG CAMERA MOVEMENT WAS CALLED" << std::endl;
+    //float cameraSpeed = 0.006f * deltaTime;
+    float cameraSpeed = deltaTime;
+
 	if (keys[GLFW_KEY_W])
 		cameraPosition += cameraSpeed * cameraFront;
 	if (keys[GLFW_KEY_S])

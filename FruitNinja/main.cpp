@@ -66,12 +66,20 @@ void AppMain()
 
     World world;
 
+    glfwSetKeyCallback(window, &World::key_callback);
+
     while (!glfwWindowShouldClose(window))
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, GL_TRUE);
 
+        cout << "calling world's draw from main " << endl;
+
         world.draw();
+
+        cout << "calling world's update_key_callbacks from main " << endl;
+
+        world.update_key_callbacks();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
