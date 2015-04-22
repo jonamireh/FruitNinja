@@ -1,3 +1,5 @@
+#pragma once
+
 #include "GameEntity.h"
 #include "ChewyMovementComponent.h"
 

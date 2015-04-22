@@ -87,6 +87,8 @@
     <ClCompile Include="MeshSet.cpp" />
     <ClCompile Include="PhongShader.cpp" />
     <ClCompile Include="PlayerCamera.cpp" />
+    <ClCompile Include="ProjectileEntity.cpp" />
+    <ClCompile Include="ProjectileMovementComponent.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="World.cpp" />
@@ -106,6 +108,8 @@
     <ClInclude Include="MeshSet.h" />
     <ClInclude Include="PhongShader.h" />
     <ClInclude Include="PlayerCamera.h" />
+    <ClInclude Include="ProjectileEntity.h" />
+    <ClInclude Include="ProjectileMovementComponent.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="World.h" />
