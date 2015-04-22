@@ -8,5 +8,5 @@ public:
 	ArcheryCamera();
 	~ArcheryCamera();
 	virtual void cursorPosCallback(double, double);
-	virtual void movement(double);
+    void movement(double deltaTime, std::shared_ptr<GameEntity> chewy);
 };
