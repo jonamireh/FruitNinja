@@ -4,10 +4,7 @@ using namespace glm;
 
 Camera::Camera()
 {
-	xPos = 0.0f;
-	yPos = 0.0f;
-	xPrev = 0.0f;
-	yPrev = 0.0f;
+    in_use = false;
 	theta = 0.0f;
 	phi = 0.0f;
 	cameraPosition = vec3(0.0f, 0.0f, 3.0f);

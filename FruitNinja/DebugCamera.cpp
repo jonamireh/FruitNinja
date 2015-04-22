@@ -1,5 +1,4 @@
 #include "DebugCamera.h"
-#include "Global.h"
 #include "World.h"
 
 using namespace glm;
@@ -10,7 +9,6 @@ using namespace glm;
 */
 DebugCamera::DebugCamera()
 {
-
 }
 
 /*
@@ -18,25 +16,17 @@ DebugCamera::DebugCamera()
 */
 DebugCamera::~DebugCamera()
 {
-
 }
 
 /*
 Call the glfwSetCursorPosCallback to the window and this function.
 */
-void DebugCamera::cursorPosCallback(double xpos, double ypos)
+void DebugCamera::mouse_update()
 {
-	GLfloat xoffset = xpos - xPrev;
-	GLfloat yoffset = yPrev - ypos;
-	xPrev = xpos;
-	yPrev = ypos;
+	float sensitivity = 0.1;
 
-	GLfloat sensitivity = 0.1;
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
-
-	theta += xoffset;
-	phi += yoffset;
+    theta += x_offset * sensitivity;
+    phi += y_offset * sensitivity;
 
 	if (phi > MaxVerticalAngle)
 		phi = MaxVerticalAngle;
@@ -65,4 +55,7 @@ void DebugCamera::movement(double deltaTime, std::shared_ptr<GameEntity> chewy)
 		cameraPosition -= normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
 	if (keys[GLFW_KEY_D])
 		cameraPosition += normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
+
+    // NOW DO MOUSE ADJUSTS!
+    mouse_update();
 }

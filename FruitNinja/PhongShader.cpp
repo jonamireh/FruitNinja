@@ -1,4 +1,5 @@
 #include "PhongShader.h"
+#include "World.h"
 
 using namespace glm;
 using namespace std;
@@ -16,24 +17,26 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	int normal = getAttributeHandle("aNormal");
 	
 	std::vector<Mesh *> meshes = entity->mesh->getMeshes();
-	Material material = entity->material;
-	glUniform3fv(getUniformHandle("UaColor"), 1, value_ptr(material.ambient));
-	glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));
-	glUniform3fv(getUniformHandle("UsColor"), 1, value_ptr(material.specular));
-	glUniform1f(getUniformHandle("Ushine"), material.shininess);
 
 	vec3 light_pos(0, 2, 2);
 	glUniform3fv(getUniformHandle("uLightPos"), 1, value_ptr(light_pos));
 
 
 	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
-	glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(translate(mat4(1.0f), entity->position) * scale(mat4(1.0f), vec3(5.0f, 5.0f, 5.0f))));
-    glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(perspective((float)radians(45.0), (float)700 / 500, 0.1f, 100.f)));
+	glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(translate(mat4(1.0f), entity->position)));
+    glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 100.f)));
 
 
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		Mesh* mesh = meshes.at(i);
+
+		Material material = mesh->mat;
+		glUniform3fv(getUniformHandle("UaColor"), 1, value_ptr(material.ambient));
+		glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));
+		glUniform3fv(getUniformHandle("UsColor"), 1, value_ptr(material.specular));
+		glUniform1f(getUniformHandle("Ushine"), material.shininess);
+
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
 

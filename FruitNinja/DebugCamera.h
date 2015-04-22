@@ -8,6 +8,6 @@ class DebugCamera : public Camera
 public:
 	DebugCamera();
 	~DebugCamera();
-	void cursorPosCallback(double, double);
+    void mouse_update();
     void movement(double deltaTime, std::shared_ptr<GameEntity> chewy);
 };
