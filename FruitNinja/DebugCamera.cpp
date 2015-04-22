@@ -45,7 +45,7 @@ Call this at the end of the draw loop to update for strafing.
 */
 void DebugCamera::movement(double deltaTime, std::shared_ptr<GameEntity> chewy)
 {
-    float cameraSpeed = 0.01;
+    float cameraSpeed = 0.1;
 
 	if (keys[GLFW_KEY_W])
 		cameraPosition += cameraSpeed * cameraFront;

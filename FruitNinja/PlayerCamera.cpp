@@ -73,3 +73,8 @@ mat4 PlayerCamera::getViewMatrix()
 {
 	return lookAt(cameraPosition, lookAtPoint, cameraUp);
 }
+
+void PlayerCamera::update_radius(float delta)
+{
+    radius += 0.1 * delta;
+}

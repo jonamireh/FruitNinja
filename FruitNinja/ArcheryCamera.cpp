@@ -52,5 +52,5 @@ void ArcheryCamera::movement(double deltaTime, shared_ptr<GameEntity> chewy)
     mouse_update();
 
     // Should set the Archery Camera to be at chewy but slightly to the right?
-    cameraPosition = chewy->position + vec3(2.f, 4.f, 0.f);
+    cameraPosition = chewy->position + vec3(1.5f, 2.f, 0.f);
 }

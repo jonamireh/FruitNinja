@@ -18,7 +18,8 @@ float y_offset;
 float screen_width = 1280;
 float screen_height = 720;
 
-//MeshSet* bunny_mesh = new MeshSet("bunny.obj");
+static std::shared_ptr<Camera> camera;
+
 
 World::World()
 {
@@ -85,6 +86,7 @@ void World::change_camera()
         debug_camera->in_use = true;
         player_camera->in_use = false;
         archery_camera->in_use = false;
+
     }
     if (keys[GLFW_KEY_2])
     {
@@ -111,10 +113,6 @@ void World::update_key_callbacks()
     y_offset = 0;
 }
 
-void World::update_mouse_callbacks()
-{
-}
-
 void World::update()
 {
 	static float start_time = 0.0;
@@ -126,4 +124,11 @@ void World::update()
 	start_time = glfwGetTime();
 
     update_key_callbacks();
+}
+
+void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)
+{
+    shared_ptr<PlayerCamera> radius_changer = dynamic_pointer_cast<PlayerCamera>(camera);
+    if (radius_changer)
+        radius_changer->update_radius(y_pos);
 }

@@ -29,11 +29,12 @@ protected:
 	glm::vec3 cameraPosition;
 	glm::vec3 cameraUp;
 public:
-    bool in_use;
     glm::vec3 cameraFront;
+    bool in_use;
 
 	Camera();
 	~Camera();
     virtual void movement(double deltaTime, std::shared_ptr<GameEntity> chewy) = 0;
 	glm::mat4 getViewMatrix();
+    virtual void update_radius(float delta){};
 };
