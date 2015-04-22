@@ -23,14 +23,13 @@ glfwSetCursorPos(window, 0.0, 0.0);
 class Camera
 {
 protected:
-	// DebugCamera Location
-	double xPos, yPos, xPrev, yPrev;
 	// DebugCamera Angle
 	float theta, phi;
 	// DebugCamera Vectors for lookAt
 	glm::vec3 cameraPosition;
 	glm::vec3 cameraUp;
 public:
+    bool in_use;
     glm::vec3 cameraFront;
 
 	Camera();

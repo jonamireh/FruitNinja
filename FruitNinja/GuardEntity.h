@@ -5,7 +5,7 @@ class GuardEntity : public GameEntity
 {
 public:
 	GuardEntity();
-	GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, Material material);
+	GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh);
 	void update();
 private:
 };

@@ -16,6 +16,8 @@ extern double seconds_passed;
 extern Timer timer;
 extern float x_offset;
 extern float y_offset;
+extern float screen_width;
+extern float screen_height;
 
 class World
 {

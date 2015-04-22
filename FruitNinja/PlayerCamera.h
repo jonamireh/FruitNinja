@@ -8,6 +8,7 @@ class PlayerCamera : public Camera
 {
 	static const float MinVerticalAngle;
     glm::vec3 lookAtPoint;
+    float radius;
 public:
 	PlayerCamera();
 	PlayerCamera(glm::vec3 lookAt);

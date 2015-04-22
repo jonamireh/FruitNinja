@@ -14,6 +14,8 @@ double seconds_passed = 0;
 Timer timer;
 float x_offset;
 float y_offset;
+float screen_width = 1280;
+float screen_height = 720;
 
 //MeshSet* bunny_mesh = new MeshSet("bunny.obj");
 
@@ -30,17 +32,12 @@ void World::init()
     player_camera = shared_ptr<Camera>(new PlayerCamera());
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
 
-	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("bunny.obj")), Material(vec3(0.12, 0.12, 0.06), // Ambient
-		vec3(1.0, 0.8, 0.0), // Diffuse
-		vec3(0.4, 0.4, 0.14), // Specular
-		200.0f), player_camera));
+	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Ninja/ninja_final2.dae")), player_camera));
 
-	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Ninja/ninja_final2.dae")), Material(vec3(0.12, 0.12, 0.06), // Ambient
-		vec3(1.0, 0.8, 0.0), // Diffuse
-		vec3(0.4, 0.4, 0.14), // Specular
-		200.0f)));
+	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("bunny.obj"))));
 
     camera = debug_camera;
+    debug_camera->in_use = true;
 	entities.push_back(chewy);
 	entities.push_back(guard1);
 
@@ -78,11 +75,26 @@ void World::mouse_callback(GLFWwindow* window, double x_position, double y_posit
 void World::change_camera()
 {
     if (keys[GLFW_KEY_1])
+    {
         camera = debug_camera;
+        debug_camera->in_use = true;
+        player_camera->in_use = false;
+        archery_camera->in_use = false;
+    }
     if (keys[GLFW_KEY_2])
+    {
         camera = player_camera;
+        debug_camera->in_use = false;
+        player_camera->in_use = true;
+        archery_camera->in_use = false;
+    }
     if (keys[GLFW_KEY_3])
+    {
         camera = archery_camera;
+        debug_camera->in_use = false;
+        player_camera->in_use = false;
+        archery_camera->in_use = true;
+    }
 }
 
 void World::update_key_callbacks()

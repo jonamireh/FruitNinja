@@ -12,8 +12,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "World.h"
 
-GLuint screenWidth = 1280, screenHeight = 720;
-
 // the program starts here
 void AppMain()
 {
@@ -28,7 +26,7 @@ void AppMain()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Fruit Ninja", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Fruit Ninja", NULL, NULL);
     if (!window)
         throw std::runtime_error("glfwCreateWindow failed. Can your hardware handle OpenGL 3.2?");
 

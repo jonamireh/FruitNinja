@@ -12,6 +12,7 @@ Default constructor.
 PlayerCamera::PlayerCamera()
 {
 	lookAtPoint = vec3(0);
+    radius = 3.0f;
 }
 
 /*
@@ -53,9 +54,7 @@ void PlayerCamera::mouse_update()
     }
 
     cameraFront = rotateY(cameraFront, radians(x_offset * sensitivity));
-
     cameraFront = rotate(cameraFront, radians(y_offset * sensitivity), cross(cameraFront, cameraUp));
-
     cameraFront = normalize(cameraFront);
 }
 
@@ -66,7 +65,7 @@ void PlayerCamera::movement(double deltaTime, std::shared_ptr<GameEntity> chewy)
 {
     mouse_update();
 
-    cameraPosition = chewy->position - 3.0f * cameraFront;
+    cameraPosition = chewy->position - radius * cameraFront;
     lookAtPoint = chewy->position;
 }
 
