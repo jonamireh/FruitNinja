@@ -5,6 +5,9 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
+using namespace glm;
+using namespace std;
+
 bool Mesh::checkError(std::string msg) {
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR) {
@@ -14,11 +17,24 @@ bool Mesh::checkError(std::string msg) {
 	return false;
 }
 
-Mesh::Mesh(std::vector<VertexData> *vd, std::vector<unsigned int> *id, std::vector<TextureData> *td) {
+Mesh::Mesh(std::vector<VertexData> *vd, std::vector<unsigned int> *id, aiMaterial* material, std::vector<TextureData> *td)
+{
 	data = *vd;
 	indices = *id;
 	if (td)
 		textures = *td;
+
+	aiColor4D color(0.f, 0.f, 0.f, 0.f);
+	aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &color);
+	mat.ambient = vec3(color.r, color.g, color.b);
+
+	aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color);
+	mat.diffuse = vec3(color.r, color.g, color.b);
+
+	aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &color);
+	mat.specular = vec3(color.r, color.g, color.b);
+
+	aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &(mat.shininess));
 
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);

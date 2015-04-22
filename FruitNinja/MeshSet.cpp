@@ -79,7 +79,7 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		tmp.type = 0;
 		textures.push_back(tmp);
 	}
-	meshes.push_back(new Mesh(&data, &indices, &textures));
+	meshes.push_back(new Mesh(&data, &indices, mat, &textures));
 }
 
 //This function was copied from off the internet, shouldn't be turned in

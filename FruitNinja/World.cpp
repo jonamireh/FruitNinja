@@ -31,7 +31,7 @@ void World::init()
 		vec3(0.4, 0.4, 0.14), // Specular
 		200.0f), player_camera));
 
-	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae")), Material(vec3(0.12, 0.12, 0.06), // Ambient
+	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Ninja/ninja_final2.dae")), Material(vec3(0.12, 0.12, 0.06), // Ambient
 		vec3(1.0, 0.8, 0.0), // Diffuse
 		vec3(0.4, 0.4, 0.14), // Specular
 		200.0f)));
