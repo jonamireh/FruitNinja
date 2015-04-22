@@ -12,7 +12,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "World.h"
 
-GLuint screenWidth = 700, screenHeight = 500;
+GLuint screenWidth = 1280, screenHeight = 720;
 
 // the program starts here
 void AppMain()
@@ -32,9 +32,6 @@ void AppMain()
     if (!window)
         throw std::runtime_error("glfwCreateWindow failed. Can your hardware handle OpenGL 3.2?");
 
-    // GLFW settings
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetCursorPos(window, 0, 0);
     //glfwSetScrollCallback(window, OnScroll);
     glfwMakeContextCurrent(window);
 
@@ -66,7 +63,13 @@ void AppMain()
 
     World world;
 
+    // Set Key Callback Function
     glfwSetKeyCallback(window, &World::key_callback);
+    // Set Mouse Callback Function
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPos(window, 0, 0);
+    glfwSetCursorPosCallback(window, &World::mouse_callback);
+
 
     while (!glfwWindowShouldClose(window))
     {
@@ -75,7 +78,6 @@ void AppMain()
 
 		world.update();
         world.draw();
-        world.update_key_callbacks();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -12,12 +12,16 @@ using namespace glm;
 bool keys[1024];
 double seconds_passed = 0;
 Timer timer;
+float x_offset;
+float y_offset;
 
 //MeshSet* bunny_mesh = new MeshSet("bunny.obj");
 
 World::World()
 {
 	init();
+    x_offset = 0;
+    y_offset = 0;
 }
 
 void World::init()
@@ -63,6 +67,14 @@ void World::key_callback(GLFWwindow* window, int key, int scancode, int action, 
         keys[key] = false;
 }
 
+void World::mouse_callback(GLFWwindow* window, double x_position, double y_position)
+{
+    x_offset = x_position;
+    y_offset = -1.f * y_position;
+
+    glfwSetCursorPos(window, 0, 0);
+}
+
 void World::change_camera()
 {
     if (keys[GLFW_KEY_1])
@@ -77,6 +89,9 @@ void World::update_key_callbacks()
 {
     camera->movement(timer.end_timing(), entities.at(0));
     change_camera();
+
+    x_offset = 0;
+    y_offset = 0;
 }
 
 void World::update_mouse_callbacks()
@@ -92,4 +107,6 @@ void World::update()
 	}
 	seconds_passed = end_time - start_time;
 	start_time = glfwGetTime();
+
+    update_key_callbacks();
 }

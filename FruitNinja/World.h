@@ -14,6 +14,8 @@ class ArcheryCamera;
 extern bool keys[1024];
 extern double seconds_passed;
 extern Timer timer;
+extern float x_offset;
+extern float y_offset;
 
 class World
 {
@@ -26,6 +28,7 @@ public:
 	std::vector<std::shared_ptr<GameEntity>> entities;
 	void draw();
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+    static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
     void change_camera();
 private:
     std::shared_ptr<Camera> camera;

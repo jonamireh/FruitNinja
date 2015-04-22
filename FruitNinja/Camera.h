@@ -31,10 +31,10 @@ protected:
 	glm::vec3 cameraPosition;
 	glm::vec3 cameraUp;
 public:
+    glm::vec3 cameraFront;
+
 	Camera();
 	~Camera();
-	virtual void cursorPosCallback(double, double) = 0;
     virtual void movement(double deltaTime, std::shared_ptr<GameEntity> chewy) = 0;
 	glm::mat4 getViewMatrix();
-	glm::vec3 cameraFront;
 };

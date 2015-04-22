@@ -2,6 +2,7 @@
 
 #include "Camera.h"
 #include "GameEntity.h"
+#include <glm/gtx/rotate_vector.hpp>
 
 class PlayerCamera : public Camera
 {
@@ -11,7 +12,7 @@ public:
 	PlayerCamera();
 	PlayerCamera(glm::vec3 lookAt);
 	~PlayerCamera();
-	virtual void cursorPosCallback(double, double);
+    void mouse_update();
     void movement(double deltaTime, std::shared_ptr<GameEntity> chewy);
     glm::mat4 getViewMatrix();
 };

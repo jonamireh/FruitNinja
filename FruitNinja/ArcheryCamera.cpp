@@ -25,12 +25,10 @@ ArcheryCamera::~ArcheryCamera()
 /*
 Call the glfwSetCursorPosCallback to the window and this function.
 */
-void ArcheryCamera::cursorPosCallback(double xpos, double ypos)
+void ArcheryCamera::mouse_update()
 {
-	GLfloat xoffset = xpos - xPrev;
-	GLfloat yoffset = yPrev - ypos;
-	xPrev = xpos;
-	yPrev = ypos;
+	float xoffset = x_offset;
+	float yoffset = y_offset;
 
 	GLfloat sensitivity = 0.1;
 	xoffset *= sensitivity;
@@ -66,4 +64,6 @@ void ArcheryCamera::movement(double deltaTime, shared_ptr<GameEntity> chewy)
 		cameraPosition -= normalize(cross(xzDisplacement, cameraUp)) * cameraSpeed;
 	if (keys[GLFW_KEY_D])
 		cameraPosition += normalize(cross(xzDisplacement, cameraUp)) * cameraSpeed;
+
+    mouse_update();
 }
