@@ -49,6 +49,12 @@
     <ClCompile Include="PhongShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectileMovementComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -99,8 +105,14 @@
     <ClInclude Include="PlayerCamera.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ProjectileMovementComponent.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Source</Filter>
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileEntity.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

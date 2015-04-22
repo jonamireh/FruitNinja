@@ -12,7 +12,7 @@
 
 class ArcheryCamera;
 extern bool keys[1024];
-extern double seconds_passed;
+extern float seconds_passed;
 extern Timer timer;
 extern float x_offset;
 extern float y_offset;

@@ -5,12 +5,13 @@
 #include "Global.h"
 #include "ArcheryCamera.h"
 #include "GuardEntity.h"
+#include "ProjectileEntity.h"
 
 using namespace std;
 using namespace glm;
 
 bool keys[1024];
-double seconds_passed = 0;
+float seconds_passed = 0;
 Timer timer;
 float x_offset;
 float y_offset;
@@ -40,9 +41,15 @@ void World::init()
 		vec3(0.4, 0.4, 0.14), // Specular
 		200.0f)));
 
+	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("bunny.obj")), Material(vec3(0.12, 0.12, 0.06), // Ambient
+		vec3(1.0, 0.8, 0.0), // Diffuse
+		vec3(0.4, 0.4, 0.14), // Specular
+		200.0f), chewy, player_camera));
+
     camera = debug_camera;
 	entities.push_back(chewy);
 	entities.push_back(guard1);
+	entities.push_back(arrow);
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
@@ -100,8 +107,8 @@ void World::update_mouse_callbacks()
 
 void World::update()
 {
-	static double start_time = 0.0;
-	double end_time = glfwGetTime();
+	static float start_time = 0.0;
+	float end_time = glfwGetTime();
 	for (int i = 0; i < entities.size(); i++) {
 		entities[i]->update();
 	}
