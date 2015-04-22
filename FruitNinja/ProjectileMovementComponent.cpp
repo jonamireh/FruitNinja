@@ -7,7 +7,7 @@
 void ProjectileMovementComponent::update()
 {
 	static glm::vec3 velocity(0.0f, 0.0f, 0.0f);
-	if (keys[GLFW_KEY_E]) {
+	if (keys[GLFW_KEY_E] && camera->in_use) {
 		entity.position = entity.owner->position;
 		velocity = glm::normalize(camera->cameraFront) * ARROW_SPEED;
 	}

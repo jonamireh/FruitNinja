@@ -26,20 +26,22 @@ glm::vec3 leftDirection(std::shared_ptr<Camera> camera)
 
 void ChewyMovementComponent::update()
 {
-	if (keys[GLFW_KEY_W]) {
-		entity.position.x += forwardDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
-        entity.position.z += forwardDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
-	}
-	if (keys[GLFW_KEY_S]) {
-        entity.position.x += backDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
-        entity.position.z += backDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
-	}
-	if (keys[GLFW_KEY_A]) {
-        entity.position.x += leftDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
-        entity.position.z += leftDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
-	}
-	if (keys[GLFW_KEY_D]) {
-        entity.position.x += rightDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
-        entity.position.z += rightDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
+	if (camera->in_use) {
+		if (keys[GLFW_KEY_W]) {
+			entity.position.x += forwardDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			entity.position.z += forwardDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
+		}
+		if (keys[GLFW_KEY_S]) {
+			entity.position.x += backDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			entity.position.z += backDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
+		}
+		if (keys[GLFW_KEY_A]) {
+			entity.position.x += leftDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			entity.position.z += leftDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
+		}
+		if (keys[GLFW_KEY_D]) {
+			entity.position.x += rightDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			entity.position.z += rightDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
+		}
 	}
 }

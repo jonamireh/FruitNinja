@@ -37,10 +37,8 @@ void World::init()
 
 	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("bunny.obj"))));
 
-	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("bunny.obj")), Material(vec3(0.12, 0.12, 0.06), // Ambient
-		vec3(1.0, 0.8, 0.0), // Diffuse
-		vec3(0.4, 0.4, 0.14), // Specular
-		200.0f), chewy, player_camera));
+
+	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("bunny.obj")), chewy, archery_camera));
 
     camera = debug_camera;
     debug_camera->in_use = true;
