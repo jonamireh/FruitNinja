@@ -1,45 +1,126 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="ArcheryCamera.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ChewyEntity.cpp" />
-    <ClCompile Include="DebugCamera.cpp" />
-    <ClCompile Include="GLSL.cpp" />
-    <ClCompile Include="ChewyMovementComponent.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshSet.cpp" />
-    <ClCompile Include="PhongShader.cpp" />
-    <ClCompile Include="PlayerCamera.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="World.cpp" />
-    <ClCompile Include="GuardEntity.cpp" />
+    <ClCompile Include="ArcheryCamera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ChewyEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ChewyMovementComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugCamera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLSL.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GuardEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshSet.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCamera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PhongShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArcheryCamera.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="ChewyEntity.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="DebugCamera.h" />
-    <ClInclude Include="GameEntity.h" />
-    <ClInclude Include="GLSL.h" />
-    <ClInclude Include="ChewyMovementComponent.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshSet.h" />
-    <ClInclude Include="PhongShader.h" />
-    <ClInclude Include="PlayerCamera.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="World.h" />
-    <ClInclude Include="GuardEntity.h" />
+    <ClInclude Include="ArcheryCamera.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ChewyEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ChewyMovementComponent.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugCamera.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GLSL.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GuardEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshSet.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongShader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCamera.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="phongFrag.glsl" />
-    <None Include="phongVert.glsl" />
+    <None Include="phongFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="phongVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{dfc8b3af-1897-44ba-bd97-44a5e4844c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{0779bf17-c988-4cc1-9bf9-4c27b3c4de90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{8a88a7cc-111d-48c4-a54f-70c13ccedef8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
