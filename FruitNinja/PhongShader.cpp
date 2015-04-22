@@ -16,11 +16,6 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	int normal = getAttributeHandle("aNormal");
 	
 	std::vector<Mesh *> meshes = entity->mesh->getMeshes();
-	Material material = entity->material;
-	glUniform3fv(getUniformHandle("UaColor"), 1, value_ptr(material.ambient));
-	glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));
-	glUniform3fv(getUniformHandle("UsColor"), 1, value_ptr(material.specular));
-	glUniform1f(getUniformHandle("Ushine"), material.shininess);
 
 	vec3 light_pos(0, 2, 2);
 	glUniform3fv(getUniformHandle("uLightPos"), 1, value_ptr(light_pos));
@@ -34,6 +29,13 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		Mesh* mesh = meshes.at(i);
+
+		Material material = mesh->mat;
+		glUniform3fv(getUniformHandle("UaColor"), 1, value_ptr(material.ambient));
+		glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));
+		glUniform3fv(getUniformHandle("UsColor"), 1, value_ptr(material.specular));
+		glUniform1f(getUniformHandle("Ushine"), material.shininess);
+
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
 
