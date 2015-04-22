@@ -27,15 +27,10 @@ Call the glfwSetCursorPosCallback to the window and this function.
 */
 void ArcheryCamera::mouse_update()
 {
-	float xoffset = x_offset;
-	float yoffset = y_offset;
+	float sensitivity = 0.1;
 
-	GLfloat sensitivity = 0.1;
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
-
-	theta += xoffset;
-	phi += yoffset;
+	theta += x_offset * sensitivity;
+	phi += y_offset * sensitivity;
 
 	if (phi > MaxVerticalAngle)
 		phi = MaxVerticalAngle;
@@ -54,16 +49,8 @@ Call this at the end of the draw loop to update for strafing.
 */
 void ArcheryCamera::movement(double deltaTime, shared_ptr<GameEntity> chewy)
 {
-	float cameraSpeed = 0.01;
-	vec3 xzDisplacement = vec3(cameraFront.x, 0, cameraFront.z);
-	if (keys[GLFW_KEY_W])
-		cameraPosition += cameraSpeed * xzDisplacement;
-	if (keys[GLFW_KEY_S])
-		cameraPosition -= cameraSpeed * xzDisplacement;
-	if (keys[GLFW_KEY_A])
-		cameraPosition -= normalize(cross(xzDisplacement, cameraUp)) * cameraSpeed;
-	if (keys[GLFW_KEY_D])
-		cameraPosition += normalize(cross(xzDisplacement, cameraUp)) * cameraSpeed;
-
     mouse_update();
+
+    // Should set the Archery Camera to be at chewy but slightly to the right?
+    cameraPosition = chewy->position + cross(cameraFront, cameraUp);
 }
