@@ -7,4 +7,6 @@ void GameEntity::turnTo(glm::vec3 cartesian) {
 		rotations.y = -1.0f * glm::atan(cartesian.z / cartesian.x);
 	else
 		rotations.y = glm::atan(cartesian.z / -cartesian.x) + PI;
+
+    rotations.y -= PI / 2.f;
 }
