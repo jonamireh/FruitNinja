@@ -92,7 +92,7 @@
     <ClCompile Include="ProjectileEntity.cpp" />
     <ClCompile Include="ProjectileMovementComponent.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="tdogl\Bitmap.cpp" />
+    <ClCompile Include="tdogl\bitmap.cpp" />
     <ClCompile Include="tdogl\stb_image.c" />
     <ClCompile Include="tdogl\Texture.cpp" />
     <ClCompile Include="Timer.cpp" />

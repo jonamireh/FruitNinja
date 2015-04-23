@@ -61,18 +61,15 @@
     <ClCompile Include="GameEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-<<<<<<< Updated upstream
-=======
-    <ClCompile Include="tdogl\Bitmap.cpp">
-      <Filter>tdogl</Filter>
-    </ClCompile>
-    <ClCompile Include="tdogl\Texture.cpp">
-      <Filter>tdogl</Filter>
+    <ClCompile Include="tdogl\bitmap.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="tdogl\stb_image.c">
-      <Filter>tdogl</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
->>>>>>> Stashed changes
+    <ClCompile Include="tdogl\Texture.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -136,13 +133,13 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="tdogl\Bitmap.h">
-      <Filter>tdogl</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="tdogl\stb_image.h">
-      <Filter>tdogl</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="tdogl\Texture.h">
-      <Filter>tdogl</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -163,9 +160,6 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{8a88a7cc-111d-48c4-a54f-70c13ccedef8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="tdogl">
-      <UniqueIdentifier>{bbf2565a-b36a-491c-bac0-761b086533d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
