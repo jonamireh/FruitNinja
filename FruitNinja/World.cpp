@@ -63,7 +63,6 @@ void World::init()
     shared_ptr <GameEntity> box3(new ObstacleEntity(vec3(50.0, 10.0, 20.0), meshes.at("box")));
     box3->scale = 3.0f;
 
-
     camera = player_camera;
     player_camera->in_use = true;
 	entities.push_back(chewy);

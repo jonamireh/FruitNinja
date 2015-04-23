@@ -14,6 +14,6 @@ public:
 private:
 	void recursiveProcess(aiNode *node, const aiScene *scene);
 	void processMesh(aiMesh *mesh, const aiScene *scene);
-	unsigned int loadTexture(const char *filename);
+	unsigned int loadTexture(const char *filename, int width, int height);
 	std::vector<Mesh*> meshes;
 };

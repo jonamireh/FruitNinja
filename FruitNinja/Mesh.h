@@ -14,8 +14,8 @@ struct VertexData {
 	glm::vec2 texCoord;
 };
 struct TextureData {
-	unsigned int id;
-	unsigned int type;
+	GLuint id;
+	GLuint type;
 };
 
 class Mesh {

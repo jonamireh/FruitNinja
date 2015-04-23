@@ -5,9 +5,11 @@ uniform vec3 UaColor;
 uniform vec3 UdColor;
 uniform vec3 UsColor;
 uniform float Ushine;
+//uniform sampler2D Utex;
 
 in vec3 vNormals;
 in vec3 vLight;
+//in vec2 vTextCoord;
 
 out vec4 finalColor;
 

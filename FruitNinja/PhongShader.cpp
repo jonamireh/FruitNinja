@@ -4,6 +4,15 @@
 using namespace glm;
 using namespace std;
 
+bool check_gl_error(std::string msg) {
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR) {
+		std::cerr << msg << ": OpenGL Error: " << error << std::endl;
+		return true;
+	}
+	return false;
+}
+
 PhongShader::PhongShader(std::string vertShader, std::string fragShader) : Shader(vertShader, fragShader)
 {
 	
@@ -15,6 +24,7 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	//vertex attributes
 	int vertex = getAttributeHandle("aPosition");
 	int normal = getAttributeHandle("aNormal");
+	//int texture = getAttributeHandle("aTextCoord");
 	
 	std::vector<Mesh *> meshes = entity->mesh->getMeshes();
 	
@@ -40,6 +50,25 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		Mesh* mesh = meshes.at(i);
+		if (mesh->textures.size() > 0) {
+			//std::cout << "textur" << std::endl;
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
+			//glUniform1i(getUniformHandle("Utex"), 0);
+			/*glPushAttrib(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glEnable(GL_TEXTURE_2D);
+
+			glBegin(GL_QUADS);
+			glNormal3f(0.0, 0.0, 1.0);
+			glTexCoord2d(1, 1); glVertex3f(0.0, 0.0, 0.0);
+			glTexCoord2d(1, 0); glVertex3f(0.0, 1.0, 0.0);
+			glTexCoord2d(0, 0); glVertex3f(1.0, 1.0, 0.0);
+			glTexCoord2d(0, 1); glVertex3f(1.0, 0.0, 0.0);
+			glEnd();
+
+			glDisable(GL_TEXTURE_2D);
+			glPopAttrib();*/
+		}
 
 		Material material = mesh->mat;
 		glUniform3fv(getUniformHandle("UaColor"), 1, value_ptr(material.ambient));
@@ -50,8 +79,6 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
 
-		//checkError("Mesh.draw");
-
 		glEnableVertexAttribArray(vertex);
 		glVertexAttribPointer(vertex, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
 
@@ -59,14 +86,21 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 		glVertexAttribPointer(normal, 3, GL_FLOAT, GL_FALSE,
 			sizeof(VertexData), (void*)(sizeof(glm::vec3)));
 
-        //cout << glGetError() << endl;
-        //assert(glGetError() == 0);
+		check_gl_error("Mesh.draw before texture");
+
+		//glEnableVertexAttribArray(texture);
+		//glVertexAttribPointer(normal, 2, GL_FLOAT, GL_FALSE,
+		//	sizeof(VertexData), (void*)(3 * sizeof(glm::vec3)));
+
+		check_gl_error("Mesh.draw after texture");
 
 		glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
 
 		glDisableVertexAttribArray(vertex);
 		glDisableVertexAttribArray(normal);
+		//glDisableVertexAttribArray(texture);
+		//glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	

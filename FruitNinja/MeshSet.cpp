@@ -2,10 +2,13 @@
 #include "MeshSet.h"
 #include <assimp/cimport.h>
 #include <assimp/postprocess.h>
+#include <GL/gl.h>
 #include <GL/glew.h>
 //#include <SDL_image.h>
 #include <iostream> 
 #include <assert.h>
+#include "tdogl/Texture.h"
+#include "tdogl/Bitmap.h"
 
 void MeshSet::recursiveProcess(aiNode *node, const aiScene *scene) {
 	//process
@@ -73,39 +76,58 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 	//just using diffuse texture for now...
 	for (int i = 0; i < mat->GetTextureCount(aiTextureType_DIFFUSE); i++) {
 		aiString str;
-		mat->GetTexture(aiTextureType_DIFFUSE, i, &str);
-		TextureData tmp;
-		tmp.id = loadTexture(str.C_Str());
-		tmp.type = 0;
-		textures.push_back(tmp);
+		if (mat->GetTexture(aiTextureType_DIFFUSE, i, &str) == AI_SUCCESS) {
+			TextureData tmp;
+			//---------------------------
+			//tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("C:/Users/Peter/Documents/GitHub/FruitNinja/Assets/Barrel/MaterialDiffuseColor.png");//str.C_Str());
+			//bmp.flipVertically();
+			//tdogl::Texture* tex = new tdogl::Texture(bmp);
+			tmp.id = loadTexture(str.C_Str(), 1024, 1024);
+			//tmp.id = tex->object();//loadTexture(str.C_Str(), 1024, 1024); //HARD CODIN NEEDS A FIXIN!!!
+			//delete tex;
+			//-------------------------------------
+			printf("Using texture %s\n", str.C_Str());
+			tmp.type = 0;
+			textures.push_back(tmp);
+		}
+		else {
+			printf("Texture failed to load: %s\n", str.C_Str());
+		}
 	}
 	meshes.push_back(new Mesh(&data, &indices, mat, &textures));
 }
 
 //This function was copied from off the internet, shouldn't be turned in
-unsigned int MeshSet::loadTexture(const char* filename) {
-	/*unsigned int num;
-	glGenTextures(1, &num);
-	SDL_Surface* img = IMG_Load(filename);
-	if (img == NULL) {
-		std::cout << "img was not loaded" << std::endl;
-		return -1;
-	}
-	SDL_PixelFormat form = { NULL, NULL, 32, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff, 0, 255 };
-	SDL_Surface* img2 = SDL_ConvertSurface(img, &form, SDL_SWSURFACE);
-	if (img2 == NULL) {
-		std::cout << "img2 was not loaded" << std::endl;
-		return -1;
-	}
-	glBindTexture(GL_TEXTURE_2D, num);
+GLuint MeshSet::loadTexture(const char* filename, int width, int height) {
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img2->w, img2->h, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, img2->pixels);
-	SDL_FreeSurface(img);
-	SDL_FreeSurface(img2);
-	return num;*/
-	return 0;
+	GLuint texture = 0;
+	/*unsigned char *data;
+	FILE *file;
+		// open texture data
+	file = fopen(filename, "rb");
+	if (file == NULL) return 0;
+
+	data = (unsigned char*)malloc(width * height * 4);
+
+	fread(data, width * height * 4, 1, file);
+	fclose(file);
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_DECAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_DECAL);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	gluBuild2DMipmaps(GL_TEXTURE_2D, 4, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+	
+	free(data);*/
+	return texture;
 }
 
 MeshSet::MeshSet(std::string filename) {
