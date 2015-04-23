@@ -5,11 +5,17 @@
 
 using namespace glm;
 
-void GameEntity::turnTo(glm::vec3 cartesian) {
-	if (cartesian.x < 0)
-		rotations.y = -1.0f * glm::atan(cartesian.z / cartesian.x);
-	else
-		rotations.y = glm::atan(cartesian.z / -cartesian.x) + PI;
+using namespace glm;
 
-    rotations.y -= PI / 2.f;
+vec3 GameEntity::turnAngle(vec3 cartesian) {
+	vec3 rot_angles(0, 0, 0);
+
+	if (cartesian.x < 0)
+		rot_angles.y = -1.0f * atan(cartesian.z / cartesian.x);
+	else
+		rot_angles.y = atan(cartesian.z / -cartesian.x) + PI;
+
+    rot_angles.y -= PI / 2.f;
+
+	return rot_angles;
 }

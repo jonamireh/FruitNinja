@@ -9,17 +9,17 @@ using namespace std;
 
 vec3 forwardDirection(std::shared_ptr<Camera> camera)
 {
-	return  normalize(camera->cameraFront);
+	return normalize(camera->cameraFront);
 }
 
 vec3 backDirection(std::shared_ptr<Camera> camera)
 {
-	return  normalize(camera->cameraFront) * -1.0f;
+	return normalize(camera->cameraFront) * -1.0f;
 }
 
 vec3 rightDirection(std::shared_ptr<Camera> camera)
 {
-	return  normalize(cross(camera->cameraFront, vec3(0.0, 1.0, 0.0)));
+	return normalize(cross(camera->cameraFront, vec3(0.0, 1.0, 0.0)));
 }
 
 vec3 leftDirection(std::shared_ptr<Camera> camera)
@@ -27,31 +27,36 @@ vec3 leftDirection(std::shared_ptr<Camera> camera)
 	return normalize(cross(camera->cameraFront, vec3(0.0, 1.0, 0.0))) * -1.0f;
 }
 
+float angleDiff(float angle_a, float angle_b)
+{
+	vec2 a(cos(angle_a), sin(angle_a));
+	vec2 b(cos(angle_b), sin(angle_b));
+
+	return acos(dot(a, b));
+}
+
 void ChewyMovementComponent::update()
 {
 	if (camera->in_use) {
+		vec3 movement(0, 0, 0);
+
 		if (keys[GLFW_KEY_W]) {
-            entity.turnTo(camera->cameraFront);
-			entity.position.x += forwardDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
-			entity.position.z += forwardDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			movement += forwardDirection(camera);
 		}
 		if (keys[GLFW_KEY_S]) {
-            entity.turnTo(camera->cameraFront);
-            entity.rotations.y += M_PI;
-			entity.position.x += backDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
-			entity.position.z += backDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			movement += backDirection(camera);
 		}
 		if (keys[GLFW_KEY_A]) {
-            entity.turnTo(camera->cameraFront);
-            entity.rotations.y += M_PI_2;
-			entity.position.x += leftDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
-			entity.position.z += leftDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			movement += leftDirection(camera);
 		}
 		if (keys[GLFW_KEY_D]) {
-            entity.turnTo(camera->cameraFront);
-            entity.rotations.y -= M_PI_2;
-			entity.position.x += rightDirection(camera).x * CHEWY_MOVE_SPEED * (float)seconds_passed;
-			entity.position.z += rightDirection(camera).z * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			movement += rightDirection(camera);
+		}
+		
+		if (length(movement) > 0) {
+			movement = normalize(movement * vec3(1, 0, 1)) * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			entity.rotations = entity.turnAngle(movement);
+			entity.position += movement;
 		}
 	}
 }
