@@ -78,7 +78,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChewyEntity.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
-    <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GLSL.cpp" />
     <ClCompile Include="ChewyMovementComponent.cpp" />
     <ClCompile Include="GuardEntity.cpp" />
@@ -86,6 +85,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshSet.cpp" />
+    <ClCompile Include="ObstacleEntity.cpp" />
     <ClCompile Include="PhongShader.cpp" />
     <ClCompile Include="PlayerCamera.cpp" />
     <ClCompile Include="ProjectileEntity.cpp" />
@@ -107,6 +107,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshSet.h" />
+    <ClInclude Include="ObstacleEntity.h" />
     <ClInclude Include="PhongShader.h" />
     <ClInclude Include="PlayerCamera.h" />
     <ClInclude Include="ProjectileEntity.h" />
