@@ -55,7 +55,7 @@
     <ClCompile Include="ProjectileEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="GameEntity.cpp">
+    <ClCompile Include="ObstacleEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -115,6 +115,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="ProjectileEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstacleEntity.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
