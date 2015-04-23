@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
-  <asset><contributor><author></author><authoring_tool>FBX COLLADA exporter</authoring_tool><comments></comments></contributor><created>2015-04-23T09:29:48Z</created><keywords></keywords><modified>2015-04-23T09:29:48Z</modified><revision></revision><subject></subject><title></title><unit meter="0.010000" name="centimeter"></unit><up_axis>Y_UP</up_axis></asset>
+  <asset><contributor><author></author><authoring_tool>FBX COLLADA exporter</authoring_tool><comments></comments></contributor><created>2015-04-23T17:29:10Z</created><keywords></keywords><modified>2015-04-23T17:29:10Z</modified><revision></revision><subject></subject><title></title><unit meter="0.010000" name="centimeter"></unit><up_axis>Y_UP</up_axis></asset>
   <library_materials>
     <material id="lambert2" name="lambert2">
       <instance_effect url="#lambert2-fx"/>
@@ -63,7 +63,7 @@
               <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.400000  0.400000 0.400000 1.000000</color>
+              <color sid="diffuse">0.254902  0.254902 0.254902 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -83,10 +83,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.156863  0.156863 0.156863 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -106,10 +106,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.046983  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.214771  0.037934 0.037934 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -129,10 +129,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.060395  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.255039  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -152,10 +152,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.241611  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -175,10 +175,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.093965  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.281880  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -198,10 +198,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.234897  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -221,10 +221,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.013428  0.013428 0.013428 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.201343  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -244,10 +244,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.006714  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.187915  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -267,10 +267,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.058824  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.201343  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -290,10 +290,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.100664  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.208057  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -313,10 +313,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.073823  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.234897  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -336,10 +336,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.019608  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.201343  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -359,10 +359,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.235294  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -382,10 +382,10 @@
               <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
             </emission>
             <ambient>
-              <color sid="ambient">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.500000  0.500000 0.500000 1.000000</color>
+              <color sid="diffuse">0.215686  0.000000 0.000000 1.000000</color>
             </diffuse>
             <transparent opaque="RGB_ZERO">
               <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
@@ -4697,7 +4697,7 @@
 -0.993956 -0.109604 0.006253
 0.715295 -0.115935 0.689139
 -0.056554 -0.245814 0.967666
-0.997645 -0.068555 -0.001908
+0.997646 -0.068555 -0.001908
 0.879850 0.474368 -0.028979
 0.641007 0.077798 -0.763582
 0.631365 0.342163 0.695919
@@ -5125,7 +5125,7 @@
 0.993956 -0.109604 0.006253
 -0.715295 -0.115936 0.689139
 0.056555 -0.245814 0.967666
--0.997645 -0.068555 -0.001907
+-0.997646 -0.068555 -0.001907
 -0.641007 0.077798 -0.763582
 -0.879850 0.474368 -0.028979
 -0.911323 0.411497 0.012665
