@@ -40,7 +40,11 @@ void World::init()
 
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Tower/tower.dae"))));
     tower->scale = 30.0f;
-    shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern/lantern.dae"))));
+    shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 15.0, 30.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern/lantern.dae"))));
+    shared_ptr <GameEntity> lantern_pole(new ObstacleEntity(vec3(30.0, 0.0, 30.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern Pole/lanternPole.dae"))));
+    shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(10.0, 0.0, 10.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/ClosedBarrel.dae"))));
+    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(20.0, 0.0, 20.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/OpenBarrel.dae"))));
+
     camera = player_camera;
     player_camera->in_use = true;
 	entities.push_back(chewy);
@@ -48,6 +52,10 @@ void World::init()
 	entities.push_back(arrow);
     entities.push_back(tower);
     entities.push_back(lantern);
+    entities.push_back(lantern_pole);
+    entities.push_back(oBarrel);
+    entities.push_back(cBarrel);
+
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
