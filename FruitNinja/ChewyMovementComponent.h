@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "GameEntity.h"
 #include "Camera.h"
+#include <math.h>
 
 #define CHEWY_MOVE_SPEED 5.0f
 
