@@ -78,6 +78,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChewyEntity.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
+    <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GLSL.cpp" />
     <ClCompile Include="ChewyMovementComponent.cpp" />
     <ClCompile Include="GuardEntity.cpp" />

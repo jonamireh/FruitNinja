@@ -13,4 +13,5 @@ public:
 	std::shared_ptr<MeshSet> mesh;
 	glm::vec3 position;
     glm::vec3 rotations;
+	void turnTo(glm::vec3);
 };

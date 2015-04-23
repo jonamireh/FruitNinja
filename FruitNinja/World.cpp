@@ -39,7 +39,7 @@ void World::init()
 	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae"))));
 
 
-	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("bunny.obj")), chewy, archery_camera));
+	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("../Assets/Arrow/arrow.dae")), chewy, archery_camera));
 
     camera = player_camera;
     player_camera->in_use = true;
