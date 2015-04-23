@@ -15,4 +15,5 @@ public:
     glm::vec3 rotations;
     float scale = 1.0f;
 	glm::vec3 turnAngle(glm::vec3 cartesian);
+	glm::vec3 velocity = glm::vec3(0);
 };

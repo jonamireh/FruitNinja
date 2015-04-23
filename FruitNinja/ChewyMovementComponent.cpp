@@ -40,6 +40,8 @@ void ChewyMovementComponent::update()
 	if (camera->in_use) {
 		vec3 movement(0, 0, 0);
 
+		entity.velocity -= vec3(0, 20, 0) * seconds_passed;
+		
 		if (keys[GLFW_KEY_W]) {
 			movement += forwardDirection(camera);
 		}
@@ -54,9 +56,20 @@ void ChewyMovementComponent::update()
 		}
 		
 		if (length(movement) > 0) {
-			movement = normalize(movement * vec3(1, 0, 1)) * CHEWY_MOVE_SPEED * (float)seconds_passed;
+			movement = normalize(movement * vec3(1, 0, 1)) * CHEWY_MOVE_SPEED * seconds_passed;
 			entity.rotations = entity.turnAngle(movement);
 			entity.position += movement;
+		}
+		if (entity.position.y <= 0 && keys[GLFW_KEY_SPACE])
+		{
+			entity.velocity += vec3(0, 17, 0);
+		}
+
+		entity.position += entity.velocity * seconds_passed;
+		if (entity.position.y < 0)
+		{
+			entity.position.y = 0;
+			entity.velocity.y = 0;
 		}
 	}
 }
