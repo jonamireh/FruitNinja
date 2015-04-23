@@ -39,8 +39,8 @@ void PlayerCamera::mouse_update()
 {
 	float sensitivity = 0.1;
 
-    theta += x_offset * sensitivity;
-    phi += y_offset * sensitivity;
+    theta -= x_offset * sensitivity;
+    phi -= y_offset * sensitivity;
 
     if (phi > MaxVerticalAngle)
     {
@@ -55,7 +55,7 @@ void PlayerCamera::mouse_update()
     }
 
     cameraFront = rotateY(cameraFront, radians(x_offset * sensitivity));
-    cameraFront = rotate(cameraFront, radians(y_offset * sensitivity), cross(cameraFront, cameraUp));
+    cameraFront = rotate(cameraFront, -radians(y_offset * sensitivity), cross(cameraFront, cameraUp));
     cameraFront = normalize(cameraFront);
 }
 
