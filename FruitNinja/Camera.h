@@ -26,7 +26,6 @@ protected:
 	// DebugCamera Angle
 	float theta, phi;
 	// DebugCamera Vectors for lookAt
-	glm::vec3 cameraPosition;
 	glm::vec3 cameraUp;
 public:
     glm::vec3 cameraFront;
@@ -37,4 +36,5 @@ public:
     virtual void movement(double deltaTime, std::shared_ptr<GameEntity> chewy) = 0;
 	glm::mat4 getViewMatrix();
     virtual void update_radius(float delta){};
+	glm::vec3 cameraPosition;
 };
