@@ -47,6 +47,7 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern/lantern.dae"))));
 
     shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 6.0, 31.5), meshes.at("lantern")));
+    lantern->rotations.y = M_PI_2;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern Pole/lanternPole.dae"))));
     shared_ptr <GameEntity> lantern_pole(new ObstacleEntity(vec3(30.0, 0.0, 30.0), meshes.at("lanternPole")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/ClosedBarrel.dae"))));

@@ -19,7 +19,7 @@
 #include "Bitmap.h"
 #include <stdexcept>
 #include <cstdlib>
-#include <C:/Users/Peter/Documents/GitHub/FruitNinja/FruitNinja/tdogl/stb_image.h>
+#include "stb_image.h"
 
 //uses stb_image to try load files
 #define STBI_FAILURE_USERMSG
