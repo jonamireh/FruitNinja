@@ -31,6 +31,7 @@ public:
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
     static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
     void change_camera();
+    std::map<std::string, std::shared_ptr<MeshSet>> meshes;
 private:
     std::shared_ptr<Camera> debug_camera;
     std::shared_ptr<Camera> archery_camera;

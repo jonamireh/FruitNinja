@@ -34,16 +34,28 @@ void World::init()
     player_camera = shared_ptr<Camera>(new PlayerCamera());
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
 
-	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Ninja/ninja_final2.dae")), player_camera));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae"))));
-	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("../Assets/Arrow/arrow.dae")), chewy, archery_camera));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet("../Assets/Ninja/ninja_final2.dae"))));
+	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae"))));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(5.0, 0.0, 0.0), meshes.at("guard")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet("../Assets/Arrow/arrow.dae"))));
+	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), meshes.at("arrow"), chewy, archery_camera));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet("../Assets/Tower/tower.dae"))));
 
-    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Tower/tower.dae"))));
+    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
     tower->scale = 30.0f;
-    shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 15.0, 30.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern/lantern.dae"))));
-    shared_ptr <GameEntity> lantern_pole(new ObstacleEntity(vec3(30.0, 0.0, 30.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern Pole/lanternPole.dae"))));
-    shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(10.0, 0.0, 10.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/ClosedBarrel.dae"))));
-    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(20.0, 0.0, 20.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/OpenBarrel.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern/lantern.dae"))));
+
+    shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 15.0, 30.0), meshes.at("lantern")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern Pole/lanternPole.dae"))));
+    shared_ptr <GameEntity> lantern_pole(new ObstacleEntity(vec3(30.0, 0.0, 30.0), meshes.at("lanternPole")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/ClosedBarrel.dae"))));
+    shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(10.0, 0.0, 10.0), meshes.at("closedBarrel")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/OpenBarrel.dae"))));
+    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(20.0, 0.0, 20.0), meshes.at("openBarrel")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet("../Assets/Box/Box.dae"))));
+    shared_ptr <GameEntity> box(new ObstacleEntity(vec3(50.0, 0.0, 20.0), meshes.at("box")));
+
 
     camera = player_camera;
     player_camera->in_use = true;
@@ -55,6 +67,7 @@ void World::init()
     entities.push_back(lantern_pole);
     entities.push_back(oBarrel);
     entities.push_back(cBarrel);
+    entities.push_back(box);
 
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
