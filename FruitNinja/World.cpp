@@ -18,7 +18,8 @@ float y_offset;
 float screen_width = 1280;
 float screen_height = 720;
 
-//MeshSet* bunny_mesh = new MeshSet("bunny.obj");
+static std::shared_ptr<Camera> camera;
+
 
 World::World()
 {
@@ -35,7 +36,7 @@ void World::init()
 
 	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Ninja/ninja_final2.dae")), player_camera));
 
-	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("bunny.obj"))));
+	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae"))));
 
 
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("bunny.obj")), chewy, archery_camera));
@@ -85,6 +86,7 @@ void World::change_camera()
         debug_camera->in_use = true;
         player_camera->in_use = false;
         archery_camera->in_use = false;
+
     }
     if (keys[GLFW_KEY_2])
     {
@@ -111,10 +113,6 @@ void World::update_key_callbacks()
     y_offset = 0;
 }
 
-void World::update_mouse_callbacks()
-{
-}
-
 void World::update()
 {
 	static float start_time = 0.0;
@@ -126,4 +124,11 @@ void World::update()
 	start_time = glfwGetTime();
 
     update_key_callbacks();
+}
+
+void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)
+{
+    shared_ptr<PlayerCamera> radius_changer = dynamic_pointer_cast<PlayerCamera>(camera);
+    if (radius_changer)
+        radius_changer->update_radius(y_pos);
 }

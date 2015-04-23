@@ -17,7 +17,10 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	int normal = getAttributeHandle("aNormal");
 	
 	std::vector<Mesh *> meshes = entity->mesh->getMeshes();
-
+	
+	vec3 dir_light_vec(0, 1, 0);
+	glUniform3fv(getUniformHandle("UdirLight"), 1, value_ptr(dir_light_vec));
+	
 	vec3 light_pos(0, 2, 2);
 	glUniform3fv(getUniformHandle("uLightPos"), 1, value_ptr(light_pos));
 

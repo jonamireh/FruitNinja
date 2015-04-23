@@ -63,10 +63,14 @@ void AppMain()
 
     // Set Key Callback Function
     glfwSetKeyCallback(window, &World::key_callback);
+
     // Set Mouse Callback Function
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(window, 0, 0);
     glfwSetCursorPosCallback(window, &World::mouse_callback);
+
+    glfwSetScrollCallback(window, &World::scroll_callback);
+
 
 
     while (!glfwWindowShouldClose(window))

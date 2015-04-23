@@ -24,16 +24,15 @@ class World
 public:
 	World();
     void update_key_callbacks();
-    void update_mouse_callbacks();
 	void update();
-	std::map<std::string, std::shared_ptr<Shader>> shaders;
+    static void scroll_callback(GLFWwindow* window, double x_pos, double y_pos);
+    std::map<std::string, std::shared_ptr<Shader>> shaders;
 	std::vector<std::shared_ptr<GameEntity>> entities;
 	void draw();
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
     static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
     void change_camera();
 private:
-    std::shared_ptr<Camera> camera;
     std::shared_ptr<Camera> debug_camera;
     std::shared_ptr<Camera> archery_camera;
     std::shared_ptr<Camera> player_camera;
