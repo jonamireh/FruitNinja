@@ -10,7 +10,7 @@ void ProjectileMovementComponent::update()
 	if (keys[GLFW_KEY_E] && camera->in_use) {
 		entity.position = camera->cameraPosition;//entity.owner->position;
 		velocity = glm::normalize(camera->cameraFront) * ARROW_SPEED;
-		entity.turnTo(camera->cameraFront);
+		entity.rotations = entity.turnAngle(camera->cameraFront);
 	}
 	entity.position += velocity * (float)seconds_passed;
 	//std::cout << entity.position.x << ", " << entity.position.y << ", " << entity.position.z << "\n";
