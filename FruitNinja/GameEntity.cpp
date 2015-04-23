@@ -1,6 +1,9 @@
 #include "GameEntity.h"
 
 #define PI 3.14159
+#include <glm/gtc/matrix_transform.inl>
+
+using namespace glm;
 
 void GameEntity::turnTo(glm::vec3 cartesian) {
 	if (cartesian.x < 0)

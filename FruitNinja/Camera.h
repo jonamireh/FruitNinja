@@ -33,7 +33,7 @@ public:
 
 	Camera();
 	~Camera();
-    virtual void movement(double deltaTime, std::shared_ptr<GameEntity> chewy) = 0;
+    virtual void movement(std::shared_ptr<GameEntity> chewy) = 0;
 	glm::mat4 getViewMatrix();
     virtual void update_radius(float delta){};
 	glm::vec3 cameraPosition;

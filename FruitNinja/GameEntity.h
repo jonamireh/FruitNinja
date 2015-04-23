@@ -14,4 +14,5 @@ public:
 	glm::vec3 position;
     glm::vec3 rotations;
 	void turnTo(glm::vec3);
+    float scale = 1.0f;
 };

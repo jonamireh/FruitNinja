@@ -62,7 +62,7 @@ void PlayerCamera::mouse_update()
 /**
 Call this at the end of the draw loop to update for strafing.
 */
-void PlayerCamera::movement(double deltaTime, std::shared_ptr<GameEntity> chewy)
+void PlayerCamera::movement(std::shared_ptr<GameEntity> chewy)
 {
     mouse_update();
 

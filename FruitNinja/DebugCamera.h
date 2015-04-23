@@ -9,5 +9,5 @@ public:
 	DebugCamera();
 	~DebugCamera();
     void mouse_update();
-    void movement(double deltaTime, std::shared_ptr<GameEntity> chewy);
+    void movement(std::shared_ptr<GameEntity> chewy);
 };

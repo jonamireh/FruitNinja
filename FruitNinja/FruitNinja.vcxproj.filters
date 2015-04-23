@@ -58,6 +58,9 @@
     <ClCompile Include="ObstacleEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="GameEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">

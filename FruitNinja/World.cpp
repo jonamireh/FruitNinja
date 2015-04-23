@@ -6,13 +6,13 @@
 #include "ArcheryCamera.h"
 #include "GuardEntity.h"
 #include "ProjectileEntity.h"
+#include "ObstacleEntity.h"
 
 using namespace std;
 using namespace glm;
 
 bool keys[1024];
 float seconds_passed = 0;
-Timer timer;
 float x_offset;
 float y_offset;
 float screen_width = 1280;
@@ -35,17 +35,19 @@ void World::init()
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
 
 	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Ninja/ninja_final2.dae")), player_camera));
-
-	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae"))));
-
-
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(5.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae"))));
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("../Assets/Arrow/arrow.dae")), chewy, archery_camera));
 
+    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Tower/tower.dae"))));
+    tower->scale = 50.0f;
+    shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern/lantern.dae"))));
     camera = player_camera;
     player_camera->in_use = true;
 	entities.push_back(chewy);
-	entities.push_back(guard1);
+	entities.push_back(guard);
 	entities.push_back(arrow);
+    entities.push_back(tower);
+    entities.push_back(lantern);
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
@@ -53,7 +55,6 @@ void World::init()
 
 void World::draw()
 {
-    timer.start_timing("startDraw");
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaders.at("phongShader")->getProgramID());
 	for (int i = 0; i < entities.size(); i++)
@@ -106,7 +107,7 @@ void World::change_camera()
 
 void World::update_key_callbacks()
 {
-    camera->movement(timer.end_timing(), entities.at(0));
+    camera->movement(entities.at(0));
     change_camera();
 
     x_offset = 0;

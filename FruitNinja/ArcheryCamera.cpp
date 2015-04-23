@@ -47,7 +47,7 @@ void ArcheryCamera::mouse_update()
 /**
 Call this at the end of the draw loop to update for strafing.
 */
-void ArcheryCamera::movement(double deltaTime, shared_ptr<GameEntity> chewy)
+void ArcheryCamera::movement(shared_ptr<GameEntity> chewy)
 {
     mouse_update();
 

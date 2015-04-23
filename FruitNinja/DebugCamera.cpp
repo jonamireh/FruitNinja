@@ -1,5 +1,6 @@
 #include "DebugCamera.h"
 #include "World.h"
+#include <glm/gtx/string_cast.hpp>
 
 using namespace glm;
 
@@ -43,9 +44,9 @@ void DebugCamera::mouse_update()
 /**
 Call this at the end of the draw loop to update for strafing.
 */
-void DebugCamera::movement(double deltaTime, std::shared_ptr<GameEntity> chewy)
+void DebugCamera::movement(shared_ptr<GameEntity> chewy)
 {
-    float cameraSpeed = 0.1;
+    float cameraSpeed = 1.;
 
 	if (keys[GLFW_KEY_W])
 		cameraPosition += cameraSpeed * cameraFront;
@@ -55,6 +56,8 @@ void DebugCamera::movement(double deltaTime, std::shared_ptr<GameEntity> chewy)
 		cameraPosition -= normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
 	if (keys[GLFW_KEY_D])
 		cameraPosition += normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
+
+    cout << to_string(cameraPosition) << endl;
 
     // NOW DO MOUSE ADJUSTS!
     mouse_update();
