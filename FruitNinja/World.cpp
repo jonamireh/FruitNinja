@@ -37,9 +37,9 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet("../Assets/Ninja/ninja_final2.dae"))));
 	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae"))));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(5.0, 0.0, 0.0), meshes.at("guard")));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet("../Assets/Arrow/arrow.dae"))));
-	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), meshes.at("arrow"), chewy, archery_camera));
+	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 4.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet("../Assets/Tower/tower.dae"))));
 
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
