@@ -5,14 +5,15 @@
 using namespace glm;
 
 const float PlayerCamera::MinVerticalAngle = 0.0f;
-
+const float max_radius = 20.f;
+const float min_radius = 5.f;
 /*
 Default constructor.
 */
 PlayerCamera::PlayerCamera()
 {
 	lookAtPoint = vec3(0);
-    radius = 3.0f;
+    radius = 10.0f;
 }
 
 /*
@@ -77,10 +78,10 @@ mat4 PlayerCamera::getViewMatrix()
 void PlayerCamera::update_radius(float delta)
 {
     float new_radius = radius - 0.1 * delta;
-    if (new_radius > 15.f)
-        new_radius = 15.f;
-    else if (new_radius < 2.0f)
-        new_radius = 2.0f;
+    if (new_radius > max_radius)
+        new_radius = max_radius;
+    else if (new_radius < min_radius)
+        new_radius = min_radius;
 
     radius = new_radius;
 }

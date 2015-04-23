@@ -41,8 +41,8 @@ void World::init()
 
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("bunny.obj")), chewy, archery_camera));
 
-    camera = debug_camera;
-    debug_camera->in_use = true;
+    camera = player_camera;
+    player_camera->in_use = true;
 	entities.push_back(chewy);
 	entities.push_back(guard1);
 	entities.push_back(arrow);
