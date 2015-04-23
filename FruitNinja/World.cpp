@@ -39,7 +39,7 @@ void World::init()
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(5.0f, 0.0f, 0.0f), shared_ptr<MeshSet>(new MeshSet("../Assets/Arrow/arrow.dae")), chewy, archery_camera));
 
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Tower/tower.dae"))));
-    tower->scale = 50.0f;
+    tower->scale = 30.0f;
     shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(0.0, 0.0, 0.0), shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern/lantern.dae"))));
     camera = player_camera;
     player_camera->in_use = true;

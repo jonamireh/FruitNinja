@@ -5,7 +5,7 @@
 using namespace glm;
 
 const float PlayerCamera::MinVerticalAngle = 0.0f;
-const float max_radius = 20.f;
+const float max_radius = 27.f;
 const float min_radius = 5.f;
 /*
 Default constructor.
@@ -13,7 +13,7 @@ Default constructor.
 PlayerCamera::PlayerCamera()
 {
 	lookAtPoint = vec3(0);
-    radius = 10.0f;
+    radius = 17.0f;
 }
 
 /*
@@ -66,8 +66,8 @@ void PlayerCamera::movement(std::shared_ptr<GameEntity> chewy)
 {
     mouse_update();
 
-    cameraPosition = chewy->position - radius * cameraFront;
-    lookAtPoint = chewy->position;
+    cameraPosition = chewy->position + vec3(0.f, 5.0f, 0.f) -radius * cameraFront;
+    lookAtPoint = chewy->position + vec3(0.f, 5.0f, 0.f);
 }
 
 mat4 PlayerCamera::getViewMatrix()
@@ -77,7 +77,7 @@ mat4 PlayerCamera::getViewMatrix()
 
 void PlayerCamera::update_radius(float delta)
 {
-    float new_radius = radius - 0.1 * delta;
+    float new_radius = radius - 0.5 * delta;
     if (new_radius > max_radius)
         new_radius = max_radius;
     else if (new_radius < min_radius)
