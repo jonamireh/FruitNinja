@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChewyEntity.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
@@ -87,6 +88,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshSet.cpp" />
     <ClCompile Include="ObstacleEntity.cpp" />
+    <ClCompile Include="OctTree.cpp" />
     <ClCompile Include="PhongShader.cpp" />
     <ClCompile Include="PlayerCamera.cpp" />
     <ClCompile Include="ProjectileEntity.cpp" />
@@ -100,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h" />
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChewyEntity.h" />
     <ClInclude Include="Component.h" />
@@ -112,6 +115,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshSet.h" />
     <ClInclude Include="ObstacleEntity.h" />
+    <ClInclude Include="OctTree.h" />
     <ClInclude Include="PhongShader.h" />
     <ClInclude Include="PlayerCamera.h" />
     <ClInclude Include="ProjectileEntity.h" />

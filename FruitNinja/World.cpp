@@ -7,6 +7,7 @@
 #include "GuardEntity.h"
 #include "ProjectileEntity.h"
 #include "ObstacleEntity.h"
+#include "OctTree.h"
 
 using namespace std;
 using namespace glm;
@@ -148,6 +149,10 @@ void World::update_key_callbacks()
 
 void World::update()
 {
+    OctTree world_oct_tree = OctTree(BoundingBox(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+
+    // get the collison pairs and handle them as you desire
+
 	static float start_time = 0.0;
 	float end_time = glfwGetTime();
 	for (int i = 0; i < entities.size(); i++) {
