@@ -5,8 +5,8 @@
 #include "Camera.h"
 #include <math.h>
 
-#define CHEWY_MOVE_SPEED 15.0f
-#define CHEWY_ROTATE_SPEED ((float)(M_PI * 2))
+#define CHEWY_MOVE_SPEED 20.0f
+#define CHEWY_ROTATE_SPEED 15.0f
 
 class ChewyMovementComponent : public Component
 {
