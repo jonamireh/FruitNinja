@@ -24,7 +24,7 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	//vertex attributes
 	int vertex = getAttributeHandle("aPosition");
 	int normal = getAttributeHandle("aNormal");
-	//int texture = getAttributeHandle("aTextCoord");
+	int texture = getAttributeHandle("aTextCoord");
 	
 	std::vector<Mesh *> meshes = entity->mesh->getMeshes();
 	
@@ -33,7 +33,6 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	
 	vec3 light_pos(0, 2, 2);
 	glUniform3fv(getUniformHandle("uLightPos"), 1, value_ptr(light_pos));
-
 
 	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
 
@@ -46,28 +45,25 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
     glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(model_trans * model_rot_z * model_rot_x * model_rot_y * model_scale));
     glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f)));
 
-
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		Mesh* mesh = meshes.at(i);
+		//std::cout << "Loop: " << i << std::endl;
+		//system("PAUSE");
 		if (mesh->textures.size() > 0) {
-			//std::cout << "textur" << std::endl;
-			//glActiveTexture(GL_TEXTURE0);
-			//glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
-			//glUniform1i(getUniformHandle("Utex"), 0);
-			/*glPushAttrib(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glEnable(GL_TEXTURE_2D);
-
-			glBegin(GL_QUADS);
-			glNormal3f(0.0, 0.0, 1.0);
-			glTexCoord2d(1, 1); glVertex3f(0.0, 0.0, 0.0);
-			glTexCoord2d(1, 0); glVertex3f(0.0, 1.0, 0.0);
-			glTexCoord2d(0, 0); glVertex3f(1.0, 1.0, 0.0);
-			glTexCoord2d(0, 1); glVertex3f(1.0, 0.0, 0.0);
-			glEnd();
-
-			glDisable(GL_TEXTURE_2D);
-			glPopAttrib();*/
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
+			glUniform1i(getUniformHandle("Utex"), 0);
+			glUniform1i(getUniformHandle("Uflag"), 1);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->VAO);
+			glEnableVertexAttribArray(texture);//
+			glVertexAttribPointer(texture, 2, GL_FLOAT, GL_FALSE,//
+				sizeof(VertexData), (void*)(3 * sizeof(glm::vec3)));//
+		}
+		else {
+			//std::cout << "bitch" << std::endl;
+			//system("PAUSE");
+			glUniform1i(getUniformHandle("Uflag"), 0);
 		}
 
 		Material material = mesh->mat;
@@ -85,22 +81,21 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 		glEnableVertexAttribArray(normal);
 		glVertexAttribPointer(normal, 3, GL_FLOAT, GL_FALSE,
 			sizeof(VertexData), (void*)(sizeof(glm::vec3)));
-
-		check_gl_error("Mesh.draw before texture");
-
-		//glEnableVertexAttribArray(texture);
-		//glVertexAttribPointer(normal, 2, GL_FLOAT, GL_FALSE,
-		//	sizeof(VertexData), (void*)(3 * sizeof(glm::vec3)));
-
-		check_gl_error("Mesh.draw after texture");
-
+		if (mesh->textures.size() > 10) {
+			check_gl_error("Mesh.draw before drawelem");
+			system("PAUSE");
+		}
 		glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
-
+		if (mesh->textures.size() > 10) {
+			check_gl_error("Mesh.draw after texture");
+			std::cout << "got after\n";
+			system("PAUSE");
+		}
 
 		glDisableVertexAttribArray(vertex);
 		glDisableVertexAttribArray(normal);
-		//glDisableVertexAttribArray(texture);
-		//glBindTexture(GL_TEXTURE_2D, 0);
+		glDisableVertexAttribArray(texture);//
+		glBindTexture(GL_TEXTURE_2D, 0);//
 	}
 
 	

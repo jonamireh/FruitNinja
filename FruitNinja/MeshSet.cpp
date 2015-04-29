@@ -58,6 +58,8 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		if (mesh->mTextureCoords[0]) {
 			tmpVec.x = mesh->mTextureCoords[0][i].x;
 			tmpVec.y = mesh->mTextureCoords[0][i].y;
+			//std::cout << "U: " << tmpVec.x << std::endl;
+			//std::cout << "V: " << tmpVec.y << std::endl;
 		}
 		else {
 			tmpVec.x = tmpVec.y = tmpVec.z = 0.0;
@@ -79,12 +81,12 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		if (mat->GetTexture(aiTextureType_DIFFUSE, i, &str) == AI_SUCCESS) {
 			TextureData tmp;
 			//---------------------------
-			//tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("C:/Users/Peter/Documents/GitHub/FruitNinja/Assets/Barrel/MaterialDiffuseColor.png");//str.C_Str());
-			//bmp.flipVertically();
-			//tdogl::Texture* tex = new tdogl::Texture(bmp);
-			tmp.id = loadTexture(str.C_Str(), 1024, 1024);
-			//tmp.id = tex->object();//loadTexture(str.C_Str(), 1024, 1024); //HARD CODIN NEEDS A FIXIN!!!
-			//delete tex;
+			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("C:/Users/Peter/Documents/GitHub/FruitNinja/Assets/Barrel/Test.png");//str.C_Str());
+			
+			bmp.flipVertically();
+			tdogl::Texture* tex = new tdogl::Texture(bmp);
+			tmp.id = tex->object();
+			//delete tex;//possible memory leak
 			//-------------------------------------
 			printf("Using texture %s\n", str.C_Str());
 			tmp.type = 0;

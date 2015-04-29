@@ -15,7 +15,7 @@
       <init_from>MaterialDiffuseColor.png</init_from>
     </image>
     <image id="Untitled" name="Untitled">
-      <init_from>Untitled.png</init_from>
+      <init_from>MaterialDiffuseColor.png</init_from>
     </image>
   </library_images>
   <library_effects>

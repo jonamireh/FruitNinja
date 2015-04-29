@@ -55,7 +55,7 @@ void World::init()
     shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(48.0, 0.0, 30.0), meshes.at("closedBarrel")));
     cBarrel->scale = 3.0f;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/OpenBarrel.dae"))));
-    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(48.0, 0.0, 40.0), meshes.at("openBarrel")));
+    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(48.0, 8.0, 40.0), meshes.at("openBarrel")));
     oBarrel->scale = 3.0f;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet("../Assets/Box/Box.dae"))));
     shared_ptr <GameEntity> box1(new ObstacleEntity(vec3(50.0, 0.0, 20.0), meshes.at("box")));

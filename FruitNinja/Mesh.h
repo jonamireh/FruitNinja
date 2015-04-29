@@ -20,7 +20,7 @@ struct TextureData {
 
 class Mesh {
 public:
-	Mesh(std::vector<VertexData> *vd, std::vector<unsigned int> *id, aiMaterial* material, std::vector<TextureData> *td = NULL);
+	Mesh(std::vector<VertexData> *vd, std::vector<GLuint> *id, aiMaterial* material, std::vector<TextureData> *td = NULL);
 	~Mesh();
 	GLuint VAO;
 	GLuint VBO;
