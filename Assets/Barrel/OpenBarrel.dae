@@ -14,6 +14,12 @@
     <image id="MaterialDiffuseColor_png" name="MaterialDiffuseColor_png">
       <init_from>MaterialDiffuseColor.png</init_from>
     </image>
+<<<<<<< HEAD
+=======
+    <image id="Untitled" name="Untitled">
+      <init_from>MaterialDiffuseColor.png</init_from>
+    </image>
+>>>>>>> 8b38a12e45b2c5c0a9afe40d1479c091e3c56ea4
   </library_images>
   <library_effects>
     <effect id="Material-effect">
