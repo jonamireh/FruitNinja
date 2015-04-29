@@ -1,21 +1,21 @@
-#include "BoundingBox.h"
+#include "Voxel.h"
 
 using namespace glm;
 
-BoundingBox::BoundingBox()
+Voxel::Voxel()
 {
     
 }
 
-BoundingBox::BoundingBox(vec3 lower, vec3 upper)
+Voxel::Voxel(vec3 lower, vec3 upper)
 {
     lower_bound = lower;
     upper_bound = upper;
 }
 
-std::vector<BoundingBox> BoundingBox::split()
+std::vector<Voxel> Voxel::split()
 {
-    std::vector<BoundingBox> boxes;
+    std::vector<Voxel> boxes;
 
     //    X     Y    Z
     // front face
@@ -36,22 +36,25 @@ std::vector<BoundingBox> BoundingBox::split()
     vec3 right_mid_back = vec3(upper_bound.x, 0.5f * (lower_bound.y + upper_bound.y), upper_bound.z);
 
 
-    boxes.push_back(BoundingBox(lower_bound, mid_mid_mid));
-    boxes.push_back(BoundingBox(mid_mid_front, right_mid_mid));
-    boxes.push_back(BoundingBox(left_mid_front, mid_top_back));
-    boxes.push_back(BoundingBox(mid_mid_front, right_top_mid));
+    boxes.push_back(Voxel(lower_bound, mid_mid_mid));
+    boxes.push_back(Voxel(mid_bottom_front, right_mid_mid));
+    boxes.push_back(Voxel(left_mid_front, mid_top_mid));
+    boxes.push_back(Voxel(mid_mid_front, right_top_mid));
 
-    boxes.push_back(BoundingBox(left_bottom_mid, mid_mid_back));
-    boxes.push_back(BoundingBox(mid_bottom_mid, right_mid_back));
-    boxes.push_back(BoundingBox(left_mid_mid, mid_top_back));
-    boxes.push_back(BoundingBox(mid_mid_mid, upper_bound));
+    boxes.push_back(Voxel(left_bottom_mid, mid_mid_back));
+    boxes.push_back(Voxel(mid_bottom_mid, right_mid_back));
+    boxes.push_back(Voxel(left_mid_mid, mid_top_back));
+    boxes.push_back(Voxel(mid_mid_mid, upper_bound));
 
     return boxes;
 }
 
-bool BoundingBox::contains(vec3 point)
+bool Voxel::contains(vec3 point, float radius)
 {
+    vec3 center = vec3(0.5f * (lower_bound.x + upper_bound.x), 0.5f * (lower_bound.y + upper_bound.y), 0.5f * (lower_bound.z + upper_bound.z));
     return (point.x >= lower_bound.x && point.x <= upper_bound.x &&
         point.y >= lower_bound.y && point.y <= upper_bound.y &&
-        point.z >= lower_bound.z && point.z <= upper_bound.z);
+        point.z >= lower_bound.z && point.z <= upper_bound.z) || distance(center, point) < radius;
 }
+
+//std::vector<std::pair<vec3, vec3>>

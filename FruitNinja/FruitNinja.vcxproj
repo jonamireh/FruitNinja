@@ -69,13 +69,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="debugFrag.glsl" />
+    <None Include="debugVert.glsl" />
     <None Include="packages.config" />
     <None Include="phongFrag.glsl" />
     <None Include="phongVert.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
-    <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="DebugShader.cpp" />
+    <ClCompile Include="Voxel.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChewyEntity.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
@@ -102,7 +105,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h" />
-    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="DebugShader.h" />
+    <ClInclude Include="Voxel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChewyEntity.h" />
     <ClInclude Include="Component.h" />
