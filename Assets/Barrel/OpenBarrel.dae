@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.74.0 commit date:2015-03-31, commit time:13:39, hash:000dfc0</authoring_tool>
     </contributor>
-    <created>2015-04-28T18:44:18</created>
-    <modified>2015-04-28T18:44:18</modified>
+    <created>2015-04-28T20:42:04</created>
+    <modified>2015-04-28T20:42:04</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -14,12 +14,6 @@
     <image id="MaterialDiffuseColor_png" name="MaterialDiffuseColor_png">
       <init_from>MaterialDiffuseColor.png</init_from>
     </image>
-<<<<<<< HEAD
-=======
-    <image id="Untitled" name="Untitled">
-      <init_from>MaterialDiffuseColor.png</init_from>
-    </image>
->>>>>>> 8b38a12e45b2c5c0a9afe40d1479c091e3c56ea4
   </library_images>
   <library_effects>
     <effect id="Material-effect">

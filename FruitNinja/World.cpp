@@ -1,6 +1,7 @@
 #include "World.h"
 #include "ChewyEntity.h"
 #include "PhongShader.h"
+#include "TextureDebugShader.h"
 #include "DebugCamera.h"
 #include "Global.h"
 #include "ArcheryCamera.h"
@@ -64,6 +65,8 @@ void World::init()
     box2->scale = 3.0f;
     shared_ptr <GameEntity> box3(new ObstacleEntity(vec3(50.0, 10.0, 20.0), meshes.at("box")));
     box3->scale = 3.0f;
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("testbox", shared_ptr<MeshSet>(new MeshSet("../Assets/Test/testplane.dae"))));
+	shared_ptr <GameEntity> testbox(new ObstacleEntity(vec3(1.0, 5.0, 1.0), meshes.at("testbox")));
 
     camera = player_camera;
     player_camera->in_use = true;
@@ -78,21 +81,32 @@ void World::init()
     entities.push_back(box1);
     entities.push_back(box2);
     entities.push_back(box3);
-
+	entities.push_back(testbox);
 
 
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
+	shared_ptr<Shader> textDebugShader(new TextureDebugShader());
+	shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 }
 
 void World::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaders.at("phongShader")->getProgramID());
+	glViewport(0, 0, screen_width, screen_height);
 	for (int i = 0; i < entities.size(); i++)
 		shaders.at("phongShader")->draw(camera->getViewMatrix(), entities.at(i));
 	//bunny_mesh->draw(mat4(1.0f), vec3(0, 0, 0));
+
+	glUseProgram(shaders.at("textureDebugShader")->getProgramID());
+	shared_ptr<Shader> temp = shaders.at("textureDebugShader");
+	if (shared_ptr<TextureDebugShader> textDebugShader = dynamic_pointer_cast<TextureDebugShader, Shader>(temp))
+	{
+		textDebugShader->drawTexture(entities.at(entities.size() - 1)->mesh->getMeshes().at(0)->textures.at(0).id, 256, 256);
+	}
+
     glUseProgram(0);
 }
 
@@ -149,7 +163,7 @@ void World::update_key_callbacks()
 
 void World::update()
 {
-    OctTree world_oct_tree = OctTree(BoundingBox(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+    //OctTree world_oct_tree = OctTree(BoundingBox(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 
     // get the collison pairs and handle them as you desire
 
