@@ -11,6 +11,7 @@
 #include "PlayerCamera.h"
 
 class ArcheryCamera;
+const string assetPath = "assets/";
 extern bool keys[1024];
 extern float seconds_passed;
 extern float x_offset;
