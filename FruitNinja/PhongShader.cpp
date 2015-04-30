@@ -55,10 +55,10 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 			glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
 			glUniform1i(getUniformHandle("Utex"), 0);
 			glUniform1i(getUniformHandle("Uflag"), 1);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->VAO);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO2);
 			glEnableVertexAttribArray(texture);//
 			glVertexAttribPointer(texture, 2, GL_FLOAT, GL_FALSE,//
-				sizeof(VertexData), (void*)(3 * sizeof(glm::vec3)));//
+				sizeof(vec2), (void*)0);//
 		}
 		else {
 			//std::cout << "bitch" << std::endl;

@@ -13,6 +13,8 @@ struct VertexData {
 	glm::vec3 color;
 	glm::vec2 texCoord;
 };
+
+
 struct TextureData {
 	GLuint id;
 	GLuint type;
@@ -20,15 +22,17 @@ struct TextureData {
 
 class Mesh {
 public:
-	Mesh(std::vector<VertexData> *vd, std::vector<GLuint> *id, aiMaterial* material, std::vector<TextureData> *td = NULL);
+	Mesh(std::vector<VertexData> *vd, std::vector<GLuint> *id, aiMaterial* material, std::vector<TextureData> *td = NULL, std::vector<glm::vec2> *tc = NULL);
 	~Mesh();
 	GLuint VAO;
 	GLuint VBO;
+	GLuint VBO2;
 	GLuint IND;
 
 	std::vector<VertexData> data;
 	std::vector<TextureData> textures;
 	std::vector<unsigned int> indices;
+	std::vector<glm::vec2> texCoords;
 
 	Material mat;
 private:

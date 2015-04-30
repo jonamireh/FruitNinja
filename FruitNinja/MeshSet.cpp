@@ -27,6 +27,7 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 	std::vector<VertexData> data;
 	std::vector<unsigned int> indices;
 	std::vector<TextureData> textures;
+	std::vector<glm::vec2> texCoords;
 	aiColor4D col;
 	aiMaterial *mat = scene->mMaterials[mesh->mMaterialIndex];
 	aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &col);
@@ -55,9 +56,11 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		}
 		tmp.color = tmpVec;
 		//texture coordinates
+		
 		if (mesh->mTextureCoords[0]) {
 			tmpVec.x = mesh->mTextureCoords[0][i].x;
 			tmpVec.y = mesh->mTextureCoords[0][i].y;
+			texCoords.push_back(glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y));
 			//std::cout << "U: " << tmpVec.x << std::endl;
 			//std::cout << "V: " << tmpVec.y << std::endl;
 		}
@@ -81,9 +84,11 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		if (mat->GetTexture(aiTextureType_DIFFUSE, i, &str) == AI_SUCCESS) {
 			TextureData tmp;
 			//---------------------------
-			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("../Assets/Test/TestBoxDiffuse.png");//str.C_Str());
+			//std::string tempStr("../Assets/Barrel/");
+			//tempStr += str.C_Str();
+			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("../Assets/Barrel/CloseBarrelClosed.png");//str.C_Str());
 			
-			bmp.flipVertically();
+			//bmp.flipVertically();
 			tdogl::Texture* tex = new tdogl::Texture(bmp);
 			tmp.id = tex->object();
 			//delete tex;//possible memory leak
@@ -96,7 +101,7 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 			printf("Texture failed to load: %s\n", str.C_Str());
 		}
 	}
-	meshes.push_back(new Mesh(&data, &indices, mat, &textures));
+	meshes.push_back(new Mesh(&data, &indices, mat, &textures, &texCoords));
 }
 
 //This function was copied from off the internet, shouldn't be turned in

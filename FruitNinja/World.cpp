@@ -56,7 +56,7 @@ void World::init()
     shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(48.0, 0.0, 30.0), meshes.at("closedBarrel")));
     cBarrel->scale = 3.0f;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/OpenBarrel.dae"))));
-    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(48.0, 50.0, 40.0), meshes.at("openBarrel")));
+    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(30.0, 0.0, 40.0), meshes.at("openBarrel")));
     oBarrel->scale = 3.0f;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet("../Assets/Box/Box.dae"))));
     shared_ptr <GameEntity> box1(new ObstacleEntity(vec3(50.0, 0.0, 20.0), meshes.at("box")));
@@ -87,8 +87,11 @@ void World::init()
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
-	shared_ptr<Shader> textDebugShader(new TextureDebugShader());
-	shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+
+	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
+	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+
+	cout << sizeof(VertexData) << endl;
 }
 
 void World::draw()
@@ -100,12 +103,12 @@ void World::draw()
 		shaders.at("phongShader")->draw(camera->getViewMatrix(), entities.at(i));
 	//bunny_mesh->draw(mat4(1.0f), vec3(0, 0, 0));
 
-	glUseProgram(shaders.at("textureDebugShader")->getProgramID());
+	/*glUseProgram(shaders.at("textureDebugShader")->getProgramID());
 	shared_ptr<Shader> temp = shaders.at("textureDebugShader");
 	if (shared_ptr<TextureDebugShader> textDebugShader = dynamic_pointer_cast<TextureDebugShader, Shader>(temp))
 	{
 		textDebugShader->drawTexture(entities.at(entities.size() - 1)->mesh->getMeshes().at(0)->textures.at(0).id, 256, 256);
-	}
+	}*/
 
     glUseProgram(0);
 }
