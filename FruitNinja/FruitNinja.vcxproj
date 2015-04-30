@@ -71,6 +71,10 @@
   <ItemGroup>
     <None Include="debugFrag.glsl" />
     <None Include="debugVert.glsl" />
+    <None Include="DeferredFragRender.glsl" />
+    <None Include="DeferredFragShader.glsl" />
+    <None Include="DeferredVertRender.glsl" />
+    <None Include="DeferredVertShader.glsl" />
     <None Include="packages.config" />
     <None Include="phongFrag.glsl" />
     <None Include="phongVert.glsl" />
@@ -80,6 +84,7 @@
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
     <ClCompile Include="DebugShader.cpp" />
+    <ClCompile Include="DeferredShader.cpp" />
     <ClCompile Include="TextureDebugShader.cpp" />
     <ClCompile Include="Voxel.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -109,6 +114,7 @@
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h" />
     <ClInclude Include="DebugShader.h" />
+    <ClInclude Include="DeferredShader.h" />
     <ClInclude Include="TextureDebugShader.h" />
     <ClInclude Include="Voxel.h" />
     <ClInclude Include="Camera.h" />

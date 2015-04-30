@@ -24,7 +24,8 @@ void MeshSet::recursiveProcess(aiNode *node, const aiScene *scene) {
 }
 
 void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
-	std::vector<VertexData> data;
+	std::vector<glm::vec3> verts;
+	std::vector<glm::vec3> normals;
 	std::vector<unsigned int> indices;
 	std::vector<TextureData> textures;
 	std::vector<glm::vec2> texCoords;
@@ -33,42 +34,23 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 	aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &col);
 	glm::vec3 defaultColor(col.r, col.g, col.b);
 	for (int i = 0; i < mesh->mNumVertices; i++) {
-		VertexData tmp;
 		glm::vec3 tmpVec;
 		//position
 		tmpVec.x = mesh->mVertices[i].x;
 		tmpVec.y = mesh->mVertices[i].y;
 		tmpVec.z = mesh->mVertices[i].z;
-		tmp.pos = tmpVec;
+		verts.push_back(tmpVec);
 		//normals
 		tmpVec.x = mesh->mNormals[i].x;
 		tmpVec.y = mesh->mNormals[i].y;
 		tmpVec.z = mesh->mNormals[i].z;
-		tmp.normal = tmpVec;
-		//color
-		if (mesh->mColors[0]) {
-			tmpVec.x = mesh->mColors[0][i].r;
-			tmpVec.y = mesh->mColors[0][i].g;
-			tmpVec.z = mesh->mColors[0][i].b;
-		}
-		else {
-			tmpVec = defaultColor;//.x = tmpVec.y = tmpVec.z = 0.7;
-		}
-		tmp.color = tmpVec;
+		normals.push_back(tmpVec);
+
 		//texture coordinates
 		
 		if (mesh->mTextureCoords[0]) {
-			tmpVec.x = mesh->mTextureCoords[0][i].x;
-			tmpVec.y = mesh->mTextureCoords[0][i].y;
 			texCoords.push_back(glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y));
-			//std::cout << "U: " << tmpVec.x << std::endl;
-			//std::cout << "V: " << tmpVec.y << std::endl;
 		}
-		else {
-			tmpVec.x = tmpVec.y = tmpVec.z = 0.0;
-		}
-		tmp.texCoord = glm::vec2(tmpVec.x, tmpVec.y);
-		data.push_back(tmp);
 	}
 	//indices
 	for (int i = 0; i < mesh->mNumFaces; i++){
@@ -84,16 +66,15 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		if (mat->GetTexture(aiTextureType_DIFFUSE, i, &str) == AI_SUCCESS) {
 			TextureData tmp;
 			//---------------------------
-			//std::string tempStr("../Assets/Barrel/");
-			//tempStr += str.C_Str();
-			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("../Assets/Barrel/CloseBarrelClosed.png");//str.C_Str());
-			
-			//bmp.flipVertically();
+			std::string tempStr("../Assets/textures/");
+			tempStr += str.C_Str();
+			printf("Using texture %s...\n", str.C_Str());
+			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(tempStr);
+
 			tdogl::Texture* tex = new tdogl::Texture(bmp);
 			tmp.id = tex->object();
 			//delete tex;//possible memory leak
 			//-------------------------------------
-			printf("Using texture %s\n", str.C_Str());
 			tmp.type = 0;
 			textures.push_back(tmp);
 		}
@@ -101,7 +82,7 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 			printf("Texture failed to load: %s\n", str.C_Str());
 		}
 	}
-	meshes.push_back(new Mesh(&data, &indices, mat, &textures, &texCoords));
+	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords));
 }
 
 //This function was copied from off the internet, shouldn't be turned in

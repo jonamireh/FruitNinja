@@ -7,14 +7,6 @@
 #include <assimp/postprocess.h>
 #include "Material.h"
 
-struct VertexData {
-	glm::vec3 pos;
-	glm::vec3 normal;
-	glm::vec3 color;
-	glm::vec2 texCoord;
-};
-
-
 struct TextureData {
 	GLuint id;
 	GLuint type;
@@ -22,14 +14,17 @@ struct TextureData {
 
 class Mesh {
 public:
-	Mesh(std::vector<VertexData> *vd, std::vector<GLuint> *id, aiMaterial* material, std::vector<TextureData> *td = NULL, std::vector<glm::vec2> *tc = NULL);
+	Mesh(std::vector<glm::vec3> *vd, std::vector<glm::vec3> *nd, std::vector<GLuint> *id, aiMaterial* material,
+		std::vector<TextureData> *td = NULL, std::vector<glm::vec2> *tc = NULL);
 	~Mesh();
 	GLuint VAO;
 	GLuint VBO;
 	GLuint VBO2;
+	GLuint VBO3;
 	GLuint IND;
 
-	std::vector<VertexData> data;
+	std::vector<glm::vec3> verts;
+	std::vector<glm::vec3> normals;
 	std::vector<TextureData> textures;
 	std::vector<unsigned int> indices;
 	std::vector<glm::vec2> texCoords;

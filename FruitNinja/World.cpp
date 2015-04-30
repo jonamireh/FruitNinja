@@ -9,6 +9,7 @@
 #include "ProjectileEntity.h"
 #include "ObstacleEntity.h"
 #include "OctTree.h"
+#include "DeferredShader.h"
 
 using namespace std;
 using namespace glm;
@@ -88,10 +89,11 @@ void World::init()
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
 
+	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl"));
+	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
+
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
-
-	cout << sizeof(VertexData) << endl;
 }
 
 void World::draw()
@@ -101,7 +103,6 @@ void World::draw()
 	glViewport(0, 0, screen_width, screen_height);
 	for (int i = 0; i < entities.size(); i++)
 		shaders.at("phongShader")->draw(camera->getViewMatrix(), entities.at(i));
-	//bunny_mesh->draw(mat4(1.0f), vec3(0, 0, 0));
 
 	/*glUseProgram(shaders.at("textureDebugShader")->getProgramID());
 	shared_ptr<Shader> temp = shaders.at("textureDebugShader");

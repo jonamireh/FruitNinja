@@ -125,3 +125,13 @@ GLuint Shader::getProgramID()
 {
     return program;
 }
+
+
+bool Shader::check_gl_error(std::string msg) {
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR) {
+		std::cerr << msg << ": OpenGL Error: " << error << std::endl;
+		return true;
+	}
+	return false;
+}

@@ -82,6 +82,9 @@
     <ClCompile Include="TextureDebugShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="DeferredShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -165,6 +168,9 @@
     <ClInclude Include="TextureDebugShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="DeferredShader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -184,6 +190,18 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="TextureDebug.fragmentshader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="DeferredFragRender.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="DeferredFragShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="DeferredVertRender.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="DeferredVertShader.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

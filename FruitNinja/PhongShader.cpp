@@ -4,26 +4,15 @@
 using namespace glm;
 using namespace std;
 
-bool check_gl_error(std::string msg) {
-	GLenum error = glGetError();
-	if (error != GL_NO_ERROR) {
-		std::cerr << msg << ": OpenGL Error: " << error << std::endl;
-		return true;
-	}
-	return false;
-}
-
 PhongShader::PhongShader(std::string vertShader, std::string fragShader) : Shader(vertShader, fragShader)
 {
-	
+	glBindAttribLocation(getProgramID(), 0, "aPosition");
+	glBindAttribLocation(getProgramID(), 1, "aNormal");
 }
 
 
 void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 {
-	//vertex attributes
-	int vertex = getAttributeHandle("aPosition");
-	int normal = getAttributeHandle("aNormal");
 	int texture = getAttributeHandle("aTextCoord");
 	
 	std::vector<Mesh *> meshes = entity->mesh->getMeshes();
@@ -48,21 +37,19 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		Mesh* mesh = meshes.at(i);
-		//std::cout << "Loop: " << i << std::endl;
-		//system("PAUSE");
+		glBindVertexArray(mesh->VAO);
+
 		if (mesh->textures.size() > 0) {
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
 			glUniform1i(getUniformHandle("Utex"), 0);
 			glUniform1i(getUniformHandle("Uflag"), 1);
-			glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO2);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO3);
 			glEnableVertexAttribArray(texture);//
 			glVertexAttribPointer(texture, 2, GL_FLOAT, GL_FALSE,//
-				sizeof(vec2), (void*)0);//
+				sizeof(vec2), 0);//
 		}
 		else {
-			//std::cout << "bitch" << std::endl;
-			//system("PAUSE");
 			glUniform1i(getUniformHandle("Uflag"), 0);
 		}
 
@@ -72,30 +59,16 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 		glUniform3fv(getUniformHandle("UsColor"), 1, value_ptr(material.specular));
 		glUniform1f(getUniformHandle("Ushine"), material.shininess);
 
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
 
-		glEnableVertexAttribArray(vertex);
-		glVertexAttribPointer(vertex, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
-
-		glEnableVertexAttribArray(normal);
-		glVertexAttribPointer(normal, 3, GL_FLOAT, GL_FALSE,
-			sizeof(VertexData), (void*)(sizeof(glm::vec3)));
-		if (mesh->textures.size() > 10) {
-			check_gl_error("Mesh.draw before drawelem");
-			system("PAUSE");
-		}
+		check_gl_error("Mesh.draw before drawelem");
+		
 		glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
-		if (mesh->textures.size() > 10) {
-			check_gl_error("Mesh.draw after texture");
-			std::cout << "got after\n";
-			system("PAUSE");
-		}
+		
+		check_gl_error("Mesh.draw after texture");
 
-		glDisableVertexAttribArray(vertex);
-		glDisableVertexAttribArray(normal);
-		glDisableVertexAttribArray(texture);//
-		glBindTexture(GL_TEXTURE_2D, 0);//
+		glDisableVertexAttribArray(texture);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	

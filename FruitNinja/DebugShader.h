@@ -8,7 +8,7 @@ class DebugShader : public Shader
 	GLuint VAO;
 	GLuint VBO;
 
-	std::vector<VertexData> data;
+	//std::vector<VertexData> data;
 
 public:
 	DebugShader(std::string vertShader, std::string fragShader);

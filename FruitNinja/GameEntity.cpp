@@ -31,11 +31,11 @@ void GameEntity::sebInit()
     vec3 tempCenter;
     for (int i = 0; i < meshes.size(); i++)
     {
-        for (int j = 0; j < meshes[i]->data.size(); j++)
+        for (int j = 0; j < meshes[i]->verts.size(); j++)
         {
-            tempCenter += meshes[i]->data[j].pos;
+            tempCenter += meshes[i]->verts[j];
             numVertices++;
-            float temp = distance(meshes[i]->data[0].pos, meshes[i]->data[j].pos);
+            float temp = distance(meshes[i]->verts[0], meshes[i]->verts[j]);
             if (temp > largestDistance)
             {
                 largestDistance = temp;
