@@ -41,14 +41,14 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet("../Assets/Arrow/arrow.dae"))));
-	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 4.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet("../Assets/Tower/tower.dae"))));
+	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
+    //meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet("../Assets/Tower/tower.dae"))));
 
-    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
-    tower->scale = 30.0f;
+    //shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
+    //tower->scale = 30.0f;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern/lantern.dae"))));
 
-    shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 6.0, 31.5), meshes.at("lantern")));
+    shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 16.0, 31.5), meshes.at("lantern")));
     lantern->rotations.y = M_PI_2;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern Pole/lanternPole.dae"))));
     shared_ptr <GameEntity> lantern_pole(new ObstacleEntity(vec3(30.0, 0.0, 30.0), meshes.at("lanternPole")));
@@ -56,14 +56,14 @@ void World::init()
     shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(48.0, 0.0, 30.0), meshes.at("closedBarrel")));
     cBarrel->scale = 3.0f;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/OpenBarrel.dae"))));
-    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(48.0, 8.0, 40.0), meshes.at("openBarrel")));
+    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(48.0, 50.0, 40.0), meshes.at("openBarrel")));
     oBarrel->scale = 3.0f;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet("../Assets/Box/Box.dae"))));
     shared_ptr <GameEntity> box1(new ObstacleEntity(vec3(50.0, 0.0, 20.0), meshes.at("box")));
     box1->scale = 3.0f;
-    shared_ptr <GameEntity> box2(new ObstacleEntity(vec3(50.0, 5.0, 20.0), meshes.at("box")));
+    shared_ptr <GameEntity> box2(new ObstacleEntity(vec3(50.0, 7.0, 20.0), meshes.at("box")));
     box2->scale = 3.0f;
-    shared_ptr <GameEntity> box3(new ObstacleEntity(vec3(50.0, 10.0, 20.0), meshes.at("box")));
+    shared_ptr <GameEntity> box3(new ObstacleEntity(vec3(50.0, 14.0, 20.0), meshes.at("box")));
     box3->scale = 3.0f;
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("testbox", shared_ptr<MeshSet>(new MeshSet("../Assets/Test/testplane.dae"))));
 	shared_ptr <GameEntity> testbox(new ObstacleEntity(vec3(1.0, 5.0, 1.0), meshes.at("testbox")));
@@ -73,7 +73,7 @@ void World::init()
 	entities.push_back(chewy);
 	entities.push_back(guard);
 	entities.push_back(arrow);
-    entities.push_back(tower);
+    //entities.push_back(tower);
     entities.push_back(lantern);
     entities.push_back(lantern_pole);
     entities.push_back(oBarrel);
@@ -163,7 +163,7 @@ void World::update_key_callbacks()
 
 void World::update()
 {
-    //OctTree world_oct_tree = OctTree(BoundingBox(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+    OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 
     // get the collison pairs and handle them as you desire
 

@@ -73,7 +73,10 @@
     <ClCompile Include="OctTree.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="BoundingBox.cpp">
+    <ClCompile Include="Voxel.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -150,7 +153,10 @@
     <ClInclude Include="OctTree.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="BoundingBox.h">
+    <ClInclude Include="Voxel.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -160,6 +166,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="phongVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="debugFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="debugVert.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

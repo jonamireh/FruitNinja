@@ -1,14 +1,24 @@
 #include "OctTree.h"
+#include <iostream>
 
 OctTree::OctTree()
 {
     
 }
 
-OctTree::OctTree(BoundingBox param_box, std::vector<std::shared_ptr<GameEntity>> objects_in_section, std::shared_ptr<OctTree> root_ref)
+OctTree::OctTree(Voxel param_box, std::vector<std::shared_ptr<GameEntity>> objects_in_section, std::shared_ptr<OctTree> root_ref)
 {
-    box = param_box;
+    voxel = param_box;
     objects = objects_in_section;
+    min_radius = FLT_MAX;
+    for (int i = 0; i < objects.size(); i++)
+    {
+        float temp = objects.at(i)->getRadius();
+        if (temp < min_radius)
+        {
+            min_radius = temp;
+        }
+    }
 
     if (root_ref == nullptr)
         root = std::shared_ptr<OctTree>(this);
@@ -23,13 +33,14 @@ This needs to do it based off of bounding boxes rather than points, but this sho
 */
 void OctTree::branch()
 {
-    if (glm::distance(box.lower_bound, box.upper_bound) < MIN_SIZE)
+    if (glm::distance(voxel.lower_bound, voxel.upper_bound) < 2.0f * min_radius)
     {
-        // run collision check
+        std::cout << "collision!" << std::endl;
+
         return;
     }
 
-    std::vector<BoundingBox> subset_boxes = box.split();
+    std::vector<Voxel> subset_voxels = voxel.split();
 
     for (int i = 0; i < 8; i++)
     {
@@ -37,11 +48,14 @@ void OctTree::branch()
 
         for (int j = 0; j < objects.size(); j++)
         {
-            if (subset_boxes.at(i).contains(objects.at(j)->position))
+            if (subset_voxels.at(i).contains(objects.at(j)->getCenter(), objects.at(j)->getRadius()))
                 subset_objects.push_back(objects.at(j));
         }
 
         if (subset_objects.size() > 1)
-            OctTree(subset_boxes.at(i), subset_objects, root);
+        {
+            OctTree(subset_voxels.at(i), subset_objects, root);
+        }
+
     }
 }
