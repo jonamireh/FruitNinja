@@ -74,10 +74,13 @@
     <None Include="packages.config" />
     <None Include="phongFrag.glsl" />
     <None Include="phongVert.glsl" />
+    <None Include="TextureDebug.fragmentshader" />
+    <None Include="TextureDebug.vertexshader" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
     <ClCompile Include="DebugShader.cpp" />
+    <ClCompile Include="TextureDebugShader.cpp" />
     <ClCompile Include="Voxel.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChewyEntity.cpp" />
@@ -106,6 +109,7 @@
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h" />
     <ClInclude Include="DebugShader.h" />
+    <ClInclude Include="TextureDebugShader.h" />
     <ClInclude Include="Voxel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChewyEntity.h" />

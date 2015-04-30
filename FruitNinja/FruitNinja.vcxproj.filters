@@ -79,6 +79,9 @@
     <ClCompile Include="DebugShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="TextureDebugShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -159,6 +162,9 @@
     <ClInclude Include="DebugShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="TextureDebugShader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -172,6 +178,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="debugVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="TextureDebug.vertexshader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="TextureDebug.fragmentshader">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

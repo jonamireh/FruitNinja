@@ -81,7 +81,7 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		if (mat->GetTexture(aiTextureType_DIFFUSE, i, &str) == AI_SUCCESS) {
 			TextureData tmp;
 			//---------------------------
-			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("C:/Users/Peter/Documents/GitHub/FruitNinja/Assets/Barrel/Test.png");//str.C_Str());
+			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile("../Assets/Test/TestBoxDiffuse.png");//str.C_Str());
 			
 			bmp.flipVertically();
 			tdogl::Texture* tex = new tdogl::Texture(bmp);
