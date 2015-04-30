@@ -18,12 +18,13 @@ void main()
 {
 	vec3 dirDiffuse = UdColor * max(0.0, dot(normalize(vNormals), normalize(UdirLight)));
 	vec3 dirSpecular = UsColor * max(0.0, pow(dot(normalize(vNormals), normalize(UdirLight)), Ushine));
-	vec3 diffuse = UdColor * max(0.0, dot(normalize(vNormals), normalize(vLight)));
 	vec3 specular = UsColor * max(0.0, pow(dot(normalize(vNormals), normalize(vLight)), Ushine));
 	if(Uflag == 1) {
-		vec2 textureCoord = vec2(vTextCoord.x + vec4(dirDiffuse + dirSpecular + diffuse + specular + UaColor, 1).x * .00001, vTextCoord.y);
-		finalColor = texture(Utex, vTextCoord);
+		vec4 texColor = texture(Utex, vTextCoord);
+		vec3 diffuse = vec3(texColor) * max(0.0, dot(normalize(vNormals), normalize(vLight)));
+		finalColor = vec4(diffuse + specular + UaColor, 1);
 	} else {
+		vec3 diffuse = UdColor * max(0.0, dot(normalize(vNormals), normalize(vLight)));
 		finalColor = vec4(dirDiffuse + dirSpecular + diffuse + specular + UaColor, 1);
 	}
 }
