@@ -2,6 +2,8 @@
 #include "MeshSet.h"
 #include "Material.h"
 #include <memory>
+#include <vector>
+#include "BoundingBox.h"
 
 class GameEntity
 {
@@ -23,5 +25,8 @@ public:
     float getRadius();
     glm::vec3 getCenter();
 	glm::vec3 center;
+    bool compare(std::shared_ptr<GameEntity> ge);
+    std::shared_ptr<std::vector<BoundingBox>> GameEntity::getBoundingBoxes();
+
 
 };

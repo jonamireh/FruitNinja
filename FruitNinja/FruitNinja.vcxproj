@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="DeferredShader.cpp" />
     <ClCompile Include="TextureDebugShader.cpp" />
@@ -113,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h" />
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="DebugShader.h" />
     <ClInclude Include="DeferredShader.h" />
     <ClInclude Include="FrustrumCulling.h" />

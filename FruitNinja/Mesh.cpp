@@ -86,3 +86,27 @@ Mesh::~Mesh() {
 	glDeleteBuffers(1, &VBO3);
 	glDeleteBuffers(1, &IND);
 }
+
+shared_ptr<BoundingBox> Mesh::getBoundingBox()
+{
+    if (cache == nullptr)
+    {
+        float min_x, max_x,
+            min_y, max_y,
+            min_z, max_z;
+        min_x = max_x = verts.at(0).x;
+        min_y = max_y = verts.at(0).y;
+        min_z = max_z = verts.at(0).z;
+        for (int i = 0; i < verts.size(); i++)
+        {
+            if (verts.at(i).x < min_x) min_x = verts.at(i).x;
+            if (verts.at(i).x > max_x) max_x = verts.at(i).x;
+            if (verts.at(i).y < min_y) min_y = verts.at(i).y;
+            if (verts.at(i).y > max_y) max_y = verts.at(i).y;
+            if (verts.at(i).z < min_z) min_z = verts.at(i).z;
+            if (verts.at(i).z > max_z) max_z = verts.at(i).z;
+        }
+        cache = shared_ptr<BoundingBox>(new BoundingBox(glm::vec3(min_x, min_y, min_z), glm::vec3(max_x, max_y, max_z)));
+    }
+    return cache;
+}

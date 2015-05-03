@@ -85,6 +85,9 @@
     <ClCompile Include="DeferredShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="BoundingBox.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -172,6 +175,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="FrustrumCulling.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBox.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

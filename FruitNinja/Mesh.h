@@ -6,6 +6,7 @@
 #include <assimp/cimport.h>
 #include <assimp/postprocess.h>
 #include "Material.h"
+#include "BoundingBox.h"
 
 struct TextureData {
 	GLuint id;
@@ -28,9 +29,9 @@ public:
 	std::vector<TextureData> textures;
 	std::vector<unsigned int> indices;
 	std::vector<glm::vec2> texCoords;
-
+    std::shared_ptr<BoundingBox> getBoundingBox();
 	Material mat;
 private:
-
+    std::shared_ptr<BoundingBox> cache;
 	bool checkError(std::string msg);
 };
