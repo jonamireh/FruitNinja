@@ -7,7 +7,6 @@ class GameEntity
 {
     void sebInit();
     float radius;
-    glm::vec3 center;
 public:
     GameEntity() {}
     GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh) : position(position), mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f))
@@ -23,4 +22,6 @@ public:
 	glm::vec3 velocity = glm::vec3(0);
     float getRadius();
     glm::vec3 getCenter();
+	glm::vec3 center;
+
 };

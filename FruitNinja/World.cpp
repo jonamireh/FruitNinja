@@ -10,6 +10,7 @@
 #include "ObstacleEntity.h"
 #include "OctTree.h"
 #include "DeferredShader.h"
+#include "FrustrumCulling.h"
 
 using namespace std;
 using namespace glm;
@@ -82,7 +83,7 @@ void World::init()
     entities.push_back(box1);
     entities.push_back(box2);
     entities.push_back(box3);
-	entities.push_back(testbox);
+	//entities.push_back(testbox);
 
 
 
@@ -101,9 +102,20 @@ void World::draw()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaders.at("phongShader")->getProgramID());
 	glViewport(0, 0, screen_width, screen_height);
-	for (int i = 0; i < entities.size(); i++)
-		shaders.at("phongShader")->draw(camera->getViewMatrix(), entities.at(i));
-
+	shared_ptr<DebugCamera> c_test = dynamic_pointer_cast<DebugCamera>(camera);
+	vector<shared_ptr<GameEntity>> culled;
+	if (c_test != nullptr)
+	{
+		culled = cull_objects(entities, player_camera->getViewMatrix());
+	}
+	else
+	{
+		culled = cull_objects(entities, camera->getViewMatrix());
+		
+	}
+	cout << "# of Entities to be drawn: " << culled.size() << endl;
+	for (int i = 0; i < culled.size(); i++)
+		shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
 	/*glUseProgram(shaders.at("textureDebugShader")->getProgramID());
 	shared_ptr<Shader> temp = shaders.at("textureDebugShader");
 	if (shared_ptr<TextureDebugShader> textDebugShader = dynamic_pointer_cast<TextureDebugShader, Shader>(temp))

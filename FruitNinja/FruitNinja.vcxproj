@@ -115,6 +115,7 @@
     <ClInclude Include="ArcheryCamera.h" />
     <ClInclude Include="DebugShader.h" />
     <ClInclude Include="DeferredShader.h" />
+    <ClInclude Include="FrustrumCulling.h" />
     <ClInclude Include="TextureDebugShader.h" />
     <ClInclude Include="Voxel.h" />
     <ClInclude Include="Camera.h" />

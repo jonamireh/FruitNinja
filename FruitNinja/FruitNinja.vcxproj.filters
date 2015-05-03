@@ -171,6 +171,9 @@
     <ClInclude Include="DeferredShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="FrustrumCulling.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
