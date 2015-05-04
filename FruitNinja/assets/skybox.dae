@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.74.0 commit date:2015-03-31, commit time:13:39, hash:000dfc0</authoring_tool>
     </contributor>
-    <created>2015-05-03T20:41:32</created>
-    <modified>2015-05-03T20:41:32</modified>
+    <created>2015-05-03T21:12:09</created>
+    <modified>2015-05-03T21:12:09</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -272,7 +272,7 @@
     <geometry id="Cube-mesh" name="Cube">
       <mesh>
         <source id="Cube-mesh-positions">
-          <float_array id="Cube-mesh-positions-array" count="12">-15.99541 -15.9954 15.9954 -15.9954 -15.99541 -15.99542 15.99542 -15.99541 -15.9954 15.99541 -15.9954 15.99541</float_array>
+          <float_array id="Cube-mesh-positions-array" count="12">-0.9997136 -0.9997129 0.999713 -0.9997127 -0.9997134 -0.9997138 0.9997141 -0.9997134 -0.9997129 0.9997136 -0.9997129 0.9997134</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -326,7 +326,7 @@
     <geometry id="Cube_001-mesh" name="Cube.001">
       <mesh>
         <source id="Cube_001-mesh-positions">
-          <float_array id="Cube_001-mesh-positions-array" count="12">-15.99522 -15.99559 -15.99541 -15.99557 15.99522 -15.99541 15.99559 -15.99523 -15.99542 15.99524 15.99558 -15.99541</float_array>
+          <float_array id="Cube_001-mesh-positions-array" count="12">-0.9996653 -0.9997247 -0.9997134 -0.9996871 0.9997019 -0.9997134 0.9996881 -0.9997024 -0.9997138 0.9996663 0.9997242 -0.9997134</float_array>
           <technique_common>
             <accessor source="#Cube_001-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -336,7 +336,7 @@
           </technique_common>
         </source>
         <source id="Cube_001-mesh-normals">
-          <float_array id="Cube_001-mesh-normals-array" count="6">0 2.38487e-7 -1 -2.38487e-7 0 -1</float_array>
+          <float_array id="Cube_001-mesh-normals-array" count="6">0 2.38487e-7 -1 -2.38496e-7 0 -1</float_array>
           <technique_common>
             <accessor source="#Cube_001-mesh-normals-array" count="2" stride="3">
               <param name="X" type="float"/>
@@ -380,7 +380,7 @@
     <geometry id="Cube_002-mesh" name="Cube.002">
       <mesh>
         <source id="Cube_002-mesh-positions">
-          <float_array id="Cube_002-mesh-positions-array" count="12">15.99541 -15.9954 15.99541 15.9954 -15.99541 -15.9954 15.99542 15.99541 15.9954 15.99541 15.9954 -15.9954</float_array>
+          <float_array id="Cube_002-mesh-positions-array" count="12">0.9997136 -0.9997129 0.9997135 0.9997131 -0.9997134 -0.9997131 0.9997141 0.9997134 0.9997131 0.9997136 0.9997129 -0.9997131</float_array>
           <technique_common>
             <accessor source="#Cube_002-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -434,7 +434,7 @@
     <geometry id="Cube_003-mesh" name="Cube.003">
       <mesh>
         <source id="Cube_003-mesh-positions">
-          <float_array id="Cube_003-mesh-positions-array" count="12">15.9954 -15.9954 15.99541 -15.9954 -15.9954 15.99542 15.99541 15.99541 15.99539 -15.99541 15.99541 15.9954</float_array>
+          <float_array id="Cube_003-mesh-positions-array" count="12">0.9997131 -0.9997129 0.9997134 -0.9997131 -0.9997129 0.9997138 0.9997136 0.9997134 0.9997125 -0.9997136 0.9997134 0.9997129</float_array>
           <technique_common>
             <accessor source="#Cube_003-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -488,7 +488,7 @@
     <geometry id="Cube_004-mesh" name="Cube.004">
       <mesh>
         <source id="Cube_004-mesh-positions">
-          <float_array id="Cube_004-mesh-positions-array" count="12">-15.9954 -15.99541 15.9954 -15.9954 15.99541 15.99539 -15.99541 -15.99541 -15.99541 -15.9954 15.99541 -15.99542</float_array>
+          <float_array id="Cube_004-mesh-positions-array" count="12">-0.9997131 -0.9997134 0.999713 -0.9997131 0.9997134 0.9997125 -0.9997136 -0.9997134 -0.9997134 -0.9997127 0.9997134 -0.999714</float_array>
           <technique_common>
             <accessor source="#Cube_004-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -542,7 +542,7 @@
     <geometry id="Cube_005-mesh" name="Cube.005">
       <mesh>
         <source id="Cube_005-mesh-positions">
-          <float_array id="Cube_005-mesh-positions-array" count="12">-15.9954 15.99541 15.9954 -15.9954 15.9954 -15.99542 15.99541 15.9954 -15.99541 15.9954 15.99541 15.99541</float_array>
+          <float_array id="Cube_005-mesh-positions-array" count="12">-0.9997131 0.9997134 0.9997129 -0.9997131 0.9997129 -0.9997138 0.9997136 0.9997129 -0.9997134 0.9997131 0.9997134 0.9997134</float_array>
           <technique_common>
             <accessor source="#Cube_005-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>

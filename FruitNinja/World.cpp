@@ -49,10 +49,10 @@ void World::init()
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard")));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet(assetPath + "arrow.dae"))));
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
-    //meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet(assetPath + "tower.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet(assetPath + "tower.dae"))));
 
-    //shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
-    //tower->scale = 30.0f;
+    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
+    tower->scale = 30.0f;
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
 
     shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 16.0, 31.5), meshes.at("lantern")));
@@ -74,7 +74,7 @@ void World::init()
     box3->scale = 3.0f;
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae"))));
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
-	_skybox->scale = 10.f;
+	_skybox->scale = 450.f;
 
     camera = player_camera;
     player_camera->in_use = true;
