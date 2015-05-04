@@ -13,4 +13,5 @@ public:
     BoundingBox(glm::vec3, glm::vec3);
     //std::vector<BoundingBox> split();
     bool contains(glm::vec3);
+    std::shared_ptr<std::vector<std::pair<glm::vec3, glm::vec3>>> get_points(glm::mat4& model);
 };

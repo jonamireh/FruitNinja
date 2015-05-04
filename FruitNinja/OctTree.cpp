@@ -43,10 +43,7 @@ void OctTree::branch()
         for (int i = 0; i < objects.size() - 1; i++)
         {
             if (objects.at(i)->compare(objects.at(i + 1)))
-            {
                 root->collision_pairs->push_back(pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>(objects.at(i), objects.at(i + 1)));
-                cout << "collision!" << endl;
-            }
         }
         return;
     }
@@ -67,6 +64,5 @@ void OctTree::branch()
         {
             children.push_back(OctTree(subset_voxels.at(i), subset_objects, root));
         }
-
     }
 }

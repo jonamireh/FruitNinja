@@ -25,13 +25,7 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 
 	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
 
-    mat4 model_trans = translate(mat4(1.0f), entity->position);
-    mat4 model_rot_x = rotate(mat4(1.0f), entity->rotations.x, vec3(1.f, 0.f, 0.f));
-    mat4 model_rot_y = rotate(mat4(1.0f), entity->rotations.y, vec3(0.f, 1.f, 0.f));
-    mat4 model_rot_z = rotate(mat4(1.0f), entity->rotations.z, vec3(0.f, 0.f, 1.f));
-    mat4 model_scale = scale(mat4(1.0f), vec3(entity->scale, entity->scale, entity->scale));
-
-    glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(model_trans * model_rot_z * model_rot_x * model_rot_y * model_scale));
+    glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(entity->getModelMat()));
     glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f)));
 
 	for (int i = 0; i < meshes.size(); i++)

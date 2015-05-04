@@ -1,14 +1,15 @@
+#pragma once
 #include <glm/glm.hpp>
 #include "Shader.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
 
 class DebugShader : public Shader
 {
 	GLuint VAO;
 	GLuint VBO;
-
-	//std::vector<VertexData> data;
 
 public:
 	DebugShader(std::string vertShader, std::string fragShader);

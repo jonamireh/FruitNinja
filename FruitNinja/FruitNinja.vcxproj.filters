@@ -88,6 +88,9 @@
     <ClCompile Include="BoundingBox.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionHandler.h">
+      <Filter>Headers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">

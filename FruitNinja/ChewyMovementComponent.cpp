@@ -37,8 +37,13 @@ float angleDiff(float angle_a, float angle_b)
 
 void ChewyMovementComponent::update()
 {
-	if (camera->in_use) {
-		vec3 movement(0, 0, 0);
+	if (camera->in_use) 
+    {
+		movement.x = 0.f;
+		movement.y = 0.f;
+		movement.z = 0.f;
+
+		entity.last_position = entity.position;
 
 		entity.velocity -= vec3(0, 25, 0) * seconds_passed;
 		

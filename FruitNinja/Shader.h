@@ -26,6 +26,6 @@ public:
 	GLint getAttributeHandle(std::string name);
 	GLint getUniformHandle(std::string name);
 	GLuint getProgramID();
-	virtual void draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity) =0;
+	virtual void draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity);
 	bool check_gl_error(std::string msg);
 };

@@ -135,3 +135,8 @@ bool Shader::check_gl_error(std::string msg) {
 	}
 	return false;
 }
+
+void Shader::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)
+{
+    
+}

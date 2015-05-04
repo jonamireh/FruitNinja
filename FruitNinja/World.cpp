@@ -11,6 +11,9 @@
 #include "OctTree.h"
 #include "DeferredShader.h"
 #include "FrustrumCulling.h"
+#include "CollisionHandler.h"
+#include "DebugShader.h"
+#include <glm/gtx/rotate_vector.hpp>
 
 using namespace std;
 using namespace glm;
@@ -93,6 +96,9 @@ void World::init()
 	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
 
+    shared_ptr<Shader> debugShader(new DebugShader("debugVert.glsl", "debugFrag.glsl"));
+    shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
+
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 }
@@ -100,22 +106,50 @@ void World::init()
 void World::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(shaders.at("phongShader")->getProgramID());
 	glViewport(0, 0, screen_width, screen_height);
 	shared_ptr<DebugCamera> c_test = dynamic_pointer_cast<DebugCamera>(camera);
 	vector<shared_ptr<GameEntity>> culled;
-	if (c_test != nullptr)
-	{
-		culled = cull_objects(entities, player_camera->getViewMatrix());
+    if (c_test != nullptr)
+    {
+        culled = cull_objects(entities, camera->getViewMatrix());
+        /*glUseProgram(shaders.at("debugShader")->getProgramID());
+        //shared_ptr<Shader> d_test = shaders.at("debugShader");
+        shared_ptr<DebugShader> d_test = dynamic_pointer_cast<DebugShader, Shader>(shaders.at("debugShader"));
+        if (d_test != nullptr)
+        {
+            for (int j = 0; j < culled.size(); j++)
+            {
+                std::shared_ptr<std::vector<BoundingBox>> boxes = culled.at(j)->getBoundingBoxes();
+                for (int k = 0; k < boxes->size(); k++)
+                {
+                    shared_ptr<vector<pair<vec3, vec3>>> points = boxes->at(k).get_points(culled.at(j)->getModelMat());
+                    for (int l = 0; l < points->size(); l++)
+                    {
+                        d_test->drawLine(points->at(l).first, points->at(l).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
+                    }
+                }
+            }
+        }*/
 	}
 	else
 	{
 		culled = cull_objects(entities, camera->getViewMatrix());
 		
 	}
-	cout << "# of Entities to be drawn: " << culled.size() << endl;
+    glUseProgram(0);
+    glUseProgram(shaders.at("phongShader")->getProgramID());
+    glViewport(0, 0, screen_width, screen_height);
 	for (int i = 0; i < culled.size(); i++)
 		shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
+	/*glUseProgram(shaders.at("debugShader")->getProgramID());
+	for (int i = 0; i < culled.size(); i++)
+	{
+		shared_ptr<DebugShader> d_test = dynamic_pointer_cast<DebugShader, Shader>(shaders.at("debugShader"));
+		if (d_test != nullptr)
+		{
+			d_test->drawLine(rotateY(culled.at(i)->position + vec3(0, 0, 1.f), culled.at(i)->rotations.y), rotateY(culled.at(i)->position + vec3(0, 0, 5.f), culled.at(i)->rotations.y), vec3(1., 0, 0), camera->getViewMatrix());
+		}
+	}*/
 	/*glUseProgram(shaders.at("textureDebugShader")->getProgramID());
 	shared_ptr<Shader> temp = shaders.at("textureDebugShader");
 	if (shared_ptr<TextureDebugShader> textDebugShader = dynamic_pointer_cast<TextureDebugShader, Shader>(temp))
@@ -180,8 +214,7 @@ void World::update_key_callbacks()
 void World::update()
 {
     OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
-
-    // get the collison pairs and handle them as you desire
+    collision_handler(world_oct_tree->collision_pairs);
 
 	static float start_time = 0.0;
 	float end_time = glfwGetTime();

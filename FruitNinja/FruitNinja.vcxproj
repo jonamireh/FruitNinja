@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="CollisionHandler.h" />
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="DeferredShader.cpp" />
     <ClCompile Include="TextureDebugShader.cpp" />
