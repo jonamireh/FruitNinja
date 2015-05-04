@@ -14,6 +14,8 @@
 #include "CollisionHandler.h"
 #include "DebugShader.h"
 #include <glm/gtx/rotate_vector.hpp>
+#include "Skybox.h"
+#include "SimpleTextureShader.h"
 
 using namespace std;
 using namespace glm;
@@ -41,37 +43,38 @@ void World::init()
     player_camera = shared_ptr<Camera>(new PlayerCamera());
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
 
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet("../Assets/Ninja/ninja_final2.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
 	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet("../Assets/Samurai/samurai.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet("../Assets/Arrow/arrow.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet(assetPath + "arrow.dae"))));
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
-    //meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet("../Assets/Tower/tower.dae"))));
+    //meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet(assetPath + "tower.dae"))));
 
     //shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
     //tower->scale = 30.0f;
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern/lantern.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
 
     shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 16.0, 31.5), meshes.at("lantern")));
     lantern->rotations.y = M_PI_2;
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet("../Assets/Lantern Pole/lanternPole.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
     shared_ptr <GameEntity> lantern_pole(new ObstacleEntity(vec3(30.0, 0.0, 30.0), meshes.at("lanternPole")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/ClosedBarrel.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
     shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(48.0, 0.0, 30.0), meshes.at("closedBarrel")));
     cBarrel->scale = 3.0f;
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet("../Assets/Barrel/OpenBarrel.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
     shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(30.0, 0.0, 40.0), meshes.at("openBarrel")));
     oBarrel->scale = 3.0f;
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet("../Assets/Box/Box.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
     shared_ptr <GameEntity> box1(new ObstacleEntity(vec3(50.0, 0.0, 20.0), meshes.at("box")));
     box1->scale = 3.0f;
     shared_ptr <GameEntity> box2(new ObstacleEntity(vec3(50.0, 7.0, 20.0), meshes.at("box")));
     box2->scale = 3.0f;
     shared_ptr <GameEntity> box3(new ObstacleEntity(vec3(50.0, 14.0, 20.0), meshes.at("box")));
     box3->scale = 3.0f;
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("testbox", shared_ptr<MeshSet>(new MeshSet("../Assets/Test/testplane.dae"))));
-	shared_ptr <GameEntity> testbox(new ObstacleEntity(vec3(1.0, 5.0, 1.0), meshes.at("testbox")));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae"))));
+	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
+	_skybox->scale = 10.f;
 
     camera = player_camera;
     player_camera->in_use = true;
@@ -86,7 +89,6 @@ void World::init()
     entities.push_back(box1);
     entities.push_back(box2);
     entities.push_back(box3);
-	//entities.push_back(testbox);
 
 
 
@@ -98,6 +100,9 @@ void World::init()
 
     shared_ptr<Shader> debugShader(new DebugShader("debugVert.glsl", "debugFrag.glsl"));
     shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
+
+	shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
+	shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
@@ -136,6 +141,13 @@ void World::draw()
 		culled = cull_objects(entities, camera->getViewMatrix());
 		
 	}
+
+
+	glUseProgram(0);
+	glUseProgram(shaders.at("simpleShader")->getProgramID());
+	glViewport(0, 0, screen_width, screen_height);
+	shaders.at("simpleShader")->draw(camera->getViewMatrix(), _skybox);
+
     glUseProgram(0);
     glUseProgram(shaders.at("phongShader")->getProgramID());
     glViewport(0, 0, screen_width, screen_height);
@@ -225,6 +237,8 @@ void World::update()
 	start_time = glfwGetTime();
 
     update_key_callbacks();
+
+	_skybox->update();
 }
 
 void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)
