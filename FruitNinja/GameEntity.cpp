@@ -81,18 +81,19 @@ shared_ptr<BoundingBox> GameEntity::getOuterBoundingBox()
 		vec3 lower_bound(FLT_MAX, FLT_MAX, FLT_MAX);
 		for (int i = 0; i < meshes.size(); i++)
 		{
-			vec3 less = lessThan(meshes.at(i)->getBoundingBox()->lower_bound, lower_bound);
-			vec3 greater = greaterThan(meshes.at(i)->getBoundingBox()->upper_bound, upper_bound);
-			if (less.x && less.y && less.z)
-			{
-				lower_bound = meshes.at(i)->getBoundingBox()->lower_bound;
-			}
-			if (greater.x && greater.y && greater.z)
-			{
-				upper_bound = meshes.at(i)->getBoundingBox()->upper_bound;
-			}
+			vec3 m_lower_bound = meshes.at(i)->getBoundingBox()->lower_bound;
+			vec3 m_upper_bound = meshes.at(i)->getBoundingBox()->upper_bound;
+
+			vec3 less = lessThan(m_lower_bound, lower_bound);
+			vec3 greater = greaterThan(m_upper_bound, upper_bound);
+			lower_bound.x = less.x ? m_lower_bound.x : lower_bound.x;
+			lower_bound.y = less.y ? m_lower_bound.y : lower_bound.y;
+			lower_bound.z = less.z ? m_lower_bound.z : lower_bound.z;
+			upper_bound.x = greater.x ? m_upper_bound.x : upper_bound.x;
+			upper_bound.y = greater.y ? m_upper_bound.y : upper_bound.y;
+			upper_bound.z = greater.z ? m_upper_bound.z : upper_bound.z;
 		}
-		largestBB = shared_ptr<BoundingBox>(new BoundingBox(vec3(vec4(lower_bound, 1.0f) * getModelMat()), vec3(vec4(upper_bound, 1.0f) * getModelMat())));
+		largestBB = shared_ptr<BoundingBox>(new BoundingBox(vec3(vec4(lower_bound, 1.0f)), vec3(vec4(upper_bound, 1.0f))));
 	}
 	return largestBB;
 }

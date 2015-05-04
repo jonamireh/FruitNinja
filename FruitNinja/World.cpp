@@ -112,44 +112,34 @@ void World::draw()
     if (c_test != nullptr)
     {
         culled = cull_objects(entities, camera->getViewMatrix());
-        /*glUseProgram(shaders.at("debugShader")->getProgramID());
+        glUseProgram(shaders.at("debugShader")->getProgramID());
         //shared_ptr<Shader> d_test = shaders.at("debugShader");
         shared_ptr<DebugShader> d_test = dynamic_pointer_cast<DebugShader, Shader>(shaders.at("debugShader"));
         if (d_test != nullptr)
         {
             for (int j = 0; j < culled.size(); j++)
             {
-                std::shared_ptr<std::vector<BoundingBox>> boxes = culled.at(j)->getBoundingBoxes();
-                for (int k = 0; k < boxes->size(); k++)
-                {
-                    shared_ptr<vector<pair<vec3, vec3>>> points = boxes->at(k).get_points(culled.at(j)->getModelMat());
-                    for (int l = 0; l < points->size(); l++)
-                    {
-                        d_test->drawLine(points->at(l).first, points->at(l).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
-                    }
-                }
+                shared_ptr<BoundingBox> box = culled.at(j)->getOuterBoundingBox();
+				shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points(culled.at(j)->getModelMat());
+				for (int l = 0; l < points->size(); l++)
+				{
+					d_test->drawLine(points->at(l).first, points->at(l).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
+				}
             }
-        }*/
+        }
 	}
 	else
 	{
 		culled = cull_objects(entities, camera->getViewMatrix());
 		
 	}
-    glUseProgram(0);
+    //glUseProgram(0);
     glUseProgram(shaders.at("phongShader")->getProgramID());
     glViewport(0, 0, screen_width, screen_height);
 	for (int i = 0; i < culled.size(); i++)
 		shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
-	/*glUseProgram(shaders.at("debugShader")->getProgramID());
-	for (int i = 0; i < culled.size(); i++)
-	{
-		shared_ptr<DebugShader> d_test = dynamic_pointer_cast<DebugShader, Shader>(shaders.at("debugShader"));
-		if (d_test != nullptr)
-		{
-			d_test->drawLine(rotateY(culled.at(i)->position + vec3(0, 0, 1.f), culled.at(i)->rotations.y), rotateY(culled.at(i)->position + vec3(0, 0, 5.f), culled.at(i)->rotations.y), vec3(1., 0, 0), camera->getViewMatrix());
-		}
-	}*/
+	glUseProgram(shaders.at("debugShader")->getProgramID());
+
 	/*glUseProgram(shaders.at("textureDebugShader")->getProgramID());
 	shared_ptr<Shader> temp = shaders.at("textureDebugShader");
 	if (shared_ptr<TextureDebugShader> textDebugShader = dynamic_pointer_cast<TextureDebugShader, Shader>(temp))
@@ -213,8 +203,7 @@ void World::update_key_callbacks()
 
 void World::update()
 {
-    OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
-    collision_handler(world_oct_tree->collision_pairs);
+    
 
 	static float start_time = 0.0;
 	float end_time = glfwGetTime();
@@ -225,6 +214,9 @@ void World::update()
 	start_time = glfwGetTime();
 
     update_key_callbacks();
+
+	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+    collision_handler(world_oct_tree->collision_pairs);
 }
 
 void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)

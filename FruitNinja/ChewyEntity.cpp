@@ -76,20 +76,28 @@ void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
 	switch (axis)
 	{
 	case 1:
-		bottom.y += d.y;
-		bottom.z += d.z;
+		bottom.y = top.y;
+		bottom.z = top.z;
 		break;
 	case 2:
-		bottom.x += d.x;
-		bottom.z += d.z;
+		bottom.x = top.x;
+		bottom.z = top.z;
 		break;
 	case 3:
-		bottom.y += d.y;
-		bottom.z += d.z;
+		bottom.x = top.x;
+		bottom.y = top.y;
 		break;
 	}
 
 	glm::vec3 n_face = glm::normalize(top - bottom);
-	moveComponent.movement = moveComponent.movement - glm::dot(moveComponent.movement, n_face);
+	
+	/*if (glm::dot(n_face, glm::normalize(moveComponent.movement)) > glm::dot(-n_face, glm::normalize(moveComponent.movement)))
+	{
+		n_face = -n_face;
+	}*/
+
+	n_face.y = 0.f;
+	moveComponent.movement.y = 0.f;
+	moveComponent.movement -= glm::dot(moveComponent.movement, n_face);
 	position = last_position + moveComponent.movement;
 }
