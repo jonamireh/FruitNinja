@@ -71,7 +71,8 @@ void AppMain()
 
     glfwSetScrollCallback(window, &World::scroll_callback);
 
-
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
     while (!glfwWindowShouldClose(window))
     {

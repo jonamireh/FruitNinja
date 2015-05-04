@@ -74,7 +74,7 @@ void World::init()
     box3->scale = 3.0f;
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae"))));
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
-	_skybox->scale = 450.f;
+	_skybox->scale = 750.f;
 
     camera = player_camera;
     player_camera->in_use = true;
