@@ -78,6 +78,8 @@
     <None Include="packages.config" />
     <None Include="phongFrag.glsl" />
     <None Include="phongVert.glsl" />
+    <None Include="simpleFrag.glsl" />
+    <None Include="simpleVert.glsl" />
     <None Include="TextureDebug.fragmentshader" />
     <None Include="TextureDebug.vertexshader" />
   </ItemGroup>
@@ -87,6 +89,8 @@
     <ClCompile Include="CollisionHandler.h" />
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="DeferredShader.cpp" />
+    <ClCompile Include="SimpleTextureShader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="TextureDebugShader.cpp" />
     <ClCompile Include="Voxel.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -119,6 +123,8 @@
     <ClInclude Include="DebugShader.h" />
     <ClInclude Include="DeferredShader.h" />
     <ClInclude Include="FrustrumCulling.h" />
+    <ClInclude Include="SimpleTextureShader.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="TextureDebugShader.h" />
     <ClInclude Include="Voxel.h" />
     <ClInclude Include="Camera.h" />

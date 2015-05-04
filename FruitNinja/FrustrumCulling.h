@@ -58,7 +58,7 @@ std::vector<std::shared_ptr<GameEntity>> cull_objects(std::vector<std::shared_pt
 		{
 			//float point = classify_point(p_planes[j], glm::vec4(center, 1.0f));
 			float distance = glm::dot(normalize_plane(p_planes[j]), center);
-			if (distance < 0.f && abs(distance + 2.0) > entities.at(i)->getRadius())
+			if (distance < 0.f && abs(distance + 2.0f) > entities.at(i)->getRadius())
 			{
 				in_frustrum = false;
 				break;

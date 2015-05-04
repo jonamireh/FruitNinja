@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.74.0 commit date:2015-03-31, commit time:13:39, hash:000dfc0</authoring_tool>
     </contributor>
-    <created>2015-05-03T19:42:38</created>
-    <modified>2015-05-03T19:42:38</modified>
+    <created>2015-05-03T21:12:09</created>
+    <modified>2015-05-03T21:12:09</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -272,7 +272,7 @@
     <geometry id="Cube-mesh" name="Cube">
       <mesh>
         <source id="Cube-mesh-positions">
-          <float_array id="Cube-mesh-positions-array" count="12">-3.913727 -3.913723 -3.913725 -3.913723 3.913728 -3.913725 3.913728 3.913725 -3.913725 3.913727 -3.913725 -3.913725</float_array>
+          <float_array id="Cube-mesh-positions-array" count="12">-0.9997136 -0.9997129 0.999713 -0.9997127 -0.9997134 -0.9997138 0.9997141 -0.9997134 -0.9997129 0.9997136 -0.9997129 0.9997134</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -282,7 +282,7 @@
           </technique_common>
         </source>
         <source id="Cube-mesh-normals">
-          <float_array id="Cube-mesh-normals-array" count="6">0 0 -1 0 0 -1</float_array>
+          <float_array id="Cube-mesh-normals-array" count="6">0 -1 2.38487e-7 0 -1 2.38487e-7</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-normals-array" count="2" stride="3">
               <param name="X" type="float"/>
@@ -292,7 +292,7 @@
           </technique_common>
         </source>
         <source id="Cube-mesh-map">
-          <float_array id="Cube-mesh-map-array" count="12">0.9998998 0.9998995 1.00502e-4 0.9999 9.998e-5 1.00687e-4 0.999899 9.998e-5 0.9998998 0.9998995 9.998e-5 1.00687e-4</float_array>
+          <float_array id="Cube-mesh-map-array" count="12">1.00502e-4 0.9999 9.998e-5 1.00687e-4 0.999899 9.998e-5 0.9998998 0.9998995 1.00502e-4 0.9999 0.999899 9.998e-5</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-map-array" count="6" stride="2">
               <param name="S" type="float"/>
@@ -319,14 +319,14 @@
           <input semantic="TEXCOORD" source="#Cube-mesh-map" offset="2" set="0"/>
           <input semantic="COLOR" source="#Cube-mesh-colors-Col" offset="3" set="0"/>
           <vcount>3 3 </vcount>
-          <p>0 0 0 0 1 0 1 1 2 0 2 2 3 1 3 3 0 1 4 4 2 1 5 5</p>
+          <p>1 0 0 0 2 0 1 1 3 0 2 2 0 1 3 3 1 1 4 4 3 1 5 5</p>
         </polylist>
       </mesh>
     </geometry>
     <geometry id="Cube_001-mesh" name="Cube.001">
       <mesh>
         <source id="Cube_001-mesh-positions">
-          <float_array id="Cube_001-mesh-positions-array" count="12">-3.91368 3.913727 -3.913769 -3.913765 3.913725 3.913682 3.913769 3.913728 -3.913682 3.913684 3.913725 3.913769</float_array>
+          <float_array id="Cube_001-mesh-positions-array" count="12">-0.9996653 -0.9997247 -0.9997134 -0.9996871 0.9997019 -0.9997134 0.9996881 -0.9997024 -0.9997138 0.9996663 0.9997242 -0.9997134</float_array>
           <technique_common>
             <accessor source="#Cube_001-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -336,7 +336,7 @@
           </technique_common>
         </source>
         <source id="Cube_001-mesh-normals">
-          <float_array id="Cube_001-mesh-normals-array" count="6">0 1 4.56889e-7 -2.13218e-7 1 2.43672e-7</float_array>
+          <float_array id="Cube_001-mesh-normals-array" count="6">0 2.38487e-7 -1 -2.38496e-7 0 -1</float_array>
           <technique_common>
             <accessor source="#Cube_001-mesh-normals-array" count="2" stride="3">
               <param name="X" type="float"/>
@@ -380,7 +380,7 @@
     <geometry id="Cube_002-mesh" name="Cube.002">
       <mesh>
         <source id="Cube_002-mesh-positions">
-          <float_array id="Cube_002-mesh-positions-array" count="12">3.913727 -3.913726 -3.913725 3.913725 3.913726 -3.913725 3.913728 -3.913726 3.913725 3.913727 3.913724 3.913725</float_array>
+          <float_array id="Cube_002-mesh-positions-array" count="12">0.9997136 -0.9997129 0.9997135 0.9997131 -0.9997134 -0.9997131 0.9997141 0.9997134 0.9997131 0.9997136 0.9997129 -0.9997131</float_array>
           <technique_common>
             <accessor source="#Cube_002-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -390,7 +390,7 @@
           </technique_common>
         </source>
         <source id="Cube_002-mesh-normals">
-          <float_array id="Cube_002-mesh-normals-array" count="6">1 2.43674e-7 -2.43674e-7 1 2.13215e-7 -2.13215e-7</float_array>
+          <float_array id="Cube_002-mesh-normals-array" count="6">1 -2.38487e-7 -2.38487e-7 1 -2.38487e-7 -2.38487e-7</float_array>
           <technique_common>
             <accessor source="#Cube_002-mesh-normals-array" count="2" stride="3">
               <param name="X" type="float"/>
@@ -434,7 +434,7 @@
     <geometry id="Cube_003-mesh" name="Cube.003">
       <mesh>
         <source id="Cube_003-mesh-positions">
-          <float_array id="Cube_003-mesh-positions-array" count="12">3.913725 -3.913725 -3.913725 -3.913725 -3.913727 -3.913725 3.913727 -3.913723 3.913725 -3.913727 -3.913725 3.913725</float_array>
+          <float_array id="Cube_003-mesh-positions-array" count="12">0.9997131 -0.9997129 0.9997134 -0.9997131 -0.9997129 0.9997138 0.9997136 0.9997134 0.9997125 -0.9997136 0.9997134 0.9997129</float_array>
           <technique_common>
             <accessor source="#Cube_003-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -444,7 +444,7 @@
           </technique_common>
         </source>
         <source id="Cube_003-mesh-normals">
-          <float_array id="Cube_003-mesh-normals-array" count="6">2.43674e-7 -1 2.43674e-7 2.13215e-7 -1 2.13215e-7</float_array>
+          <float_array id="Cube_003-mesh-normals-array" count="6">2.38487e-7 4.76974e-7 1 2.08676e-7 4.47163e-7 1</float_array>
           <technique_common>
             <accessor source="#Cube_003-mesh-normals-array" count="2" stride="3">
               <param name="X" type="float"/>
@@ -488,7 +488,7 @@
     <geometry id="Cube_004-mesh" name="Cube.004">
       <mesh>
         <source id="Cube_004-mesh-positions">
-          <float_array id="Cube_004-mesh-positions-array" count="12">-3.913725 -3.913723 -3.913727 -3.913725 -3.913723 3.913725 -3.913727 3.913727 -3.913725 -3.913723 3.913727 3.913727</float_array>
+          <float_array id="Cube_004-mesh-positions-array" count="12">-0.9997131 -0.9997134 0.999713 -0.9997131 0.9997134 0.9997125 -0.9997136 -0.9997134 -0.9997134 -0.9997127 0.9997134 -0.999714</float_array>
           <technique_common>
             <accessor source="#Cube_004-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -498,7 +498,7 @@
           </technique_common>
         </source>
         <source id="Cube_004-mesh-normals">
-          <float_array id="Cube_004-mesh-normals-array" count="6">-1 2.13215e-7 4.56889e-7 -1 -2.43674e-7 0</float_array>
+          <float_array id="Cube_004-mesh-normals-array" count="6">-1 4.47163e-7 -2.08676e-7 -1 0 2.38487e-7</float_array>
           <technique_common>
             <accessor source="#Cube_004-mesh-normals-array" count="2" stride="3">
               <param name="X" type="float"/>
@@ -542,7 +542,7 @@
     <geometry id="Cube_005-mesh" name="Cube.005">
       <mesh>
         <source id="Cube_005-mesh-positions">
-          <float_array id="Cube_005-mesh-positions-array" count="12">-3.913725 -3.913725 3.913725 -3.913725 3.913727 3.913725 3.913727 3.913725 3.913725 3.913725 -3.913727 3.913725</float_array>
+          <float_array id="Cube_005-mesh-positions-array" count="12">-0.9997131 0.9997134 0.9997129 -0.9997131 0.9997129 -0.9997138 0.9997136 0.9997129 -0.9997134 0.9997131 0.9997134 0.9997134</float_array>
           <technique_common>
             <accessor source="#Cube_005-mesh-positions-array" count="4" stride="3">
               <param name="X" type="float"/>
@@ -552,7 +552,7 @@
           </technique_common>
         </source>
         <source id="Cube_005-mesh-normals">
-          <float_array id="Cube_005-mesh-normals-array" count="6">0 0 1 0 0 1</float_array>
+          <float_array id="Cube_005-mesh-normals-array" count="6">0 1 -2.38487e-7 0 1 -2.38487e-7</float_array>
           <technique_common>
             <accessor source="#Cube_005-mesh-normals-array" count="2" stride="3">
               <param name="X" type="float"/>

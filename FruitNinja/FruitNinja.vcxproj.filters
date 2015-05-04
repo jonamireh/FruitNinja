@@ -91,6 +91,12 @@
     <ClCompile Include="CollisionHandler.h">
       <Filter>Headers</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleTextureShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -183,6 +189,12 @@
     <ClInclude Include="BoundingBox.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleTextureShader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -214,6 +226,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="DeferredVertShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="simpleFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="simpleVert.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

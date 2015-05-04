@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "tdogl/Texture.h"
 #include "tdogl/Bitmap.h"
+#include "World.h"
 
 void MeshSet::recursiveProcess(aiNode *node, const aiScene *scene) {
 	//process
@@ -66,7 +67,7 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		if (mat->GetTexture(aiTextureType_DIFFUSE, i, &str) == AI_SUCCESS) {
 			TextureData tmp;
 			//---------------------------
-			std::string tempStr("../Assets/textures/");
+			std::string tempStr(assetPath);
 			tempStr += str.C_Str();
 			printf("Using texture %s...\n", str.C_Str());
 			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(tempStr);

@@ -9,6 +9,7 @@
 #include "Timer.h"
 #include "DebugCamera.h"
 #include "PlayerCamera.h"
+#include "Skybox.h"
 
 class ArcheryCamera;
 const string assetPath = "assets/";
@@ -37,6 +38,7 @@ private:
     std::shared_ptr<Camera> debug_camera;
     std::shared_ptr<Camera> archery_camera;
     std::shared_ptr<Camera> player_camera;
+	std::shared_ptr<Skybox> _skybox;
 
 	void init();
 };
