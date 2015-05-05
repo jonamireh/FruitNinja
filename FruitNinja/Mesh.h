@@ -8,20 +8,25 @@
 #include "Material.h"
 #include "BoundingBox.h"
 
-struct TextureData {
+struct TextureData
+{
 	GLuint id;
 	GLuint type;
 };
 
-class Mesh {
+class Mesh
+{
 public:
-	Mesh(std::vector<glm::vec3> *vd, std::vector<glm::vec3> *nd, std::vector<GLuint> *id, aiMaterial* material,
-		std::vector<TextureData> *td = NULL, std::vector<glm::vec2> *tc = NULL);
+	Mesh(std::vector<glm::vec3>* vd, std::vector<glm::vec3>* nd, std::vector<GLuint>* id, aiMaterial* material,
+	     std::vector<TextureData>* td = NULL, std::vector<glm::vec2>* tc = NULL, std::vector<aiBone>* bones = NULL, 
+		 std::vector<glm::ivec4>* boneIds = NULL, std::vector<glm::vec4>* boneWeights = NULL, std::vector<aiAnimation> *animationData = NULL);
 	~Mesh();
 	GLuint VAO;
 	GLuint VBO;
 	GLuint VBO2;
 	GLuint VBO3;
+	GLuint VBO_BoneID;
+	GLuint VBO_BoneWeight;
 	GLuint IND;
 
 	std::vector<glm::vec3> verts;
@@ -29,9 +34,14 @@ public:
 	std::vector<TextureData> textures;
 	std::vector<unsigned int> indices;
 	std::vector<glm::vec2> texCoords;
-    std::shared_ptr<BoundingBox> getBoundingBox();
+	std::vector<aiBone> bones;
+	std::vector<glm::ivec4> boneIds;
+	std::vector<glm::vec4> boneWeights;
+	std::vector<aiAnimation> animations;
+	std::vector<glm::mat4> boneTransformations;
+	std::shared_ptr<BoundingBox> getBoundingBox();
 	Material mat;
 private:
-    std::shared_ptr<BoundingBox> cache;
+	std::shared_ptr<BoundingBox> cache;
 	bool checkError(std::string msg);
 };

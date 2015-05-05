@@ -4,19 +4,20 @@
 #include <glm/gtx/string_cast.inl>
 
 
-ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera()))
+ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera())), animComponent(this)
 {
 	
 }
 
-ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> camera) : GameEntity(position, mesh), moveComponent(*this, camera)
+ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> camera) : GameEntity(position, mesh), moveComponent(*this, camera), animComponent(this)
 {
-	
+	current_animation = &mesh->getAnimations()[0];
 }
 
 void ChewyEntity::update()
 {
 	moveComponent.update();
+	animComponent.update();
 }
 
 void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)

@@ -2,6 +2,7 @@
 
 #include "GameEntity.h"
 #include "ChewyMovementComponent.h"
+#include "ChewyAnimationComponent.h"
 
 class ChewyEntity : public GameEntity
 {
@@ -11,6 +12,8 @@ public:
 	void update();
 	void collision(std::shared_ptr<BoundingBox> bb);
 	float up_velocity = 0;
+	aiAnimation *current_animation;
 private:
 	ChewyMovementComponent moveComponent;
+	ChewyAnimationComponent animComponent;
 };

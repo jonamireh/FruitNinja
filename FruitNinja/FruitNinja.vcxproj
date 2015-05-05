@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="ChewyAnimationComponent.cpp" />
     <ClCompile Include="CollisionHandler.h" />
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="DeferredShader.cpp" />
@@ -120,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h" />
     <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="ChewyAnimationComponent.h" />
     <ClInclude Include="DebugShader.h" />
     <ClInclude Include="DeferredShader.h" />
     <ClInclude Include="FrustrumCulling.h" />

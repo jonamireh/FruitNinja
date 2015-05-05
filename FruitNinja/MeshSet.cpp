@@ -30,6 +30,9 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 	std::vector<unsigned int> indices;
 	std::vector<TextureData> textures;
 	std::vector<glm::vec2> texCoords;
+	std::vector<aiBone> bones;
+	std::vector<glm::ivec4> boneIds;
+	std::vector<glm::vec4> boneWeights;
 	aiColor4D col;
 	aiMaterial *mat = scene->mMaterials[mesh->mMaterialIndex];
 	aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &col);
@@ -83,7 +86,24 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 			printf("Texture failed to load: %s\n", str.C_Str());
 		}
 	}
-	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords));
+
+	if (mesh->HasBones())
+	{
+		boneIds.resize(mesh->mNumVertices, glm::vec4(0));
+		boneWeights.resize(mesh->mNumVertices, glm::vec4(0));
+	}
+	// Bones
+	for (int i = 0; i < mesh->mNumBones; i++)
+	{
+		aiBone *bone = mesh->mBones[i];
+		bones.push_back(*bone);
+		int j;
+		for (j = 0; j < 4 && boneWeights[bone->mWeights->mVertexId][j] != 0; j++) {}
+		boneIds[bone->mWeights->mVertexId][j] = i;
+		boneWeights[bone->mWeights->mVertexId][j] = bone->mWeights->mWeight;
+	}
+	// Add mesh to set
+	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords, &bones, &boneIds, &boneWeights));
 }
 
 //This function was copied from off the internet, shouldn't be turned in
@@ -125,6 +145,11 @@ MeshSet::MeshSet(std::string filename) {
 		std::cout << aiGetErrorString();
 		return;
 	}
+	for (int i = 0; i < scene->mNumAnimations; i++)
+	{
+		animations.push_back(*scene->mAnimations[i]);
+	}
+	bone_tree = scene->mRootNode;
 	recursiveProcess(scene->mRootNode, scene);
 }
 
@@ -137,3 +162,7 @@ std::vector<Mesh*>& MeshSet::getMeshes() {
 	return meshes;
 }
 
+std::vector<aiAnimation>& MeshSet::getAnimations()
+{
+	return animations;
+}

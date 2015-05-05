@@ -6,14 +6,14 @@ using namespace std;
 
 PhongShader::PhongShader(std::string vertShader, std::string fragShader) : Shader(vertShader, fragShader)
 {
-	glBindAttribLocation(getProgramID(), 0, "aPosition");
-	glBindAttribLocation(getProgramID(), 1, "aNormal");
+	//glBindAttribLocation(getProgramID(), 0, "aPosition");
+	//glBindAttribLocation(getProgramID(), 1, "aNormal");
 }
 
 
 void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 {
-	int texture = getAttributeHandle("aTextCoord");
+	//int texture = getAttributeHandle("aTextCoord");
 	
 	std::vector<Mesh *> meshes = entity->mesh->getMeshes();
 	
@@ -39,9 +39,9 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 			glUniform1i(getUniformHandle("Utex"), 0);
 			glUniform1i(getUniformHandle("Uflag"), 1);
 			glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO3);
-			glEnableVertexAttribArray(texture);//
-			glVertexAttribPointer(texture, 2, GL_FLOAT, GL_FALSE,//
-				sizeof(vec2), 0);//
+			//glEnableVertexAttribArray(texture);//
+			//glVertexAttribPointer(texture, 2, GL_FLOAT, GL_FALSE,//
+			//	sizeof(vec2), 0);//
 		}
 		else {
 			glUniform1i(getUniformHandle("Uflag"), 0);
@@ -61,7 +61,7 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 		
 		check_gl_error("Mesh.draw after texture");
 
-		glDisableVertexAttribArray(texture);
+		//glDisableVertexAttribArray(texture);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 

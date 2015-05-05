@@ -97,6 +97,9 @@
     <ClCompile Include="SimpleTextureShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="ChewyAnimationComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -193,6 +196,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="SimpleTextureShader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ChewyAnimationComponent.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
