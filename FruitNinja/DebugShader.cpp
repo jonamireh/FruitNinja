@@ -10,12 +10,14 @@ DebugShader::DebugShader(string vertShader, string fragShader) : Shader(vertShad
 	glBindVertexArray(VAO);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 	glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBindVertexArray(0);
 }
 
 void DebugShader::drawLine(vec3 p1, vec3 p2, vec3 color, mat4& view_mat)
 {	
 	glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	GLfloat g_vertex_buffer_data[] = {
 		p1.x, p1.y, p1.z,
 		p2.x, p2.y, p2.z,
@@ -26,7 +28,7 @@ void DebugShader::drawLine(vec3 p1, vec3 p2, vec3 color, mat4& view_mat)
 	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
 
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(getAttributeHandle("aPosition"));
 
 	glVertexAttribPointer(

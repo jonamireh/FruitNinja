@@ -10,6 +10,7 @@
 #include "DebugCamera.h"
 #include "PlayerCamera.h"
 #include "Skybox.h"
+#include "DebugShader.h"
 
 class ArcheryCamera;
 const string assetPath = "assets/";
@@ -34,12 +35,13 @@ public:
     static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
     void change_camera();
     std::map<std::string, std::shared_ptr<MeshSet>> meshes;
+
+    static void draw_line(glm::vec3 p1, glm::vec3 p2, glm::vec3 color);
 private:
     std::shared_ptr<Camera> debug_camera;
     std::shared_ptr<Camera> archery_camera;
     std::shared_ptr<Camera> player_camera;
 	std::shared_ptr<Skybox> _skybox;
-
 	void init();
 };
 

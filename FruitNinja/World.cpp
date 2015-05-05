@@ -28,10 +28,11 @@ float screen_width = 1280;
 float screen_height = 720;
 
 static std::shared_ptr<Camera> camera;
-
+static shared_ptr<DebugShader> debugShader;
 
 World::World()
 {
+    debugShader = shared_ptr<DebugShader>(new DebugShader("debugVert.glsl", "debugFrag.glsl"));
 	init();
     x_offset = 0;
     y_offset = 0;
@@ -98,7 +99,6 @@ void World::init()
 	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
 
-    shared_ptr<Shader> debugShader(new DebugShader("debugVert.glsl", "debugFrag.glsl"));
     shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
 
 	shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
@@ -126,17 +126,18 @@ void World::draw()
 		//glUseProgram(0);
         glUseProgram(shaders.at("debugShader")->getProgramID());
         //shared_ptr<Shader> d_test = shaders.at("debugShader");
-        shared_ptr<DebugShader> d_test = dynamic_pointer_cast<DebugShader, Shader>(shaders.at("debugShader"));
-        if (d_test != nullptr)
+        for (int i = 0; i < culled.size(); i++)
         {
-            for (int i = 0; i < culled.size(); i++)
+            shared_ptr<BoundingBox> box = culled.at(i)->getTransformedOuterBoundingBox();
+			shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points();
+			for (int j = 0; j < points->size(); j++)
+			{
+				debugShader->drawLine(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
+			}
+            vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
+            for (int i = 0; i < planes.size(); i++)
             {
-                shared_ptr<BoundingBox> box = culled.at(i)->getTransformedOuterBoundingBox();
-				shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points();
-				for (int j = 0; j < points->size(); j++)
-				{
-					d_test->drawLine(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
-				}
+                debugShader->drawLine(planes.at(i).first, planes.at(i).first + planes.at(i).second, vec3(0, 1.f, 0), camera->getViewMatrix());
             }
         }
 	}
@@ -208,18 +209,18 @@ void World::update_key_callbacks()
 
 void World::update()
 {
-	static float start_time = 0.0;
+    static float start_time = 0.0;
+
+    OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+    collision_handler(world_oct_tree->collision_pairs);
+
 	float end_time = glfwGetTime();
-	for (int i = 0; i < entities.size(); i++) {
+	for (int i = 0; i < entities.size(); i++) 
 		entities[i]->update();
-	}
 	seconds_passed = end_time - start_time;
 	start_time = glfwGetTime();
 
     update_key_callbacks();
-
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
-    collision_handler(world_oct_tree->collision_pairs);
 	_skybox->update();
 }
 
@@ -228,4 +229,9 @@ void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)
     shared_ptr<PlayerCamera> radius_changer = dynamic_pointer_cast<PlayerCamera>(camera);
     if (radius_changer)
         radius_changer->update_radius(y_pos);
+}
+
+void World::draw_line(vec3 p1, vec3 p2, vec3 color)
+{
+    debugShader->drawLine(p1, p2, color, camera->getViewMatrix());
 }
