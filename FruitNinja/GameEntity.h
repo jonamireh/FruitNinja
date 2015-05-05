@@ -32,5 +32,5 @@ public:
     std::shared_ptr<std::vector<BoundingBox>> GameEntity::getBoundingBoxes();
     glm::mat4 getModelMat();
 	std::shared_ptr<BoundingBox> getOuterBoundingBox();
-
+	std::shared_ptr<BoundingBox> getTransformedOuterBoundingBox();
 };

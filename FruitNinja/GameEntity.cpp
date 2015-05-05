@@ -26,7 +26,7 @@ vec3 GameEntity::turnAngle(vec3 cartesian) {
 void GameEntity::sebInit()
 {
     std::vector<Mesh*> meshes = mesh->getMeshes();
-    float largestDistance = FLT_MIN;
+    float largestDistance = -FLT_MAX;
     int numVertices = 0;
     vec3 tempCenter;
     for (int i = 0; i < meshes.size(); i++)
@@ -61,10 +61,9 @@ shared_ptr<vector<BoundingBox>> GameEntity::getBoundingBoxes()
     shared_ptr<vector<BoundingBox>> toReturn = shared_ptr<vector<BoundingBox>>(new vector<BoundingBox>);
 
     vector<Mesh*> meshes = mesh->getMeshes();
-	mat4 model = getModelMat();
     for (int i = 0; i < meshes.size(); i++)
     {
-        BoundingBox newBB(vec3(vec4(meshes.at(i)->getBoundingBox()->lower_bound, 1.f) * model), vec3(vec4(meshes.at(i)->getBoundingBox()->upper_bound, 1.f) * model));
+        BoundingBox newBB(vec3(vec4(meshes.at(i)->getBoundingBox()->lower_bound, 1.f)), vec3(vec4(meshes.at(i)->getBoundingBox()->upper_bound, 1.f)));
 
         toReturn->push_back(newBB);
     }
@@ -76,8 +75,7 @@ shared_ptr<BoundingBox> GameEntity::getOuterBoundingBox()
 	if (largestBB == nullptr)
 	{
 		vector<Mesh*> meshes = mesh->getMeshes();
-		mat4 model = getModelMat();
-		vec3 upper_bound(FLT_MIN, FLT_MIN, FLT_MIN);
+		vec3 upper_bound(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 		vec3 lower_bound(FLT_MAX, FLT_MAX, FLT_MAX);
 		for (int i = 0; i < meshes.size(); i++)
 		{
@@ -98,27 +96,45 @@ shared_ptr<BoundingBox> GameEntity::getOuterBoundingBox()
 	return largestBB;
 }
 
+shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
+{
+	shared_ptr<BoundingBox> bb((std::make_shared<BoundingBox>(getOuterBoundingBox()->lower_bound, getOuterBoundingBox()->upper_bound)));
+	bb->applyTransformedBounds(getModelMat());
+
+	return bb;
+}
+
 bool GameEntity::compare(std::shared_ptr<GameEntity> ge)
 {
-    std::shared_ptr<std::vector<BoundingBox>> my_bb = getBoundingBoxes();
-    std::shared_ptr<std::vector<BoundingBox>> their_bb = ge->getBoundingBoxes();
-
-    for (int i = 0; i < my_bb->size(); i++)
+    std::shared_ptr<BoundingBox> my_bb = getTransformedOuterBoundingBox();
+    std::shared_ptr<BoundingBox> their_bb = ge->getTransformedOuterBoundingBox();
+	
+	if (my_bb->upper_bound.x > their_bb->lower_bound.x &&
+			my_bb->lower_bound.x < their_bb->upper_bound.x &&
+			my_bb->upper_bound.y > their_bb->lower_bound.y &&
+			my_bb->lower_bound.y < their_bb->upper_bound.y &&
+			my_bb->upper_bound.z > their_bb->lower_bound.z &&
+			my_bb->lower_bound.z < their_bb->upper_bound.z)
+	{
+		return true;
+	}
+	return false;
+    /*for (int i = 0; i < my_bb->size(); i++)
     {
         for (int j = 0; j < their_bb->size(); j++)
         {
-            if (my_bb->at(i).upper_bound.x > their_bb->at(j).lower_bound.x &&
-                my_bb->at(i).lower_bound.x < their_bb->at(j).upper_bound.x &&
-                my_bb->at(i).upper_bound.y > their_bb->at(j).lower_bound.y &&
-                my_bb->at(i).lower_bound.y < their_bb->at(j).upper_bound.y &&
-                my_bb->at(i).upper_bound.z > their_bb->at(j).lower_bound.z &&
-                my_bb->at(i).lower_bound.z < their_bb->at(j).upper_bound.z)
+            if (my_bb->upper_bound.x > their_bb->lower_bound.x &&
+                my_bb->lower_bound.x < their_bb->upper_bound.x &&
+                my_bb->upper_bound.y > their_bb->lower_bound.y &&
+                my_bb->lower_bound.y < their_bb->upper_bound.y &&
+                my_bb->upper_bound.z > their_bb->lower_bound.z &&
+                my_bb->lower_bound.z < their_bb->upper_bound.z)
             {
                 return true;
             }
         }
     }
-    return false;
+    return false;*/
 }
 
 void GameEntity::collision(std::shared_ptr<BoundingBox> bb)

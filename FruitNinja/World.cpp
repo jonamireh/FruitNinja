@@ -112,23 +112,30 @@ void World::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glViewport(0, 0, screen_width, screen_height);
+
+	//glUseProgram(0);
+	glUseProgram(shaders.at("simpleShader")->getProgramID());
+	glViewport(0, 0, screen_width, screen_height);
+	shaders.at("simpleShader")->draw(camera->getViewMatrix(), _skybox);
+
 	shared_ptr<DebugCamera> c_test = dynamic_pointer_cast<DebugCamera>(camera);
 	vector<shared_ptr<GameEntity>> culled;
     if (c_test != nullptr)
     {
         culled = cull_objects(entities, camera->getViewMatrix());
+		//glUseProgram(0);
         glUseProgram(shaders.at("debugShader")->getProgramID());
         //shared_ptr<Shader> d_test = shaders.at("debugShader");
         shared_ptr<DebugShader> d_test = dynamic_pointer_cast<DebugShader, Shader>(shaders.at("debugShader"));
         if (d_test != nullptr)
         {
-            for (int j = 0; j < culled.size(); j++)
+            for (int i = 0; i < culled.size(); i++)
             {
-                shared_ptr<BoundingBox> box = culled.at(j)->getOuterBoundingBox();
-				shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points(culled.at(j)->getModelMat());
-				for (int l = 0; l < points->size(); l++)
+                shared_ptr<BoundingBox> box = culled.at(i)->getTransformedOuterBoundingBox();
+				shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points();
+				for (int j = 0; j < points->size(); j++)
 				{
-					d_test->drawLine(points->at(l).first, points->at(l).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
+					d_test->drawLine(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
 				}
             }
         }
@@ -138,24 +145,12 @@ void World::draw()
 		culled = cull_objects(entities, camera->getViewMatrix());
 		
 	}
-
-	glUseProgram(0);
-	glUseProgram(shaders.at("simpleShader")->getProgramID());
-	glViewport(0, 0, screen_width, screen_height);
-	shaders.at("simpleShader")->draw(camera->getViewMatrix(), _skybox);
-
+	
+	//glUseProgram(0);
     glUseProgram(shaders.at("phongShader")->getProgramID());
     glViewport(0, 0, screen_width, screen_height);
 	for (int i = 0; i < culled.size(); i++)
 		shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
-	glUseProgram(shaders.at("debugShader")->getProgramID());
-
-	/*glUseProgram(shaders.at("textureDebugShader")->getProgramID());
-	shared_ptr<Shader> temp = shaders.at("textureDebugShader");
-	if (shared_ptr<TextureDebugShader> textDebugShader = dynamic_pointer_cast<TextureDebugShader, Shader>(temp))
-	{
-		textDebugShader->drawTexture(entities.at(entities.size() - 1)->mesh->getMeshes().at(0)->textures.at(0).id, 256, 256);
-	}*/
 
     glUseProgram(0);
 }
@@ -213,8 +208,6 @@ void World::update_key_callbacks()
 
 void World::update()
 {
-    
-
 	static float start_time = 0.0;
 	float end_time = glfwGetTime();
 	for (int i = 0; i < entities.size(); i++) {

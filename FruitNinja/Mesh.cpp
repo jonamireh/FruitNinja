@@ -76,7 +76,7 @@ Mesh::Mesh(std::vector<glm::vec3> *vd, std::vector<glm::vec3> *nd, std::vector<u
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	glEnableVertexAttribArray(0); // Disable our Vertex Array Object  
+	//glDisableVertexAttribArray(0); // Disable our Vertex Array Object  
 	glBindVertexArray(0); // Disable our Vertex Buffer Object 
 }
 

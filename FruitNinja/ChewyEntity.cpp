@@ -1,6 +1,7 @@
 #include "ChewyEntity.h"
 #include "PlayerCamera.h"
 #include "World.h"
+#include <glm/gtx/string_cast.inl>
 
 
 ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera()))
@@ -20,7 +21,8 @@ void ChewyEntity::update()
 
 void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
 {
-	shared_ptr<BoundingBox> my_bb = getOuterBoundingBox();
+	shared_ptr<BoundingBox> my_bb = getTransformedOuterBoundingBox();
+
 	float lowest = FLT_MAX;
 	
 	glm::vec3 top;
@@ -71,7 +73,7 @@ void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
 		axis = 3;
 	}
 
-	glm::vec3 d = top - bottom;
+	//glm::vec3 d = top - bottom;
 
 	switch (axis)
 	{
@@ -90,14 +92,10 @@ void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
 	}
 
 	glm::vec3 n_face = glm::normalize(top - bottom);
-	
-	/*if (glm::dot(n_face, glm::normalize(moveComponent.movement)) > glm::dot(-n_face, glm::normalize(moveComponent.movement)))
-	{
-		n_face = -n_face;
-	}*/
-
+	cout << glm::to_string(n_face) << endl;
 	n_face.y = 0.f;
-	moveComponent.movement.y = 0.f;
 	moveComponent.movement -= glm::dot(moveComponent.movement, n_face);
+	moveComponent.movement.y = 0.f;
+	cout << glm::to_string(moveComponent.movement) << endl;
 	position = last_position + moveComponent.movement;
 }
