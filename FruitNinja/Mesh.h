@@ -35,6 +35,7 @@ public:
 	std::vector<unsigned int> indices;
 	std::vector<glm::vec2> texCoords;
 	std::vector<aiBone> bones;
+	std::vector<aiNode*> boneTreePtrs;
 	std::vector<glm::ivec4> boneIds;
 	std::vector<glm::vec4> boneWeights;
 	std::vector<aiAnimation> animations;

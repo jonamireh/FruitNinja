@@ -19,7 +19,7 @@ bool Mesh::checkError(std::string msg)
 	return false;
 }
 
-Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalData, std::vector<unsigned int>* indexData, aiMaterial* material, std::vector<TextureData>* textureData, std::vector<glm::vec2>* textureCoordinates, std::vector<aiBone>* boneData, std::vector<glm::ivec4>* boneIdData, std::vector<glm::vec4>* boneWeightData, std::vector<aiAnimation> *animationData)
+Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalData, std::vector<unsigned int>* indexData, aiMaterial* material, std::vector<TextureData>* textureData, std::vector<glm::vec2>* textureCoordinates, std::vector<aiBone>* boneData, std::vector<glm::ivec4>* boneIdData, std::vector<glm::vec4>* boneWeightData, std::vector<aiAnimation>* animationData)
 {
 	verts = *vertexData;
 	normals = *normalData;
@@ -27,7 +27,7 @@ Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalDat
 	if (boneData)
 	{
 		bones = *boneData;
-		boneTransformations.resize(boneData->size(), glm::mat4(0));
+		boneTransformations.resize(boneData->size(), glm::mat4());
 	}
 	if (boneIdData)
 		boneIds = *boneIdData;

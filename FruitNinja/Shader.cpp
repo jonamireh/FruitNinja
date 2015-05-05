@@ -89,6 +89,19 @@ void Shader::setupHandles()
         GLuint location = glGetAttribLocation(program, name);
         attributes.insert(pair<string, GLint>(name, location));
     }
+
+	total = -1;
+	glGetProgramiv(program, GL_ACTIVE_UNIFORM_BLOCKS, &total);
+	for (int i = 0; i<total; ++i)
+	{
+		int name_len;
+		glGetActiveUniformBlockiv(program, GLuint(i), GL_UNIFORM_BLOCK_NAME_LENGTH, &name_len);
+		std::vector<GLchar> name;
+		glGetActiveUniformBlockName(program, GLuint(i), name_len, NULL, &name[0]);
+
+		GLuint location = glGetUniformBlockIndex(program, &name[0]);
+		uniformBlocks.insert(pair<string, GLint>(&name[0], location));
+	}
 }
 
 GLint Shader::getAttributeHandle(string name)
@@ -119,6 +132,21 @@ GLint Shader::getUniformHandle(string name)
         assert(false);
     }
     return handle;
+}
+
+GLint Shader::getUniformBlockHandle(string name)
+{
+	GLint handle;
+	try
+	{
+		handle = uniformBlocks.at(name);
+	}
+	catch (exception& e)
+	{
+		cout << "The uniform block name '" << name << "' is not bound to this shader." << endl;
+		assert(false);
+	}
+	return handle;
 }
 
 GLuint Shader::getProgramID()

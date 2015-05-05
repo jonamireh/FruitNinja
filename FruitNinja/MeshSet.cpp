@@ -10,6 +10,7 @@
 #include "tdogl/Texture.h"
 #include "tdogl/Bitmap.h"
 #include "World.h"
+#include <fstream>
 
 void MeshSet::recursiveProcess(aiNode *node, const aiScene *scene) {
 	//process
@@ -89,8 +90,8 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 
 	if (mesh->HasBones())
 	{
-		boneIds.resize(mesh->mNumVertices, glm::vec4(0));
-		boneWeights.resize(mesh->mNumVertices, glm::vec4(0));
+		boneIds.resize(mesh->mNumVertices, glm::ivec4());
+		boneWeights.resize(mesh->mNumVertices, glm::vec4());
 	}
 	// Bones
 	for (int i = 0; i < mesh->mNumBones; i++)
@@ -98,9 +99,22 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		aiBone *bone = mesh->mBones[i];
 		bones.push_back(*bone);
 		int j;
-		for (j = 0; j < 4 && boneWeights[bone->mWeights->mVertexId][j] != 0; j++) {}
-		boneIds[bone->mWeights->mVertexId][j] = i;
-		boneWeights[bone->mWeights->mVertexId][j] = bone->mWeights->mWeight;
+		for (j = 0; j < 4 && boneWeights[bone->mWeights->mVertexId][j] != 0.0f; j++) {}
+		(&boneIds[bone->mWeights->mVertexId])->operator[](j) = i;
+		(&boneWeights[bone->mWeights->mVertexId])->operator[](j) = bone->mWeights->mWeight;
+	}
+	if (mesh->HasBones())
+	{
+		std::ofstream file;
+		file.open("bonetest.txt");
+		for (int i = 0; i < boneWeights.size(); i++)
+		{
+			float sum = 0.0f;
+			for (int j = 0; j < 4; j++)
+				sum += boneWeights[i][j];
+			file << sum << endl;
+		}
+		file.close();
 	}
 	// Add mesh to set
 	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords, &bones, &boneIds, &boneWeights));
@@ -150,7 +164,32 @@ MeshSet::MeshSet(std::string filename) {
 		animations.push_back(*scene->mAnimations[i]);
 	}
 	bone_tree = scene->mRootNode;
+	inverseMat = scene->mRootNode->mTransformation;
+	inverseMat.Inverse();
+	processBones(bone_tree);
+	processAnimations();
 	recursiveProcess(scene->mRootNode, scene);
+}
+
+void MeshSet::processBones(aiNode* node)
+{
+	boneInfo.insert(std::pair<std::string, BoneInfo*>(node->mName.C_Str(), new BoneInfo(node)));
+	for (int i = 0; i < node->mNumChildren; i++)
+	{
+		processBones(node->mChildren[i]);
+	}
+}
+
+void MeshSet::processAnimations()
+{
+	for (int i = 0; i < animations.size(); i++)
+	{
+		for (int j = 0; j < animations[i].mNumChannels; j++)
+		{
+			BoneInfo *info = boneInfo.at(animations[i].mChannels[j]->mNodeName.C_Str());
+			info->bone_anim->insert(std::pair<aiAnimation*, aiNodeAnim*>(&animations[i], animations[i].mChannels[j]));
+		}
+	}
 }
 
 MeshSet::~MeshSet() {
