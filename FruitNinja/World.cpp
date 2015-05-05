@@ -122,10 +122,8 @@ void World::draw()
 	vector<shared_ptr<GameEntity>> culled;
     if (c_test != nullptr)
     {
-        culled = cull_objects(entities, camera->getViewMatrix());
-		//glUseProgram(0);
+        culled = cull_objects(entities, player_camera->getViewMatrix());
         glUseProgram(shaders.at("debugShader")->getProgramID());
-        //shared_ptr<Shader> d_test = shaders.at("debugShader");
         for (int i = 0; i < culled.size(); i++)
         {
             shared_ptr<BoundingBox> box = culled.at(i)->getTransformedOuterBoundingBox();
@@ -211,15 +209,13 @@ void World::update()
 {
     static float start_time = 0.0;
 
-    OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
-    collision_handler(world_oct_tree->collision_pairs);
-
 	float end_time = glfwGetTime();
 	for (int i = 0; i < entities.size(); i++) 
 		entities[i]->update();
 	seconds_passed = end_time - start_time;
 	start_time = glfwGetTime();
-
+	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
 	_skybox->update();
 }
