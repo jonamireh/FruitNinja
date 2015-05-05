@@ -14,7 +14,7 @@ class ChewyMovementComponent : public Component
 public:
 	ChewyMovementComponent(GameEntity& entity, std::shared_ptr<Camera> camera) : entity(entity), camera(camera) {}
 	void update();
-	glm::vec3 movement;
+	glm::vec3 direction;
 
 private:
 	GameEntity& entity;

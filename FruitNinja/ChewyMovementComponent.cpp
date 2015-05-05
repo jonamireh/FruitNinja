@@ -39,30 +39,35 @@ void ChewyMovementComponent::update()
 {
 	if (camera->in_use) 
     {
-		movement.x = 0.f;
-		movement.y = 0.f;
-		movement.z = 0.f;
+		direction.x = 0.f;
+		direction.y = 0.f;
+		direction.z = 0.f;
 
 		entity.last_position = entity.position;
 
 		entity.velocity -= vec3(0, 25, 0) * seconds_passed;
 		
 		if (keys[GLFW_KEY_W]) {
-			movement += forwardDirection(camera);
+			direction += forwardDirection(camera);
 		}
 		if (keys[GLFW_KEY_S]) {
-			movement += backDirection(camera);
+			direction += backDirection(camera);
 		}
 		if (keys[GLFW_KEY_A]) {
-			movement += leftDirection(camera);
+			direction += leftDirection(camera);
 		}
 		if (keys[GLFW_KEY_D]) {
-			movement += rightDirection(camera);
+			direction += rightDirection(camera);
 		}
-		
-		if (length(movement) > 0) {
-			movement = normalize(movement * vec3(1, 0, 1)) * CHEWY_MOVE_SPEED * seconds_passed;
-			float toAngle = entity.turnAngle(movement).y;
+
+        vec3 pos_offset;
+
+		if (length(direction) > 0) {
+            direction = normalize(direction * vec3(1, 0, 1));
+                
+            pos_offset = direction * CHEWY_MOVE_SPEED * seconds_passed;
+
+			float toAngle = entity.turnAngle(direction).y;
 			float fromAngle = entity.rotations.y;
 			
 			if (toAngle - fromAngle < -M_PI)
@@ -82,7 +87,7 @@ void ChewyMovementComponent::update()
 			else
 				entity.rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
 
-			entity.position += movement;
+            entity.position += pos_offset;
 		}
 		if (entity.position.y <= 0 && keys[GLFW_KEY_SPACE])
 		{

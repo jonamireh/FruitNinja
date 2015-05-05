@@ -11,6 +11,5 @@ public:
 	void update();
 	void collision(std::shared_ptr<BoundingBox> bb);
 	float up_velocity = 0;
-private:
 	ChewyMovementComponent moveComponent;
 };
