@@ -13,6 +13,21 @@ glm::vec4 normalize_plane(glm::vec4& p1)
 	return p1_c / mag;
 }
 
+int PlaneAABBIntersect(shared_ptr<BoundingBox> bb, glm::vec4& p)
+{
+	glm::vec3 c = (bb->upper_bound + bb->lower_bound) / 2.f;
+	glm::vec3 h = (bb->upper_bound - bb->lower_bound) / 2.f;
+
+	float e = h.x * fabs(p.x) + h.y * fabs(p.y) + h.z * fabs(p.z);
+	float s = glm::dot(c, glm::vec3(p)) + p.w;
+
+	if ((s - e) > 0)
+		return 0;
+	if ((s + e) > 0)
+		return 1;
+	return 2;
+}
+
 std::vector<std::shared_ptr<GameEntity>> cull_objects(std::vector<std::shared_ptr<GameEntity>> entities, glm::mat4& view_mat)
 {
 	glm::vec4 p_planes[6];
@@ -53,12 +68,9 @@ std::vector<std::shared_ptr<GameEntity>> cull_objects(std::vector<std::shared_pt
 	for (int i = 0; i < entities.size(); i++)
 	{
 		bool in_frustrum = true;
-		glm::vec4 center = glm::vec4(entities.at(i)->getCenter(), 1.0f);
 		for (int j = 0; j < 6; j++)
 		{
-			//float point = classify_point(p_planes[j], glm::vec4(center, 1.0f));
-			float distance = glm::dot(normalize_plane(p_planes[j]), center);
-			if (distance < 0.f && abs(distance + 3.0f) > entities.at(i)->getRadius())
+			if (PlaneAABBIntersect(entities.at(i)->getTransformedOuterBoundingBox(), p_planes[j]) == 2)
 			{
 				in_frustrum = false;
 				break;
