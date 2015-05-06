@@ -26,6 +26,7 @@ float x_offset;
 float y_offset;
 float screen_width = 1280;
 float screen_height = 720;
+bool debug_enabled = false;
 
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
@@ -123,21 +124,6 @@ void World::draw()
     if (c_test != nullptr)
     {
         culled = cull_objects(entities, player_camera->getViewMatrix());
-        glUseProgram(shaders.at("debugShader")->getProgramID());
-        for (int i = 0; i < culled.size(); i++)
-        {
-            shared_ptr<BoundingBox> box = culled.at(i)->getTransformedOuterBoundingBox();
-			shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points();
-			for (int j = 0; j < points->size(); j++)
-			{
-				debugShader->drawLine(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
-			}
-            vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
-            for (int i = 0; i < planes.size(); i++)
-            {
-                debugShader->drawLine(planes.at(i).first, planes.at(i).first + planes.at(i).second, vec3(0, 1.f, 0), camera->getViewMatrix());
-            }
-        }
 	}
 	else
 	{
@@ -152,6 +138,24 @@ void World::draw()
 		shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
 
     glUseProgram(0);
+	if (debug_enabled)
+	{
+		glUseProgram(shaders.at("debugShader")->getProgramID());
+		for (int i = 0; i < culled.size(); i++)
+		{
+			shared_ptr<BoundingBox> box = culled.at(i)->getTransformedOuterBoundingBox();
+			shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points();
+			for (int j = 0; j < points->size(); j++)
+			{
+				debugShader->drawLine(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
+			}
+			vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
+			for (int i = 0; i < planes.size(); i++)
+			{
+				debugShader->drawLine(planes.at(i).first, planes.at(i).first + box->getMaxWidth(5.0f) * planes.at(i).second, vec3(0, 1.f, 0), camera->getViewMatrix());
+			}
+		}
+	}
 }
 
 void World::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -196,11 +200,17 @@ void World::change_camera()
     }
 }
 
+void World::enable_debugging()
+{
+	if (keys[GLFW_KEY_Z])
+		debug_enabled = !debug_enabled;
+}
+
 void World::update_key_callbacks()
 {
     camera->movement(entities.at(0));
     change_camera();
-
+	enable_debugging();
     x_offset = 0;
     y_offset = 0;
 }

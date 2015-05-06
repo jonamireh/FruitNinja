@@ -19,4 +19,6 @@ public:
 
     std::vector<std::pair<glm::vec3, glm::vec3>> getPlanes();
     std::vector<std::pair<std::pair<glm::vec3, glm::vec3>, std::pair<glm::vec3, glm::vec3>>> getFaces();
+
+	float getMaxWidth(float protrudingLength);
 };

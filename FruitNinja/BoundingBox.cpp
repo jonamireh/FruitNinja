@@ -105,7 +105,7 @@ vector<pair<vec3, vec3>> BoundingBox::getPlanes()
         pair<vec3, vec3> set2 = faces.at(i).second;
         vec3 orig = (set1.first + set1.second + set2.first + set2.second)/4.f;
 
-        vec3 normal = glm::normalize(glm::cross(set1.second - set1.first, set2.first - set1.first));
+        vec3 normal = glm::normalize(glm::cross(set1.first - orig, set1.second - orig));
 
         toReturn.push_back(pair<vec3, vec3>(orig, normal));
     }
@@ -120,28 +120,40 @@ vector<pair<pair<vec3, vec3>, pair<vec3, vec3>>> BoundingBox::getFaces()
     //left face
     toReturn.push_back(pair<pair<vec3, vec3>, pair<vec3, vec3>>(
         pair<vec3, vec3>(vec3(lower_bound), vec3(lower_bound.x, upper_bound.y, lower_bound.z)), 
-        pair<vec3, vec3>(vec3(lower_bound.x, lower_bound.y, upper_bound.z), vec3(lower_bound.x, upper_bound.y, upper_bound.z))));
+		pair<vec3, vec3>(vec3(lower_bound.x, upper_bound.y, upper_bound.z), vec3(lower_bound.x, lower_bound.y, upper_bound.z))));
     //back face
     toReturn.push_back(pair<pair<vec3, vec3>, pair<vec3, vec3>>(
-        pair<vec3, vec3>(vec3(lower_bound), vec3(upper_bound.x, lower_bound.y, lower_bound.z)),
-        pair<vec3, vec3>(vec3(lower_bound.x, upper_bound.y, lower_bound.z), vec3(upper_bound.x, upper_bound.y, lower_bound.z))));
+		pair<vec3, vec3>(vec3(upper_bound.x, lower_bound.y, lower_bound.z), vec3(upper_bound.x, upper_bound.y, lower_bound.z)),
+		pair<vec3, vec3>(vec3(lower_bound.x, upper_bound.y, lower_bound.z), vec3(lower_bound))));
     //right face
     toReturn.push_back(pair<pair<vec3, vec3>, pair<vec3, vec3>>(
-        pair<vec3, vec3>(vec3(upper_bound), vec3(upper_bound.x, upper_bound.y, lower_bound.z)),
-        pair<vec3, vec3>(vec3(upper_bound.x, lower_bound.y, upper_bound.z), vec3(upper_bound.x, lower_bound.y, lower_bound.z))));
+		pair<vec3, vec3>(vec3(upper_bound.x, lower_bound.y, upper_bound.z), vec3(upper_bound)),
+		pair<vec3, vec3>(vec3(upper_bound.x, upper_bound.y, lower_bound.z), vec3(upper_bound.x, lower_bound.y, lower_bound.z))));
     //bottom face
     toReturn.push_back(pair<pair<vec3, vec3>, pair<vec3, vec3>>(
-        pair<vec3, vec3>(vec3(lower_bound), vec3(upper_bound.x, lower_bound.y, lower_bound.z)),
-        pair<vec3, vec3>(vec3(lower_bound.x, lower_bound.y, upper_bound.z), vec3(upper_bound.x, lower_bound.y, upper_bound.z))));
+		pair<vec3, vec3>(vec3(lower_bound), vec3(lower_bound.x, lower_bound.y, upper_bound.z)),
+		pair<vec3, vec3>(vec3(upper_bound.x, lower_bound.y, lower_bound.z), vec3(upper_bound.x, lower_bound.y, upper_bound.z))));
     //front face
     toReturn.push_back(pair<pair<vec3, vec3>, pair<vec3, vec3>>(
-        pair<vec3, vec3>(vec3(upper_bound), vec3(lower_bound.x, upper_bound.y, upper_bound.z)),
-        pair<vec3, vec3>(vec3(lower_bound.x, lower_bound.y, upper_bound.z), vec3(upper_bound.x, lower_bound.y, upper_bound.z))));
+		pair<vec3, vec3>(vec3(lower_bound.x, lower_bound.y, upper_bound.z), vec3(lower_bound.x, upper_bound.y, upper_bound.z)),
+		pair<vec3, vec3>(vec3(upper_bound), vec3(upper_bound.x, lower_bound.y, upper_bound.z))));
     //top face
     toReturn.push_back(pair<pair<vec3, vec3>, pair<vec3, vec3>>(
-        pair<vec3, vec3>(vec3(upper_bound), vec3(upper_bound.x, upper_bound.y, lower_bound.z)),
-        pair<vec3, vec3>(vec3(lower_bound.x, upper_bound.y, upper_bound.z), vec3(lower_bound.x, upper_bound.y, lower_bound.z))));
+		pair<vec3, vec3>(vec3(lower_bound.x, upper_bound.y, upper_bound.z), vec3(lower_bound.x, upper_bound.y, lower_bound.z)),
+		pair<vec3, vec3>(vec3(upper_bound.x, upper_bound.y, lower_bound.z), vec3(upper_bound))));
 
     return toReturn;
+}
+
+float BoundingBox::getMaxWidth(float protrudingLength)
+{
+	float toReturn = -FLT_MAX;
+
+	toReturn = upper_bound.x - lower_bound.x > toReturn ? upper_bound.x - lower_bound.x : toReturn;
+	toReturn = upper_bound.y - lower_bound.y > toReturn ? upper_bound.y - lower_bound.y : toReturn;
+	toReturn = upper_bound.z - lower_bound.z > toReturn ? upper_bound.z - lower_bound.z : toReturn;
+
+	return (toReturn / 2.f) + protrudingLength;
+
 }
 
