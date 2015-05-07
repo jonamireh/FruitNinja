@@ -29,7 +29,7 @@ public:
     glm::vec3 getCenter();
 	glm::vec3 center;
     bool compare(std::shared_ptr<GameEntity> ge);
-    std::shared_ptr<std::vector<BoundingBox>> GameEntity::getBoundingBoxes();
+    std::shared_ptr<std::vector<BoundingBox>> GameEntity::getTransformedBoundingBoxes();
     glm::mat4 getModelMat();
 	std::shared_ptr<BoundingBox> getOuterBoundingBox();
 	std::shared_ptr<BoundingBox> getTransformedOuterBoundingBox();

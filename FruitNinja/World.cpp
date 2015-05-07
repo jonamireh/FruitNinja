@@ -45,12 +45,15 @@ void World::init()
     player_camera = shared_ptr<Camera>(new PlayerCamera());
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
 
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
-	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard")));
+
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
+	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
+
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet(assetPath + "arrow.dae"))));
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
+
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet(assetPath + "tower.dae"))));
 
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
@@ -130,17 +133,17 @@ void World::draw()
 		culled = cull_objects(entities, camera->getViewMatrix());
 		
 	}
+	glUseProgram(0);
 	
 	//glUseProgram(0);
     glUseProgram(shaders.at("phongShader")->getProgramID());
     glViewport(0, 0, screen_width, screen_height);
 	for (int i = 0; i < culled.size(); i++)
 		shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
-
     glUseProgram(0);
 	if (debug_enabled)
 	{
-		glUseProgram(shaders.at("debugShader")->getProgramID());
+		glUseProgram(debugShader->getProgramID());
 		for (int i = 0; i < culled.size(); i++)
 		{
 			shared_ptr<BoundingBox> box = culled.at(i)->getTransformedOuterBoundingBox();
@@ -150,11 +153,12 @@ void World::draw()
 				debugShader->drawLine(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
 			}
 			vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
-			for (int i = 0; i < planes.size(); i++)
+			for (int k = 0; k < planes.size(); k++)
 			{
-				debugShader->drawLine(planes.at(i).first, planes.at(i).first + box->getMaxWidth(5.0f) * planes.at(i).second, vec3(0, 1.f, 0), camera->getViewMatrix());
+				debugShader->drawLine(planes.at(k).first, planes.at(k).first + box->getMaxWidth(5.0f) * planes.at(k).second, vec3(0, 1.f, 0), camera->getViewMatrix());
 			}
 		}
+		glUseProgram(0);
 	}
 }
 
@@ -239,5 +243,12 @@ void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)
 
 void World::draw_line(vec3 p1, vec3 p2, vec3 color)
 {
-    debugShader->drawLine(p1, p2, color, camera->getViewMatrix());
+	glUseProgram(debugShader->getProgramID());
+	debugShader->drawLine(p1, p2, color, camera->getViewMatrix());
+}
+
+void World::draw_point(vec3 p, vec3 color, float radius)
+{
+	glUseProgram(debugShader->getProgramID());
+	debugShader->drawPoint(p, color, radius, camera->getViewMatrix());
 }

@@ -37,6 +37,7 @@ public:
     std::map<std::string, std::shared_ptr<MeshSet>> meshes;
 	void enable_debugging();
     static void draw_line(glm::vec3 p1, glm::vec3 p2, glm::vec3 color);
+	static void draw_point(glm::vec3 p, glm::vec3 color, float radius);
 private:
     std::shared_ptr<Camera> debug_camera;
     std::shared_ptr<Camera> archery_camera;
