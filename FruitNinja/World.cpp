@@ -216,6 +216,7 @@ void World::draw()
 			{
 				debugShader->drawLine(planes.at(k).first, planes.at(k).first + box->getMaxWidth(5.0f) * planes.at(k).second, vec3(0, 1.f, 0), camera->getViewMatrix());
 			}
+			draw_sphere(culled.at(i)->getCenter(), culled.at(i)->getRadius(), vec3(1.f, 1.f, 0.f), 3.f);
 		}
 		glUseProgram(0);
 	}
@@ -310,4 +311,44 @@ void World::draw_point(vec3 p, vec3 color, float radius)
 {
 	glUseProgram(debugShader->getProgramID());
 	debugShader->drawPoint(p, color, radius, camera->getViewMatrix());
+}
+
+void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
+{
+	vector<float> points;
+	for (float theta = 0.f; theta < 360.f; theta +=delta)
+	{
+		float x = radius * cos(radians(theta)) * cos(radians(0.f));
+		points.push_back(x + center.x);
+		float y = radius * sin(radians(0.f));
+		points.push_back(y + center.y);
+		float z = radius * sin(radians(theta)) * cos(radians(0.f));
+		points.push_back(z + center.z);
+	}
+	//assert(points.size() == 360.f / delta);
+	debugShader->drawPoints(points, color, camera->getViewMatrix());
+	points.clear();
+	for (float phi = 0.f; phi < 360.f; phi +=delta)
+	{
+		float x = radius * cos(radians(0.f)) * cos(radians(phi));
+		points.push_back(x + center.x);
+		float y = radius * sin(radians(phi));
+		points.push_back(y + center.y);
+		float z = radius * sin(radians(0.f)) * cos(radians(phi));
+		points.push_back(z + center.z);
+	}
+	//assert(points.size() == 360.f / delta);
+	debugShader->drawPoints(points, color, camera->getViewMatrix());
+	points.clear();
+	for (float phi = -180.f; phi < 180.f; phi += delta)
+	{
+		float x = radius * cos(radians(90.f)) * cos(radians(phi));
+		points.push_back(x + center.x);
+		float y = radius * sin(radians(phi));
+		points.push_back(y + center.y);
+		float z = radius * sin(radians(90.f)) * cos(radians(phi));
+		points.push_back(z + center.z);
+	}
+	//assert(points.size() == 360.f / delta);
+	debugShader->drawPoints(points, color, camera->getViewMatrix());
 }

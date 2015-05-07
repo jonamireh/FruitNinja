@@ -93,3 +93,34 @@ void DebugShader::drawPoint(vec3 p, vec3 color, float radius, mat4& view_mat)
 	glDisableVertexAttribArray(0);
 	glBindVertexArray(0);
 }
+
+void DebugShader::drawPoints(vector<float> points, vec3 color, mat4& view_mat)
+{
+	int currentId;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &currentId);
+	assert(currentId == getProgramID());
+	glBindVertexArray(POINT_VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, POINT_VBO);
+
+	glUniform3fv(getUniformHandle("Ucolor"), 1, value_ptr(color));
+	glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f)));
+	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
+
+	glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(float), &points[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(
+		getAttributeHandle("aPosition"),                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		3,                  // size
+		GL_FLOAT,           // type
+		GL_FALSE,           // normalized?
+		0,                  // stride
+		(void*)0            // array buffer offset
+		);
+
+	// Draw the line !
+	glPointSize(1.f);
+	glDrawArrays(GL_POINTS, 0, points.size() / 3); // 1 indices for the points
+	glDisableVertexAttribArray(0);
+	glBindVertexArray(0);
+}
