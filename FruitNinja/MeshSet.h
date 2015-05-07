@@ -1,7 +1,6 @@
 #pragma once
 
 #include <assimp/scene.h>
-#include <glm/glm.hpp>
 #include <vector>
 #include "Mesh.h"
 #include <string>

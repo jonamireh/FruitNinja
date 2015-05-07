@@ -11,6 +11,7 @@
 using namespace glm;
 using namespace std;
 
+
 vec3 GameEntity::turnAngle(vec3 cartesian) {
 	vec3 rot_angles(0, 0, 0);
 

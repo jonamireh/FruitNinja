@@ -108,8 +108,9 @@ Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalDat
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	//glDisableVertexAttribArray(0); // Disable our Vertex Array Object  
-	glBindVertexArray(0); // Disable our Vertex Buffer Object 
+
+	glBindVertexArray(0);
+
 }
 
 Mesh::~Mesh()

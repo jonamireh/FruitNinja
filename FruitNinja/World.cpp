@@ -24,9 +24,10 @@ bool keys[1024];
 float seconds_passed = 0;
 float x_offset;
 float y_offset;
-float screen_width = 1280;
-float screen_height = 720;
+
 bool debug_enabled = false;
+float screen_width = SCREEN_WIDTH;
+float screen_height = SCREEN_HEIGHT;
 
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
@@ -62,11 +63,29 @@ void World::init()
 
     shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 16.0, 31.5), meshes.at("lantern")));
     lantern->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern2(new ObstacleEntity(vec3(0.0, 16.0, 31.5), meshes.at("lantern")));
+	lantern2->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern3(new ObstacleEntity(vec3(30.0, 16.0, 0.0), meshes.at("lantern")));
+	lantern3->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern4(new ObstacleEntity(vec3(-30.0, 2.0, 20), meshes.at("lantern")));
+	lantern2->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern5(new ObstacleEntity(vec3(-50.0, 10.0, 0.0), meshes.at("lantern")));
+	lantern3->rotations.y = M_PI_2;
+
+
+
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
     shared_ptr <GameEntity> lantern_pole(new ObstacleEntity(vec3(30.0, 0.0, 30.0), meshes.at("lanternPole")));
+
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
     shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(48.0, 0.0, 30.0), meshes.at("closedBarrel")));
     cBarrel->scale = 3.0f;
+	shared_ptr <GameEntity> cBarrel2(new ObstacleEntity(vec3(-50.0, 0.0, -10.0), meshes.at("closedBarrel")));
+	cBarrel2->scale = 3.0f;
+	shared_ptr <GameEntity> cBarrel3(new ObstacleEntity(vec3(-58.0, 0.0, 10.0), meshes.at("closedBarrel")));
+	cBarrel3->scale = 3.0f;
+
+
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
     shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(30.0, 0.0, 40.0), meshes.at("openBarrel")));
     oBarrel->scale = 3.0f;
@@ -88,14 +107,20 @@ void World::init()
 	entities.push_back(arrow);
     //entities.push_back(tower);
     entities.push_back(lantern);
+	entities.push_back(lantern2);
+	entities.push_back(lantern3);
+	entities.push_back(lantern4);
+	entities.push_back(lantern5);
+
     entities.push_back(lantern_pole);
     entities.push_back(oBarrel);
     entities.push_back(cBarrel);
+	entities.push_back(cBarrel2);
+	entities.push_back(cBarrel3);
+
     entities.push_back(box1);
     entities.push_back(box2);
     entities.push_back(box3);
-
-
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
@@ -115,12 +140,26 @@ void World::init()
 void World::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glViewport(0, 0, screen_width, screen_height);
+	
 
-	//glUseProgram(0);
-	glUseProgram(shaders.at("simpleShader")->getProgramID());
-	glViewport(0, 0, screen_width, screen_height);
-	shaders.at("simpleShader")->draw(camera->getViewMatrix(), _skybox);
+	glUseProgram(0);
+	static bool usePhong = true;
+
+	if (keys[GLFW_KEY_6])
+	{
+		usePhong = true;
+	}
+	if (keys[GLFW_KEY_7])
+	{
+		usePhong = false;
+	}
+
+
+	if (usePhong) {
+		glUseProgram(shaders.at("simpleShader")->getProgramID());
+		glViewport(0, 0, screen_width, screen_height);
+		shaders.at("simpleShader")->draw(camera->getViewMatrix(), _skybox);
+	}
 
 	shared_ptr<DebugCamera> c_test = dynamic_pointer_cast<DebugCamera>(camera);
 	vector<shared_ptr<GameEntity>> culled;
@@ -135,11 +174,22 @@ void World::draw()
 	}
 	glUseProgram(0);
 	
-	//glUseProgram(0);
-    glUseProgram(shaders.at("phongShader")->getProgramID());
-    glViewport(0, 0, screen_width, screen_height);
-	for (int i = 0; i < culled.size(); i++)
-		shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
+
+	if (usePhong) {
+		glUseProgram(shaders.at("phongShader")->getProgramID());
+		glViewport(0, 0, screen_width, screen_height);
+		for (int i = 0; i < culled.size(); i++)
+			shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
+	}
+	else {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glUseProgram(shaders.at("defShader")->getProgramID());
+		glViewport(0, 0, screen_width, screen_height);
+		shaders.at("defShader")->draw(camera, culled);
+	}
+
+
     glUseProgram(0);
 	if (debug_enabled)
 	{

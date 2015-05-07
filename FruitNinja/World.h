@@ -12,6 +12,9 @@
 #include "Skybox.h"
 #include "DebugShader.h"
 
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720	
+
 class ArcheryCamera;
 const string assetPath = "assets/";
 extern bool keys[1024];

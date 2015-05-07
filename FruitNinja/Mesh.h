@@ -3,8 +3,6 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <GL/glew.h>
-#include <assimp/cimport.h>
-#include <assimp/postprocess.h>
 #include "Material.h"
 #include "BoundingBox.h"
 

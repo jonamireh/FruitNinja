@@ -100,6 +100,18 @@
     <ClCompile Include="ChewyAnimationComponent.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="DeferredRenderer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="StencilShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -201,6 +213,18 @@
     <ClInclude Include="ChewyAnimationComponent.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="DeferredRenderer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="StencilShader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -222,9 +246,6 @@
     <None Include="TextureDebug.fragmentshader">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="DeferredFragRender.glsl">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="DeferredFragShader.glsl">
       <Filter>Shaders</Filter>
     </None>
@@ -238,6 +259,24 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="simpleVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="dirLightFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="lightVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="DeferredFragRender.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="pointLightFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="StencilVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="StencilFrag.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

@@ -1,17 +1,28 @@
-#version 150
+#version 330
 
 uniform sampler2D Utex;
 uniform int Uflag;
+uniform vec3 UdColor;
+
 
 in vec2 vTextCoord;
+in vec3 vWorldPos;
+in vec3 vNormal;
 
-out vec4 finalColor;
+layout (location = 0) out vec3 WorldPosOut; 
+layout (location = 1) out vec3 DiffuseOut; 
+layout (location = 2) out vec3 NormalOut; 
+layout (location = 3) out vec3 TexCoordOut; 
 
 void main()
 {
+	WorldPosOut = vWorldPos;
 	if(Uflag == 1) {
-		finalColor = texture(Utex, vTextCoord);
+		DiffuseOut = texture(Utex, vTextCoord).xyz;
 	} else {
-		finalColor = vec4(0, .5, 6, 1);
+		DiffuseOut = UdColor;
 	}
+
+	NormalOut = normalize(vNormal); 
+    TexCoordOut = vec3(vTextCoord, 0.0); 
 }
