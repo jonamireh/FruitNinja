@@ -12,10 +12,10 @@ class GameEntity
 	std::shared_ptr<BoundingBox> largestBB;
 public:
     GameEntity() {}
-    GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh) : position(position), mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f))
+	GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh) : position(position), mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f))
     {
-        sebInit();
-    }
+		sebInit();
+    };
 	virtual void update() = 0;
     virtual void collision(std::shared_ptr<BoundingBox> bb);
 	std::shared_ptr<MeshSet> mesh;

@@ -27,25 +27,9 @@ vec3 GameEntity::turnAngle(vec3 cartesian) {
 
 void GameEntity::sebInit()
 {
-    std::vector<Mesh*> meshes = mesh->getMeshes();
-    float largestDistance = -FLT_MAX;
-    int numVertices = 0;
-    vec3 tempCenter;
-    for (int i = 0; i < meshes.size(); i++)
-    {
-        for (int j = 0; j < meshes[i]->verts.size(); j++)
-        {
-            tempCenter += meshes[i]->verts[j];
-            numVertices++;
-            float temp = glm::distance(meshes[i]->verts[0], meshes[i]->verts[j]);
-            if (temp > largestDistance)
-            {
-                largestDistance = temp;
-            }
-        }
-    }
-    radius = largestDistance / 2.0f;
-    center = tempCenter / (float) numVertices;
+	shared_ptr<BoundingBox> outer_bb = getOuterBoundingBox();
+    radius = glm::distance(outer_bb->lower_bound, outer_bb->upper_bound) / 2.f;
+    center = (outer_bb->lower_bound + outer_bb->upper_bound)  / 2.f;
 }
 
 float GameEntity::getRadius()
@@ -55,7 +39,8 @@ float GameEntity::getRadius()
 
 vec3 GameEntity::getCenter()
 {
-    return center + position;
+	shared_ptr<BoundingBox> outer_bb = getOuterBoundingBox();
+	return vec3(center + position) + ((scale != 1.f) ? vec3(0.f, glm::distance(outer_bb->lower_bound, vec3(outer_bb->lower_bound.x, outer_bb->lower_bound.y, outer_bb->upper_bound.z)) / 2.f, 0.f) : vec3(0.f));
 }
 
 shared_ptr<BoundingBox> GameEntity::getOuterBoundingBox()

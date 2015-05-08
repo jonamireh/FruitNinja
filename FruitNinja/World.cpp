@@ -121,7 +121,6 @@ void World::init()
     entities.push_back(box1);
     entities.push_back(box2);
     entities.push_back(box3);
-
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
 
