@@ -31,7 +31,7 @@ float screen_height = SCREEN_HEIGHT;
 
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
-
+static bool time_stopped = false;
 World::World()
 {
     debugShader = shared_ptr<DebugShader>(new DebugShader("debugVert.glsl", "debugFrag.glsl"));
@@ -266,7 +266,9 @@ void World::change_camera()
 void World::enable_debugging()
 {
 	if (keys[GLFW_KEY_Z])
-		debug_enabled = !debug_enabled;
+		debug_enabled = true;
+	if (keys[GLFW_KEY_X])
+		debug_enabled = false;
 }
 
 void World::update_key_callbacks()
@@ -274,18 +276,34 @@ void World::update_key_callbacks()
     camera->movement(entities.at(0));
     change_camera();
 	enable_debugging();
+	stop_time();
     x_offset = 0;
     y_offset = 0;
 }
 
+void World::stop_time()
+{
+	if (keys[GLFW_KEY_T])
+		time_stopped = true;
+	if (keys[GLFW_KEY_Y])
+		time_stopped = false;
+}
+
 void World::update()
 {
-    static float start_time = 0.0;
+	static float start_time = 0.0;
 
 	float end_time = glfwGetTime();
-	for (int i = 0; i < entities.size(); i++) 
+	for (int i = 0; i < entities.size(); i++)
 		entities[i]->update();
-	seconds_passed = end_time - start_time;
+	if (!time_stopped)
+	{
+		seconds_passed = end_time - start_time;
+	}
+	else
+	{
+		seconds_passed = 0.f;
+	}
 	start_time = glfwGetTime();
 	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);

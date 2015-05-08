@@ -28,7 +28,8 @@ class World
 {
 public:
 	World();
-    void update_key_callbacks();
+	static void stop_time();
+	void update_key_callbacks();
 	void update();
     static void scroll_callback(GLFWwindow* window, double x_pos, double y_pos);
     std::map<std::string, std::shared_ptr<Shader>> shaders;

@@ -78,8 +78,8 @@ vector<pair<pair<vec3, vec3>, pair<vec3, vec3>>> BoundingBox::getFaces()
 		));
     //bottom face
     toReturn.push_back(pair<pair<vec3, vec3>, pair<vec3, vec3>>(
-		pair<vec3, vec3>(vec3(upper_bound.x, lower_bound.y, upper_bound.z), vec3(upper_bound.x, lower_bound.y, lower_bound.z)),
-		pair<vec3, vec3>(vec3(lower_bound.x, lower_bound.y, upper_bound.z), vec3(lower_bound))
+		pair<vec3, vec3>(vec3(lower_bound.x, lower_bound.y, upper_bound.z), vec3(lower_bound)),
+		pair<vec3, vec3>(vec3(upper_bound.x, lower_bound.y, lower_bound.z), vec3(upper_bound.x, lower_bound.y, upper_bound.z))
 		));
     //front face
     toReturn.push_back(pair<pair<vec3, vec3>, pair<vec3, vec3>>(
