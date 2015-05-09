@@ -19,3 +19,7 @@ Cal Poly CPE 476 - Team Ninja
 `Z` - Enable DebugShader
 
 `X` - Disable DebugShader
+
+`6` - Enable PhongShader
+
+`7` - Enable DeferredShader
