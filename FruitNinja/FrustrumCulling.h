@@ -28,7 +28,7 @@ int PlaneAABBIntersect(shared_ptr<BoundingBox> bb, glm::vec4& p)
 	return 2;
 }
 
-std::vector<std::shared_ptr<GameEntity>> cull_objects(std::vector<std::shared_ptr<GameEntity>> entities, glm::mat4& view_mat)
+std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<std::shared_ptr<GameEntity>> entities, glm::mat4& view_mat)
 {
 	glm::vec4 p_planes[6];
 	std::vector<std::shared_ptr<GameEntity>> toReturn;

@@ -23,6 +23,7 @@ extern float x_offset;
 extern float y_offset;
 extern float screen_width;
 extern float screen_height;
+extern bool time_stopped;
 
 class World
 {

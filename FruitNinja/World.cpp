@@ -16,6 +16,8 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include "Skybox.h"
 #include "SimpleTextureShader.h"
+#include <functional>
+#include <queue>
 
 using namespace std;
 using namespace glm;
@@ -31,7 +33,9 @@ float screen_height = SCREEN_HEIGHT;
 
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
-static bool time_stopped = false;
+bool time_stopped = false;
+static queue<std::function<void()>> debugShaderQueue;
+
 World::World()
 {
     debugShader = shared_ptr<DebugShader>(new DebugShader("debugVert.glsl", "debugFrag.glsl"));
@@ -170,14 +174,14 @@ void World::draw()
 	}
 
 	shared_ptr<DebugCamera> c_test = dynamic_pointer_cast<DebugCamera>(camera);
-	vector<shared_ptr<GameEntity>> culled;
+	vector<shared_ptr<GameEntity>> in_view;
     if (c_test != nullptr)
     {
-        culled = cull_objects(entities, player_camera->getViewMatrix());
+        in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
 	}
 	else
 	{
-		culled = cull_objects(entities, camera->getViewMatrix());
+		in_view = get_objects_in_view(entities, camera->getViewMatrix());
 		
 	}
 	glUseProgram(0);
@@ -186,15 +190,15 @@ void World::draw()
 	if (usePhong) {
 		glUseProgram(shaders.at("phongShader")->getProgramID());
 		glViewport(0, 0, screen_width, screen_height);
-		for (int i = 0; i < culled.size(); i++)
-			shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
+		for (int i = 0; i < in_view.size(); i++)
+			shaders.at("phongShader")->draw(camera->getViewMatrix(), in_view.at(i));
 	}
 	else {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(shaders.at("defShader")->getProgramID());
 		glViewport(0, 0, screen_width, screen_height);
-		shaders.at("defShader")->draw(camera, culled);
+		shaders.at("defShader")->draw(camera, in_view);
 	}
 
 
@@ -202,23 +206,31 @@ void World::draw()
 	if (debug_enabled)
 	{
 		glUseProgram(debugShader->getProgramID());
-		for (int i = 0; i < culled.size(); i++)
+		for (int i = 0; i < in_view.size(); i++)
 		{
-			shared_ptr<BoundingBox> box = culled.at(i)->getTransformedOuterBoundingBox();
+			shared_ptr<BoundingBox> box = in_view.at(i)->getTransformedOuterBoundingBox();
 			shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points();
 			for (int j = 0; j < points->size(); j++)
 			{
-				debugShader->drawLine(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
+				draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));
 			}
 			vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
 			for (int k = 0; k < planes.size(); k++)
 			{
-				debugShader->drawLine(planes.at(k).first, planes.at(k).first + box->getMaxWidth(5.0f) * planes.at(k).second, vec3(0, 1.f, 0), camera->getViewMatrix());
+				draw_line(planes.at(k).first, planes.at(k).first + box->getMaxWidth(5.0f) * planes.at(k).second, vec3(0, 1.f, 0));
 			}
-			draw_sphere(culled.at(i)->getCenter(), culled.at(i)->getRadius(), vec3(1.f, 1.f, 0.f), 3.f);
+			draw_sphere(in_view.at(i)->getCenter(), in_view.at(i)->getRadius(), vec3(1.f, 1.f, 0.f), 3.f);
 		}
 		glUseProgram(0);
 	}
+
+	glUseProgram(debugShader->getProgramID());
+	while (!debugShaderQueue.empty())
+	{
+		 debugShaderQueue.front()();
+		 debugShaderQueue.pop();
+	}
+	glUseProgram(0);
 }
 
 void World::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -321,17 +333,20 @@ void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)
 void World::draw_line(vec3 p1, vec3 p2, vec3 color)
 {
 	glUseProgram(debugShader->getProgramID());
-	debugShader->drawLine(p1, p2, color, camera->getViewMatrix());
+	debugShaderQueue.push([=](){debugShader->drawLine(p1, p2, color, camera->getViewMatrix()); });
+	glUseProgram(0);
 }
 
 void World::draw_point(vec3 p, vec3 color, float radius)
 {
 	glUseProgram(debugShader->getProgramID());
-	debugShader->drawPoint(p, color, radius, camera->getViewMatrix());
+	debugShaderQueue.push([=](){debugShader->drawPoint(p, color, radius, camera->getViewMatrix());  });
+	glUseProgram(0);
 }
 
 void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
 {
+	glUseProgram(debugShader->getProgramID());
 	vector<float> points;
 	for (float theta = 0.f; theta < 360.f; theta +=delta)
 	{
@@ -343,7 +358,7 @@ void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
 		points.push_back(z + center.z);
 	}
 	//assert(points.size() == 360.f / delta);
-	debugShader->drawPoints(points, color, camera->getViewMatrix());
+	debugShaderQueue.push([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
 	points.clear();
 	for (float phi = 0.f; phi < 360.f; phi +=delta)
 	{
@@ -355,7 +370,7 @@ void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
 		points.push_back(z + center.z);
 	}
 	//assert(points.size() == 360.f / delta);
-	debugShader->drawPoints(points, color, camera->getViewMatrix());
+	debugShaderQueue.push([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
 	points.clear();
 	for (float phi = -180.f; phi < 180.f; phi += delta)
 	{
@@ -367,5 +382,6 @@ void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
 		points.push_back(z + center.z);
 	}
 	//assert(points.size() == 360.f / delta);
-	debugShader->drawPoints(points, color, camera->getViewMatrix());
+	debugShaderQueue.push([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
+	glUseProgram(0);
 }
