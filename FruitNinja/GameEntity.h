@@ -1,6 +1,5 @@
 #pragma once
 #include "MeshSet.h"
-#include "Material.h"
 #include <memory>
 #include <vector>
 #include "BoundingBox.h"
@@ -30,7 +29,7 @@ public:
 	glm::vec3 center;
     bool compare(std::shared_ptr<GameEntity> ge);
     std::shared_ptr<std::vector<BoundingBox>> GameEntity::getTransformedBoundingBoxes();
-    glm::mat4 getModelMat();
+    virtual glm::mat4 getModelMat();
 	std::shared_ptr<BoundingBox> getOuterBoundingBox();
 	std::shared_ptr<BoundingBox> getTransformedOuterBoundingBox();
 };

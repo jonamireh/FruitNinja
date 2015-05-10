@@ -99,6 +99,7 @@
     <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="GuardMovementComponent.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightEntity.cpp" />
     <ClCompile Include="SimpleTextureShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="StencilShader.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="GBuffer.h" />
     <ClInclude Include="GuardMovementComponent.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LightEntity.h" />
     <ClInclude Include="SimpleTextureShader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="StencilShader.h" />

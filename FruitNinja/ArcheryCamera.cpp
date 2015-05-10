@@ -41,7 +41,7 @@ void ArcheryCamera::mouse_update()
     front.x = cos(radians(theta)) * cos(radians(phi));
     front.y = sin(radians(phi));
     front.z = sin(radians(theta)) * cos(radians(phi));
-    cameraFront = normalize(front);
+	cameraFront = front;//normalize(front); //not necessary, already normalized
 }
 
 /**

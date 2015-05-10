@@ -11,7 +11,7 @@ uniform vec3 uLightPos;
 out vec4 FragColor;
 
 #define CONSTANT 0.0
-#define LINEAR 0.0
+#define LINEAR 0.5
 #define EXPONENTIAL 0.3
 #define AMBIENT_INTENSITY 0.3
 #define DIFFUSE_INTENSITY 1.0

@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <math.h>
 
-#define GUARD_MOVE_SPEED 10.0f
+#define GUARD_MOVE_SPEED 20.0f
 #define GUARD_ROTATE_SPEED 15.0f
 
 class GuardMovementComponent : public Component

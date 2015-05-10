@@ -26,10 +26,12 @@ protected:
 	// DebugCamera Angle
 	float theta, phi;
 	// DebugCamera Vectors for lookAt
-	glm::vec3 cameraUp;
+	
 public:
+	glm::vec3 cameraUp;
     glm::vec3 cameraFront;
     bool in_use;
+
 
 	Camera();
 	~Camera();

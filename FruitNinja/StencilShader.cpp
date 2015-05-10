@@ -7,7 +7,7 @@ StencilShader::StencilShader(std::string vertShader, std::string fragShader)
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 }
 
-void StencilShader::stencilPass(std::shared_ptr<Camera> camera, GBuffer* gbuffer, std::shared_ptr<Light> light)
+void StencilShader::stencilPass(std::shared_ptr<Camera> camera, GBuffer* gbuffer, Light* light)
 {
 	glUseProgram(getProgramID());
 

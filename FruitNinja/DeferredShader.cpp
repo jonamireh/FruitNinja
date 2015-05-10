@@ -1,13 +1,15 @@
-#include "DeferredShader.h"
 #include "World.h"
+#include "DeferredShader.h"
+#include "SimpleTextureShader.h"
 
 using namespace glm;
 using namespace std;
 
 
 
-DeferredShader::DeferredShader(std::string vertShader, std::string fragShader) : Shader(vertShader, fragShader),
-gbuffer(), renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred)
+DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox)
+	: Shader(vertShader, fragShader), skybox(skybox), gbuffer(), skyShader("simpleVert.glsl", "simpleFrag.glsl"),
+	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred)
 {
 	gbuffer.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
@@ -24,8 +26,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 
 	glEnable(GL_DEPTH_TEST);
 
-	//glDisable(GL_BLEND);
-
 	for (int i = 0; i < ents.size(); i++) {
 		std::vector<Mesh*> meshes = ents[i]->mesh->getMeshes();
 
@@ -34,8 +34,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 		glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
 		glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
 		glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f)));
-		//glUniformMatrix4fv(getUniformHandle("uNormalMatrix"), 1, GL_FALSE, value_ptr(glm::inverse(glm::transpose(view_mat * ents[i]->getModelMat()))));
-
 
 		for (int i = 0; i < meshes.size(); i++)
 		{
@@ -74,8 +72,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 	}
 	glDepthMask(GL_FALSE);
 
-	//glDisable(GL_DEPTH_TEST);
-
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -84,7 +80,7 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 
 
 
-void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents)
+void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights)
 {
 	gbuffer.StartFrame();
 	geomPass(camera->getViewMatrix(), ents);
@@ -94,7 +90,8 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 	}
 	else {
 		//startLightPasses();
-		renderer.draw(camera, ents);
+		renderer.draw(camera, ents, lights);
+		skyboxPass(camera);
 		finalPass();
 	}
 		
@@ -104,8 +101,19 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 		disp_mode = four_screen;
 }
 
+void DeferredShader::skyboxPass(std::shared_ptr<Camera> camera)
+{
+	glUseProgram(skyShader.getProgramID());
+
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+
+	skyShader.draw(camera->getViewMatrix(), skybox);
+}
+
 void DeferredShader::finalPass()
 {
+	getProgramID();
 	gbuffer.BindForFinalPass();
 	glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
 		0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
