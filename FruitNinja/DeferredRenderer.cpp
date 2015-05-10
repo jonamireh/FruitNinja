@@ -6,13 +6,6 @@ using namespace glm;
 DeferredRenderer::DeferredRenderer(std::string vertShader, std::string fragShader, GBuffer* gbuffer)
 	: Shader(vertShader, fragShader), gbuffer(gbuffer), stencilShader("StencilVert.glsl", "StencilFrag.glsl")
 {
-	std::shared_ptr<MeshSet> mesh(new MeshSet(assetPath + "UnitSphere.obj"));
-	lights.push_back(std::make_shared<Light>(vec3(30.0, 16.0, 31.5), vec3(1.0, 1.0, 1.0), 500.0f, mesh));
-	lights.push_back(std::make_shared<Light>(vec3(0.0, 16.0, 31.5), vec3(1.0, 1.0, 1.0), 500.0f, mesh));
-	lights.push_back(std::make_shared<Light>(vec3(30.0, 16.0, 0.0), vec3(1.0, 1.0, 1.0), 500.0f, mesh));
-	lights.push_back(std::make_shared<Light>(vec3(-30.0, 2.0, 20), vec3(1.0, 1.0, 1.0), 500.0f, mesh));
-	lights.push_back(std::make_shared<Light>(vec3(-50.0, 10.0, 0.0), vec3(1.0, 1.0, 1.0), 500.0f, mesh));
-
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 }
 
@@ -22,7 +15,7 @@ DeferredRenderer::~DeferredRenderer()
 	
 }
 
-void DeferredRenderer::pointLightPass(std::shared_ptr<Camera> camera, std::shared_ptr<Light> light)
+void DeferredRenderer::pointLightPass(std::shared_ptr<Camera> camera, Light* light)
 {
 	gbuffer->BindForLightPass();
 
@@ -72,7 +65,7 @@ void DeferredRenderer::pointLightPass(std::shared_ptr<Camera> camera, std::share
 }
 
 
-void DeferredRenderer::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents)
+void DeferredRenderer::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights)
 {
 	glEnable(GL_STENCIL_TEST);
 	for (int i = 0; i < lights.size(); i++) {

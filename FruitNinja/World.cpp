@@ -18,6 +18,7 @@
 #include "SimpleTextureShader.h"
 #include <functional>
 #include <queue>
+#include "LightEntity.h"
 
 using namespace std;
 using namespace glm;
@@ -50,31 +51,33 @@ void World::init()
     player_camera = shared_ptr<Camera>(new PlayerCamera());
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
 
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", make_shared<MeshSet>(assetPath + "samurai.dae")));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard")));
 
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", make_shared<MeshSet>(assetPath + "ninja_final2.dae")));
 	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
 
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet(assetPath + "arrow.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
 
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet(assetPath + "tower.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
 
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
     tower->scale = 30.0f;
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
 
-    shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 16.0, 31.5), meshes.at("lantern")));
+
+	shared_ptr <GameEntity> lantern(new LightEntity(vec3(30.0, 16.0, 31.5), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
     lantern->rotations.y = M_PI_2;
-	shared_ptr <GameEntity> lantern2(new ObstacleEntity(vec3(0.0, 16.0, 31.5), meshes.at("lantern")));
+	shared_ptr <GameEntity> lantern2(new LightEntity(vec3(0.0, 16.0, 31.5), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
 	lantern2->rotations.y = M_PI_2;
-	shared_ptr <GameEntity> lantern3(new ObstacleEntity(vec3(30.0, 16.0, 0.0), meshes.at("lantern")));
+	shared_ptr <GameEntity> lantern3(new LightEntity(vec3(30.0, 16.0, 0.0), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
 	lantern3->rotations.y = M_PI_2;
-	shared_ptr <GameEntity> lantern4(new ObstacleEntity(vec3(-30.0, 2.0, 20), meshes.at("lantern")));
-	lantern2->rotations.y = M_PI_2;
-	shared_ptr <GameEntity> lantern5(new ObstacleEntity(vec3(-50.0, 10.0, 0.0), meshes.at("lantern")));
-	lantern3->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern4(new LightEntity(vec3(-30.0, 2.0, 20), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
+	lantern4->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern5(new LightEntity(vec3(-50.0, 10.0, 0.0), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
+	lantern5->rotations.y = M_PI_2;
 
 
 
@@ -109,7 +112,7 @@ void World::init()
 	entities.push_back(chewy);
 	entities.push_back(guard);
 	entities.push_back(arrow);
-    //entities.push_back(tower);
+    entities.push_back(tower);
     entities.push_back(lantern);
 	entities.push_back(lantern2);
 	entities.push_back(lantern3);
@@ -128,7 +131,7 @@ void World::init()
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
 
-	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl"));
+	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
 	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
 
     shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
@@ -146,7 +149,7 @@ void World::draw()
 	
 
 	glUseProgram(0);
-	static bool usePhong = true;
+	static bool usePhong = false;
 
 	if (keys[GLFW_KEY_6])
 	{
@@ -194,11 +197,20 @@ void World::draw()
 			shaders.at("phongShader")->draw(camera->getViewMatrix(), in_view.at(i));
 	}
 	else {
+		//even if lantern culled still need light from it
+		vector<Light*> lights;
+		for (int i = 0; i < entities.size(); i++) {
+			if (typeid(*entities[i]) == typeid(LightEntity)) {
+				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
+				lights.push_back(&le->light);
+			}
+		}
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(shaders.at("defShader")->getProgramID());
 		glViewport(0, 0, screen_width, screen_height);
-		shaders.at("defShader")->draw(camera, in_view);
+		shaders.at("defShader")->draw(camera, in_view, lights);
 	}
 
 

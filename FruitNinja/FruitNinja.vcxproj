@@ -98,6 +98,7 @@
     <ClCompile Include="DeferredShader.cpp" />
     <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightEntity.cpp" />
     <ClCompile Include="SimpleTextureShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="StencilShader.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="FrustrumCulling.h" />
     <ClInclude Include="GBuffer.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LightEntity.h" />
     <ClInclude Include="SimpleTextureShader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="StencilShader.h" />

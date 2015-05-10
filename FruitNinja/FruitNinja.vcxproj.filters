@@ -82,9 +82,6 @@
     <ClCompile Include="TextureDebugShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="DeferredShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -100,16 +97,22 @@
     <ClCompile Include="ChewyAnimationComponent.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="DeferredRenderer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GBuffer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="DeferredShader.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredRenderer.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
     <ClCompile Include="StencilShader.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
+    <ClCompile Include="LightEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -195,9 +198,6 @@
     <ClInclude Include="TextureDebugShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="DeferredShader.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="FrustrumCulling.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -213,17 +213,23 @@
     <ClInclude Include="ChewyAnimationComponent.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="DeferredRenderer.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GBuffer.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="StencilShader.h">
+    <ClInclude Include="LightEntity.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="StencilShader.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredShader.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredRenderer.h">
+      <Filter>DeferredShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -289,6 +295,9 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{8a88a7cc-111d-48c4-a54f-70c13ccedef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DeferredShader">
+      <UniqueIdentifier>{6dcbd46a-1231-4229-bca7-0dd0e49c0401}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
