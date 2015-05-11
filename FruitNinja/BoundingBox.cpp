@@ -6,7 +6,24 @@ using namespace glm;
 
 BoundingBox::BoundingBox(vec3 lower_bound, vec3 upper_bound) : lower_bound(lower_bound), upper_bound(upper_bound) {}
 
-shared_ptr<vector<pair<vec3, vec3>>> BoundingBox::get_points()
+vector<vec3> BoundingBox::get_points()
+{
+    vector<vec3> points;
+    points.push_back(lower_bound);
+    points.push_back(vec3(lower_bound.x, lower_bound.y, upper_bound.z));
+    points.push_back(vec3(lower_bound.x, upper_bound.y, lower_bound.z));
+    points.push_back(vec3(upper_bound.x, lower_bound.y, lower_bound.z));
+    points.push_back(upper_bound);
+    points.push_back(vec3(upper_bound.x, upper_bound.y, lower_bound.z));
+    points.push_back(vec3(upper_bound.x, lower_bound.y, upper_bound.z));
+    return points;
+}
+
+
+/**
+ *
+ */
+shared_ptr<vector<pair<vec3, vec3>>> BoundingBox::get_line_segments()
 {
     shared_ptr<vector<pair<vec3, vec3>>> toReturn(new vector<pair<vec3, vec3>>());
 
@@ -93,6 +110,16 @@ vector<pair<pair<vec3, vec3>, pair<vec3, vec3>>> BoundingBox::getFaces()
 		));
 
     return toReturn;
+}
+
+bool BoundingBox::contains(glm::vec3 check_point)
+{
+    return (check_point.x >= lower_bound.x &&
+        check_point.x <= upper_bound.x &&
+        check_point.y >= lower_bound.y &&
+        check_point.y <= upper_bound.y &&
+        check_point.z >= lower_bound.z &&
+        check_point.z <= upper_bound.z);
 }
 
 float BoundingBox::getMaxWidth(float protrudingLength)

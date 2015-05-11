@@ -75,14 +75,7 @@ shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
 	
 	vec3 lower_bound(obb->lower_bound);
 	vec3 upper_bound(obb->upper_bound);
-	vector<vec3> points;
-	points.push_back(lower_bound);
-	points.push_back(vec3(lower_bound.x, lower_bound.y, upper_bound.z));
-	points.push_back(vec3(lower_bound.x, upper_bound.y, lower_bound.z));
-	points.push_back(vec3(upper_bound.x, lower_bound.y, lower_bound.z));
-	points.push_back(upper_bound);
-	points.push_back(vec3(upper_bound.x, upper_bound.y, lower_bound.z));
-	points.push_back(vec3(upper_bound.x, lower_bound.y, upper_bound.z));
+    vector<vec3> points = obb->get_points();
 
 	vector<vec3> transformed_points;
 	mat4 model = getModelMat();
@@ -108,19 +101,23 @@ shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
 
 bool GameEntity::compare(std::shared_ptr<GameEntity> ge)
 {
+    cout << "compare being called" << endl;
+
+    bool return_value = false;
+
     std::shared_ptr<BoundingBox> my_bb = getTransformedOuterBoundingBox();
     std::shared_ptr<BoundingBox> their_bb = ge->getTransformedOuterBoundingBox();
 	
-	if (my_bb->upper_bound.x > their_bb->lower_bound.x &&
-			my_bb->lower_bound.x < their_bb->upper_bound.x &&
-			my_bb->upper_bound.y > their_bb->lower_bound.y &&
-			my_bb->lower_bound.y < their_bb->upper_bound.y &&
-			my_bb->upper_bound.z > their_bb->lower_bound.z &&
-			my_bb->lower_bound.z < their_bb->upper_bound.z)
-	{
-		return true;
-	}
-	return false;
+    vector<vec3> my_points = my_bb->get_points();
+    vector<vec3> their_points = their_bb->get_points();
+
+    for (int i = 0; i < my_points.size(); i++)
+    {
+        if (their_bb->contains(my_points.at(i)) || my_bb->contains(their_points.at(i)))
+            return_value = true;
+    }
+
+    return return_value;
 }
 
 void GameEntity::collision(std::shared_ptr<BoundingBox> bb)

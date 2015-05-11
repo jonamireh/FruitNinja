@@ -49,6 +49,8 @@ int intersect3D_SegmentPlane(vec3 sP0, vec3 sP1, pair<glm::vec3, glm::vec3> Pn, 
 
 void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
 {
+    cout << "Bounding Box collision for Chewy" << endl;
+
     position = last_position;
 
     vector<pair<glm::vec3, glm::vec3>> planes = bb->getPlanes();
