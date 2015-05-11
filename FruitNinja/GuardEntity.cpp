@@ -1,14 +1,14 @@
 #include "GuardEntity.h"
-#include "ChewyEntity.h"
 
 using namespace std;
 using namespace glm;
+
 
 #define DETECTION_OUTER_RADIUS 10.f
 #define DETECTION_INNER_RADIUS 5.f
 #define COS_ANGLE 0.5
 
-GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh) : GameEntity(position, mesh)
+GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, float time, glm::vec3 direction) : GameEntity(position, mesh), move_component(*this, time, direction)
 {
 
 }
@@ -37,4 +37,6 @@ void GuardEntity::collisionBS(std::shared_ptr<GameEntity> e)
 float GuardEntity::getRadius()
 {
 	return DETECTION_OUTER_RADIUS;
+=======
+>>>>>>> 7a545a1ac5ac84381529fa3f6b73e41bce3cd1b4
 }

@@ -115,6 +115,9 @@
     <ClCompile Include="LightEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="GuardMovementComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
