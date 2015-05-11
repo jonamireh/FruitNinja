@@ -1,4 +1,5 @@
 #include "GuardEntity.h"
+#include "ChewyEntity.h"
 
 using namespace std;
 using namespace glm;
@@ -37,6 +38,4 @@ void GuardEntity::collisionBS(std::shared_ptr<GameEntity> e)
 float GuardEntity::getRadius()
 {
 	return DETECTION_OUTER_RADIUS;
-=======
->>>>>>> 7a545a1ac5ac84381529fa3f6b73e41bce3cd1b4
 }

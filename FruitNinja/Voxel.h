@@ -13,6 +13,5 @@ public:
     std::vector<Voxel> split();
     bool contains(glm::vec3, float);
 	std::vector<glm::vec3> get_points();
-	std::shared_ptr<std::vector<std::pair<glm::vec3, glm::vec3>>> get_line_segments();
 
 };
