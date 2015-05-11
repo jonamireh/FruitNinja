@@ -16,7 +16,7 @@ public:
 		sebInit();
     };
 	virtual void update() = 0;
-    virtual void collision(std::shared_ptr<BoundingBox> bb);
+    virtual void collision(std::shared_ptr<GameEntity> entity);
 	std::shared_ptr<MeshSet> mesh;
 	glm::vec3 position;
 	glm::vec3 last_position;
@@ -24,7 +24,7 @@ public:
     float scale = 1.0f;
 	glm::vec3 turnAngle(glm::vec3 cartesian);
 	glm::vec3 velocity = glm::vec3(0);
-    float getRadius();
+    virtual float getRadius();
     glm::vec3 getCenter();
 	glm::vec3 center;
     bool compare(std::shared_ptr<GameEntity> ge);

@@ -40,6 +40,7 @@ public:
 	std::vector<glm::mat4> boneTransformations;
 	std::shared_ptr<BoundingBox> getBoundingBox();
 	Material mat;
+	Material bMat;
 private:
 	std::shared_ptr<BoundingBox> cache;
 	bool checkError(std::string msg);

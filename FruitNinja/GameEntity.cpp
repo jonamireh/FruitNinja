@@ -123,7 +123,7 @@ bool GameEntity::compare(std::shared_ptr<GameEntity> ge)
 	return false;
 }
 
-void GameEntity::collision(std::shared_ptr<BoundingBox> bb)
+void GameEntity::collision(std::shared_ptr<GameEntity> bb)
 {
     //cout << "generic object collided!" << endl;
 }

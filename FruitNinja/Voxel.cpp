@@ -13,12 +13,6 @@ Voxel::Voxel(vec3 lower, vec3 upper)
     lower_bound = lower;
     upper_bound = upper;
     voxel_center = vec3(0.5f * (lower_bound.x + upper_bound.x), 0.5f * (lower_bound.y + upper_bound.y), 0.5f * (lower_bound.z + upper_bound.z));
-
-    shared_ptr<vector<pair<vec3, vec3>>> points = get_line_segments();
-    for (int j = 0; j < points->size(); j++)
-    {
-       World::draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 1.f, 1.f));
-    }
 }
 
 shared_ptr<vector<pair<vec3, vec3>>> Voxel::get_line_segments()
