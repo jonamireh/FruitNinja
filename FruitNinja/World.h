@@ -12,6 +12,9 @@
 #include "Skybox.h"
 #include "DebugShader.h"
 
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720	
+
 class ArcheryCamera;
 const string assetPath = "assets/";
 extern bool keys[1024];
@@ -20,12 +23,14 @@ extern float x_offset;
 extern float y_offset;
 extern float screen_width;
 extern float screen_height;
+extern bool time_stopped;
 
 class World
 {
 public:
 	World();
-    void update_key_callbacks();
+	static void stop_time();
+	void update_key_callbacks();
 	void update();
     static void scroll_callback(GLFWwindow* window, double x_pos, double y_pos);
     std::map<std::string, std::shared_ptr<Shader>> shaders;
@@ -35,8 +40,10 @@ public:
     static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
     void change_camera();
     std::map<std::string, std::shared_ptr<MeshSet>> meshes;
-
+	void enable_debugging();
     static void draw_line(glm::vec3 p1, glm::vec3 p2, glm::vec3 color);
+	static void draw_point(glm::vec3 p, glm::vec3 color, float radius);
+	static void draw_sphere(glm::vec3 center, float radius, glm::vec3 color, float delta);
 private:
     std::shared_ptr<Camera> debug_camera;
     std::shared_ptr<Camera> archery_camera;

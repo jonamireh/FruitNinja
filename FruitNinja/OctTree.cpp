@@ -1,5 +1,6 @@
 #include "OctTree.h"
 #include <iostream>
+#include "Timer.h"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ OctTree::OctTree(Voxel param_box, vector<shared_ptr<GameEntity>> objects_in_sect
     if (root_ref == nullptr)
     {
         root = shared_ptr<OctTree>(this);
-        collision_pairs = shared_ptr<set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>>(new set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>());
+		collision_pairs = shared_ptr<set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>>(new set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>());
     }
     else
         root = root_ref;
@@ -38,12 +39,14 @@ This needs to do it based off of bounding boxes rather than points, but this sho
 */
 void OctTree::branch()
 {
+    Timer timer = Timer();
+
+
     if (glm::distance(voxel.lower_bound, voxel.upper_bound) < min_radius)
     {
         for (int i = 0; i < objects.size() - 1; i++)
         {
-            if (objects.at(i)->compare(objects.at(i + 1)))
-                root->collision_pairs->insert(pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>(objects.at(i), objects.at(i + 1)));
+			root->collision_pairs->insert(pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>(objects.at(i), objects.at(i + 1)));
         }
         return;
     }
@@ -53,16 +56,27 @@ void OctTree::branch()
     for (int i = 0; i < 8; i++)
     {
         vector<shared_ptr<GameEntity>> subset_objects;
-
+        int k = 0;
         for (int j = 0; j < objects.size(); j++)
         {
+            //timer.start_timing("contains check");
             if (subset_voxels.at(i).contains(objects.at(j)->getCenter(), objects.at(j)->getRadius()))
+            {
+                //timer.start_timing("pushback check");
+
+                k++;
+
                 subset_objects.push_back(objects.at(j));
+                //cout << timer.end_timing() << endl;
+            }
+            //cout << timer.end_timing() << endl;
         }
+        //cout << k << endl;
 
         if (subset_objects.size() > 1)
         {
-            children.push_back(OctTree(subset_voxels.at(i), subset_objects, root));
+            //children.push_back(OctTree(subset_voxels.at(i), subset_objects, root));
+            OctTree(subset_voxels.at(i), subset_objects, root);
         }
     }
 }

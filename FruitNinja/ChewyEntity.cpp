@@ -18,8 +18,22 @@ ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std:
 
 void ChewyEntity::update()
 {
+	std::vector<Mesh*> meshes = mesh->getMeshes();
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		meshes.at(i)->mat = meshes.at(i)->bMat;
+	}
 	moveComponent.update();
 	animComponent.update();
+}
+
+void ChewyEntity::set_material(Material material)
+{
+	std::vector<Mesh*> meshes = mesh->getMeshes();
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		meshes.at(i)->mat = material;
+	}
 }
 
 int intersect3D_SegmentPlane(vec3 sP0, vec3 sP1, pair<glm::vec3, glm::vec3> Pn, vec3* I)
@@ -47,61 +61,64 @@ int intersect3D_SegmentPlane(vec3 sP0, vec3 sP1, pair<glm::vec3, glm::vec3> Pn, 
     return 1;
 }
 
-void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
+void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
 {
-    position = last_position;
+	if (compare(entity))
+	{
+		
+		position = last_position;
+		shared_ptr<BoundingBox> bb = entity->getTransformedOuterBoundingBox();
+		vector<pair<glm::vec3, glm::vec3>> planes = bb->getPlanes();
 
-    vector<pair<glm::vec3, glm::vec3>> planes = bb->getPlanes();
+		pair<glm::vec3, glm::vec3> collision_plane;
+		bool intersected = false;
+		float smallest_dist = FLT_MAX;
+		for (int i = 0; i < planes.size(); i++)
+		{
+			vec3 d;
+			//bool intersection = glm::intersectRayPlane(position, glm::normalize(moveComponent.direction), planes.at(i).first, glm::normalize(planes.at(i).second), dist);
+			int intersection = intersect3D_SegmentPlane(position - moveComponent.direction, 3.0f * moveComponent.direction + position, planes.at(i), &d);
+			if (intersection)
+			{
+				intersected = true;
+				if (fabs(glm::distance(d, position)) < smallest_dist)
+				{
+					smallest_dist = fabs(glm::distance(d, position));
+					collision_plane = planes.at(i);
+				}
+			}
+		}
 
-    pair<glm::vec3, glm::vec3> collision_plane;
-    bool intersected = false;
-    float smallest_dist = FLT_MAX;
-    for (int i = 0; i < planes.size(); i++)
-    {
-        vec3 d;
-        //bool intersection = glm::intersectRayPlane(position, glm::normalize(moveComponent.direction), planes.at(i).first, glm::normalize(planes.at(i).second), dist);
-        int intersection = intersect3D_SegmentPlane(position - moveComponent.direction, 3.0f * moveComponent.direction + position, planes.at(i), &d);
-        if (intersection)
-        {
-            intersected = true;
-            if (fabs(glm::distance(d, position)) < smallest_dist)
-            {
-                smallest_dist = fabs(glm::distance(d, position));
-                collision_plane = planes.at(i);
-            }
-        }
-    }
+		if (intersected)
+		{
+			vec3 cancel_direction = vec3(1.f, 1.f, 1.f);
+			if (collision_plane.second.x)
+				cancel_direction.x = 0.f;
+			else if (collision_plane.second.y)
+				cancel_direction.y = 0.f;
+			else if (collision_plane.second.z)
+				cancel_direction.z = 0.f;
 
-    if (intersected)
-    {
-        vec3 cancel_direction = vec3(1.f, 1.f, 1.f);
-        if (collision_plane.second.x)
-            cancel_direction.x = 0.f;
-        else if (collision_plane.second.y)
-            cancel_direction.y = 0.f;
-        else if (collision_plane.second.z)
-            cancel_direction.z = 0.f;
+			position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
 
-        position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
-
-        // SHOULD DO IT THIS WAY
-        //float speed_magnitude = cos(M_PI_2 - acos(glm::dot(-collision_plane.second, moveComponent.direction)));
-        //vec3 rotation_axis = cross(-collision_plane.second, moveComponent.direction);
-        //vec3 oldDir(moveComponent.direction);
-        //float angle = (float)M_PI_2 - acos(glm::dot(-collision_plane.second, oldDir));
-        //vec3 newDir = rotate(oldDir, angle, rotation_axis);
-        ////vec3 newDir = rotate(oldDir, angle, vec3(0.f,1.f, 0.f));
-        //vec3 offset = newDir * speed_magnitude * CHEWY_MOVE_SPEED * seconds_passed;
-        //position += offset;
-        //if (position.x != position.x || position.y != position.y || position.z != position.z)
-        //{
-        //    cout << "what" << endl;
-        //}
-    }
-    
+			// SHOULD DO IT THIS WAY
+			//float speed_magnitude = cos(M_PI_2 - acos(glm::dot(-collision_plane.second, moveComponent.direction)));
+			//vec3 rotation_axis = cross(-collision_plane.second, moveComponent.direction);
+			//vec3 oldDir(moveComponent.direction);
+			//float angle = (float)M_PI_2 - acos(glm::dot(-collision_plane.second, oldDir));
+			//vec3 newDir = rotate(oldDir, angle, rotation_axis);
+			////vec3 newDir = rotate(oldDir, angle, vec3(0.f,1.f, 0.f));
+			//vec3 offset = newDir * speed_magnitude * CHEWY_MOVE_SPEED * seconds_passed;
+			//position += offset;
+			//if (position.x != position.x || position.y != position.y || position.z != position.z)
+			//{
+			//    cout << "what" << endl;
+			//}
+		}
+	}
 }
 
-/*void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
+/*void ChewyEntity::box_collision(std::shared_ptr<BoundingBox> bb)
 {
     shared_ptr<BoundingBox> my_bb = getTransformedOuterBoundingBox();
 

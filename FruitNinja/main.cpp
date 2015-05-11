@@ -57,7 +57,7 @@ void AppMain()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    glClearColor(0.f, 0.2f, 0.4f, 1.0f);
+    glClearColor(0.f, 0.f, 0.f, 1.0f);
 
     World world;
 
@@ -85,6 +85,7 @@ void AppMain()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+	
 
     glfwTerminate();
 }

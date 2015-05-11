@@ -18,6 +18,7 @@ void main()
 {
 	vec3 dirDiffuse = UdColor * max(0.0, dot(normalize(vNormals), normalize(UdirLight)));
 	vec3 dirSpecular = UsColor * max(0.0, pow(dot(normalize(vNormals), normalize(UdirLight)), Ushine));
+
 	vec3 specular = UsColor * max(0.0, pow(dot(normalize(vNormals), normalize(vLight)), Ushine));
 	if(Uflag == 1) {
 		vec4 texColor = texture(Utex, vTextCoord);

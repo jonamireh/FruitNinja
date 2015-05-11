@@ -17,6 +17,9 @@
 #include "Skybox.h"
 #include "SimpleTextureShader.h"
 #include "TestSphere.h"
+#include <functional>
+#include <queue>
+#include "LightEntity.h"
 
 using namespace std;
 using namespace glm;
@@ -25,11 +28,15 @@ bool keys[1024];
 float seconds_passed = 0;
 float x_offset;
 float y_offset;
-float screen_width = 1280;
-float screen_height = 720;
+
+bool debug_enabled = false;
+float screen_width = SCREEN_WIDTH;
+float screen_height = SCREEN_HEIGHT;
 
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
+bool time_stopped = false;
+static vector<std::function<void()>> debugShaderQueue;
 
 World::World()
 {
@@ -47,23 +54,46 @@ void World::init()
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
     shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
+
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard")));
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet(assetPath + "arrow.dae"))));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard"), 0.f, vec3(1.f, 0.f, 0.f)));
+
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", shared_ptr<MeshSet>(new MeshSet(assetPath + "tower.dae"))));
+
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
 
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
     tower->scale = 30.0f;
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
 
-    shared_ptr <GameEntity> lantern(new ObstacleEntity(vec3(30.0, 16.0, 31.5), meshes.at("lantern")));
+
+	shared_ptr <GameEntity> lantern(new LightEntity(vec3(30.0, 16.0, 31.5), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
     lantern->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern2(new LightEntity(vec3(0.0, 16.0, 31.5), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
+	lantern2->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern3(new LightEntity(vec3(30.0, 16.0, 0.0), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
+	lantern3->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern4(new LightEntity(vec3(-30.0, 2.0, 20), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
+	lantern4->rotations.y = M_PI_2;
+	shared_ptr <GameEntity> lantern5(new LightEntity(vec3(-50.0, 10.0, 0.0), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
+	lantern5->rotations.y = M_PI_2;
+
+
+
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
     shared_ptr <GameEntity> lantern_pole(new ObstacleEntity(vec3(30.0, 0.0, 30.0), meshes.at("lanternPole")));
+
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
     shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(48.0, 0.0, 30.0), meshes.at("closedBarrel")));
     cBarrel->scale = 3.0f;
+	shared_ptr <GameEntity> cBarrel2(new ObstacleEntity(vec3(-50.0, 0.0, -10.0), meshes.at("closedBarrel")));
+	cBarrel2->scale = 3.0f;
+	shared_ptr <GameEntity> cBarrel3(new ObstacleEntity(vec3(-58.0, 0.0, 10.0), meshes.at("closedBarrel")));
+	cBarrel3->scale = 3.0f;
+
+
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
     shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(30.0, 0.0, 40.0), meshes.at("openBarrel")));
     oBarrel->scale = 3.0f;
@@ -86,21 +116,28 @@ void World::init()
 	entities.push_back(chewy);
 	entities.push_back(guard);
 	entities.push_back(arrow);
-    //entities.push_back(tower);
+    entities.push_back(tower);
     entities.push_back(lantern);
+	entities.push_back(lantern2);
+	entities.push_back(lantern3);
+	entities.push_back(lantern4);
+	entities.push_back(lantern5);
+
     entities.push_back(lantern_pole);
     entities.push_back(oBarrel);
     entities.push_back(cBarrel);
+	entities.push_back(cBarrel2);
+	entities.push_back(cBarrel3);
+
     entities.push_back(box1);
     entities.push_back(box2);
     entities.push_back(box3);
 	entities.push_back(testSphere);
 
-
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
 
-	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl"));
+	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
 	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
 
     shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
@@ -115,49 +152,106 @@ void World::init()
 void World::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glViewport(0, 0, screen_width, screen_height);
+	
 
-	//glUseProgram(0);
-	glUseProgram(shaders.at("simpleShader")->getProgramID());
-	glViewport(0, 0, screen_width, screen_height);
-	shaders.at("simpleShader")->draw(camera->getViewMatrix(), _skybox);
+	glUseProgram(0);
+	static bool usePhong = false;
+
+	if (keys[GLFW_KEY_6])
+	{
+		usePhong = true;
+	}
+	if (keys[GLFW_KEY_7])
+	{
+		usePhong = false;
+	}
+
+
+	if (usePhong) {
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glDepthMask(GL_TRUE);
+
+
+		glUseProgram(shaders.at("simpleShader")->getProgramID());
+		glViewport(0, 0, screen_width, screen_height);
+		shaders.at("simpleShader")->draw(camera->getViewMatrix(), _skybox);
+	}
 
 	shared_ptr<DebugCamera> c_test = dynamic_pointer_cast<DebugCamera>(camera);
-	vector<shared_ptr<GameEntity>> culled;
+	vector<shared_ptr<GameEntity>> in_view;
     if (c_test != nullptr)
     {
-        culled = cull_objects(entities, camera->getViewMatrix());
-		//glUseProgram(0);
-        glUseProgram(shaders.at("debugShader")->getProgramID());
-        //shared_ptr<Shader> d_test = shaders.at("debugShader");
-        for (int i = 0; i < culled.size(); i++)
-        {
-            shared_ptr<BoundingBox> box = culled.at(i)->getTransformedOuterBoundingBox();
-			shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points();
-			for (int j = 0; j < points->size(); j++)
-			{
-				debugShader->drawLine(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f), camera->getViewMatrix());
-			}
-            vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
-            for (int i = 0; i < planes.size(); i++)
-            {
-                debugShader->drawLine(planes.at(i).first, planes.at(i).first + planes.at(i).second, vec3(0, 1.f, 0), camera->getViewMatrix());
-            }
-        }
+        in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
 	}
 	else
 	{
-		culled = cull_objects(entities, camera->getViewMatrix());
+		in_view = get_objects_in_view(entities, camera->getViewMatrix());
 		
 	}
+	glUseProgram(0);
 	
-	//glUseProgram(0);
-    glUseProgram(shaders.at("phongShader")->getProgramID());
-    glViewport(0, 0, screen_width, screen_height);
-	for (int i = 0; i < culled.size(); i++)
-		shaders.at("phongShader")->draw(camera->getViewMatrix(), culled.at(i));
+
+	if (usePhong) {
+		glUseProgram(shaders.at("phongShader")->getProgramID());
+		glViewport(0, 0, screen_width, screen_height);
+		for (int i = 0; i < in_view.size(); i++)
+			shaders.at("phongShader")->draw(camera->getViewMatrix(), in_view.at(i));
+	}
+	else {
+		//even if lantern culled still need light from it
+		vector<Light*> lights;
+		for (int i = 0; i < entities.size(); i++) {
+			if (typeid(*entities[i]) == typeid(LightEntity)) {
+				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
+				lights.push_back(&le->light);
+			}
+		}
+		
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glUseProgram(shaders.at("defShader")->getProgramID());
+		glViewport(0, 0, screen_width, screen_height);
+		shaders.at("defShader")->draw(camera, in_view, lights);
+	}
+
 
     glUseProgram(0);
+	if (debug_enabled)
+	{
+		glUseProgram(debugShader->getProgramID());
+		for (int i = 0; i < in_view.size(); i++)
+		{
+			shared_ptr<BoundingBox> box = in_view.at(i)->getTransformedOuterBoundingBox();
+			shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points();
+			for (int j = 0; j < points->size(); j++)
+			{
+				draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));
+			}
+			vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
+			for (int k = 0; k < planes.size(); k++)
+			{
+				draw_line(planes.at(k).first, planes.at(k).first + box->getMaxWidth(5.0f) * planes.at(k).second, vec3(0, 1.f, 0));
+			}
+			draw_sphere(in_view.at(i)->getCenter(), in_view.at(i)->getRadius(), vec3(1.f, 1.f, 0.f), 3.f);
+		}
+		glUseProgram(0);
+	}
+
+	glUseProgram(debugShader->getProgramID());
+	for (int i = debugShaderQueue.size() - 1; i >= 0; i--)
+	{
+		debugShaderQueue.at(i)();
+	}
+	if (!time_stopped)
+	{
+		debugShaderQueue.clear();
+	}
+	glUseProgram(0);
 }
 
 void World::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -202,28 +296,50 @@ void World::change_camera()
     }
 }
 
+void World::enable_debugging()
+{
+	if (keys[GLFW_KEY_Z])
+		debug_enabled = true;
+	if (keys[GLFW_KEY_X])
+		debug_enabled = false;
+}
+
 void World::update_key_callbacks()
 {
     camera->movement(entities.at(0));
     change_camera();
-
+	enable_debugging();
+	stop_time();
     x_offset = 0;
     y_offset = 0;
 }
 
+void World::stop_time()
+{
+	if (keys[GLFW_KEY_T])
+		time_stopped = true;
+	if (keys[GLFW_KEY_Y])
+		time_stopped = false;
+}
+
 void World::update()
 {
-    static float start_time = 0.0;
-
-    OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
-    collision_handler(world_oct_tree->collision_pairs);
+	static float start_time = 0.0;
 
 	float end_time = glfwGetTime();
-	for (int i = 0; i < entities.size(); i++) 
+	for (int i = 0; i < entities.size(); i++)
 		entities[i]->update();
-	seconds_passed = end_time - start_time;
+	if (!time_stopped)
+	{
+		seconds_passed = end_time - start_time;
+	}
+	else
+	{
+		seconds_passed = 0.f;
+	}
 	start_time = glfwGetTime();
-
+	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
 	_skybox->update();
 }
@@ -237,5 +353,56 @@ void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)
 
 void World::draw_line(vec3 p1, vec3 p2, vec3 color)
 {
-    debugShader->drawLine(p1, p2, color, camera->getViewMatrix());
+	glUseProgram(debugShader->getProgramID());
+	debugShaderQueue.push_back([=](){debugShader->drawLine(p1, p2, color, camera->getViewMatrix()); });
+	glUseProgram(0);
+}
+
+void World::draw_point(vec3 p, vec3 color, float radius)
+{
+	glUseProgram(debugShader->getProgramID());
+	debugShaderQueue.push_back([=](){debugShader->drawPoint(p, color, radius, camera->getViewMatrix());  });
+	glUseProgram(0);
+}
+
+void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
+{
+	glUseProgram(debugShader->getProgramID());
+	vector<float> points;
+	for (float theta = 0.f; theta < 360.f; theta +=delta)
+	{
+		float x = radius * cos(radians(theta)) * cos(radians(0.f));
+		points.push_back(x + center.x);
+		float y = radius * sin(radians(0.f));
+		points.push_back(y + center.y);
+		float z = radius * sin(radians(theta)) * cos(radians(0.f));
+		points.push_back(z + center.z);
+	}
+	//assert(points.size() == 360.f / delta);
+	debugShaderQueue.push_back([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
+	points.clear();
+	for (float phi = 0.f; phi < 360.f; phi +=delta)
+	{
+		float x = radius * cos(radians(0.f)) * cos(radians(phi));
+		points.push_back(x + center.x);
+		float y = radius * sin(radians(phi));
+		points.push_back(y + center.y);
+		float z = radius * sin(radians(0.f)) * cos(radians(phi));
+		points.push_back(z + center.z);
+	}
+	//assert(points.size() == 360.f / delta);
+	debugShaderQueue.push_back([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
+	points.clear();
+	for (float phi = -180.f; phi < 180.f; phi += delta)
+	{
+		float x = radius * cos(radians(90.f)) * cos(radians(phi));
+		points.push_back(x + center.x);
+		float y = radius * sin(radians(phi));
+		points.push_back(y + center.y);
+		float z = radius * sin(radians(90.f)) * cos(radians(phi));
+		points.push_back(z + center.z);
+	}
+	//assert(points.size() == 360.f / delta);
+	debugShaderQueue.push_back([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
+	glUseProgram(0);
 }

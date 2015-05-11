@@ -3,8 +3,6 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <GL/glew.h>
-#include <assimp/cimport.h>
-#include <assimp/postprocess.h>
 #include "Material.h"
 #include "BoundingBox.h"
 
@@ -48,6 +46,7 @@ public:
 	std::vector<glm::mat4> boneTransformations;
 	std::shared_ptr<BoundingBox> getBoundingBox();
 	Material mat;
+	Material bMat;
 private:
 	std::shared_ptr<BoundingBox> cache;
 	bool checkError(std::string msg);
