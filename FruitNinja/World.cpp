@@ -27,7 +27,7 @@ bool keys[1024];
 float seconds_passed = 0;
 float x_offset;
 float y_offset;
-
+const vec3 octtree_bound(-500.f, -500.f, -500.f);
 bool debug_enabled = false;
 float screen_width = SCREEN_WIDTH;
 float screen_height = SCREEN_HEIGHT;
@@ -332,7 +332,7 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+	OctTree* world_oct_tree = new OctTree(Voxel(octtree_bound, -1.f*octtree_bound), entities, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
 	_skybox->update();

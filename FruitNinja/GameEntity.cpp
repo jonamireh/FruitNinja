@@ -101,8 +101,6 @@ shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
 
 bool GameEntity::compare(std::shared_ptr<GameEntity> ge)
 {
-    cout << "compare being called" << endl;
-
     bool return_value = false;
 
     std::shared_ptr<BoundingBox> my_bb = getTransformedOuterBoundingBox();

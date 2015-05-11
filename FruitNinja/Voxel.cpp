@@ -14,11 +14,11 @@ Voxel::Voxel(vec3 lower, vec3 upper)
     lower_bound = lower;
     upper_bound = upper;
 
-    shared_ptr<vector<pair<vec3, vec3>>> points = get_line_segments();
-    for (int j = 0; j < points->size(); j++)
-    {
-        World::draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 1.f, 1.f));
-    }
+    //shared_ptr<vector<pair<vec3, vec3>>> points = get_line_segments();
+    //for (int j = 0; j < points->size(); j++)
+    //{
+    //    World::draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 1.f, 1.f));
+    //}
 }
 
 shared_ptr<vector<pair<vec3, vec3>>> Voxel::get_line_segments()
@@ -89,10 +89,11 @@ std::vector<Voxel> Voxel::split()
     return boxes;
 }
 
-bool Voxel::contains(vec3 point, float radius)
+bool Voxel::contains(vec3 object_center, float radius)
 {
-	vec3 center = vec3(0.5f * (lower_bound.x + upper_bound.x), 0.5f * (lower_bound.y + upper_bound.y), 0.5f * (lower_bound.z + upper_bound.z));
+	vec3 voxel_center = vec3(0.5f * (lower_bound.x + upper_bound.x), 0.5f * (lower_bound.y + upper_bound.y), 0.5f * (lower_bound.z + upper_bound.z));
+    vec3 point = object_center + radius * normalize(voxel_center - object_center);
 	return (point.x >= lower_bound.x && point.x <= upper_bound.x &&
 		point.y >= lower_bound.y && point.y <= upper_bound.y &&
-		point.z >= lower_bound.z && point.z <= upper_bound.z) || glm::distance(center, point) < radius;
+		point.z >= lower_bound.z && point.z <= upper_bound.z) || glm::distance(voxel_center, point) < radius;
 }

@@ -38,17 +38,17 @@ This needs to do it based off of bounding boxes rather than points, but this sho
 */
 void OctTree::branch()
 {
-    if (glm::distance(voxel.lower_bound, voxel.upper_bound) < 2.f * min_radius)
+    if (glm::distance(voxel.lower_bound, voxel.upper_bound) < min_radius)
     {
 		for (int i = 0; i < objects.size() - 1; i++)
 		{
-			objects.at(i)->collisionBS(objects.at(i + 1));
-			objects.at(i + 1)->collisionBS(objects.at(i));
+			//objects.at(i)->collisionBS(objects.at(i + 1));
+			//objects.at(i + 1)->collisionBS(objects.at(i));
 
-			if (objects.at(i)->compare(objects.at(i + 1)))
+			/*if (objects.at(i)->compare(objects.at(i + 1)))
 			{
 				root->collision_pairs->insert(pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>(objects.at(i), objects.at(i + 1)));
-			}
+			}*/
         }
         return;
     }

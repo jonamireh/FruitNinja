@@ -13,5 +13,4 @@ public:
     std::vector<Voxel> split();
     bool contains(glm::vec3, float);
 	std::vector<glm::vec3> get_points();
-
 };
