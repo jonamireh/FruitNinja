@@ -91,7 +91,7 @@
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
-    <ClCompile Include="ChewyAnimationComponent.cpp" />
+    <ClCompile Include="BasicAnimationComponent.cpp" />
     <ClCompile Include="CollisionHandler.h" />
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="DeferredRenderer.cpp" />
@@ -102,6 +102,7 @@
     <ClCompile Include="LightEntity.cpp" />
     <ClCompile Include="SimpleTextureShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="TestSphere.cpp" />
     <ClCompile Include="StencilShader.cpp" />
     <ClCompile Include="TextureDebugShader.cpp" />
     <ClCompile Include="Voxel.cpp" />
@@ -132,7 +133,7 @@
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h" />
     <ClInclude Include="BoundingBox.h" />
-    <ClInclude Include="ChewyAnimationComponent.h" />
+    <ClInclude Include="BasicAnimationComponent.h" />
     <ClInclude Include="DebugShader.h" />
     <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DeferredShader.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="LightEntity.h" />
     <ClInclude Include="SimpleTextureShader.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="TestSphere.h" />
     <ClInclude Include="StencilShader.h" />
     <ClInclude Include="TextureDebugShader.h" />
     <ClInclude Include="Voxel.h" />

@@ -27,6 +27,7 @@ public:
     virtual float getRadius();
     glm::vec3 getCenter();
 	glm::vec3 center;
+	aiAnimation *current_animation;
     bool compare(std::shared_ptr<GameEntity> ge);
     std::shared_ptr<std::vector<BoundingBox>> GameEntity::getTransformedBoundingBoxes();
     virtual glm::mat4 getModelMat();

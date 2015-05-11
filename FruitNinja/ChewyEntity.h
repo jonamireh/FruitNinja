@@ -2,7 +2,7 @@
 
 #include "GameEntity.h"
 #include "ChewyMovementComponent.h"
-#include "ChewyAnimationComponent.h"
+#include "BasicAnimationComponent.h"
 
 class ChewyEntity : public GameEntity
 {
@@ -13,8 +13,7 @@ public:
 	void collision(std::shared_ptr<GameEntity> entity);
 	void set_material(Material material);
 	float up_velocity = 0;
-	aiAnimation *current_animation;
 private:
 	ChewyMovementComponent moveComponent;
-	ChewyAnimationComponent animComponent;
+	BasicAnimationComponent animComponent;
 };

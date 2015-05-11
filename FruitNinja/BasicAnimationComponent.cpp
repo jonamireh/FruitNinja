@@ -1,62 +1,62 @@
-#include "ChewyAnimationComponent.h"
+#include "BasicAnimationComponent.h"
 #include "World.h"
 #include "ChewyEntity.h"
 
 
-void ChewyAnimationComponent::update()
+void BasicAnimationComponent::update()
 {
-	//ChewyEntity *chewy = static_cast<ChewyEntity *>(entity);
-	//std::vector<Mesh*> chewyMeshes = chewy->mesh->getMeshes();
-	//frameTime += seconds_passed;
-	//if (frameTime > chewy->current_animation->mDuration)
-	//{
-	//	while (frameTime - chewy->current_animation->mDuration > 0)
-	//		frameTime -= chewy->current_animation->mDuration;
-	//}
+	if (entity->current_animation == nullptr)
+		return;
 
-	//frameTime = max(1 / 24.0f, frameTime);
+	std::vector<Mesh*> entityMeshses = entity->mesh->getMeshes();
+	frameTime += seconds_passed;
+	if (frameTime > entity->current_animation->mDuration)
+	{
+		while (frameTime - entity->current_animation->mDuration > 0)
+			frameTime -= entity->current_animation->mDuration;
+	}
 
-	//aiMatrix4x4 identity = aiMatrix4x4();
-	//calculateAnimationTransforms(chewy->mesh->bone_tree->mChildren[0], identity);
-	//
-	//// Get bones for each mesh
-	//for (int i = 0; i < chewyMeshes.size(); i++)
-	//{
-	//	// Get transformations for each bone
-	//	for (int j = 0; j < chewyMeshes[i]->bones.size(); j++)
-	//	{
-	//		string boneName = chewyMeshes[i]->bones[j].mName.C_Str();
-	//		chewyMeshes[i]->boneTransformations[j] = convertAiMatrix4x4ToMat4(chewy->mesh->boneInfo.at(boneName)->transformation) * convertAiMatrix4x4ToMat4(chewyMeshes[i]->bones[j].mOffsetMatrix);
-	//	}
-	//}
+	frameTime = max(1 / 24.0f, frameTime);
+
+	aiMatrix4x4 identity = aiMatrix4x4();
+	calculateAnimationTransforms(entity->mesh->bone_tree, identity);
+	// Get bones for each mesh
+	for (int i = 0; i < entityMeshses.size(); i++)
+	{
+		entityMeshses[i]->boneTransformations.clear();
+		// Get transformations for each bone
+		for (int j = 0; j < entityMeshses[i]->bones.size(); j++)
+		{
+			string boneName = entityMeshses[i]->bones[j].mName.C_Str();
+			entityMeshses[i]->boneTransformations.push_back(convertAiMatrix4x4ToMat4(entity->mesh->boneInfo.at(boneName)->transformation));
+		}
+	}
 }
 
-void ChewyAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatrix4x4 parentTransform)
+void BasicAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatrix4x4 parentTransform)
 {
-	ChewyEntity *chewy = static_cast<ChewyEntity *>(entity);
 	string boneName = node->mName.C_Str();
 
 	aiMatrix4x4 nodeTransform(node->mTransformation);
 
 	// Gets the animation info for the bone
-	BoneInfo *info = chewy->mesh->boneInfo.at(boneName);
-	aiNodeAnim *bone = info->bone_anim->at(chewy->current_animation);
+	aiNodeAnim *bone = FindAnimationNode(boneName);
 
-	if (bone)
+	if (bone != nullptr)
 	{
 		// Interpolate scaling and generate scaling transformation matrix
-		aiVector3D Scaling;
+		aiVector3D Scaling(1, 1, 1);
 		CalcInterpolatedScaling(Scaling, bone);
 		aiMatrix4x4 ScalingM;
 		aiMatrix4x4::Scaling(Scaling, ScalingM);
 
 		// Interpolate rotation and generate rotation transformation matrix
-		aiQuaternion RotationQ;
+		aiQuaternion RotationQ(1, 0, 0, 0);
 		CalcInterpolatedRotation(RotationQ, bone);
 		aiMatrix4x4 RotationM = aiMatrix4x4(RotationQ.GetMatrix());
 
 		// Interpolate translation and generate translation transformation matrix
-		aiVector3D Translation;
+		aiVector3D Translation(0, 0, 0);
 		CalcInterpolatedTranslation(Translation, bone);
 		aiMatrix4x4 TranslationM;
 		aiMatrix4x4::Translation(Translation, TranslationM);
@@ -67,7 +67,8 @@ void ChewyAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatri
 
 	aiMatrix4x4 globalTransformation = parentTransform * nodeTransform;
 
-	chewy->mesh->boneInfo.at(boneName)->transformation = chewy->mesh->inverseMat * globalTransformation;
+	if (bone != nullptr)
+		entity->mesh->boneInfo.at(boneName)->transformation = entity->mesh->inverseMat * globalTransformation * entity->mesh->boneInfo.at(boneName)->bone_offset;
 
 	for (int i = 0; i < node->mNumChildren; i++)
 	{
@@ -75,7 +76,16 @@ void ChewyAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatri
 	}
 }
 
-void ChewyAnimationComponent::CalcInterpolatedRotation(aiQuaternion& Out, const aiNodeAnim* pNodeAnim)
+aiNodeAnim* BasicAnimationComponent::FindAnimationNode(string boneName)
+{
+	if (entity->mesh->boneInfo.find(boneName) == entity->mesh->boneInfo.end())
+		return nullptr;
+	if (entity->mesh->boneInfo.at(boneName)->bone_anim->size() <= 0)
+		return nullptr;
+	return entity->mesh->boneInfo.at(boneName)->bone_anim->at(entity->current_animation);
+}
+
+void BasicAnimationComponent::CalcInterpolatedRotation(aiQuaternion& Out, const aiNodeAnim* pNodeAnim)
 {
 	// we need at least two values to interpolate...
 	if (pNodeAnim->mNumRotationKeys == 1) {
@@ -92,10 +102,10 @@ void ChewyAnimationComponent::CalcInterpolatedRotation(aiQuaternion& Out, const 
 	const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
 	const aiQuaternion& EndRotationQ = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;
 	aiQuaternion::Interpolate(Out, StartRotationQ, EndRotationQ, Factor);
-	Out = Out.Normalize();
+	//Out = Out.Normalize();
 }
 
-glm::uint ChewyAnimationComponent::FindRotation(const aiNodeAnim* pNodeAnim)
+glm::uint BasicAnimationComponent::FindRotation(const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumRotationKeys > 0);
 
@@ -107,7 +117,7 @@ glm::uint ChewyAnimationComponent::FindRotation(const aiNodeAnim* pNodeAnim)
 	assert(0);
 }
 
-void ChewyAnimationComponent::CalcInterpolatedScaling(aiVector3D& Out, const aiNodeAnim* pNodeAnim)
+void BasicAnimationComponent::CalcInterpolatedScaling(aiVector3D& Out, const aiNodeAnim* pNodeAnim)
 {
 	// we need at least two values to interpolate...
 	if (pNodeAnim->mNumScalingKeys == 1) {
@@ -125,12 +135,12 @@ void ChewyAnimationComponent::CalcInterpolatedScaling(aiVector3D& Out, const aiN
 	const aiVector3D& EndScalingV = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
 	Assimp::Interpolator<aiVector3D> interpolator;
 	interpolator.operator()(Out, StartScalingV, EndScalingV, Factor);
-	Out = Out.Normalize();
+	//Out = Out.Normalize();
 }
 
-glm::uint ChewyAnimationComponent::FindScaling(const aiNodeAnim* pNodeAnim)
+glm::uint BasicAnimationComponent::FindScaling(const aiNodeAnim* pNodeAnim)
 {
-	assert(pNodeAnim->mNumRotationKeys > 0);
+	assert(pNodeAnim->mNumScalingKeys > 0);
 
 	for (glm::uint i = 0; i < pNodeAnim->mNumScalingKeys - 1; i++) {
 		if (frameTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) {
@@ -140,7 +150,7 @@ glm::uint ChewyAnimationComponent::FindScaling(const aiNodeAnim* pNodeAnim)
 	assert(0);
 }
 
-void ChewyAnimationComponent::CalcInterpolatedTranslation(aiVector3D& Out, const aiNodeAnim* pNodeAnim)
+void BasicAnimationComponent::CalcInterpolatedTranslation(aiVector3D& Out, const aiNodeAnim* pNodeAnim)
 {
 	// we need at least two values to interpolate...
 	if (pNodeAnim->mNumPositionKeys == 1) {
@@ -158,10 +168,10 @@ void ChewyAnimationComponent::CalcInterpolatedTranslation(aiVector3D& Out, const
 	const aiVector3D& EndTranslationV = pNodeAnim->mPositionKeys[NextTranslationIndex].mValue;
 	Assimp::Interpolator<aiVector3D> interpolator;
 	interpolator.operator()(Out, StartTranslationV, EndTranslationV, Factor);
-	Out = Out.Normalize();
+	//Out = Out.Normalize();
 }
 
-glm::uint ChewyAnimationComponent::FindTranslation(const aiNodeAnim* pNodeAnim)
+glm::uint BasicAnimationComponent::FindTranslation(const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumPositionKeys > 0);
 
@@ -173,7 +183,7 @@ glm::uint ChewyAnimationComponent::FindTranslation(const aiNodeAnim* pNodeAnim)
 	assert(0);
 }
 
-glm::mat4 ChewyAnimationComponent::convertAiMatrix4x4ToMat4(aiMatrix4x4 inMat)
+glm::mat4 BasicAnimationComponent::convertAiMatrix4x4ToMat4(aiMatrix4x4 inMat)
 {
 	return glm::mat4(inMat.a1, inMat.b1, inMat.c1, inMat.d1,
 		inMat.a2, inMat.b2, inMat.c2, inMat.d2,
@@ -181,12 +191,12 @@ glm::mat4 ChewyAnimationComponent::convertAiMatrix4x4ToMat4(aiMatrix4x4 inMat)
 		inMat.a4, inMat.b4, inMat.c4, inMat.d4);
 }
 
-ChewyAnimationComponent::ChewyAnimationComponent(GameEntity *chewy)
+BasicAnimationComponent::BasicAnimationComponent(GameEntity *entity)
 {
-	this->entity = chewy;
+	this->entity = entity;
 }
 
 
-ChewyAnimationComponent::~ChewyAnimationComponent()
+BasicAnimationComponent::~BasicAnimationComponent()
 {
 }

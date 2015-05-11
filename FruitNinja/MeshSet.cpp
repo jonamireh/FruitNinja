@@ -32,8 +32,10 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 	std::vector<TextureData> textures;
 	std::vector<glm::vec2> texCoords;
 	std::vector<aiBone> bones;
-	std::vector<glm::ivec4> boneIds;
-	std::vector<glm::vec4> boneWeights;
+	std::vector<glm::ivec4> boneIds1;
+	std::vector<glm::vec4> boneWeights1;
+	std::vector<glm::ivec4> boneIds2;
+	std::vector<glm::vec4> boneWeights2;
 	aiColor4D col;
 	aiMaterial *mat = scene->mMaterials[mesh->mMaterialIndex];
 	aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &col);
@@ -90,34 +92,61 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 
 	if (mesh->HasBones())
 	{
-		boneIds.resize(mesh->mNumVertices, glm::ivec4());
-		boneWeights.resize(mesh->mNumVertices, glm::vec4());
+		for (int i = 0; i < mesh->mNumVertices; i++)
+		{
+			boneIds1.push_back(glm::ivec4());
+			boneWeights1.push_back(glm::vec4());
+			boneIds2.push_back(glm::ivec4());
+			boneWeights2.push_back(glm::vec4());
+		}
 	}
 	// Bones
 	for (int i = 0; i < mesh->mNumBones; i++)
 	{
 		aiBone *bone = mesh->mBones[i];
 		bones.push_back(*bone);
-		int j;
-		for (j = 0; j < 4 && boneWeights[bone->mWeights->mVertexId][j] != 0.0f; j++) {}
-		(&boneIds[bone->mWeights->mVertexId])->operator[](j) = i;
-		(&boneWeights[bone->mWeights->mVertexId])->operator[](j) = bone->mWeights->mWeight;
-	}
-	if (mesh->HasBones())
-	{
-		std::ofstream file;
-		file.open("bonetest.txt");
-		for (int i = 0; i < boneWeights.size(); i++)
+		BoneInfo *info = boneInfo.at(bone->mName.C_Str());
+		info->bone_offset = bone->mOffsetMatrix;
+		for (int j = 0; j < bone->mNumWeights; j++)
 		{
-			float sum = 0.0f;
-			for (int j = 0; j < 4; j++)
-				sum += boneWeights[i][j];
-			file << sum << endl;
+			int k = 0;
+			while (k < 3 && boneWeights1[bone->mWeights[j].mVertexId][k % 4] != 0.0f ||
+				   k < 7 && boneWeights2[bone->mWeights[j].mVertexId][k % 4] != 0.0f)
+			{
+				k++;
+			}
+			if (k < 4)
+			{
+				boneIds1.data()[bone->mWeights[j].mVertexId][k] = i;
+				boneWeights1.data()[bone->mWeights[j].mVertexId][k % 4] = bone->mWeights->mWeight;
+			}
+			else if (k < 8)
+			{
+				boneIds2.data()[bone->mWeights[j].mVertexId][k] = i;
+				boneWeights2.data()[bone->mWeights[j].mVertexId][k % 4] = bone->mWeights->mWeight;
+			}
 		}
-		file.close();
+	}
+
+	for (int i = 0; i < boneWeights1.size(); i++)
+	{
+		float sum = 0;
+		for (int j = 0; j < 4; j++)
+			sum += boneWeights1.data()[i][j];
+		for (int j = 0; j < 4; j++)
+			boneWeights1.data()[i][j] = boneWeights1[i][j] / sum;
+	}
+
+	for (int i = 0; i < boneWeights2.size(); i++)
+	{
+		float sum = 0;
+		for (int j = 0; j < 4; j++)
+			sum += boneWeights2.data()[i][j];
+		for (int j = 0; j < 4; j++)
+			boneWeights2.data()[i][j] = boneWeights2[i][j] / sum;
 	}
 	// Add mesh to set
-	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords, &bones, &boneIds, &boneWeights));
+	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords, &bones, &boneIds1, &boneWeights1, &boneIds1, &boneWeights1, &animations));
 }
 
 //This function was copied from off the internet, shouldn't be turned in

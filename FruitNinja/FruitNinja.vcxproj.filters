@@ -94,8 +94,11 @@
     <ClCompile Include="SimpleTextureShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="ChewyAnimationComponent.cpp">
+    <ClCompile Include="BasicAnimationComponent.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TestSphere.cpp" />
+	  <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source</Filter>
@@ -213,8 +216,11 @@
     <ClInclude Include="SimpleTextureShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="ChewyAnimationComponent.h">
+    <ClInclude Include="BasicAnimationComponent.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TestSphere.h" />
+	  <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Headers</Filter>

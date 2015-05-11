@@ -11,7 +11,8 @@ struct BoneInfo
 	aiMatrix4x4 transformation;
 	std::map<aiAnimation*, aiNodeAnim*> *bone_anim;
 	aiNode *bone_pos;
-	BoneInfo(aiNode *pos) : bone_pos(pos), bone_anim(new std::map<aiAnimation*, aiNodeAnim*>), transformation()
+	aiMatrix4x4 bone_offset;
+	BoneInfo(aiNode *pos) : bone_offset(), bone_pos(pos), bone_anim(new std::map<aiAnimation*, aiNodeAnim*>), transformation()
 	{
 	}
 };
