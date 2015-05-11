@@ -7,7 +7,7 @@ using namespace std;
 
 #define DETECTION_OUTER_RADIUS 10.f
 #define DETECTION_INNER_RADIUS 5.f
-#define COS_ANGLE 0.5
+#define COS_ANGLE 60.f
 
 GuardEntity::GuardEntity() : move_component(*this, 0.f, glm::vec3(0.f, 0.f, 0.f))
 {
@@ -30,13 +30,12 @@ void GuardEntity::collision(shared_ptr<GameEntity> entity)
 	shared_ptr<ChewyEntity> chewy = dynamic_pointer_cast<ChewyEntity>(entity);
 	if (chewy != nullptr)
 	{
-		cout << degrees(acos(dot(normalize(entity->getCenter() - this->getCenter()), normalize(this->move_component.direction)))) << endl;
 		if (glm::distance(entity->getCenter(), this->getCenter()) < DETECTION_INNER_RADIUS)
 		{
 			chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
 		}
 		else if (glm::distance(entity->getCenter(), this->getCenter()) < DETECTION_OUTER_RADIUS
-			&& acos(dot(normalize(entity->getCenter() - this->getCenter()), normalize(this->move_component.direction))) < acos(COS_ANGLE))
+			&& degrees(acos(dot(normalize(entity->getCenter() - this->getCenter()), normalize(this->move_component.direction)))) < COS_ANGLE)
 		{
 			chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
 		}
