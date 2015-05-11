@@ -35,7 +35,7 @@ float screen_height = SCREEN_HEIGHT;
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
 bool time_stopped = false;
-static queue<std::function<void()>> debugShaderQueue;
+static vector<std::function<void()>> debugShaderQueue;
 
 World::World()
 {
@@ -51,8 +51,8 @@ void World::init()
     player_camera = shared_ptr<Camera>(new PlayerCamera());
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
 
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", make_shared<MeshSet>(assetPath + "samurai.dae")));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard")));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard"), 5.f, vec3(1.f, 0.f, 0.f)));
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", make_shared<MeshSet>(assetPath + "ninja_final2.dae")));
 	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
@@ -237,10 +237,13 @@ void World::draw()
 	}
 
 	glUseProgram(debugShader->getProgramID());
-	while (!debugShaderQueue.empty())
+	for (int i = debugShaderQueue.size() - 1; i >= 0; i--)
 	{
-		 debugShaderQueue.front()();
-		 debugShaderQueue.pop();
+		debugShaderQueue.at(i)();
+	}
+	if (!time_stopped)
+	{
+		debugShaderQueue.clear();
 	}
 	glUseProgram(0);
 }
@@ -345,14 +348,14 @@ void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)
 void World::draw_line(vec3 p1, vec3 p2, vec3 color)
 {
 	glUseProgram(debugShader->getProgramID());
-	debugShaderQueue.push([=](){debugShader->drawLine(p1, p2, color, camera->getViewMatrix()); });
+	debugShaderQueue.push_back([=](){debugShader->drawLine(p1, p2, color, camera->getViewMatrix()); });
 	glUseProgram(0);
 }
 
 void World::draw_point(vec3 p, vec3 color, float radius)
 {
 	glUseProgram(debugShader->getProgramID());
-	debugShaderQueue.push([=](){debugShader->drawPoint(p, color, radius, camera->getViewMatrix());  });
+	debugShaderQueue.push_back([=](){debugShader->drawPoint(p, color, radius, camera->getViewMatrix());  });
 	glUseProgram(0);
 }
 
@@ -370,7 +373,7 @@ void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
 		points.push_back(z + center.z);
 	}
 	//assert(points.size() == 360.f / delta);
-	debugShaderQueue.push([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
+	debugShaderQueue.push_back([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
 	points.clear();
 	for (float phi = 0.f; phi < 360.f; phi +=delta)
 	{
@@ -382,7 +385,7 @@ void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
 		points.push_back(z + center.z);
 	}
 	//assert(points.size() == 360.f / delta);
-	debugShaderQueue.push([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
+	debugShaderQueue.push_back([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
 	points.clear();
 	for (float phi = -180.f; phi < 180.f; phi += delta)
 	{
@@ -394,6 +397,6 @@ void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
 		points.push_back(z + center.z);
 	}
 	//assert(points.size() == 360.f / delta);
-	debugShaderQueue.push([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
+	debugShaderQueue.push_back([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
 	glUseProgram(0);
 }

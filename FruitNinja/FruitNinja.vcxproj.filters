@@ -115,6 +115,9 @@
     <ClCompile Include="LightEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="GuardMovementComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -230,6 +233,9 @@
     </ClInclude>
     <ClInclude Include="DeferredRenderer.h">
       <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="GuardMovementComponent.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
