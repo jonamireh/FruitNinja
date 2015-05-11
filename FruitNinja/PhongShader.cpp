@@ -45,12 +45,12 @@ void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
 
 		if (mesh->bones.size() > 0)
 		{
-			//glUniform1i(getUniformHandle("uBoneFlag"), 1);
-			//glUniformMatrix4fv(getUniformHandle("uBones[0]"), mesh->boneTransformations.size(), GL_FALSE, value_ptr(mesh->boneTransformations[0]));
+			glUniform1i(getUniformHandle("uBoneFlag"), 1);
+			glUniformMatrix4fv(getUniformHandle("uBones[0]"), mesh->boneTransformations.size(), GL_FALSE, value_ptr(mesh->boneTransformations[0]));
 		}
 		else
 		{
-			//glUniform1i(getUniformHandle("uBoneFlag"), 0);
+			glUniform1i(getUniformHandle("uBoneFlag"), 0);
 		}
 
 		Material material = mesh->mat;

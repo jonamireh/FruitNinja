@@ -16,6 +16,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include "Skybox.h"
 #include "SimpleTextureShader.h"
+#include "TestSphere.h"
 
 using namespace std;
 using namespace glm;
@@ -45,7 +46,7 @@ void World::init()
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
-	shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
+    shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard")));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", shared_ptr<MeshSet>(new MeshSet(assetPath + "arrow.dae"))));
@@ -77,6 +78,9 @@ void World::init()
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->scale = 750.f;
 
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
+	shared_ptr <TestSphere> testSphere(new TestSphere(meshes.at("testsphere")));
+
     camera = player_camera;
     player_camera->in_use = true;
 	entities.push_back(chewy);
@@ -90,7 +94,7 @@ void World::init()
     entities.push_back(box1);
     entities.push_back(box2);
     entities.push_back(box3);
-
+	entities.push_back(testSphere);
 
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
