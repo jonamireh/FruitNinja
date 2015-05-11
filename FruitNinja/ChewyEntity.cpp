@@ -6,10 +6,10 @@
 
 using namespace glm;
 
-ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera())), animComponent(this)
+/*ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera())), animComponent(this)
 {
 	
-}
+}*/
 
 ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> camera) : GameEntity(position, mesh), moveComponent(*this, camera), animComponent(this)
 {
@@ -18,8 +18,22 @@ ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std:
 
 void ChewyEntity::update()
 {
+	std::vector<Mesh*> meshes = mesh->getMeshes();
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		meshes.at(i)->mat = meshes.at(i)->bMat;
+	}
 	moveComponent.update();
 	animComponent.update();
+}
+
+void ChewyEntity::set_material(Material material)
+{
+	std::vector<Mesh*> meshes = mesh->getMeshes();
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		meshes.at(i)->mat = material;
+	}
 }
 
 int intersect3D_SegmentPlane(vec3 sP0, vec3 sP1, pair<glm::vec3, glm::vec3> Pn, vec3* I)
@@ -47,12 +61,12 @@ int intersect3D_SegmentPlane(vec3 sP0, vec3 sP1, pair<glm::vec3, glm::vec3> Pn, 
     return 1;
 }
 
-void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
+void ChewyEntity::collisionBB(std::shared_ptr<GameEntity> entity)
 {
     cout << "Bounding Box collision for Chewy" << endl;
 
     position = last_position;
-
+	shared_ptr<BoundingBox> bb = entity->getTransformedOuterBoundingBox();
     vector<pair<glm::vec3, glm::vec3>> planes = bb->getPlanes();
 
     pair<glm::vec3, glm::vec3> collision_plane;
@@ -103,7 +117,7 @@ void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
     
 }
 
-/*void ChewyEntity::collision(std::shared_ptr<BoundingBox> bb)
+/*void ChewyEntity::collisionBB(std::shared_ptr<BoundingBox> bb)
 {
     shared_ptr<BoundingBox> my_bb = getTransformedOuterBoundingBox();
 

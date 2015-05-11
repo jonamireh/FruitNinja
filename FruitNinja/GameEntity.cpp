@@ -120,10 +120,16 @@ bool GameEntity::compare(std::shared_ptr<GameEntity> ge)
     return return_value;
 }
 
-void GameEntity::collision(std::shared_ptr<BoundingBox> bb)
+void GameEntity::collisionBB(std::shared_ptr<GameEntity> entity)
 {
     //cout << "generic object collided!" << endl;
 }
+
+void GameEntity::collisionBS(std::shared_ptr<GameEntity> entity)
+{
+	
+}
+
 
 glm::mat4 GameEntity::getModelMat()
 {

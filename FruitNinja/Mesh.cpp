@@ -49,6 +49,7 @@ Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalDat
 
 	aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &color);
 	mat.specular = vec3(color.r, color.g, color.b);
+	bMat = mat;
 
 	aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &(mat.shininess));
 

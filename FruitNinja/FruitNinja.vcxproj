@@ -137,6 +137,7 @@
     <ClInclude Include="DeferredShader.h" />
     <ClInclude Include="FrustrumCulling.h" />
     <ClInclude Include="GBuffer.h" />
+    <ClInclude Include="GuardMovementComponent.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightEntity.h" />
     <ClInclude Include="SimpleTextureShader.h" />
