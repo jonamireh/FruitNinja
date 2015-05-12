@@ -127,23 +127,10 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 			}
 		}
 	}
-
 	for (int i = 0; i < boneWeights1.size(); i++)
 	{
-		float sum = 0;
-		for (int j = 0; j < 4; j++)
-			sum += boneWeights1.data()[i][j];
-		for (int j = 0; j < 4; j++)
-			boneWeights1.data()[i][j] = boneWeights1[i][j] / sum;
-	}
-
-	for (int i = 0; i < boneWeights2.size(); i++)
-	{
-		float sum = 0;
-		for (int j = 0; j < 4; j++)
-			sum += boneWeights2.data()[i][j];
-		for (int j = 0; j < 4; j++)
-			boneWeights2.data()[i][j] = boneWeights2[i][j] / sum;
+		
+		glm::normalize(boneWeights1[i]);
 	}
 	// Add mesh to set
 	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords, &bones, &boneIds1, &boneWeights1, &boneIds1, &boneWeights1, &animations));
@@ -183,7 +170,7 @@ GLuint MeshSet::loadTexture(const char* filename, int width, int height) {
 }
 
 MeshSet::MeshSet(std::string filename) {
-	const aiScene* scene = aiImportFile(filename.c_str(), aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* scene = aiImportFile(filename.c_str(), aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
 	if (!scene) {
 		std::cout << aiGetErrorString();
 		return;

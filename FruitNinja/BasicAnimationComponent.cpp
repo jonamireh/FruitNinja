@@ -28,7 +28,7 @@ void BasicAnimationComponent::update()
 		for (int j = 0; j < entityMeshses[i]->bones.size(); j++)
 		{
 			string boneName = entityMeshses[i]->bones[j].mName.C_Str();
-			entityMeshses[i]->boneTransformations.push_back(convertAiMatrix4x4ToMat4(entity->mesh->boneInfo.at(boneName)->transformation));
+			entityMeshses[i]->boneTransformations.push_back(convertAiMatrix4x4ToMat4(entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));
 		}
 	}
 }
@@ -68,7 +68,7 @@ void BasicAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatri
 	aiMatrix4x4 globalTransformation = parentTransform * nodeTransform;
 
 	if (bone != nullptr)
-		entity->mesh->boneInfo.at(boneName)->transformation = entity->mesh->inverseMat * globalTransformation * entity->mesh->boneInfo.at(boneName)->bone_offset;
+		entity->mesh->boneInfo.at(boneName)->transformation = entity->mesh->inverseMat * globalTransformation;
 
 	for (int i = 0; i < node->mNumChildren; i++)
 	{
@@ -102,7 +102,7 @@ void BasicAnimationComponent::CalcInterpolatedRotation(aiQuaternion& Out, const 
 	const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
 	const aiQuaternion& EndRotationQ = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;
 	aiQuaternion::Interpolate(Out, StartRotationQ, EndRotationQ, Factor);
-	//Out = Out.Normalize();
+	Out = Out.Normalize();
 }
 
 glm::uint BasicAnimationComponent::FindRotation(const aiNodeAnim* pNodeAnim)

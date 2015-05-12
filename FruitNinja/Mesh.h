@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include "Material.h"
 #include "BoundingBox.h"
+#include <map>
 
 struct TextureData
 {
@@ -16,7 +17,7 @@ class Mesh
 {
 public:
 	Mesh(std::vector<glm::vec3>* vd, std::vector<glm::vec3>* nd, std::vector<GLuint>* id, aiMaterial* material,
-	     std::vector<TextureData>* td = NULL, std::vector<glm::vec2>* tc = NULL, std::vector<aiBone>* bones = NULL, 
+		std::vector<TextureData>* td = NULL, std::vector<glm::vec2>* tc = NULL, std::vector<aiBone>* boneData = NULL,
 		 std::vector<glm::ivec4>* boneIdData1 = NULL, std::vector<glm::vec4>* boneWeightData1 = NULL,  
 		 std::vector<glm::ivec4>* boneIdData2 = NULL, std::vector<glm::vec4>* boneWeightData2 = NULL,
 		 std::vector<aiAnimation> *animationData = NULL);

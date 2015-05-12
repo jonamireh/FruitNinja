@@ -34,14 +34,10 @@ void main()
 							  0, 0, 0, 1);
 	if (uBoneFlag == 1)
 	{
-		boneTransform = uBones[boneId1[0]] * boneWeight1[0];
-		boneTransform += uBones[boneId1[1]] * boneWeight1[1];
-		boneTransform += uBones[boneId1[2]] * boneWeight1[2];
-		boneTransform += uBones[boneId1[3]] * boneWeight1[3];
-		boneTransform += uBones[boneId2[0]] * boneWeight2[0];
-		boneTransform += uBones[boneId2[1]] * boneWeight2[1];
-		boneTransform += uBones[boneId2[2]] * boneWeight2[2];
-		boneTransform += uBones[boneId2[3]] * boneWeight2[3];
+		boneTransform = boneWeight1[0] * uBones[boneId1[0]];
+		boneTransform += boneWeight1[1] * uBones[boneId1[1]];
+		boneTransform += boneWeight1[2] * uBones[boneId1[2]];
+		boneTransform += boneWeight1[3] * uBones[boneId1[3]];
 	}
 
 	gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * boneTransform * vec4(aPosition, 1.0);
