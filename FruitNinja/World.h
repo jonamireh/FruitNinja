@@ -51,5 +51,6 @@ private:
 	std::shared_ptr<Skybox> _skybox;
 	void init();
 	void shootArrows();
+    std::shared_ptr<GameEntity> chewy;
 };
 

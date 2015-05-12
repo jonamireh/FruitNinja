@@ -1,5 +1,4 @@
 #include "World.h"
-#include "ChewyEntity.h"
 #include "PhongShader.h"
 #include "TextureDebugShader.h"
 #include "DebugCamera.h"
@@ -20,6 +19,7 @@
 #include <functional>
 #include <queue>
 #include "LightEntity.h"
+#include "ChewyEntity.h"
 
 using namespace std;
 using namespace glm;
@@ -55,10 +55,10 @@ void World::init()
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
     tower->scale = 30.0f;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
-    shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
+    chewy = std::make_shared<ChewyEntity>(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera);
     // chewy bounding box mesh
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
-    chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera))->getOuterBoundingBox();
+    chewy->largestBB = chewy->getOuterBoundingBox();
     chewy->sebInit();
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
@@ -139,12 +139,12 @@ void World::init()
 
     camera = player_camera;
     player_camera->in_use = true;
+    entities.push_back(tower);
 	entities.push_back(chewy);
 	entities.push_back(guard);
 	entities.push_back(guard1);
 	entities.push_back(guard2);
 
-    entities.push_back(tower);
     entities.push_back(lantern);
 	entities.push_back(lantern2);
 	entities.push_back(lantern3);
@@ -375,7 +375,7 @@ void World::enable_debugging()
 
 void World::update_key_callbacks()
 {
-    camera->movement(entities.at(0));
+    camera->movement(chewy);
     change_camera();
 	enable_debugging();
 	stop_time();
@@ -409,7 +409,7 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-    std::vector<shared_ptr<GameEntity>> v1(entities.begin() + 1, entities.end() - 2);
+    std::vector<shared_ptr<GameEntity>> v1(entities.begin() + 1, entities.end() );
 	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), v1, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
