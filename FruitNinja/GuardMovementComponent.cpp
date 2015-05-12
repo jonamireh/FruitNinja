@@ -35,7 +35,8 @@ void GuardMovementComponent::update()
 		else
 			entity.rotations.y += (toAngle - fromAngle) * GUARD_ROTATE_SPEED * seconds_passed;
 
-		vec3 pos_offset = direction * GUARD_MOVE_SPEED * seconds_passed;
-		entity.position += pos_offset;
+		//vec3 pos_offset = direction * GUARD_MOVE_SPEED * seconds_passed;
+		//entity.position += pos_offset;
+		entity.position = pathing.getPosition(time_elapsed);
 	}
 }

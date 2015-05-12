@@ -95,10 +95,10 @@ void ChewyMovementComponent::update()
 		}
 
 		entity.position += entity.velocity * seconds_passed;
-		/*if (entity.position.y < 0)
+		if (entity.position.y < 0)
 		{
 			entity.position.y = 0;
 			entity.velocity.y = 0;
-		}*/
+		}
 	}
 }

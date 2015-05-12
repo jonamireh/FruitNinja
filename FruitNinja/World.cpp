@@ -62,6 +62,12 @@ void World::init()
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
 		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 10.f));
+	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(-50.0, 0.0, 60.0), meshes.at("guard"), { vec3(-50.0, 0.0, 60.0), vec3(-25.0, 0.0, 45.0),
+		vec3(3.0, 0.0, 45.0), vec3(50.0, 0.0, 60.0), vec3(90.0, 0.0, 20.0) }, 5.f));
+	/*shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0),
+		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0) }, 10.f));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0),
+		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0) }, 10.f));*/
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
@@ -120,6 +126,7 @@ void World::init()
     player_camera->in_use = true;
 	entities.push_back(chewy);
 	entities.push_back(guard);
+	entities.push_back(guard1);
 	entities.push_back(arrow);
     entities.push_back(tower);
     entities.push_back(lantern);
@@ -191,7 +198,7 @@ void World::draw()
 	vector<shared_ptr<GameEntity>> in_view;
     if (c_test != nullptr)
     {
-        in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
+        in_view = get_objects_in_view(entities, camera->getViewMatrix());
 	}
 	else
 	{
