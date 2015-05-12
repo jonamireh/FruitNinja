@@ -7,7 +7,7 @@ using namespace std;
 void GuardMovementComponent::update()
 {
 	time_elapsed += seconds_passed;
-	if (time_elapsed > time)
+	if (time > 0.f && time_elapsed > time)
 	{
 		time_elapsed = 0.f;
 		direction *= -1.f;
