@@ -73,6 +73,8 @@ void DeferredRenderer::draw(std::shared_ptr<Camera> camera, std::vector<std::sha
 		pointLightPass(camera, lights[i]);
 	}
 	glDisable(GL_STENCIL_TEST);
+
+
 	dirLightShader.pass(camera);
 }
 void DeferredRenderer::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)

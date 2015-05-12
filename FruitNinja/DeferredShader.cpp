@@ -25,6 +25,8 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	for (int i = 0; i < ents.size(); i++) {
 		std::vector<Mesh*> meshes = ents[i]->mesh->getMeshes();
