@@ -4,7 +4,7 @@
 using namespace glm;
 
 DeferredRenderer::DeferredRenderer(std::string vertShader, std::string fragShader, GBuffer* gbuffer)
-	: Shader(vertShader, fragShader), gbuffer(gbuffer), stencilShader("StencilVert.glsl", "StencilFrag.glsl")
+	: Shader(vertShader, fragShader), gbuffer(gbuffer), stencilShader("StencilVert.glsl", "StencilFrag.glsl"), dirLightShader(gbuffer)
 {
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 }
@@ -72,10 +72,8 @@ void DeferredRenderer::draw(std::shared_ptr<Camera> camera, std::vector<std::sha
 		stencilShader.stencilPass(camera, gbuffer, lights[i]);
 		pointLightPass(camera, lights[i]);
 	}
-	
 	glDisable(GL_STENCIL_TEST);
-
-
+	dirLightShader.pass(camera);
 }
 void DeferredRenderer::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)
 {

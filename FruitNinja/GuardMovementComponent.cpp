@@ -7,14 +7,14 @@ using namespace std;
 void GuardMovementComponent::update()
 {
 	time_elapsed += seconds_passed;
-	if (time > 0.f && time_elapsed > time)
+	if (animation_time > 0.f && time_elapsed > animation_time)
 	{
-		time_elapsed = 0.f;
-		direction *= -1.f;
+		time_elapsed = seconds_passed;
+		pathing.reverse();
 	}
-	if (time > 0.f)
+	if (animation_time > 0.f)
 	{
-
+		direction = pathing.getDirection(time_elapsed);
 		float toAngle = entity.turnAngle(direction).y;
 		float fromAngle = entity.rotations.y;
 

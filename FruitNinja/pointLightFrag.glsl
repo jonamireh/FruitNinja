@@ -11,8 +11,8 @@ uniform vec3 uLightPos;
 out vec4 FragColor;
 
 #define CONSTANT 0.0
-#define LINEAR 0.5
-#define EXPONENTIAL 0.3
+#define LINEAR 0.0
+#define EXPONENTIAL 0.0075
 #define AMBIENT_INTENSITY 0.3
 #define DIFFUSE_INTENSITY 1.0
 #define SPEC_INTENSITY 1.0
@@ -71,5 +71,5 @@ void main()
    	vec3 normal = texture(norMap, texCoord).xyz;
    	normal = normalize(normal);
 
-   	FragColor = vec4(color, 1.0) * calcPointLight(worldPos, normal) * 50.0f;
+   	FragColor = vec4(color, 1.0) * calcPointLight(worldPos, normal);
 }
