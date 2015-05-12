@@ -134,7 +134,6 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
     position = last_position;
     position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
 
-	std::cout << "vel: " << velocity.y << endl;
 	/*if (fabs(velocity.y) < 0.00001 && keys[GLFW_KEY_SPACE])
 	{
 		velocity.y += 30;

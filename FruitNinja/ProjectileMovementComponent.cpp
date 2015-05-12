@@ -21,7 +21,6 @@ void ProjectileMovementComponent::update()
 		entity.rot[3] = glm::vec4(0, 0, 0, 1);
 		entity.should_draw = true;
 		entity.shot = true;
-		std::cout << "Shot it too" << std::endl;
 	}
 	else {
 		entity.position += velocity * (float)seconds_passed;

@@ -167,7 +167,6 @@ void World::shootArrows()
 	if (keys[GLFW_KEY_E] && archery_camera->in_use && !held)
 	{
 		held = true;
-		cout << "Made arrow" << endl;
 	}
 	if (held && !keys[GLFW_KEY_E])
 	{
