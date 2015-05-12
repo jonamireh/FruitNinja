@@ -7,7 +7,7 @@ class GuardEntity : public GameEntity
 {
 public:
 	GuardEntity();
-	GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, float time, glm::vec3 direction);
+	GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::vector<glm::vec3> control_points, float animation_time);
 	void update();
 	void collision(std::shared_ptr<GameEntity> entity);
 	float getRadius();

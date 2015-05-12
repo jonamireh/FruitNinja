@@ -3,10 +3,10 @@
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include <glm/gtx/rotate_vector.hpp>
+#include "LightEntity.h"
 
-ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>())
+ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>()), shot(false)
 {
-
 }
 
 ProjectileEntity::~ProjectileEntity()
@@ -34,4 +34,12 @@ glm::mat4 ProjectileEntity::getModelMat()
 	glm::mat4 model_scale = glm::scale(glm::mat4(1.0f), glm::vec3(scale, scale, scale));
 
 	return model_trans * rot * model_scale;
+}
+
+void ProjectileEntity::collision(std::shared_ptr<GameEntity> bb)
+{
+	if (typeid(*bb) == typeid(LightEntity))
+	{
+		bb->should_draw = false;
+	}
 }

@@ -25,11 +25,11 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	for (int i = 0; i < ents.size(); i++) {
 		std::vector<Mesh*> meshes = ents[i]->mesh->getMeshes();
-
-		int texture = getAttributeHandle("aTextCoord");
 
 		glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
 		glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
@@ -45,14 +45,21 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 				glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
 				glUniform1i(getUniformHandle("Utex"), 0);
 				glUniform1i(getUniformHandle("Uflag"), 1);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO3);
-				glEnableVertexAttribArray(texture);//
-				glVertexAttribPointer(texture, 2, GL_FLOAT, GL_FALSE, sizeof(vec2), 0);
 			}
 			else {
 
 				glUniform1i(getUniformHandle("Uflag"), 0);
 			}
+			if (mesh->bones.size() > 0)
+			{
+				glUniform1i(getUniformHandle("uBoneFlag"), 1);
+				glUniformMatrix4fv(getUniformHandle("uBones[0]"), mesh->boneTransformations.size(), GL_FALSE, value_ptr(mesh->boneTransformations[0]));
+			}
+			else
+			{
+				glUniform1i(getUniformHandle("uBoneFlag"), 0);
+			}
+
 
 			Material material = mesh->mat;
 			glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));
@@ -64,7 +71,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 			check_gl_error("Mesh.draw after texture");
 
 			if (mesh->textures.size() > 0) {
-				glDisableVertexAttribArray(texture);
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 			

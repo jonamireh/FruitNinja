@@ -60,7 +60,8 @@ void World::init()
     chewy->sebInit();
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard"), 5.f, vec3(-1.f, 0.f, 0.f)));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
+		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 10.f));
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
@@ -206,13 +207,21 @@ void World::draw()
 		for (int i = 0; i < in_view.size(); i++)
 			shaders.at("phongShader")->draw(camera->getViewMatrix(), in_view.at(i));
 	}
+	//otherwise deferred rendering
 	else {
 		//even if lantern culled still need light from it
 		vector<Light*> lights;
 		for (int i = 0; i < entities.size(); i++) {
-			if (typeid(*entities[i]) == typeid(LightEntity)) {
+			if (typeid(*entities[i]) == typeid(LightEntity) && entities[i]->should_draw) {
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
+			}
+		}
+		for (int i = 0; i < in_view.size(); i++)
+		{
+			if (!in_view[i]->should_draw) {
+				in_view.erase(in_view.begin() + i);
+				i--;
 			}
 		}
 		

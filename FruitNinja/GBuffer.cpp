@@ -71,9 +71,7 @@ void GBuffer::BindForGeomPass()
 //probably incorrect name here
 void GBuffer::BindAllForReading()
 {
-
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
 
 	for (unsigned int i = 0; i < ARRAY_SIZE_IN_ELEMENTS(m_textures); i++) {
 		glActiveTexture(GL_TEXTURE0 + i);

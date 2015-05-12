@@ -23,7 +23,6 @@ bool Mesh::checkError(std::string msg)
 Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalData, std::vector<GLuint>* indexData, aiMaterial* material,
 	std::vector<TextureData>* textureData, std::vector<glm::vec2>* textureCoordinates, std::vector<aiBone>* boneData,
 	std::vector<glm::ivec4>* boneIdData1, std::vector<glm::vec4>* boneWeightData1,
-	std::vector<glm::ivec4>* boneIdData2, std::vector<glm::vec4>* boneWeightData2,
 	std::vector<aiAnimation> *animationData)
 {
 	verts = *vertexData;
@@ -35,13 +34,9 @@ Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalDat
 		boneTransformations.resize(bones.size(), glm::mat4());
 	}
 	if (boneIdData1)
-		boneIds1 = *boneIdData1;
+		boneIds = *boneIdData1;
 	if (boneWeightData1)
-		boneWeights1 = *boneWeightData1;
-	if (boneIdData2)
-		boneIds2 = *boneIdData2;
-	if (boneWeightData2)
-		boneWeights2 = *boneWeightData2;
+		boneWeights = *boneWeightData1;
 	if (textureData)
 		textures = *textureData;
 	if (textureCoordinates)
@@ -94,37 +89,19 @@ Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalDat
 
 	if (boneIdData1 && boneIdData1->size() > 0)
 	{
-		glGenBuffers(1, &VBO_BoneID1);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO_BoneID1);
-		glBufferData(GL_ARRAY_BUFFER, boneIds1.size() * sizeof(glm::ivec4), &boneIds1[0], GL_STATIC_DRAW);
+		glGenBuffers(1, &VBO_BoneID);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO_BoneID);
+		glBufferData(GL_ARRAY_BUFFER, boneIds.size() * sizeof(glm::ivec4), &boneIds[0], GL_STATIC_DRAW);
 		glEnableVertexAttribArray(3);
 		glVertexAttribIPointer(3, 4, GL_INT, sizeof(glm::ivec4), 0);
 	}
 
 	if (boneWeightData1 && boneWeightData1->size() > 0)
 	{
-		glGenBuffers(1, &VBO_BoneWeight1);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO_BoneWeight1);
-		glBufferData(GL_ARRAY_BUFFER, boneWeights1.size() * sizeof(glm::vec4), &boneWeights1[0], GL_STATIC_DRAW);
+		glGenBuffers(1, &VBO_BoneWeight);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO_BoneWeight);
+		glBufferData(GL_ARRAY_BUFFER, boneWeights.size() * sizeof(glm::vec4), &boneWeights[0], GL_STATIC_DRAW);
 		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), 0);
-	}
-
-	if (boneIdData2 && boneIdData2->size() > 0)
-	{
-		glGenBuffers(1, &VBO_BoneID2);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO_BoneID2);
-		glBufferData(GL_ARRAY_BUFFER, boneIds2.size() * sizeof(glm::ivec4), &boneIds2[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(5);
-		glVertexAttribIPointer(3, 4, GL_INT, sizeof(glm::ivec4), 0);
-	}
-
-	if (boneWeightData2 && boneWeightData2->size() > 0)
-	{
-		glGenBuffers(1, &VBO_BoneWeight2);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO_BoneWeight2);
-		glBufferData(GL_ARRAY_BUFFER, boneWeights2.size() * sizeof(glm::vec4), &boneWeights2[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(6);
 		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), 0);
 	}
 

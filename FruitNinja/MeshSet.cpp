@@ -32,10 +32,8 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 	std::vector<TextureData> textures;
 	std::vector<glm::vec2> texCoords;
 	std::vector<aiBone> bones;
-	std::vector<glm::ivec4> boneIds1;
-	std::vector<glm::vec4> boneWeights1;
-	std::vector<glm::ivec4> boneIds2;
-	std::vector<glm::vec4> boneWeights2;
+	std::vector<glm::ivec4> boneIds;
+	std::vector<glm::vec4> boneWeights;
 	aiColor4D col;
 	aiMaterial *mat = scene->mMaterials[mesh->mMaterialIndex];
 	aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &col);
@@ -94,10 +92,8 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 	{
 		for (int i = 0; i < mesh->mNumVertices; i++)
 		{
-			boneIds1.push_back(glm::ivec4());
-			boneWeights1.push_back(glm::vec4());
-			boneIds2.push_back(glm::ivec4());
-			boneWeights2.push_back(glm::vec4());
+			boneIds.push_back(glm::ivec4(-1));
+			boneWeights.push_back(glm::vec4(0));
 		}
 	}
 	// Bones
@@ -110,30 +106,21 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 		for (int j = 0; j < bone->mNumWeights; j++)
 		{
 			int k = 0;
-			while (k < 3 && boneWeights1[bone->mWeights[j].mVertexId][k % 4] != 0.0f ||
-				   k < 7 && boneWeights2[bone->mWeights[j].mVertexId][k % 4] != 0.0f)
-			{
+			while (k < 3 && boneWeights[bone->mWeights[j].mVertexId][k] != 0.0f)
 				k++;
-			}
 			if (k < 4)
 			{
-				boneIds1.data()[bone->mWeights[j].mVertexId][k] = i;
-				boneWeights1.data()[bone->mWeights[j].mVertexId][k % 4] = bone->mWeights->mWeight;
-			}
-			else if (k < 8)
-			{
-				boneIds2.data()[bone->mWeights[j].mVertexId][k] = i;
-				boneWeights2.data()[bone->mWeights[j].mVertexId][k % 4] = bone->mWeights->mWeight;
+				boneIds.data()[bone->mWeights[j].mVertexId][k] = i;
+				boneWeights.data()[bone->mWeights[j].mVertexId][k % 4] = bone->mWeights->mWeight;
 			}
 		}
 	}
-	for (int i = 0; i < boneWeights1.size(); i++)
+	for (int i = 0; i < boneWeights.size(); i++)
 	{
-		
-		glm::normalize(boneWeights1[i]);
+		glm::normalize(boneWeights[i]);
 	}
 	// Add mesh to set
-	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords, &bones, &boneIds1, &boneWeights1, &boneIds1, &boneWeights1, &animations));
+	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords, &bones, &boneIds, &boneWeights, &animations));
 }
 
 //This function was copied from off the internet, shouldn't be turned in
