@@ -45,14 +45,21 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 				glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
 				glUniform1i(getUniformHandle("Utex"), 0);
 				glUniform1i(getUniformHandle("Uflag"), 1);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->VBO3);
-				glEnableVertexAttribArray(texture);//
-				glVertexAttribPointer(texture, 2, GL_FLOAT, GL_FALSE, sizeof(vec2), 0);
 			}
 			else {
 
 				glUniform1i(getUniformHandle("Uflag"), 0);
 			}
+			if (mesh->bones.size() > 0)
+			{
+				glUniform1i(getUniformHandle("uBoneFlag"), 1);
+				glUniformMatrix4fv(getUniformHandle("uBones[0]"), mesh->boneTransformations.size(), GL_FALSE, value_ptr(mesh->boneTransformations[0]));
+			}
+			else
+			{
+				glUniform1i(getUniformHandle("uBoneFlag"), 0);
+			}
+
 
 			Material material = mesh->mat;
 			glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));

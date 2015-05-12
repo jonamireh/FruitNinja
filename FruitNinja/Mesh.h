@@ -19,17 +19,14 @@ public:
 	Mesh(std::vector<glm::vec3>* vd, std::vector<glm::vec3>* nd, std::vector<GLuint>* id, aiMaterial* material,
 		std::vector<TextureData>* td = NULL, std::vector<glm::vec2>* tc = NULL, std::vector<aiBone>* boneData = NULL,
 		 std::vector<glm::ivec4>* boneIdData1 = NULL, std::vector<glm::vec4>* boneWeightData1 = NULL,  
-		 std::vector<glm::ivec4>* boneIdData2 = NULL, std::vector<glm::vec4>* boneWeightData2 = NULL,
 		 std::vector<aiAnimation> *animationData = NULL);
 	~Mesh();
 	GLuint VAO;
 	GLuint VBO;
 	GLuint VBO2;
 	GLuint VBO3;
-	GLuint VBO_BoneID1;
-	GLuint VBO_BoneWeight1;
-	GLuint VBO_BoneID2;
-	GLuint VBO_BoneWeight2;
+	GLuint VBO_BoneID;
+	GLuint VBO_BoneWeight;
 	GLuint IND;
 
 	std::vector<glm::vec3> verts;
@@ -39,10 +36,8 @@ public:
 	std::vector<glm::vec2> texCoords;
 	std::vector<aiBone> bones;
 	std::vector<aiNode*> boneTreePtrs;
-	std::vector<glm::ivec4> boneIds1;
-	std::vector<glm::vec4> boneWeights1;
-	std::vector<glm::ivec4> boneIds2;
-	std::vector<glm::vec4> boneWeights2;
+	std::vector<glm::ivec4> boneIds;
+	std::vector<glm::vec4> boneWeights;
 	std::vector<aiAnimation> animations;
 	std::vector<glm::mat4> boneTransformations;
 	std::shared_ptr<BoundingBox> getBoundingBox();
