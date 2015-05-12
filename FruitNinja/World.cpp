@@ -51,7 +51,9 @@ void World::init()
 	debug_camera = shared_ptr<Camera>(new DebugCamera());
     player_camera = shared_ptr<Camera>(new PlayerCamera());
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
-
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
+    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
+    tower->scale = 30.0f;
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
     shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
     // chewy bounding box mesh
@@ -70,11 +72,8 @@ void World::init()
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
 	//shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
 
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "ground.dae")));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
-
-    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
-    tower->scale = 30.0f;
+    
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
 
 
@@ -120,6 +119,24 @@ void World::init()
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
 	shared_ptr <TestSphere> testSphere(new TestSphere(meshes.at("testsphere")));
 
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_back", make_shared<MeshSet>(assetPath + "wall_back.dae")));
+    shared_ptr <GameEntity> wb(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_back")));
+    wb->scale = 30.f;
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_front", make_shared<MeshSet>(assetPath + "wall_front.dae")));
+    shared_ptr <GameEntity> wf(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_front")));
+    wf->scale = 30.f;
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_left", make_shared<MeshSet>(assetPath + "wall_left.dae")));
+    shared_ptr <GameEntity> wl(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_left")));
+    wl->scale = 30.f;
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_right", make_shared<MeshSet>(assetPath + "wall_right.dae")));
+    shared_ptr <GameEntity> wr(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_right")));
+    wr->scale = 30.f;
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("ground", make_shared<MeshSet>(assetPath + "ground.dae")));
+    shared_ptr <GameEntity> g(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("ground")));
+    g->scale = 30.f;
+
+    
+
     camera = player_camera;
     player_camera->in_use = true;
 	entities.push_back(chewy);
@@ -140,10 +157,16 @@ void World::init()
 	entities.push_back(cBarrel2);
 	entities.push_back(cBarrel3);
 
-entities.push_back(box1);
-entities.push_back(box2);
-entities.push_back(box3);
-entities.push_back(testSphere);
+    entities.push_back(box1);
+    entities.push_back(box2);
+    entities.push_back(box3);
+    entities.push_back(testSphere);
+    entities.push_back(wb);
+    entities.push_back(wf);
+    entities.push_back(wr);
+    entities.push_back(wl);
+    entities.push_back(g);
+
 
 shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
@@ -386,7 +409,8 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+    std::vector<shared_ptr<GameEntity>> v1(entities.begin() + 1, entities.end() - 2);
+	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), v1, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
 	_skybox->update();
