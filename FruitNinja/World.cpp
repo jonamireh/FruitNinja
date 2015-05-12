@@ -386,7 +386,11 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+	// Timer time;
+	// time.start_timing("");
+	unique_ptr<OctTree> world_oct_tree(new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities));
+	world_oct_tree->find_collisions();
+	// cout << "Octree build time: " << time.end_timing() * 1000 << "ms" << endl;
 	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
 	_skybox->update();
