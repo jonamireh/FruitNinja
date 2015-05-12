@@ -57,7 +57,7 @@ void DebugCamera::movement(shared_ptr<GameEntity> chewy)
 	if (keys[GLFW_KEY_D])
 		cameraPosition += normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
 
-	cout << glm::to_string(cameraPosition) << endl;
+	//cout << glm::to_string(cameraPosition) << endl;
 
     // NOW DO MOUSE ADJUSTS!
     mouse_update();
