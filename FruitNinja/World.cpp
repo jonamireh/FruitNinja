@@ -56,7 +56,8 @@ void World::init()
     shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard"), {vec3(40.0, 0.0, -2.0), vec3(60.0, 0.0, 0.0), vec3(80.0, 0.0, -2.0), vec3(100.0, 0.0, 0.0)}, 10.f));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
+		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 10.f));
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
 	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
