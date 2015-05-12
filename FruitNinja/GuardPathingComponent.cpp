@@ -21,8 +21,6 @@ glm::vec3 GuardPathingComponent::getPosition(float dt)
 	assert(time <= 1.f);
 	assert(curve_index <= control_points.size() - 2);
 
-	cout << curve_index << endl;
-
 	vector<vec3> points;
 	if (curve_index == 0)
 	{
@@ -66,8 +64,6 @@ glm::vec3 GuardPathingComponent::getDirection(float dt)
 
 	assert(time <= 1.f);
 	assert(curve_index <= control_points.size() - 2);
-
-	cout << curve_index << endl;
 
 	vector<vec3> points;
 	if (curve_index == 0)
