@@ -29,8 +29,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 	for (int i = 0; i < ents.size(); i++) {
 		std::vector<Mesh*> meshes = ents[i]->mesh->getMeshes();
 
-		int texture = getAttributeHandle("aTextCoord");
-
 		glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
 		glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
 		glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f)));
@@ -71,7 +69,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 			check_gl_error("Mesh.draw after texture");
 
 			if (mesh->textures.size() > 0) {
-				glDisableVertexAttribArray(texture);
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 			

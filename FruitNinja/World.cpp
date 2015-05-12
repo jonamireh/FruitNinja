@@ -156,7 +156,7 @@ void World::draw()
 	
 
 	glUseProgram(0);
-	static bool usePhong = true;
+	static bool usePhong = false;
 
 	if (keys[GLFW_KEY_6])
 	{
