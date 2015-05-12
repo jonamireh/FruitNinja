@@ -50,5 +50,6 @@ private:
     std::shared_ptr<Camera> player_camera;
 	std::shared_ptr<Skybox> _skybox;
 	void init();
+	void shootArrows();
 };
 
