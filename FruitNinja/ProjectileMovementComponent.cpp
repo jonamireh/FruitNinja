@@ -6,9 +6,8 @@
 
 void ProjectileMovementComponent::update()
 {
-	static glm::vec3 velocity(0.0f, 0.0f, 0.0f);
 	
-	if (keys[GLFW_KEY_E] && camera->in_use && !entity.shot) {
+	if (!entity.shot) {
 		entity.position = camera->cameraPosition;
 		velocity = camera->cameraFront * ARROW_SPEED;
 
@@ -22,10 +21,10 @@ void ProjectileMovementComponent::update()
 		entity.rot[3] = glm::vec4(0, 0, 0, 1);
 		entity.should_draw = true;
 		entity.shot = true;
-	} else if (!entity.shot) {
-		entity.should_draw = false;
 	}
 	else {
 		entity.position += velocity * (float)seconds_passed;
+		entity.timeLeft -= seconds_passed;
+		if (entity.timeLeft < 0) entity.should_draw = false;
 	}
 }

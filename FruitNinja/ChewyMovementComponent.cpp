@@ -4,6 +4,8 @@
 #include "World.h"
 #include <iostream>
 
+#define GRAVITY 33
+
 using namespace glm;
 using namespace std;
 
@@ -47,7 +49,7 @@ void ChewyMovementComponent::update()
 
         if (dynamic_cast<ChewyEntity&>(entity)._falling)
         {
-            entity.velocity -= vec3(0, 25, 0) * seconds_passed;
+            entity.velocity.y -= GRAVITY * seconds_passed;
         }
         else
         {
@@ -98,8 +100,8 @@ void ChewyMovementComponent::update()
 		}
         if ((entity.position.y <= 0 || !dynamic_cast<ChewyEntity&>(entity)._falling) && keys[GLFW_KEY_SPACE])
 		{
-			entity.velocity += vec3(0, 20, 0);
-		}
+			entity.velocity.y += 30;
+		} 
 
 		entity.position += entity.velocity * seconds_passed;
 		if (entity.position.y < 0)
@@ -107,7 +109,6 @@ void ChewyMovementComponent::update()
 			entity.position.y = 0;
 			entity.velocity.y = 0;
 		}
-
         dynamic_cast<ChewyEntity&>(entity)._falling = true;
 	}
 }

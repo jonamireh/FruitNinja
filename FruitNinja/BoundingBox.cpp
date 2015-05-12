@@ -128,3 +128,21 @@ bool BoundingBox::contains_point(vec3 check_point)
         check_point.y >= lower_bound.y && check_point.y <= upper_bound.y &&
         check_point.z >= lower_bound.z && check_point.z <= upper_bound.z);
 }
+
+bool BoundingBox::boxes_collide(BoundingBox other_box)
+{
+    vector<vec3> other_box_points = other_box.get_points();
+    for (int i = 0; i < other_box_points.size(); i++)
+    {
+        if (contains_point(other_box_points.at(i)))
+            return true;
+    }
+
+    vector<vec3> my_points = get_points();
+    for (int i = 0; i < my_points.size(); i++)
+    {
+        if (other_box.contains_point(my_points.at(i)))
+            return true;
+    }
+    return false;
+}

@@ -62,9 +62,13 @@ void World::init()
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
 		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 10.f));
+	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(-50.0, 0.0, 60.0), meshes.at("guard"), { vec3(-50.0, 0.0, 60.0), vec3(-25.0, 0.0, 45.0),
+		vec3(3.0, 0.0, 45.0), vec3(50.0, 0.0, 60.0), vec3(90.0, 0.0, 20.0) }, 15.f));
+	shared_ptr<GameEntity> guard2(new GuardEntity(vec3(-103.0, 0.0, -35.0), meshes.at("guard"), { vec3(-103.0, 0.0, -35.0), vec3(-60.0, 0.0, -25.0),
+		vec3(-12.0, 0.0, -25.0), vec3(35.0, 0.0, -25.0), vec3(45.0, 0.0, -35.0), vec3(25.0, 0, -35.0), vec3(-2.0,0 , -50.0) }, 30.f));
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
-	shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
+	//shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "ground.dae")));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
@@ -120,7 +124,9 @@ void World::init()
     player_camera->in_use = true;
 	entities.push_back(chewy);
 	entities.push_back(guard);
-	entities.push_back(arrow);
+	entities.push_back(guard1);
+	entities.push_back(guard2);
+
     entities.push_back(tower);
     entities.push_back(lantern);
 	entities.push_back(lantern2);
@@ -134,30 +140,45 @@ void World::init()
 	entities.push_back(cBarrel2);
 	entities.push_back(cBarrel3);
 
-    entities.push_back(box1);
-    entities.push_back(box2);
-    entities.push_back(box3);
-	entities.push_back(testSphere);
+entities.push_back(box1);
+entities.push_back(box2);
+entities.push_back(box3);
+entities.push_back(testSphere);
 
-	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
-	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
+shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
+shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
 
-	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
-	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
+shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
+shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
 
-    shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
+shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
 
-	shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
-	shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
+shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
+shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
 
-	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
-	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
+//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+}
+
+void World::shootArrows()
+{
+
+	static bool held = false;
+	if (keys[GLFW_KEY_E] && archery_camera->in_use && !held)
+	{
+		held = true;
+	}
+	if (held && !keys[GLFW_KEY_E])
+	{
+		entities.push_back(make_shared<ProjectileEntity>(meshes["arrow"], archery_camera));
+		held = false;
+	}
 }
 
 void World::draw()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
 	glUseProgram(0);
 	static bool usePhong = false;
@@ -191,15 +212,15 @@ void World::draw()
 	vector<shared_ptr<GameEntity>> in_view;
     if (c_test != nullptr)
     {
-        in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
+        in_view = get_objects_in_view(entities, camera->getViewMatrix());
 	}
 	else
 	{
 		in_view = get_objects_in_view(entities, camera->getViewMatrix());
-		
+
 	}
 	glUseProgram(0);
-	
+
 
 	if (usePhong) {
 		glUseProgram(shaders.at("phongShader")->getProgramID());
@@ -215,6 +236,18 @@ void World::draw()
 			if (typeid(*entities[i]) == typeid(LightEntity) && entities[i]->should_draw) {
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
+			}
+			//remove arrows with no time left
+			/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
+				shared_ptr<ProjectileEntity> pe = dynamic_pointer_cast<ProjectileEntity>(entities[i]);
+				if (pe->timeLeft < 0.0) {
+					entities.erase(entities.begin() + i);
+					i--;
+				}
+			}*/
+			if (!entities[i]->should_draw) {
+				entities.erase(entities.begin() + i);
+				i--;
 			}
 		}
 		for (int i = 0; i < in_view.size(); i++)
@@ -340,6 +373,8 @@ void World::update()
 	static float start_time = 0.0;
 
 	float end_time = glfwGetTime();
+	shootArrows();
+
 	for (int i = 0; i < entities.size(); i++)
 		entities[i]->update();
 	if (!time_stopped)

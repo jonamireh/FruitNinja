@@ -1,11 +1,13 @@
 #include "ProjectileEntity.h"
 #include "ArcheryCamera.h"
-#include "glm/gtc/quaternion.hpp"
-#include "glm/gtx/quaternion.hpp"
-#include <glm/gtx/rotate_vector.hpp>
 #include "LightEntity.h"
+#include "TestSphere.h"
 
-ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>()), shot(false)
+#define ARROW_LIFE_SPAN 10.0
+#include "GuardEntity.h"
+
+
+ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>()), shot(false), timeLeft(5.0f)
 {
 }
 
@@ -16,8 +18,8 @@ ProjectileEntity::~ProjectileEntity()
 
 
 
-ProjectileEntity::ProjectileEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh,
-	std::shared_ptr<GameEntity> owner, std::shared_ptr<Camera> camera) : GameEntity(position, mesh), owner(owner), movement(*this, camera)
+ProjectileEntity::ProjectileEntity(std::shared_ptr<MeshSet> mesh,
+	std::shared_ptr<Camera> camera) : GameEntity(glm::vec3(0, 0, 0), mesh), movement(*this, camera), shot(false), timeLeft(ARROW_LIFE_SPAN)
 {
 
 }
@@ -36,10 +38,11 @@ glm::mat4 ProjectileEntity::getModelMat()
 	return model_trans * rot * model_scale;
 }
 
-void ProjectileEntity::collision(std::shared_ptr<GameEntity> bb)
+void ProjectileEntity::collision(std::shared_ptr<GameEntity> entity)
 {
-	if (typeid(*bb) == typeid(LightEntity))
+	if (typeid(*entity) == typeid(LightEntity) || typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity))
 	{
-		bb->should_draw = false;
+        if (entity->getTransformedOuterBoundingBox()->boxes_collide(*getTransformedOuterBoundingBox()))
+            entity->should_draw = false;
 	}
 }

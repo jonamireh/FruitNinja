@@ -150,7 +150,7 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
 
     if (!falling)
         position.y = last_position.y;
-
+    
     _falling = falling;
 
     position.x = last_position.x;

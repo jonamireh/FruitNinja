@@ -18,4 +18,5 @@ public:
 	float getMaxWidth(float protrudingLength);
     std::vector<glm::vec3> get_points();
     bool contains_point(glm::vec3 check_point);
+    bool boxes_collide(BoundingBox other_box);
 };
