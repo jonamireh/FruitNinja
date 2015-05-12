@@ -5,9 +5,8 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include "LightEntity.h"
 
-ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>())
+ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>()), shot(false)
 {
-
 }
 
 ProjectileEntity::~ProjectileEntity()

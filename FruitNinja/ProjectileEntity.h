@@ -14,7 +14,7 @@ public:
 	std::shared_ptr<GameEntity> owner;
 	virtual glm::mat4 getModelMat() override;
 	void collision(std::shared_ptr<GameEntity> bb) override;
-
+	bool shot;
 	glm::mat4 rot;
 private:
 	ProjectileMovementComponent movement;
