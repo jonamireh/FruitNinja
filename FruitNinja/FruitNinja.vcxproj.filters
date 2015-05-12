@@ -245,71 +245,23 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="debugFrag.glsl" />
+    <None Include="debugVert.glsl" />
+    <None Include="DeferredFragRender.glsl" />
+    <None Include="DeferredFragShader.glsl" />
+    <None Include="DeferredVertRender.glsl" />
+    <None Include="DeferredVertShader.glsl" />
+    <None Include="dirLightFrag.glsl" />
+    <None Include="lightVert.glsl" />
     <None Include="packages.config" />
-    <None Include="phongFrag.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="phongVert.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="debugFrag.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="debugVert.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="TextureDebug.vertexshader">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="TextureDebug.fragmentshader">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="DeferredFragShader.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="DeferredVertRender.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="DeferredVertShader.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="simpleFrag.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="simpleVert.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="dirLightFrag.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="lightVert.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="DeferredFragRender.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="pointLightFrag.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="StencilVert.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="StencilFrag.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{dfc8b3af-1897-44ba-bd97-44a5e4844c83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source">
-      <UniqueIdentifier>{0779bf17-c988-4cc1-9bf9-4c27b3c4de90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{8a88a7cc-111d-48c4-a54f-70c13ccedef8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DeferredShader">
-      <UniqueIdentifier>{6dcbd46a-1231-4229-bca7-0dd0e49c0401}</UniqueIdentifier>
-    </Filter>
+    <None Include="phongFrag.glsl" />
+    <None Include="phongVert.glsl" />
+    <None Include="pointLightFrag.glsl" />
+    <None Include="simpleFrag.glsl" />
+    <None Include="simpleVert.glsl" />
+    <None Include="StencilFrag.glsl" />
+    <None Include="StencilVert.glsl" />
+    <None Include="TextureDebug.fragmentshader" />
+    <None Include="TextureDebug.vertexshader" />
   </ItemGroup>
 </Project>
