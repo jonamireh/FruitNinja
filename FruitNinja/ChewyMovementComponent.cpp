@@ -1,7 +1,7 @@
 #include "ChewyMovementComponent.h"
+#include "ChewyEntity.h"
 #include <GLFW/glfw3.h>
 #include "World.h"
-#include "ChewyMovementComponent.h"
 #include <iostream>
 
 using namespace glm;
@@ -45,7 +45,14 @@ void ChewyMovementComponent::update()
 
 		entity.last_position = entity.position;
 
-		entity.velocity -= vec3(0, 25, 0) * seconds_passed;
+        if (dynamic_cast<ChewyEntity&>(entity)._falling)
+        {
+            entity.velocity -= vec3(0, 25, 0) * seconds_passed;
+        }
+        else
+        {
+            entity.velocity = vec3(0.f);
+        }
 		
 		if (keys[GLFW_KEY_W]) {
 			direction += forwardDirection(camera);
@@ -89,16 +96,18 @@ void ChewyMovementComponent::update()
 
             entity.position += pos_offset;
 		}
-		if (entity.position.y <= 0 && keys[GLFW_KEY_SPACE])
+        if ((entity.position.y <= 0 || !dynamic_cast<ChewyEntity&>(entity)._falling) && keys[GLFW_KEY_SPACE])
 		{
 			entity.velocity += vec3(0, 20, 0);
 		}
 
 		entity.position += entity.velocity * seconds_passed;
-		/*if (entity.position.y < 0)
+		if (entity.position.y < 0)
 		{
 			entity.position.y = 0;
 			entity.velocity.y = 0;
-		}*/
+		}
+
+        dynamic_cast<ChewyEntity&>(entity)._falling = true;
 	}
 }
