@@ -63,138 +63,97 @@ int intersect3D_SegmentPlane(vec3 sP0, vec3 sP1, pair<glm::vec3, glm::vec3> Pn, 
 
 void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
 {
-	if (compare(entity))
-	{
-		
-		position = last_position;
-		shared_ptr<BoundingBox> bb = entity->getTransformedOuterBoundingBox();
-		vector<pair<glm::vec3, glm::vec3>> planes = bb->getPlanes();
+	shared_ptr<BoundingBox> bb = entity->getTransformedOuterBoundingBox();
+	vector<pair<glm::vec3, glm::vec3>> planes = bb->getPlanes();
 
-		pair<glm::vec3, glm::vec3> collision_plane;
-		bool intersected = false;
-		float smallest_dist = FLT_MAX;
-		for (int i = 0; i < planes.size(); i++)
-		{
-			vec3 d;
-			//bool intersection = glm::intersectRayPlane(position, glm::normalize(moveComponent.direction), planes.at(i).first, glm::normalize(planes.at(i).second), dist);
-			int intersection = intersect3D_SegmentPlane(position - moveComponent.direction, 3.0f * moveComponent.direction + position, planes.at(i), &d);
-			if (intersection)
-			{
-				intersected = true;
-				if (fabs(glm::distance(d, position)) < smallest_dist)
-				{
-					smallest_dist = fabs(glm::distance(d, position));
-					collision_plane = planes.at(i);
-				}
-			}
-		}
+    vector<vec3> chewy_points = getTransformedOuterBoundingBox()->get_points();
+    vector<vec3> other_entity_points = bb->get_points();
+    vec3 contained_point;
+    float closest_distance = 100.f;
+    bool point_is_contained = false;
 
-		if (intersected)
-		{
-			vec3 cancel_direction = vec3(1.f, 1.f, 1.f);
-			if (collision_plane.second.x)
-				cancel_direction.x = 0.f;
-			else if (collision_plane.second.y)
-				cancel_direction.y = 0.f;
-			else if (collision_plane.second.z)
-				cancel_direction.z = 0.f;
+    for (int i = 0; i < chewy_points.size(); i++)
+    {
+        if (bb->contains_point(chewy_points.at(i)))
+        {
+            float check_distance = glm::distance((bb->lower_bound + bb->upper_bound) / 2.f, chewy_points.at(i));
+            if (check_distance < closest_distance)
+            {
+                contained_point = chewy_points.at(i);
+                closest_distance = check_distance;
+            }
+            point_is_contained = true;
+        }
+    }
 
-			position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
+    bool other_contained_in_chewy = false;
+    for (int i = 0; i < other_entity_points.size(); i++)
+    {
+        if (getTransformedOuterBoundingBox()->contains_point(other_entity_points.at(i)))
+        {
+            other_contained_in_chewy = true;
+        }
+    }
 
-			// SHOULD DO IT THIS WAY
-			//float speed_magnitude = cos(M_PI_2 - acos(glm::dot(-collision_plane.second, moveComponent.direction)));
-			//vec3 rotation_axis = cross(-collision_plane.second, moveComponent.direction);
-			//vec3 oldDir(moveComponent.direction);
-			//float angle = (float)M_PI_2 - acos(glm::dot(-collision_plane.second, oldDir));
-			//vec3 newDir = rotate(oldDir, angle, rotation_axis);
-			////vec3 newDir = rotate(oldDir, angle, vec3(0.f,1.f, 0.f));
-			//vec3 offset = newDir * speed_magnitude * CHEWY_MOVE_SPEED * seconds_passed;
-			//position += offset;
-			//if (position.x != position.x || position.y != position.y || position.z != position.z)
-			//{
-			//    cout << "what" << endl;
-			//}
-		}
-	}
+    float distance_changed = glm::distance(last_position, position);
+
+    vec3 check_to;
+    if (point_is_contained)
+    {
+        check_to = contained_point - distance_changed * moveComponent.direction;
+        //check_to = 
+    }
+    else if (other_contained_in_chewy)
+    {
+        contained_point = entity->getCenter();
+        check_to = getCenter();
+        point_is_contained = true;
+    }
+
+    if (!point_is_contained)
+        return;
+
+    pair<glm::vec3, glm::vec3> collision_plane;
+
+    float chewy_height = getTransformedOuterBoundingBox()->upper_bound.y - getTransformedOuterBoundingBox()->lower_bound.y;
+    for (int i = 0; i < planes.size(); i++)
+    {
+        vec3 d;
+        int intersection = intersect3D_SegmentPlane(contained_point, check_to, planes.at(i), &d);
+        if (intersection)
+        {
+            collision_plane = planes.at(i);
+        }
+    }
+
+
+    bool falling = true;
+    for (int i = 0; i < chewy_points.size(); i++)
+    {
+        for (int j = 0; j < planes.size(); j++)
+        {
+            vec3 d;
+            int intersection = intersect3D_SegmentPlane(chewy_points.at(i), chewy_points.at(i) - velocity * seconds_passed, planes.at(j), &d);
+            //int intersection = intersect3D_SegmentPlane(chewy_points.at(i) - vec3(0.f, 1.f, 0.f) , chewy_points.at(i) + vec3(0.f, 10.f, 0.f) * seconds_passed, planes.at(j), &d);
+            if (intersection)
+            {
+                falling = false;
+            }
+        }
+    }
+
+    vec3 cancel_direction = vec3(1.f, 1.f, 1.f);
+    if (collision_plane.second.x)
+        cancel_direction.x = 0.f;
+    if (collision_plane.second.z)
+        cancel_direction.z = 0.f;
+
+    if (!falling)
+        position.y = last_position.y;
+    
+    _falling = falling;
+
+    position.x = last_position.x;
+    position.z = last_position.z;
+    position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
 }
-
-/*void ChewyEntity::box_collision(std::shared_ptr<BoundingBox> bb)
-{
-    shared_ptr<BoundingBox> my_bb = getTransformedOuterBoundingBox();
-
-    float lowest = FLT_MAX;
-
-    glm::vec3 top;
-    glm::vec3 bottom;
-    int axis;
-
-    if ((my_bb->upper_bound.x - bb->lower_bound.x) < lowest)
-    {
-        lowest = (my_bb->upper_bound.x - bb->lower_bound.x);
-        top = my_bb->upper_bound;
-        bottom = bb->lower_bound;
-        axis = 1;
-
-    }
-    if ((bb->upper_bound.x - my_bb->lower_bound.x) < lowest)
-    {
-        lowest = (bb->upper_bound.x - my_bb->lower_bound.x);
-        top = bb->upper_bound;
-        bottom = my_bb->lower_bound;
-        axis = 1;
-    }
-    if ((my_bb->upper_bound.y - bb->lower_bound.y) < lowest)
-    {
-        lowest = (my_bb->upper_bound.y - bb->lower_bound.y);
-        top = my_bb->upper_bound;
-        bottom = bb->lower_bound;
-        axis = 2;
-    }
-    if ((bb->upper_bound.y - my_bb->lower_bound.y) < lowest)
-    {
-        lowest = (bb->upper_bound.y - my_bb->lower_bound.y);
-        top = bb->upper_bound;
-        bottom = my_bb->lower_bound;
-        axis = 2;
-    }
-    if ((my_bb->upper_bound.z - bb->lower_bound.z) < lowest)
-    {
-        lowest = (my_bb->upper_bound.z - bb->lower_bound.z);
-        top = my_bb->upper_bound;
-        bottom = bb->lower_bound;
-        axis = 3;
-    }
-    if ((bb->upper_bound.z - my_bb->lower_bound.z) < lowest)
-    {
-        lowest = (bb->upper_bound.z - my_bb->lower_bound.z);
-        top = bb->upper_bound;
-        bottom = my_bb->lower_bound;
-        axis = 3;
-    }
-
-    //glm::vec3 d = top - bottom;
-
-    switch (axis)
-    {
-    case 1:
-        bottom.y = top.y;
-        bottom.z = top.z;
-        break;
-    case 2:
-        bottom.x = top.x;
-        bottom.z = top.z;
-        break;
-    case 3:
-        bottom.x = top.x;
-        bottom.y = top.y;
-        break;
-    }
-
-    glm::vec3 n_face = glm::normalize(top - bottom);
-    cout << glm::to_string(n_face) << endl;
-    n_face.y = 0.f;
-    moveComponent.direction -= glm::dot(moveComponent.direction, n_face);
-    moveComponent.direction.y = 0.f;
-    cout << glm::to_string(moveComponent.direction) << endl;
-    position = last_position + moveComponent.direction;
-}*/

@@ -6,7 +6,7 @@ using namespace glm;
 
 BoundingBox::BoundingBox(vec3 lower_bound, vec3 upper_bound) : lower_bound(lower_bound), upper_bound(upper_bound) {}
 
-shared_ptr<vector<pair<vec3, vec3>>> BoundingBox::get_points()
+shared_ptr<vector<pair<vec3, vec3>>> BoundingBox::get_line_segments()
 {
     shared_ptr<vector<pair<vec3, vec3>>> toReturn(new vector<pair<vec3, vec3>>());
 
@@ -107,3 +107,42 @@ float BoundingBox::getMaxWidth(float protrudingLength)
 
 }
 
+vector<vec3> BoundingBox::get_points()
+{
+    vector<vec3> points;
+    points.push_back(lower_bound);
+    points.push_back(vec3(lower_bound.x, lower_bound.y, upper_bound.z));
+    points.push_back(vec3(lower_bound.x, upper_bound.y, lower_bound.z));
+    points.push_back(vec3(upper_bound.x, lower_bound.y, lower_bound.z));
+    points.push_back(upper_bound);
+    points.push_back(vec3(upper_bound.x, upper_bound.y, lower_bound.z));
+    points.push_back(vec3(upper_bound.x, lower_bound.y, upper_bound.z));
+    points.push_back(vec3(lower_bound.x, upper_bound.y, upper_bound.z));
+    return points;
+}
+
+
+bool BoundingBox::contains_point(vec3 check_point)
+{
+    return (check_point.x >= lower_bound.x && check_point.x <= upper_bound.x &&
+        check_point.y >= lower_bound.y && check_point.y <= upper_bound.y &&
+        check_point.z >= lower_bound.z && check_point.z <= upper_bound.z);
+}
+
+bool BoundingBox::boxes_collide(BoundingBox other_box)
+{
+    vector<vec3> other_box_points = other_box.get_points();
+    for (int i = 0; i < other_box_points.size(); i++)
+    {
+        if (contains_point(other_box_points.at(i)))
+            return true;
+    }
+
+    vector<vec3> my_points = get_points();
+    for (int i = 0; i < my_points.size(); i++)
+    {
+        if (other_box.contains_point(my_points.at(i)))
+            return true;
+    }
+    return false;
+}
