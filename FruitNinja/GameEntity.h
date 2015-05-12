@@ -33,4 +33,6 @@ public:
     virtual glm::mat4 getModelMat();
 	std::shared_ptr<BoundingBox> getOuterBoundingBox();
 	std::shared_ptr<BoundingBox> getTransformedOuterBoundingBox();
+
+	bool should_draw = true;
 };

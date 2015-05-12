@@ -156,7 +156,7 @@ void World::draw()
 	
 
 	glUseProgram(0);
-	static bool usePhong = false;
+	static bool usePhong = true;
 
 	if (keys[GLFW_KEY_6])
 	{
@@ -203,13 +203,21 @@ void World::draw()
 		for (int i = 0; i < in_view.size(); i++)
 			shaders.at("phongShader")->draw(camera->getViewMatrix(), in_view.at(i));
 	}
+	//otherwise deferred rendering
 	else {
 		//even if lantern culled still need light from it
 		vector<Light*> lights;
 		for (int i = 0; i < entities.size(); i++) {
-			if (typeid(*entities[i]) == typeid(LightEntity)) {
+			if (typeid(*entities[i]) == typeid(LightEntity) && entities[i]->should_draw) {
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
+			}
+		}
+		for (int i = 0; i < in_view.size(); i++)
+		{
+			if (!in_view[i]->should_draw) {
+				in_view.erase(in_view.begin() + i);
+				i--;
 			}
 		}
 		

@@ -98,7 +98,7 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="TestSphere.cpp">
-	  <Filter>Source</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source</Filter>
@@ -120,6 +120,9 @@
     </ClCompile>
     <ClCompile Include="GuardMovementComponent.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DirLightShader.cpp">
+      <Filter>DeferredShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,7 +223,7 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="TestSphere.h">
-	  <Filter>Headers</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Headers</Filter>
@@ -242,6 +245,9 @@
     </ClInclude>
     <ClInclude Include="GuardMovementComponent.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DirLightShader.h">
+      <Filter>DeferredShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -267,9 +273,6 @@
     <None Include="DeferredFragShader.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="DeferredVertRender.glsl">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="DeferredVertShader.glsl">
       <Filter>Shaders</Filter>
     </None>
@@ -283,9 +286,6 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="lightVert.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="DeferredFragRender.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="pointLightFrag.glsl">
