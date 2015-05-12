@@ -239,12 +239,16 @@ void World::draw()
 				lights.push_back(&le->light);
 			}
 			//remove arrows with no time left
-			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
+			/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
 				shared_ptr<ProjectileEntity> pe = dynamic_pointer_cast<ProjectileEntity>(entities[i]);
 				if (pe->timeLeft < 0.0) {
 					entities.erase(entities.begin() + i);
 					i--;
 				}
+			}*/
+			if (!entities[i]->should_draw) {
+				entities.erase(entities.begin() + i);
+				i--;
 			}
 		}
 		for (int i = 0; i < in_view.size(); i++)

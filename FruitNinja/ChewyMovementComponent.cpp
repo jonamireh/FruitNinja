@@ -4,6 +4,8 @@
 #include "ChewyMovementComponent.h"
 #include <iostream>
 
+#define GRAVITY 33
+
 using namespace glm;
 using namespace std;
 
@@ -45,7 +47,7 @@ void ChewyMovementComponent::update()
 
 		entity.last_position = entity.position;
 
-		entity.velocity -= vec3(0, 25, 0) * seconds_passed;
+		entity.velocity.y -= GRAVITY * seconds_passed;
 		
 		if (keys[GLFW_KEY_W]) {
 			direction += forwardDirection(camera);
@@ -91,8 +93,8 @@ void ChewyMovementComponent::update()
 		}
 		if (entity.position.y <= 0 && keys[GLFW_KEY_SPACE])
 		{
-			entity.velocity += vec3(0, 20, 0);
-		}
+			entity.velocity.y += 30;
+		} 
 
 		entity.position += entity.velocity * seconds_passed;
 		if (entity.position.y < 0)

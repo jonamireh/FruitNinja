@@ -26,5 +26,6 @@ void ProjectileMovementComponent::update()
 	else {
 		entity.position += velocity * (float)seconds_passed;
 		entity.timeLeft -= seconds_passed;
+		if (entity.timeLeft < 0) entity.should_draw = false;
 	}
 }

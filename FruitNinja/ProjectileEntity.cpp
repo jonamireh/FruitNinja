@@ -1,11 +1,11 @@
 #include "ProjectileEntity.h"
 #include "ArcheryCamera.h"
-#include "glm/gtc/quaternion.hpp"
-#include "glm/gtx/quaternion.hpp"
-#include <glm/gtx/rotate_vector.hpp>
 #include "LightEntity.h"
+#include "TestSphere.h"
 
 #define ARROW_LIFE_SPAN 10.0
+#include "GuardEntity.h"
+
 
 ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>()), shot(false), timeLeft(5.0f)
 {
@@ -40,7 +40,7 @@ glm::mat4 ProjectileEntity::getModelMat()
 
 void ProjectileEntity::collision(std::shared_ptr<GameEntity> bb)
 {
-	if (typeid(*bb) == typeid(LightEntity))
+	if (typeid(*bb) == typeid(LightEntity) || typeid(*bb) == typeid(TestSphere) || typeid(*bb) == typeid(GuardEntity))
 	{
 		bb->should_draw = false;
 	}
