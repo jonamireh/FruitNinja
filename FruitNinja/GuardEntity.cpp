@@ -5,8 +5,8 @@
 using namespace glm;
 using namespace std;
 
-#define DETECTION_OUTER_RADIUS 10.f
-#define DETECTION_INNER_RADIUS 5.f
+#define DETECTION_OUTER_RADIUS 15.f
+#define DETECTION_INNER_RADIUS 7.f
 #define COS_ANGLE 60.f
 
 GuardEntity::GuardEntity() : move_component(*this, 0.f, glm::vec3(0.f, 0.f, 0.f))

@@ -54,6 +54,10 @@ void World::init()
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
     shared_ptr<GameEntity> chewy(new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera));
+    // chewy bounding box mesh
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
+    chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera))->getOuterBoundingBox();
+    chewy->sebInit();
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(40.0, 0.0, -2.0), meshes.at("guard"), 5.f, vec3(-1.f, 0.f, 0.f)));
@@ -227,7 +231,7 @@ void World::draw()
 		for (int i = 0; i < in_view.size(); i++)
 		{
 			shared_ptr<BoundingBox> box = in_view.at(i)->getTransformedOuterBoundingBox();
-			shared_ptr<vector<pair<vec3, vec3>>> points = box->get_points();
+			shared_ptr<vector<pair<vec3, vec3>>> points = box->get_line_segments();
 			for (int j = 0; j < points->size(); j++)
 			{
 				draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));

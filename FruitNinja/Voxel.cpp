@@ -87,13 +87,14 @@ std::vector<Voxel> Voxel::split()
 bool Voxel::contains(vec3 object_center, float radius)
 {
     vec3 point = object_center + radius * normalize(voxel_center - object_center);
+
+    //vec3 dist_vector = voxel_center - object_center;
+    //float dist_squared = dist_vector.x * dist_vector.x + dist_vector.y * dist_vector.y + dist_vector.z * dist_vector.z;
+
     return (point.x >= lower_bound.x && point.x <= upper_bound.x &&
         point.y >= lower_bound.y && point.y <= upper_bound.y &&
         point.z >= lower_bound.z && point.z <= upper_bound.z) ||
         (object_center.x >= lower_bound.x && object_center.x <= upper_bound.x &&
         object_center.y >= lower_bound.y && object_center.y <= upper_bound.y &&
-        object_center.z >= lower_bound.z && object_center.z <= upper_bound.z);
-        
-        
-        //glm::distance(voxel_center, object_center) < radius;
+        object_center.z >= lower_bound.z && object_center.z <= upper_bound.z); //|| dist_squared < radius * radius;
 }

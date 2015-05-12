@@ -63,59 +63,76 @@ int intersect3D_SegmentPlane(vec3 sP0, vec3 sP1, pair<glm::vec3, glm::vec3> Pn, 
 
 void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
 {
-	if (compare(entity))
-	{
-		
-		position = last_position;
-		shared_ptr<BoundingBox> bb = entity->getTransformedOuterBoundingBox();
-		vector<pair<glm::vec3, glm::vec3>> planes = bb->getPlanes();
+	shared_ptr<BoundingBox> bb = entity->getTransformedOuterBoundingBox();
+	vector<pair<glm::vec3, glm::vec3>> planes = bb->getPlanes();
 
-		pair<glm::vec3, glm::vec3> collision_plane;
-		bool intersected = false;
-		float smallest_dist = FLT_MAX;
-		for (int i = 0; i < planes.size(); i++)
-		{
-			vec3 d;
-			//bool intersection = glm::intersectRayPlane(position, glm::normalize(moveComponent.direction), planes.at(i).first, glm::normalize(planes.at(i).second), dist);
-			int intersection = intersect3D_SegmentPlane(position - moveComponent.direction, 3.0f * moveComponent.direction + position, planes.at(i), &d);
-			if (intersection)
-			{
-				intersected = true;
-				if (fabs(glm::distance(d, position)) < smallest_dist)
-				{
-					smallest_dist = fabs(glm::distance(d, position));
-					collision_plane = planes.at(i);
-				}
-			}
-		}
+    vector<vec3> chewy_points = getTransformedOuterBoundingBox()->get_points();
+    vector<vec3> other_entity_points = bb->get_points();
+    vec3 contained_point;
+    float closest_distance = 100.f;
+    bool point_is_contained = false;
+    for (int i = 0; i < chewy_points.size(); i++)
+    {
+        if (bb->contains_point(chewy_points.at(i)))
+        {
+            float check_distance = glm::distance((bb->lower_bound + bb->upper_bound) / 2.f, chewy_points.at(i));
+            if (check_distance < closest_distance)
+            {
+                contained_point = chewy_points.at(i);
+                closest_distance = check_distance;
+            }
+            point_is_contained = true;
+        }
+    }
 
-		if (intersected)
-		{
-			vec3 cancel_direction = vec3(1.f, 1.f, 1.f);
-			if (collision_plane.second.x)
-				cancel_direction.x = 0.f;
-			else if (collision_plane.second.y)
-				cancel_direction.y = 0.f;
-			else if (collision_plane.second.z)
-				cancel_direction.z = 0.f;
+    bool other_contained_in_chewy = false;
+    for (int i = 0; i < other_entity_points.size(); i++)
+    {
+        if (getTransformedOuterBoundingBox()->contains_point(other_entity_points.at(i)))
+        {
+            other_contained_in_chewy = true;
+        }
+    }
 
-			position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
+    float distance_changed = glm::distance(last_position, position);
 
-			// SHOULD DO IT THIS WAY
-			//float speed_magnitude = cos(M_PI_2 - acos(glm::dot(-collision_plane.second, moveComponent.direction)));
-			//vec3 rotation_axis = cross(-collision_plane.second, moveComponent.direction);
-			//vec3 oldDir(moveComponent.direction);
-			//float angle = (float)M_PI_2 - acos(glm::dot(-collision_plane.second, oldDir));
-			//vec3 newDir = rotate(oldDir, angle, rotation_axis);
-			////vec3 newDir = rotate(oldDir, angle, vec3(0.f,1.f, 0.f));
-			//vec3 offset = newDir * speed_magnitude * CHEWY_MOVE_SPEED * seconds_passed;
-			//position += offset;
-			//if (position.x != position.x || position.y != position.y || position.z != position.z)
-			//{
-			//    cout << "what" << endl;
-			//}
-		}
-	}
+    vec3 check_to;
+    if (point_is_contained)
+        check_to = contained_point - distance_changed * moveComponent.direction;
+
+    if (other_contained_in_chewy && !point_is_contained)
+    {
+        contained_point = entity->getCenter();
+        check_to = getCenter();
+        point_is_contained = true;
+    }
+
+    if (!point_is_contained)
+        return;
+
+    pair<glm::vec3, glm::vec3> collision_plane;
+
+
+    for (int i = 0; i < planes.size(); i++)
+    {
+        vec3 d;
+        int intersection = intersect3D_SegmentPlane(contained_point, check_to, planes.at(i), &d);
+        if (intersection)
+        {
+            collision_plane = planes.at(i);
+        }
+    }
+
+    vec3 cancel_direction = vec3(1.f, 1.f, 1.f);
+    if (collision_plane.second.x)
+        cancel_direction.x = 0.f;
+    if (collision_plane.second.y)
+        cancel_direction.y = 0.f;
+    if (collision_plane.second.z)
+        cancel_direction.z = 0.f;
+
+    position = last_position;
+    position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
 }
 
 /*void ChewyEntity::box_collision(std::shared_ptr<BoundingBox> bb)

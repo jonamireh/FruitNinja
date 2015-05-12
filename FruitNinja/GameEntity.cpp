@@ -83,9 +83,15 @@ shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
 	points.push_back(upper_bound);
 	points.push_back(vec3(upper_bound.x, upper_bound.y, lower_bound.z));
 	points.push_back(vec3(upper_bound.x, lower_bound.y, upper_bound.z));
+    points.push_back(vec3(lower_bound.x, upper_bound.y, upper_bound.z));
 
 	vector<vec3> transformed_points;
+
+    // Connor added this to try to get the outer box for chewy without rotations
+    vec3 saved_rotation_values = rotations;
+    rotations = vec3(0.f);
 	mat4 model = getModelMat();
+    rotations = saved_rotation_values;
 	
 	for (int i = 0; i < points.size(); i++)
 	{
