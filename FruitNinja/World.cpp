@@ -58,7 +58,7 @@ void World::init()
     chewy = std::make_shared<ChewyEntity>(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera);
     // chewy bounding box mesh
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
-    chewy->largestBB = chewy->getOuterBoundingBox();
+    chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera))->getOuterBoundingBox();
     chewy->sebInit();
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
