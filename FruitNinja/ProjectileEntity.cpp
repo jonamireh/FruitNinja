@@ -5,7 +5,9 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include "LightEntity.h"
 
-ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>()), shot(false)
+#define ARROW_LIFE_SPAN 10.0
+
+ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>()), shot(false), timeLeft(5.0f)
 {
 }
 
@@ -16,8 +18,8 @@ ProjectileEntity::~ProjectileEntity()
 
 
 
-ProjectileEntity::ProjectileEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh,
-	std::shared_ptr<GameEntity> owner, std::shared_ptr<Camera> camera) : GameEntity(position, mesh), owner(owner), movement(*this, camera)
+ProjectileEntity::ProjectileEntity(std::shared_ptr<MeshSet> mesh,
+	std::shared_ptr<Camera> camera) : GameEntity(glm::vec3(0, 0, 0), mesh), movement(*this, camera), shot(false), timeLeft(ARROW_LIFE_SPAN)
 {
 
 }
