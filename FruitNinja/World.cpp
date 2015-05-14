@@ -232,7 +232,8 @@ void World::draw()
 	}
 
 	shared_ptr<DebugCamera> c_test = dynamic_pointer_cast<DebugCamera>(camera);
-	vector<shared_ptr<GameEntity>> in_view;
+	vector<shared_ptr<GameEntity>> in_view = entities;
+	/*
     if (c_test != nullptr)
     {
         in_view = get_objects_in_view(entities, camera->getViewMatrix());
@@ -240,8 +241,7 @@ void World::draw()
 	else
 	{
 		in_view = get_objects_in_view(entities, camera->getViewMatrix());
-
-	}
+	}*/
 	glUseProgram(0);
 
 

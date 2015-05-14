@@ -124,6 +124,16 @@
     <ClCompile Include="DirLightShader.cpp">
       <Filter>DeferredShader</Filter>
     </ClCompile>
+    <ClCompile Include="GuardPathingComponent.cpp" />
+    <ClCompile Include="ShadowMapBuffer.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapCamera.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapShader.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -249,6 +259,16 @@
     <ClInclude Include="DirLightShader.h">
       <Filter>DeferredShader</Filter>
     </ClInclude>
+    <ClInclude Include="GuardPathingComponent.h" />
+    <ClInclude Include="ShadowMapBuffer.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapCamera.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapShader.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -295,6 +315,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="StencilFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shadowMapVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shadowMapFrag.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

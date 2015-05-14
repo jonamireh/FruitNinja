@@ -79,6 +79,8 @@
     <None Include="phongFrag.glsl" />
     <None Include="phongVert.glsl" />
     <None Include="pointLightFrag.glsl" />
+    <None Include="shadowMapFrag.glsl" />
+    <None Include="shadowMapVert.glsl" />
     <None Include="simpleFrag.glsl" />
     <None Include="simpleVert.glsl" />
     <None Include="StencilFrag.glsl" />
@@ -100,6 +102,9 @@
     <ClCompile Include="GuardPathingComponent.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightEntity.cpp" />
+    <ClCompile Include="ShadowMapBuffer.cpp" />
+    <ClCompile Include="ShadowMapCamera.cpp" />
+    <ClCompile Include="ShadowMapShader.cpp" />
     <ClCompile Include="SimpleTextureShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="TestSphere.cpp" />
@@ -144,6 +149,9 @@
     <ClInclude Include="GuardPathingComponent.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightEntity.h" />
+    <ClInclude Include="ShadowMapBuffer.h" />
+    <ClInclude Include="ShadowMapCamera.h" />
+    <ClInclude Include="ShadowMapShader.h" />
     <ClInclude Include="SimpleTextureShader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="TestSphere.h" />

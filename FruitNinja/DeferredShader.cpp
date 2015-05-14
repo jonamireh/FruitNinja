@@ -5,8 +5,6 @@
 using namespace glm;
 using namespace std;
 
-
-
 DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox)
 	: Shader(vertShader, fragShader), skybox(skybox), gbuffer(), skyShader("simpleVert.glsl", "simpleFrag.glsl"),
 	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred)

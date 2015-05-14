@@ -3,6 +3,7 @@
 #include "Shader.h"		
 #include "StencilShader.h"
 #include "DirLightShader.h"
+#include "ShadowMapShader.h"
 
 class DeferredRenderer : public Shader
 {
@@ -16,4 +17,5 @@ private:
 	GBuffer* gbuffer;
 	StencilShader stencilShader;
 	DirLightShader dirLightShader;
+	ShadowMapShader shadowMapShader;
 };
