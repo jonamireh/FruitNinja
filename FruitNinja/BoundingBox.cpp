@@ -35,7 +35,6 @@ shared_ptr<vector<pair<vec3, vec3>>> BoundingBox::get_line_segments()
     toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, lower_bound.z)));
 
     return toReturn;
-
 }
 
 vector<pair<vec3, vec3>> BoundingBox::getPlanes()

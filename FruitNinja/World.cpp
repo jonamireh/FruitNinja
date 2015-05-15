@@ -60,6 +60,7 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
     chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera))->getOuterBoundingBox();
     chewy->sebInit();
+    chewy->collision_response = true;
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
@@ -68,6 +69,10 @@ void World::init()
 		vec3(3.0, 0.0, 45.0), vec3(50.0, 0.0, 60.0), vec3(90.0, 0.0, 20.0) }, 15.f));
 	shared_ptr<GameEntity> guard2(new GuardEntity(vec3(-103.0, 0.0, -35.0), meshes.at("guard"), { vec3(-103.0, 0.0, -35.0), vec3(-60.0, 0.0, -25.0),
 		vec3(-12.0, 0.0, -25.0), vec3(35.0, 0.0, -25.0), vec3(45.0, 0.0, -35.0), vec3(25.0, 0, -35.0), vec3(-2.0,0 , -50.0) }, 30.f));
+
+    guard->collision_response = true;
+    guard1->collision_response = true;
+    guard2->collision_response = true;
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
 	//shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
@@ -201,7 +206,6 @@ void World::shootArrows()
 void World::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
 	glUseProgram(0);
 	static bool usePhong = false;

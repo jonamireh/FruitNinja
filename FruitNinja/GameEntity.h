@@ -8,6 +8,7 @@ class GameEntity
 {
     float radius;
 public:
+    bool collision_response = false;
 	std::shared_ptr<BoundingBox> largestBB;
     GameEntity() {}
 	GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh) : position(position), mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f)), should_draw(true)

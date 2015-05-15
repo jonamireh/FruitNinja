@@ -117,16 +117,12 @@ bool GameEntity::compare(std::shared_ptr<GameEntity> ge)
     std::shared_ptr<BoundingBox> my_bb = getTransformedOuterBoundingBox();
     std::shared_ptr<BoundingBox> their_bb = ge->getTransformedOuterBoundingBox();
 	
-	if (my_bb->upper_bound.x > their_bb->lower_bound.x &&
-			my_bb->lower_bound.x < their_bb->upper_bound.x &&
-			my_bb->upper_bound.y > their_bb->lower_bound.y &&
-			my_bb->lower_bound.y < their_bb->upper_bound.y &&
-			my_bb->upper_bound.z > their_bb->lower_bound.z &&
-			my_bb->lower_bound.z < their_bb->upper_bound.z)
-	{
-		return true;
-	}
-	return false;
+    return (my_bb->upper_bound.x > their_bb->lower_bound.x &&
+        my_bb->lower_bound.x < their_bb->upper_bound.x &&
+        my_bb->upper_bound.y > their_bb->lower_bound.y &&
+        my_bb->lower_bound.y < their_bb->upper_bound.y &&
+        my_bb->upper_bound.z > their_bb->lower_bound.z &&
+        my_bb->lower_bound.z < their_bb->upper_bound.z);
 }
 
 void GameEntity::collision(std::shared_ptr<GameEntity> bb)
