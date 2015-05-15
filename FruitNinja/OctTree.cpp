@@ -55,27 +55,20 @@ void OctTree::branch()
 
     for (int i = 0; i < 8; i++)
     {
+        bool has_collision_response = false;
         vector<shared_ptr<GameEntity>> subset_objects;
-        int k = 0;
         for (int j = 0; j < objects.size(); j++)
         {
-            //timer.start_timing("contains check");
             if (subset_voxels.at(i).contains(objects.at(j)->getCenter(), objects.at(j)->getRadius()))
             {
-                //timer.start_timing("pushback check");
-
-                k++;
-
+                if (objects.at(j)->collision_response)
+                    has_collision_response = true;
                 subset_objects.push_back(objects.at(j));
-                //cout << timer.end_timing() << endl;
             }
-            //cout << timer.end_timing() << endl;
         }
-        //cout << k << endl;
 
-        if (subset_objects.size() > 1)
+        if (subset_objects.size() > 1 && has_collision_response)
         {
-            //children.push_back(OctTree(subset_voxels.at(i), subset_objects, root));
             OctTree(subset_voxels.at(i), subset_objects, root);
         }
     }

@@ -63,82 +63,86 @@ int intersect3D_SegmentPlane(vec3 sP0, vec3 sP1, pair<glm::vec3, glm::vec3> Pn, 
 
 void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
 {
-	shared_ptr<BoundingBox> bb = entity->getTransformedOuterBoundingBox();
-	vector<pair<glm::vec3, glm::vec3>> planes = bb->getPlanes();
+    shared_ptr<BoundingBox> chewy_bounding_box = getTransformedOuterBoundingBox();
+    shared_ptr<BoundingBox> other_bounding_box = entity->getTransformedOuterBoundingBox();
 
-    vector<vec3> chewy_points = getTransformedOuterBoundingBox()->get_points();
-    vector<vec3> other_entity_points = bb->get_points();
+    shared_ptr<BoundingBox> smaller_bounding_box;
+    shared_ptr<BoundingBox> larger_bounding_box;
+
+    vector<vec3> smaller_box_points;
+    vector<vec3> larger_box_points;
+
     vec3 contained_point;
-    float closest_distance = 100.f;
+    vec3 check_to_point;
     bool point_is_contained = false;
+    bool falling = true;
+    float direction_correction = 1.f;
 
-    for (int i = 0; i < chewy_points.size(); i++)
+    pair<vec3, vec3> collision_plane;
+    vector<pair<glm::vec3, glm::vec3>> larger_box_planes;
+
+    float distance_from_last_position = glm::distance(last_position, position);
+
+    bool bounding_boxes_are_colliding = false;
+    float closest_distance = FLT_MAX;
+
+    if (glm::distance(chewy_bounding_box->upper_bound, chewy_bounding_box->lower_bound) < glm::distance(other_bounding_box->upper_bound, other_bounding_box->lower_bound))
     {
-        if (bb->contains_point(chewy_points.at(i)))
+        smaller_bounding_box = chewy_bounding_box;
+        larger_bounding_box = other_bounding_box;
+    }
+    else
+    {
+        smaller_bounding_box = other_bounding_box;
+        larger_bounding_box = chewy_bounding_box;
+        direction_correction = -1.f;
+    }
+
+    smaller_box_points = smaller_bounding_box->get_points();
+    larger_box_points = larger_bounding_box->get_points();
+    larger_box_planes = larger_bounding_box->getPlanes();
+
+    for (int i = 0; i < smaller_box_points.size(); i++)
+    {
+        if (larger_bounding_box->contains_point(smaller_box_points.at(i)))
         {
-            float check_distance = glm::distance((bb->lower_bound + bb->upper_bound) / 2.f, chewy_points.at(i));
+            float check_distance = glm::distance((larger_bounding_box->lower_bound + larger_bounding_box->upper_bound) / 2.f, smaller_box_points.at(i));
             if (check_distance < closest_distance)
             {
-                contained_point = chewy_points.at(i);
+                contained_point = smaller_box_points.at(i);
+                check_to_point = contained_point - distance_from_last_position * moveComponent.direction * direction_correction;
                 closest_distance = check_distance;
             }
             point_is_contained = true;
         }
     }
 
-    bool other_contained_in_chewy = false;
-    for (int i = 0; i < other_entity_points.size(); i++)
-    {
-        if (getTransformedOuterBoundingBox()->contains_point(other_entity_points.at(i)))
-        {
-            other_contained_in_chewy = true;
-        }
-    }
-
-    float distance_changed = glm::distance(last_position, position);
-
-    vec3 check_to;
-    if (point_is_contained)
-    {
-        check_to = contained_point - distance_changed * moveComponent.direction;
-        //check_to = 
-    }
-    else if (other_contained_in_chewy)
-    {
-        contained_point = entity->getCenter();
-        check_to = getCenter();
-        point_is_contained = true;
-    }
-
+    // if the bounding boxes do not intersect then leave this method
     if (!point_is_contained)
         return;
 
-    pair<glm::vec3, glm::vec3> collision_plane;
-
-    float chewy_height = getTransformedOuterBoundingBox()->upper_bound.y - getTransformedOuterBoundingBox()->lower_bound.y;
-    for (int i = 0; i < planes.size(); i++)
+    for (int i = 0; i < smaller_box_points.size(); i++)
     {
-        vec3 d;
-        int intersection = intersect3D_SegmentPlane(contained_point, check_to, planes.at(i), &d);
-        if (intersection)
-        {
-            collision_plane = planes.at(i);
-        }
-    }
-
-
-    bool falling = true;
-    for (int i = 0; i < chewy_points.size(); i++)
-    {
-        for (int j = 0; j < planes.size(); j++)
+        for (int j = 0; j < larger_box_planes.size(); j++)
         {
             vec3 d;
-            int intersection = intersect3D_SegmentPlane(chewy_points.at(i), chewy_points.at(i) - velocity * seconds_passed, planes.at(j), &d);
-            //int intersection = intersect3D_SegmentPlane(chewy_points.at(i) - vec3(0.f, 1.f, 0.f) , chewy_points.at(i) + vec3(0.f, 10.f, 0.f) * seconds_passed, planes.at(j), &d);
+            int intersection = intersect3D_SegmentPlane(smaller_box_points.at(i), smaller_box_points.at(i) - velocity * direction_correction, larger_box_planes.at(j), &d);
             if (intersection)
             {
                 falling = false;
             }
+        }
+    }
+
+    // check for xz collisions
+    for (int i = 0; i < larger_box_planes.size(); i++)
+    {
+        vec3 d;
+        int intersection = intersect3D_SegmentPlane(contained_point, check_to_point, larger_box_planes.at(i), &d);
+        if (intersection)
+        {
+            collision_plane = larger_box_planes.at(i);
+            falling = true; // may cause issues when platforming, re-evaluate if issues arise.
         }
     }
 
@@ -150,7 +154,7 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
 
     if (!falling)
         position.y = last_position.y;
-    
+       
     _falling = falling;
 
     position.x = last_position.x;
