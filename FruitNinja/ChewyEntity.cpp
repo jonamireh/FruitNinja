@@ -121,40 +121,43 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
     if (!point_is_contained)
         return;
 
+    for (int i = 0; i < smaller_box_points.size(); i++)
+    {
+        for (int j = 0; j < larger_box_planes.size(); j++)
+        {
+            vec3 d;
+            int intersection = intersect3D_SegmentPlane(smaller_box_points.at(i), smaller_box_points.at(i) - velocity * direction_correction, larger_box_planes.at(j), &d);
+            if (intersection)
+            {
+                falling = false;
+            }
+        }
+    }
+
     // check for xz collisions
     for (int i = 0; i < larger_box_planes.size(); i++)
     {
         vec3 d;
         int intersection = intersect3D_SegmentPlane(contained_point, check_to_point, larger_box_planes.at(i), &d);
         if (intersection)
+        {
             collision_plane = larger_box_planes.at(i);
+            falling = true; // may cause issues when platforming, re-evaluate if issues arise.
+        }
     }
 
-       for (int i = 0; i < smaller_box_points.size(); i++)
-       {
-           for (int j = 0; j < larger_box_planes.size(); j++)
-           {
-               vec3 d;
-               int intersection = intersect3D_SegmentPlane(smaller_box_points.at(i), smaller_box_points.at(i) - velocity * direction_correction, larger_box_planes.at(j), &d);
-               if (intersection)
-               {
-                   falling = false;
-               }
-           }
-       }
+    vec3 cancel_direction = vec3(1.f, 1.f, 1.f);
+    if (collision_plane.second.x)
+        cancel_direction.x = 0.f;
+    if (collision_plane.second.z)
+        cancel_direction.z = 0.f;
 
-       vec3 cancel_direction = vec3(1.f, 1.f, 1.f);
-       if (collision_plane.second.x)
-           cancel_direction.x = 0.f;
-       if (collision_plane.second.z)
-           cancel_direction.z = 0.f;
-
-       if (!falling)
-           position.y = last_position.y;
+    if (!falling)
+        position.y = last_position.y;
        
-       _falling = falling;
+    _falling = falling;
 
-       position.x = last_position.x;
-       position.z = last_position.z;
-       position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
+    position.x = last_position.x;
+    position.z = last_position.z;
+    position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
 }
