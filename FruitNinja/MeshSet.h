@@ -20,7 +20,7 @@ struct BoneInfo
 class MeshSet
 {
 public:
-	MeshSet(std::string filename);
+	MeshSet(std::string filename, GLuint texInterpolation=GL_LINEAR, GLuint texWrap=GL_REPEAT);
 	void processBones(aiNode* node);
 	void processAnimations();
 	~MeshSet();
@@ -30,8 +30,8 @@ public:
 	aiNode *bone_tree;
 	aiMatrix4x4 inverseMat;
 private:
-	void recursiveProcess(aiNode* node, const aiScene* scene);
-	void processMesh(aiMesh* mesh, const aiScene* scene);
+	void recursiveProcess(aiNode* node, const aiScene* scene, GLuint texInterpolation, GLuint texWrap);
+	void processMesh(aiMesh* mesh, const aiScene* scene, GLuint texInterpolation, GLuint texWrap);
 	unsigned int loadTexture(const char* filename, int width, int height);
 	std::vector<Mesh*> meshes;
 	std::vector<aiAnimation> animations;
