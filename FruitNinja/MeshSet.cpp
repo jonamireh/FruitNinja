@@ -75,8 +75,7 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 			tempStr += str.C_Str();
 			printf("Using texture %s...\n", str.C_Str());
 			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(tempStr);
-
-			tdogl::Texture* tex = new tdogl::Texture(bmp);
+			tdogl::Texture* tex = new tdogl::Texture(bmp, GL_LINEAR, GL_REPEAT);
 			tmp.id = tex->object();
 			//delete tex;//possible memory leak
 			//-------------------------------------
@@ -157,7 +156,7 @@ GLuint MeshSet::loadTexture(const char* filename, int width, int height) {
 }
 
 MeshSet::MeshSet(std::string filename) {
-	const aiScene* scene = aiImportFile(filename.c_str(), aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
+	const aiScene* scene = aiImportFile(filename.c_str(), aiProcess_GenNormals | aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_FlipUVs /*| aiProcess_LimitBoneWeights*/ | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
 	if (!scene) {
 		std::cout << aiGetErrorString();
 		return;
