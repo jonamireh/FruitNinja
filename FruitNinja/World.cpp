@@ -177,7 +177,7 @@ void World::init()
 
 shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
-flame = std::make_shared<Flame>(vec3(-30.0, 3.0, 20), 0.85f, 0.3f);
+flame = std::make_shared<Flame>(vec3(-30.0, 2.0, 20), 0.85f, 0.3f);
 shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox, flame));
 shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
 

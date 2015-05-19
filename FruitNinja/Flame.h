@@ -8,7 +8,6 @@
 #include "GLSL.h"
 #include <vector>
 
-
 #define NUM_PARTICLES 100000
 #define TURNING_POINT (8 * M_PI) / 9
 
@@ -17,8 +16,10 @@ class Flame
 public:
 	Flame(glm::vec3 origin, float height, float max_radius);
 	GLuint VAO;
-	GLuint VBO;
+	GLuint pVBO;
+	GLuint cVBO;
 	std::vector<float> pos;
+	std::vector<float> col;
 
 private:
 	float height;
