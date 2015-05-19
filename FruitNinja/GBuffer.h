@@ -21,6 +21,7 @@ public:
 	bool Init(unsigned int WindowWidth, unsigned int WindowHeight);
 
 	void BindForReading();
+	void BindForWriting();
 	void BindAllForReading();
 	void SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
 

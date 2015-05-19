@@ -51,15 +51,43 @@ void ShadowMapBuffer::bind_for_writing(GLenum cube_face)
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, cube_face, m_shadowMap, 0);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-
-	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (status != GL_FRAMEBUFFER_COMPLETE) {
-		printf("FB error, status: 0x%x\n", status);
-	}
 }
 
 void ShadowMapBuffer::bind_for_reading(GLenum texture_unit)
 {
 	glActiveTexture(texture_unit);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_shadowMap);
+}
+
+void ShadowMapBuffer::bind_for_reading_fb(GLenum cube_face)
+{
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, cube_face, m_shadowMap, 0);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+}
+
+void ShadowMapBuffer::dump_to_screen()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	bind_for_reading_fb(GL_TEXTURE_CUBE_MAP_POSITIVE_X);
+	glBlitFramebuffer(0, 0, 1024, 1024,
+		0, 0, 299, 299, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	bind_for_reading_fb(GL_TEXTURE_CUBE_MAP_NEGATIVE_X);
+	glBlitFramebuffer(0, 0, 1024, 1024,
+		300, 0, 599, 299, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	bind_for_reading_fb(GL_TEXTURE_CUBE_MAP_POSITIVE_Y);
+	glBlitFramebuffer(0, 0, 1024, 1024,
+		600, 0, 899, 299, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	bind_for_reading_fb(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y);
+	glBlitFramebuffer(0, 0, 1024, 1024,
+		0, 300, 299, 599, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	bind_for_reading_fb(GL_TEXTURE_CUBE_MAP_POSITIVE_Z);
+	glBlitFramebuffer(0, 0, 1024, 1024,
+		300, 300, 599, 599, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	bind_for_reading_fb(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z);
+	glBlitFramebuffer(0, 0, 1024, 1024,
+		600, 300, 899, 599, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }

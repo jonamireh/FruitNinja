@@ -82,11 +82,13 @@ void GBuffer::BindAllForReading()
 
 void GBuffer::BindForReading()
 {
-
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
-
 }
 
+void GBuffer::BindForWriting()
+{
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+}
 
 void GBuffer::SetReadBuffer(GBUFFER_TEXTURE_TYPE TextureType)
 {

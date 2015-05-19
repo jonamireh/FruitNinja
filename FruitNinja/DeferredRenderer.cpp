@@ -3,9 +3,10 @@
 
 using namespace glm;
 
-DeferredRenderer::DeferredRenderer(std::string vertShader, std::string fragShader, GBuffer* gbuffer)
-	: Shader(vertShader, fragShader), gbuffer(gbuffer), stencilShader("StencilVert.glsl", "StencilFrag.glsl"), dirLightShader(gbuffer),
-	shadowMapShader("shadowMapVert.glsl", "shadowMapFrag.glsl")
+DeferredRenderer::DeferredRenderer(std::string vertShader, std::string fragShader, GBuffer* gbuffer, ShadowMapBuffer *shadowMapBuf)
+	: Shader(vertShader, fragShader), gbuffer(gbuffer), shadowMapBuffer(shadowMapBuf),
+	stencilShader("StencilVert.glsl", "StencilFrag.glsl"), dirLightShader(gbuffer),
+	shadowMapShader("shadowMapVert.glsl", "shadowMapFrag.glsl", shadowMapBuf)
 {
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 }
@@ -19,6 +20,7 @@ DeferredRenderer::~DeferredRenderer()
 void DeferredRenderer::pointLightPass(std::shared_ptr<Camera> camera, Light* light)
 {
 	gbuffer->BindForLightPass();
+	shadowMapBuffer->bind_for_reading(GL_TEXTURE4);
 
 	glUseProgram(getProgramID());
 
@@ -37,6 +39,7 @@ void DeferredRenderer::pointLightPass(std::shared_ptr<Camera> camera, Light* lig
 	glUniform1i(getUniformHandle("posMap"), GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
 	glUniform1i(getUniformHandle("colMap"), GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
 	glUniform1i(getUniformHandle("norMap"), GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+	glUniform1i(getUniformHandle("shadowMap"), 4);
 
 	vec3 eye = camera->cameraPosition;
 	vec3 light_pos = light->pos;
@@ -71,14 +74,15 @@ void DeferredRenderer::draw(std::shared_ptr<Camera> camera, std::vector<std::sha
 	
 	for (int i = 0; i < lights.size(); i++) {
 		shadowMapShader.shadowMapPass(lights[i], ents);
-		gbuffer->StartFrame();
+		shadowMapBuffer->dump_to_screen();
+		/*gbuffer->BindForWriting();
 		glEnable(GL_STENCIL_TEST);
 		stencilShader.stencilPass(camera, gbuffer, lights[i]);
 		pointLightPass(camera, lights[i]);
-		glDisable(GL_STENCIL_TEST);
+		glDisable(GL_STENCIL_TEST);*/
 	}
 
-	dirLightShader.pass(camera);
+	//dirLightShader.pass(camera);
 }
 void DeferredRenderer::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)
 {

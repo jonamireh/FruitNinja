@@ -4,6 +4,8 @@ uniform sampler2D posMap;
 uniform sampler2D norMap;
 uniform sampler2D colMap;
 
+uniform samplerCube shadowMap;
+
 uniform vec2 uSize;
 uniform vec3 uEye;
 uniform vec3 uLightPos;
@@ -48,6 +50,12 @@ vec4 calcPointLight(vec3 worldPos, vec3 normal)
     vec3 lightDir = worldPos - uLightPos;
     float distance = length(lightDir);
     lightDir = normalize(lightDir);
+
+	float sampledDistance = texture(shadowMap, lightDir).r;
+
+	if (distance > sampledDistance + .001) {
+		return vec4(0.0, 0.0, 0.0, 1.0);
+	}
 
     vec4 color = calcLightInternal(lightDir, worldPos, normal);
 

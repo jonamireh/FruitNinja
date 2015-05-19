@@ -100,7 +100,8 @@ void World::init()
 	cBarrel2->scale = 3.0f;
 	shared_ptr <GameEntity> cBarrel3(new ObstacleEntity(vec3(-58.0, 0.0, 10.0), meshes.at("closedBarrel")));
 	cBarrel3->scale = 3.0f;
-
+	shared_ptr <GameEntity> cBarrel4(new ObstacleEntity(vec3(30, 5.0, 0.0), meshes.at("closedBarrel")));
+	cBarrel4->scale = 3.0f;
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
     shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(30.0, 0.0, 40.0), meshes.at("openBarrel")));
@@ -145,17 +146,18 @@ void World::init()
 	entities.push_back(guard1);
 	entities.push_back(guard2);
 
-    entities.push_back(lantern);
-	entities.push_back(lantern2);
+    //entities.push_back(lantern);
+	//entities.push_back(lantern2);
 	entities.push_back(lantern3);
-	entities.push_back(lantern4);
-	entities.push_back(lantern5);
+	//entities.push_back(lantern4);
+	//entities.push_back(lantern5);
 
     entities.push_back(lantern_pole);
     entities.push_back(oBarrel);
     entities.push_back(cBarrel);
 	entities.push_back(cBarrel2);
 	entities.push_back(cBarrel3);
+	entities.push_back(cBarrel4);
 
     entities.push_back(box1);
     entities.push_back(box2);

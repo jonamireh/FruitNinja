@@ -7,9 +7,10 @@ using namespace std;
 
 DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox)
 	: Shader(vertShader, fragShader), skybox(skybox), gbuffer(), skyShader("simpleVert.glsl", "simpleFrag.glsl"),
-	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred)
+	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer, &shadowMapBuffer), disp_mode(deferred)
 {
 	gbuffer.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
+	shadowMapBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 	glBindAttribLocation(getProgramID(), 1, "aNormal");
 }
@@ -95,8 +96,8 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 	else {
 		//startLightPasses();
 		renderer.draw(camera, ents, lights);
-		skyboxPass(camera);
-		finalPass();
+		//skyboxPass(camera);
+		//finalPass();
 	}
 		
 	if (keys[GLFW_KEY_4])

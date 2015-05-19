@@ -25,6 +25,7 @@ private:
 	void geomPass(glm::mat4& view_mat, std::vector<std::shared_ptr<GameEntity>> ents);
 	void lightPass();
 	GBuffer gbuffer;
+	ShadowMapBuffer shadowMapBuffer;
 	void startLightPasses();
 	void finalPass();
 	void skyboxPass(std::shared_ptr<Camera> camera);
