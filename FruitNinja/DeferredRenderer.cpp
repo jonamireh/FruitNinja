@@ -70,7 +70,8 @@ void DeferredRenderer::draw(std::shared_ptr<Camera> camera, std::vector<std::sha
 {
 	
 	for (int i = 0; i < lights.size(); i++) {
-		//shadowMapShader.shadowMapPass(lights[i], ents);
+		shadowMapShader.shadowMapPass(lights[i], ents);
+		gbuffer->StartFrame();
 		glEnable(GL_STENCIL_TEST);
 		stencilShader.stencilPass(camera, gbuffer, lights[i]);
 		pointLightPass(camera, lights[i]);

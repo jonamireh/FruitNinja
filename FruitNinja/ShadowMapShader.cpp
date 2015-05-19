@@ -31,6 +31,7 @@ void ShadowMapShader::shadowMapPass(Light* light, std::vector<std::shared_ptr<Ga
 {
 	glUseProgram(getProgramID());
 
+	glDepthMask(GL_TRUE);
 	glCullFace(GL_FRONT);
 	glClearColor(FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX);
 
@@ -40,21 +41,21 @@ void ShadowMapShader::shadowMapPass(Light* light, std::vector<std::shared_ptr<Ga
 		ShadowMapCamera camera(light->pos, gCameraDirections[i].target, gCameraDirections[i].up);
 		mat4 proj = perspective((float)radians(90.0f), 1.0f, 1.0f, 100.0f);
 		mat4 view_mat = camera.getViewMatrix();
-		check_gl_error("Test-1");
+		
 		glUniform3f(getUniformHandle("uLightWorldPos"), light->pos.x, light->pos.x, light->pos.x);
 		glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
 		glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(proj));
-		check_gl_error("Test0");
+		
 		for (int i = 0; i < ents.size(); i++) {
 			std::vector<Mesh*> meshes = ents[i]->mesh->getMeshes();
-			check_gl_error("Test1");
+			
 			glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
-			check_gl_error("Test2");
+			
 			for (int i = 0; i < meshes.size(); i++)
 			{
 				Mesh* mesh = meshes.at(i);
 				glBindVertexArray(mesh->VAO);
-				check_gl_error("Test3");
+				
 				if (mesh->bones.size() > 0)
 				{
 					glUniform1i(getUniformHandle("uBoneFlag"), 1);
@@ -64,9 +65,8 @@ void ShadowMapShader::shadowMapPass(Light* light, std::vector<std::shared_ptr<Ga
 				{
 					glUniform1i(getUniformHandle("uBoneFlag"), 0);
 				}
-				check_gl_error("Test4");
+				
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
-				check_gl_error("Test5");
 				glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
 				check_gl_error("Mesh.draw after texture");
@@ -75,12 +75,13 @@ void ShadowMapShader::shadowMapPass(Light* light, std::vector<std::shared_ptr<Ga
 	}
 
 	glCullFace(GL_BACK);
+	glDepthMask(GL_FALSE);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glClearColor(0, 0, 0, 0);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClearColor(0, 0, 0, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glUseProgram(0);
 }
 
