@@ -7,9 +7,9 @@ using namespace std;
 
 
 
-DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox)
+DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox, std::shared_ptr<Flame> flame)
 	: Shader(vertShader, fragShader), skybox(skybox), gbuffer(), skyShader("simpleVert.glsl", "simpleFrag.glsl"),
-	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred)
+	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred), flame(flame), flameShader("flameVert.glsl", "flameFrag.glsl")
 {
 	gbuffer.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
@@ -98,6 +98,7 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 		//startLightPasses();
 		renderer.draw(camera, ents, lights);
 		skyboxPass(camera);
+		particlePass(camera);
 		finalPass();
 	}
 		
@@ -115,6 +116,15 @@ void DeferredShader::skyboxPass(std::shared_ptr<Camera> camera)
 	glDisable(GL_CULL_FACE);
 
 	skyShader.draw(camera->getViewMatrix(), skybox);
+}
+
+void DeferredShader::particlePass(shared_ptr<Camera> camera)
+{
+	glUseProgram(flameShader.getProgramID());
+
+	glEnable(GL_DEPTH_TEST);
+
+	flameShader.draw(camera->getViewMatrix(), flame);
 }
 
 void DeferredShader::finalPass()

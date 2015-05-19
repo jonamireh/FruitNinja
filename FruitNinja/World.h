@@ -11,6 +11,7 @@
 #include "PlayerCamera.h"
 #include "Skybox.h"
 #include "DebugShader.h"
+#include "Flame.h"
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720	
@@ -52,5 +53,6 @@ private:
 	void init();
 	void shootArrows();
     std::shared_ptr<GameEntity> chewy;
+	std::shared_ptr<Flame> flame;
 };
 

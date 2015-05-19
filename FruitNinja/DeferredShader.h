@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "DeferredRenderer.h"
 #include "SimpleTextureShader.h"
+#include "FlameParticleShader.h"
 
 //#include <glm/gtc/type_ptr.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
@@ -16,7 +17,8 @@ enum DisplayMode
 class DeferredShader : public Shader
 {
 public:
-	DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox);
+	DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox, std::shared_ptr<Flame> flame);
+	void particlePass(shared_ptr<Camera> shared_ptr);
 	virtual void draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights);
 	void draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity);
 
@@ -30,6 +32,8 @@ private:
 	void skyboxPass(std::shared_ptr<Camera> camera);
 	std::shared_ptr<Skybox> skybox;
 	SimpleTextureShader skyShader;
+	FlameParticleShader flameShader;
+	std::shared_ptr<Flame> flame;
 
 	DeferredRenderer renderer;
 	DisplayMode disp_mode;

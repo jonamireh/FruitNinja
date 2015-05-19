@@ -124,6 +124,13 @@
     <ClCompile Include="DirLightShader.cpp">
       <Filter>DeferredShader</Filter>
     </ClCompile>
+    <ClCompile Include="GuardPathingComponent.cpp" />
+    <ClCompile Include="FlameParticleShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Flame.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -249,6 +256,13 @@
     <ClInclude Include="DirLightShader.h">
       <Filter>DeferredShader</Filter>
     </ClInclude>
+    <ClInclude Include="GuardPathingComponent.h" />
+    <ClInclude Include="FlameParticleShader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Flame.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -295,6 +309,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="StencilFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="flameFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="flameVert.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
