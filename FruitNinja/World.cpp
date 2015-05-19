@@ -119,7 +119,7 @@ void World::init()
     box2->scale = 3.0f;
     shared_ptr <GameEntity> box3(new ObstacleEntity(vec3(50.0, 14.0, 20.0), meshes.at("box")));
     box3->scale = 3.0f;
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->scale = 750.f;
 

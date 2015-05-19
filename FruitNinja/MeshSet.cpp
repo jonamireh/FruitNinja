@@ -12,20 +12,20 @@
 #include "World.h"
 #include <fstream>
 
-void MeshSet::recursiveProcess(aiNode *node, const aiScene *scene) {
+void MeshSet::recursiveProcess(aiNode *node, const aiScene *scene, GLuint texInterpolation, GLuint texWrap) {
 	//process
 	for (int i = 0; i < node->mNumMeshes; i++) {
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		processMesh(mesh, scene);
+		processMesh(mesh, scene, texInterpolation, texWrap);
 	}
 
 	//recursion
 	for (int i = 0; i < node->mNumChildren; i++) {
-		recursiveProcess(node->mChildren[i], scene);
+		recursiveProcess(node->mChildren[i], scene, texInterpolation, texWrap);
 	}
 }
 
-void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
+void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene, GLuint texInterpolation, GLuint texWrap) {
 	std::vector<glm::vec3> verts;
 	std::vector<glm::vec3> normals;
 	std::vector<unsigned int> indices;
@@ -75,8 +75,7 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene) {
 			tempStr += str.C_Str();
 			printf("Using texture %s...\n", str.C_Str());
 			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(tempStr);
-
-			tdogl::Texture* tex = new tdogl::Texture(bmp);
+			tdogl::Texture* tex = new tdogl::Texture(bmp, texInterpolation, texWrap);
 			tmp.id = tex->object();
 			//delete tex;//possible memory leak
 			//-------------------------------------
@@ -156,8 +155,8 @@ GLuint MeshSet::loadTexture(const char* filename, int width, int height) {
 	return texture;
 }
 
-MeshSet::MeshSet(std::string filename) {
-	const aiScene* scene = aiImportFile(filename.c_str(), aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
+MeshSet::MeshSet(std::string filename, GLuint texInterpolation, GLuint texWrap) {
+	const aiScene* scene = aiImportFile(filename.c_str(), aiProcess_GenNormals | aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_FlipUVs /*| aiProcess_LimitBoneWeights*/ | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
 	if (!scene) {
 		std::cout << aiGetErrorString();
 		return;
@@ -171,7 +170,7 @@ MeshSet::MeshSet(std::string filename) {
 	inverseMat.Inverse();
 	processBones(bone_tree);
 	processAnimations();
-	recursiveProcess(scene->mRootNode, scene);
+	recursiveProcess(scene->mRootNode, scene, texInterpolation, texWrap);
 }
 
 void MeshSet::processBones(aiNode* node)
