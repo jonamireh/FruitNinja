@@ -21,7 +21,6 @@
 #include <queue>
 #include "LightEntity.h"
 #include "ChewyEntity.h"
-#include "FlameParticleShader.h"
 
 using namespace std;
 using namespace glm;
@@ -173,16 +172,13 @@ void World::init()
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
-	flame = std::make_shared<Flame>(vec3(-30.0, 2.0, 20), 0.85f, 0.3f);
-	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox, flame));
+	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
 	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
 
 	shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
 
 	shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
-	shared_ptr<Shader> flameShader(new FlameParticleShader("flameVert.glsl", "flameFrag.glsl"));
-	shaders.insert(pair<string, shared_ptr<Shader>>("flameShader", flameShader));
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));

@@ -10,7 +10,6 @@ public:
 
 	GuardPathingComponent(std::vector<glm::vec3> control_points, float move_speed);
 
-	//glm::vec3 getPosition(float dt);
 	glm::vec3 getDirection();
 
 	void reverse();
