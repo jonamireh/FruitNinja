@@ -1,6 +1,8 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include "GameEntity.h"
 
-#define PI 3.14159
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -11,6 +13,14 @@
 using namespace glm;
 using namespace std;
 
+GameEntity::GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response) : position(position), mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f)),
+	collision_response(collision_response)
+{
+	sebInit();
+	list = SET_DRAW(list);
+	list = SET_OCTTREE(list);
+};
+
 
 vec3 GameEntity::turnAngle(vec3 cartesian) {
 	vec3 rot_angles(0, 0, 0);
@@ -18,9 +28,9 @@ vec3 GameEntity::turnAngle(vec3 cartesian) {
 	if (cartesian.x < 0)
 		rot_angles.y = -1.0f * atan(cartesian.z / cartesian.x);
 	else
-		rot_angles.y = atan(cartesian.z / -cartesian.x) + PI;
+		rot_angles.y = atan(cartesian.z / -cartesian.x) + M_PI;
 
-    rot_angles.y -= PI / 2.f;
+    rot_angles.y -= M_PI / 2.f;
 
 	return rot_angles;
 }

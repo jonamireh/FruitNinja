@@ -54,9 +54,11 @@ void World::init()
 	debug_camera = shared_ptr<Camera>(new DebugCamera());
     player_camera = shared_ptr<Camera>(new PlayerCamera());
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
+
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
     tower->scale = 30.0f;
+	tower->list = UNSET_OCTTREE((tower->list));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
     chewy = std::make_shared<ChewyEntity>(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera);
     // chewy bounding box mesh
@@ -66,7 +68,7 @@ void World::init()
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
-		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 10.f));
+		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 0.f));
 	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(-50.0, 0.0, 60.0), meshes.at("guard"), { vec3(-50.0, 0.0, 60.0), vec3(-25.0, 0.0, 45.0),
 		vec3(3.0, 0.0, 45.0), vec3(50.0, 0.0, 60.0), vec3(90.0, 0.0, 20.0) }, 15.f));
 	shared_ptr<GameEntity> guard2(new GuardEntity(vec3(-103.0, 0.0, -35.0), meshes.at("guard"), { vec3(-103.0, 0.0, -35.0), vec3(-60.0, 0.0, -25.0),
@@ -99,25 +101,33 @@ void World::init()
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
     shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(48.0, 0.0, 30.0), meshes.at("closedBarrel")));
     cBarrel->scale = 3.0f;
+	cBarrel->list = SET_HIDE((cBarrel->list));
 	shared_ptr <GameEntity> cBarrel2(new ObstacleEntity(vec3(-50.0, 0.0, -10.0), meshes.at("closedBarrel")));
 	cBarrel2->scale = 3.0f;
+	cBarrel2->list = SET_HIDE((cBarrel2->list));
 	shared_ptr <GameEntity> cBarrel3(new ObstacleEntity(vec3(-58.0, 0.0, 10.0), meshes.at("closedBarrel")));
 	cBarrel3->scale = 3.0f;
+	cBarrel2->list = SET_HIDE((cBarrel2->list));
 
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
     shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(30.0, 0.0, 40.0), meshes.at("openBarrel")));
     oBarrel->scale = 3.0f;
+	oBarrel->list = SET_HIDE((oBarrel->list));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
     shared_ptr <GameEntity> box1(new ObstacleEntity(vec3(50.0, 0.0, 20.0), meshes.at("box")));
     box1->scale = 3.0f;
+	box1->list = SET_HIDE((box1->list));
     shared_ptr <GameEntity> box2(new ObstacleEntity(vec3(50.0, 7.0, 20.0), meshes.at("box")));
     box2->scale = 3.0f;
+	box2->list = SET_HIDE((box2->list));
     shared_ptr <GameEntity> box3(new ObstacleEntity(vec3(50.0, 14.0, 20.0), meshes.at("box")));
     box3->scale = 3.0f;
+	box3->list = SET_HIDE((box3->list));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->scale = 750.f;
+	_skybox->list = UNSET_OCTTREE((_skybox->list));
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
 	shared_ptr <TestSphere> testSphere(new TestSphere(meshes.at("testsphere")));
@@ -257,7 +267,7 @@ void World::draw()
 		//even if lantern culled still need light from it
 		vector<Light*> lights;
 		for (int i = 0; i < entities.size(); i++) {
-			if (typeid(*entities[i]) == typeid(LightEntity) && entities[i]->should_draw) {
+			if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list)) {
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
 			}
@@ -269,14 +279,14 @@ void World::draw()
 					i--;
 				}
 			}*/
-			if (!entities[i]->should_draw) {
+			if (!SHOULD_DRAW(entities[i]->list)) {
 				entities.erase(entities.begin() + i);
 				i--;
 			}
 		}
 		for (int i = 0; i < in_view.size(); i++)
 		{
-			if (!in_view[i]->should_draw) {
+			if (!SHOULD_DRAW(entities[i]->list)) {
 				in_view.erase(in_view.begin() + i);
 				i--;
 			}
@@ -409,8 +419,7 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-    std::vector<shared_ptr<GameEntity>> v1(entities.begin() + 1, entities.end() );
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), v1, nullptr);
+	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
 	_skybox->update();

@@ -19,12 +19,13 @@ void ProjectileMovementComponent::update()
 		entity.rot[1] = glm::vec4(up2, 0);
 		entity.rot[2] = glm::vec4(look, 0);
 		entity.rot[3] = glm::vec4(0, 0, 0, 1);
-		entity.should_draw = true;
+		entity.list = SET_DRAW(entity.list);
 		entity.shot = true;
 	}
 	else {
 		entity.position += velocity * (float)seconds_passed;
 		entity.timeLeft -= seconds_passed;
-		if (entity.timeLeft < 0) entity.should_draw = false;
+		if (entity.timeLeft < 0) 
+			entity.list = UNSET_DRAW(entity.list);
 	}
 }

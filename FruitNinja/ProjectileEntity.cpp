@@ -42,7 +42,7 @@ void ProjectileEntity::collision(std::shared_ptr<GameEntity> entity)
 {
 	if (typeid(*entity) == typeid(LightEntity) || typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity))
 	{
-        if (entity->getTransformedOuterBoundingBox()->boxes_collide(*getTransformedOuterBoundingBox()))
-            entity->should_draw = false;
+		if (entity->getTransformedOuterBoundingBox()->boxes_collide(*getTransformedOuterBoundingBox()))
+			entity->list = UNSET_DRAW(entity->list);
 	}
 }
