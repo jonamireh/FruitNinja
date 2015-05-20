@@ -5,6 +5,8 @@
 
 class BoundingBox
 {
+private:
+	std::vector<glm::vec3> cache_points;
 public:
     glm::vec3 lower_bound;
     glm::vec3 upper_bound;

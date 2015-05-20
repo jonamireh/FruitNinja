@@ -108,16 +108,18 @@ float BoundingBox::getMaxWidth(float protrudingLength)
 
 vector<vec3> BoundingBox::get_points()
 {
-    vector<vec3> points;
-    points.push_back(lower_bound);
-    points.push_back(vec3(lower_bound.x, lower_bound.y, upper_bound.z));
-    points.push_back(vec3(lower_bound.x, upper_bound.y, lower_bound.z));
-    points.push_back(vec3(upper_bound.x, lower_bound.y, lower_bound.z));
-    points.push_back(upper_bound);
-    points.push_back(vec3(upper_bound.x, upper_bound.y, lower_bound.z));
-    points.push_back(vec3(upper_bound.x, lower_bound.y, upper_bound.z));
-    points.push_back(vec3(lower_bound.x, upper_bound.y, upper_bound.z));
-    return points;
+	if (cache_points.size() == 0)
+	{
+		cache_points.push_back(lower_bound);
+		cache_points.push_back(vec3(lower_bound.x, lower_bound.y, upper_bound.z));
+		cache_points.push_back(vec3(lower_bound.x, upper_bound.y, lower_bound.z));
+		cache_points.push_back(vec3(upper_bound.x, lower_bound.y, lower_bound.z));
+		cache_points.push_back(upper_bound);
+		cache_points.push_back(vec3(upper_bound.x, upper_bound.y, lower_bound.z));
+		cache_points.push_back(vec3(upper_bound.x, lower_bound.y, upper_bound.z));
+		cache_points.push_back(vec3(lower_bound.x, upper_bound.y, upper_bound.z));
+	}
+    return cache_points;
 }
 
 

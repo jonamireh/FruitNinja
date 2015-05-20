@@ -11,6 +11,7 @@
 #include "PlayerCamera.h"
 #include "Skybox.h"
 #include "DebugShader.h"
+#include "ChewyEntity.h"
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720	
@@ -25,7 +26,7 @@ extern float screen_width;
 extern float screen_height;
 extern bool time_stopped;
 extern glm::mat4 projection;
-
+extern glm::mat4 guard_projection;
 
 class World
 {
@@ -53,6 +54,6 @@ private:
 	std::shared_ptr<Skybox> _skybox;
 	void init();
 	void shootArrows();
-    std::shared_ptr<GameEntity> chewy;
+    std::shared_ptr<ChewyEntity> chewy;
 };
 

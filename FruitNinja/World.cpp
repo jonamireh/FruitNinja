@@ -1,5 +1,4 @@
 #include "World.h"
-#include "World.h"
 #include "PhongShader.h"
 #include "TextureDebugShader.h"
 #include "DebugCamera.h"
@@ -10,7 +9,6 @@
 #include "ObstacleEntity.h"
 #include "OctTree.h"
 #include "DeferredShader.h"
-#include "FrustrumCulling.h"
 #include "CollisionHandler.h"
 #include "DebugShader.h"
 #include <glm/gtx/rotate_vector.hpp>
@@ -20,7 +18,7 @@
 #include <functional>
 #include <queue>
 #include "LightEntity.h"
-#include "ChewyEntity.h"
+#include "FrustrumCulling.h"
 
 using namespace std;
 using namespace glm;
@@ -35,6 +33,7 @@ float screen_width = SCREEN_WIDTH;
 float screen_height = SCREEN_HEIGHT;
 
 mat4 projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f));
+mat4 guard_projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 10.f));
 
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
@@ -148,12 +147,10 @@ void World::init()
     shared_ptr <GameEntity> g(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("ground")));
     g->scale = 30.f;
 
-    
-
     camera = player_camera;
     player_camera->in_use = true;
-    entities.push_back(tower);
 	entities.push_back(chewy);
+	entities.push_back(tower);
 	entities.push_back(guard);
 	entities.push_back(guard1);
 	entities.push_back(guard2);
@@ -409,7 +406,14 @@ void World::update()
 	shootArrows();
 
 	for (int i = 0; i < entities.size(); i++)
+	{
 		entities[i]->update();
+		shared_ptr<GuardEntity> guard_temp = dynamic_pointer_cast<GuardEntity>(entities[i]);
+		if (guard_temp != nullptr)
+		{
+			guard_temp->check_view(chewy, entities);
+		}
+	}
 	if (!time_stopped)
 	{
 		seconds_passed = end_time - start_time;

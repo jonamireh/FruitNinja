@@ -2,6 +2,7 @@
 
 #include "GameEntity.h"
 #include "GuardMovementComponent.h"
+#include "FrustrumCulling.h"
 
 class GuardEntity : public GameEntity
 {
@@ -11,6 +12,7 @@ public:
 	void update();
 	void collision(std::shared_ptr<GameEntity> entity);
 	float getRadius();
+	void check_view(std::shared_ptr<ChewyEntity> chewy, std::vector<std::shared_ptr<GameEntity>> entities);
 	glm::vec3 front;
 	GuardMovementComponent move_component;
 private:

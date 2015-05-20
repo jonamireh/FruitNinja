@@ -14,5 +14,6 @@ ObstacleEntity::ObstacleEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh
 
 void ObstacleEntity::update()
 {
-
+	transformed_BB.reset();
+	getTransformedOuterBoundingBox();
 }

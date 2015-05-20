@@ -1,6 +1,4 @@
 #include "GuardEntity.h"
-#include "ChewyEntity.h"
-#include "World.h"
 
 using namespace glm;
 using namespace std;
@@ -22,6 +20,8 @@ GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std:
 
 void GuardEntity::update()
 {
+	transformed_BB.reset();
+	getTransformedOuterBoundingBox();
 	move_component.update();
 }
 
@@ -45,4 +45,21 @@ void GuardEntity::collision(shared_ptr<GameEntity> entity)
 float GuardEntity::getRadius()
 {
 	return DETECTION_OUTER_RADIUS;
+}
+
+void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::shared_ptr<GameEntity>> entities)
+{
+	vec3 lookAt = position + move_component.direction;
+	mat4 view = glm::lookAt(position, lookAt, vec3(0.f, 1.f, 0.f));
+
+	vector<shared_ptr<GameEntity>> just_chewy;
+	just_chewy.push_back(chewy);
+
+	vector<shared_ptr<GameEntity>> entities_in_view = get_objects_in_view(just_chewy, view, true);
+
+	if (entities_in_view.size() > 0)
+	{
+		cout << "CHEWY SEEN" << endl;
+		entities_in_view = get_objects_in_view(entities, view, true);
+	}
 }

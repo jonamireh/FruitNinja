@@ -18,6 +18,9 @@ ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std:
 
 void ChewyEntity::update()
 {
+	transformed_BB.reset();
+	getTransformedOuterBoundingBox();
+
 	std::vector<Mesh*> meshes = mesh->getMeshes();
 	for (int i = 0; i < meshes.size(); i++)
 	{
