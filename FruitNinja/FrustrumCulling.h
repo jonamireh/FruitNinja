@@ -32,7 +32,7 @@ std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<std::sh
 {
 	glm::vec4 p_planes[6];
 	std::vector<std::shared_ptr<GameEntity>> toReturn;
-	glm::mat4 combo_mat = glm::perspective((float)glm::radians(45.0), screen_width / screen_height, 0.1f, 800.f) * view_mat;
+	glm::mat4 combo_mat = projection * view_mat;
 
 	//left clipping plane
 	p_planes[0].x = combo_mat[0][3] + combo_mat[0][0];

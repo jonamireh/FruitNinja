@@ -34,6 +34,8 @@ bool debug_enabled = false;
 float screen_width = SCREEN_WIDTH;
 float screen_height = SCREEN_HEIGHT;
 
+mat4 projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f));
+
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
 bool time_stopped = false;
@@ -61,7 +63,6 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
     chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera))->getOuterBoundingBox();
     chewy->sebInit();
-    chewy->collision_response = true;
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 

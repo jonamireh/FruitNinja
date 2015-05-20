@@ -11,7 +11,7 @@ ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new Pl
 	
 }
 
-ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> camera) : GameEntity(position, mesh), moveComponent(*this, camera), animComponent(this)
+ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> camera) : GameEntity(position, mesh, true), moveComponent(*this, camera), animComponent(this)
 {
 	current_animation = &mesh->getAnimations()[0];
 }

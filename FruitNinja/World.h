@@ -24,6 +24,8 @@ extern float y_offset;
 extern float screen_width;
 extern float screen_height;
 extern bool time_stopped;
+extern glm::mat4 projection;
+
 
 class World
 {
