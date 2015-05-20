@@ -1,4 +1,5 @@
 #include "World.h"
+#include "World.h"
 #include "PhongShader.h"
 #include "TextureDebugShader.h"
 #include "DebugCamera.h"
@@ -20,6 +21,7 @@
 #include <queue>
 #include "LightEntity.h"
 #include "ChewyEntity.h"
+#include "FlameParticleShader.h"
 
 using namespace std;
 using namespace glm;
@@ -69,10 +71,6 @@ void World::init()
 		vec3(3.0, 0.0, 45.0), vec3(50.0, 0.0, 60.0), vec3(90.0, 0.0, 20.0) }, 15.f));
 	shared_ptr<GameEntity> guard2(new GuardEntity(vec3(-103.0, 0.0, -35.0), meshes.at("guard"), { vec3(-103.0, 0.0, -35.0), vec3(-60.0, 0.0, -25.0),
 		vec3(-12.0, 0.0, -25.0), vec3(35.0, 0.0, -25.0), vec3(45.0, 0.0, -35.0), vec3(25.0, 0, -35.0), vec3(-2.0,0 , -50.0) }, 30.f));
-
-    guard->collision_response = true;
-    guard1->collision_response = true;
-    guard2->collision_response = true;
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
 	//shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
@@ -173,19 +171,21 @@ void World::init()
     entities.push_back(g);
 
 
-shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
-shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
+	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
+	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
+	flame = std::make_shared<Flame>(vec3(-30.0, 2.0, 20), 0.85f, 0.3f);
+	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox, flame));
+	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
 
-shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
-shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
+	shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
 
-shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
+	shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
+	shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
+	shared_ptr<Shader> flameShader(new FlameParticleShader("flameVert.glsl", "flameFrag.glsl"));
+	shaders.insert(pair<string, shared_ptr<Shader>>("flameShader", flameShader));
 
-shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
-shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
-
-//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
-//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
+	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 }
 
 void World::shootArrows()
@@ -291,7 +291,6 @@ void World::draw()
 		glViewport(0, 0, screen_width, screen_height);
 		shaders.at("defShader")->draw(camera, in_view, lights);
 	}
-
 
     glUseProgram(0);
 	if (debug_enabled)

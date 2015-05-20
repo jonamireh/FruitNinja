@@ -74,6 +74,8 @@ void AppMain()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
+	glfwSetTime(0.f);
+
     while (!glfwWindowShouldClose(window))
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)

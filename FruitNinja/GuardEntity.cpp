@@ -15,7 +15,7 @@ GuardEntity::GuardEntity() : move_component(*this, vector<vec3>(), 0.f)
 }
 
 
-GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::vector<glm::vec3> control_points, float animation_time) : GameEntity(position, mesh), move_component(*this, control_points, animation_time), front(0.f, 0.f, 1.f)
+GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::vector<glm::vec3> control_points, float move_speed) : GameEntity(position, mesh, true), move_component(*this, control_points, move_speed), front(0.f, 0.f, 1.f)
 {
 
 }
