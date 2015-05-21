@@ -76,24 +76,27 @@ static std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<
 	{
 		bool in_frustrum = true;
 		shared_ptr<GameEntity> entity = entities.at(i);
-		for (int j = 0; j < 6; j++)
+		if ((chewy_check && HIDE_BEHIND(entity->list)) || !chewy_check)
 		{
-			if (PlaneAABBIntersect(entity->getTransformedOuterBoundingBox(), p_planes[j]) == 2)
+			for (int j = 0; j < 6; j++)
 			{
-				in_frustrum = false;
-				break;
+				if (PlaneAABBIntersect(entity->getTransformedOuterBoundingBox(), p_planes[j]) == 2)
+				{
+					in_frustrum = false;
+					break;
+				}
 			}
-		}
-		if (in_frustrum)
-		{
-			toReturn.push_back(entity);
-		} 
-		else
-		{
-			shared_ptr<ChewyEntity> chewy = dynamic_pointer_cast<ChewyEntity>(entity);
-			if (chewy != nullptr)
+			if (in_frustrum)
 			{
-				chewy_not_found = true;
+				toReturn.push_back(entity);
+			}
+			else
+			{
+				shared_ptr<ChewyEntity> chewy = dynamic_pointer_cast<ChewyEntity>(entity);
+				if (chewy != nullptr)
+				{
+					chewy_not_found = true;
+				}
 			}
 		}
 	}

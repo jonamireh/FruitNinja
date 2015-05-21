@@ -33,7 +33,7 @@ float screen_width = SCREEN_WIDTH;
 float screen_height = SCREEN_HEIGHT;
 
 mat4 projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f));
-mat4 guard_projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 10.f));
+mat4 guard_projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 30.f));
 
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
@@ -64,6 +64,7 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
     chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera))->getOuterBoundingBox();
     chewy->sebInit();
+	chewy->list = SET_HIDE(chewy->list);
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
@@ -128,6 +129,10 @@ void World::init()
 	_skybox->scale = 750.f;
 	_skybox->list = UNSET_OCTTREE((_skybox->list));
 
+	shared_ptr <GameEntity> box4(new ObstacleEntity(vec3(80.0, 0.0, 0.0), meshes.at("box")));
+	box4->scale = 4.0f;
+	box4->list = SET_HIDE((box4->list));
+
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
 	shared_ptr <TestSphere> testSphere(new TestSphere(meshes.at("testsphere")));
 
@@ -170,6 +175,7 @@ void World::init()
     entities.push_back(box1);
     entities.push_back(box2);
     entities.push_back(box3);
+	entities.push_back(box4);
     entities.push_back(testSphere);
     entities.push_back(wb);
     entities.push_back(wf);
@@ -243,7 +249,7 @@ void World::draw()
 	vector<shared_ptr<GameEntity>> in_view;
     if (c_test != nullptr)
     {
-        in_view = get_objects_in_view(entities, camera->getViewMatrix());
+        in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
 	}
 	else
 	{
