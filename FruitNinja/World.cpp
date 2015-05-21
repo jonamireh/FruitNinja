@@ -130,7 +130,7 @@ void World::init()
 	_skybox->list = UNSET_OCTTREE((_skybox->list));
 
 	shared_ptr <GameEntity> box4(new ObstacleEntity(vec3(80.0, 0.0, 0.0), meshes.at("box")));
-	box4->scale = 4.0f;
+	box4->scale = 3.0f;
 	box4->list = SET_HIDE((box4->list));
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
