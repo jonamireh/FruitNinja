@@ -11,7 +11,12 @@ void ProjectileMovementComponent::update()
 		entity.position = camera->cameraPosition;
 		velocity = camera->cameraFront * ARROW_SPEED;
 
-		glm::vec3 look = glm::normalize(camera->cameraFront);
+		entity.list = SET_DRAW(entity.list);
+		entity.shot = true;
+	}
+	else {
+		velocity.y -= GRAVITY * (float)seconds_passed;
+		glm::vec3 look = glm::normalize(velocity);
 		glm::vec3 right = glm::cross(camera->cameraUp, look);
 		glm::vec3 up2 = glm::cross(look, right);
 
@@ -19,11 +24,8 @@ void ProjectileMovementComponent::update()
 		entity.rot[1] = glm::vec4(up2, 0);
 		entity.rot[2] = glm::vec4(look, 0);
 		entity.rot[3] = glm::vec4(0, 0, 0, 1);
-		entity.list = SET_DRAW(entity.list);
-		entity.shot = true;
-	}
-	else {
-		velocity.y -= GRAVITY * (float)seconds_passed;
+
+
 		entity.position += velocity * (float)seconds_passed;
 		entity.timeLeft -= seconds_passed;
 		if (entity.timeLeft < 0) 
