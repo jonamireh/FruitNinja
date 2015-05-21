@@ -87,7 +87,7 @@ void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
 
 		vec3 upper_center = (chewy_bb->upper_bound + getCenter()) / 2.f;
 		vec3 upper_w = chewy_bb->upper_bound - upper_center;
-
+		chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
 		bool hidden = false;
 		for (int i = 0; i < entities_in_view.size(); i++)
 		{
@@ -95,9 +95,9 @@ void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
 			{
 				shared_ptr<BoundingBox> bb = entities_in_view.at(i)->getTransformedOuterBoundingBox();
 				vec3 h = bb->upper_bound - ((bb->upper_bound + bb->lower_bound) / 2.f);
-				//vec3 bb_center = (bb->upper_bound + bb->lower_bound) / 2.f - entities_in_view.at(i)->position;
-				//bb_center.y -= h.y;
-				if (segment_aabb(lower_center - entities_in_view.at(i)->position, lower_w, h) && segment_aabb(upper_center - entities_in_view.at(i)->position, upper_w, h))
+				vec3 bb_center = (bb->upper_bound + bb->lower_bound) / 2.f - entities_in_view.at(i)->position;
+				bb_center.y -= h.y;
+				if (segment_aabb(lower_center - entities_in_view.at(i)->position - h.y, lower_w, h) && segment_aabb(upper_center - entities_in_view.at(i)->position - h.y, upper_w, h))
 				{
 					hidden = true;
 					break;
