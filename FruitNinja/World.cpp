@@ -416,12 +416,13 @@ void World::update()
 	if (!time_stopped)
 	{
 		seconds_passed = glfwGetTime() - start_time;
-		start_time = glfwGetTime();
 	}
 	else
 	{
 		seconds_passed = 0.f;
 	}
+	start_time = glfwGetTime();
+
 	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
