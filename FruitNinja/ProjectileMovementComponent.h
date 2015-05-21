@@ -5,8 +5,6 @@
 //#include <memory>
 //#include "ProjectileEntity.h"
 
-#define ARROW_SPEED 30.0f
-
 class ProjectileEntity;
 
 class ProjectileMovementComponent : public Component

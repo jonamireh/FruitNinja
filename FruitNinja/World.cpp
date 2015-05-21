@@ -66,7 +66,7 @@ void World::init()
     chewy->sebInit();
 	chewy->list = SET_HIDE(chewy->list);
 
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai2.dae"))));
 	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
 		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 0.f));
 	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(-50.0, 0.0, 60.0), meshes.at("guard"), { vec3(-50.0, 0.0, 60.0), vec3(-25.0, 0.0, 45.0),
@@ -151,6 +151,7 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("ground", make_shared<MeshSet>(assetPath + "ground.dae")));
     shared_ptr <GameEntity> g(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("ground")));
     g->scale = 30.f;
+
 
     camera = player_camera;
     player_camera->in_use = true;
@@ -274,14 +275,7 @@ void World::draw()
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
 			}
-			//remove arrows with no time left
-			/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
-				shared_ptr<ProjectileEntity> pe = dynamic_pointer_cast<ProjectileEntity>(entities[i]);
-				if (pe->timeLeft < 0.0) {
-					entities.erase(entities.begin() + i);
-					i--;
-				}
-			}*/
+
 			if (!SHOULD_DRAW(entities[i]->list)) {
 				entities.erase(entities.begin() + i);
 				i--;
@@ -408,7 +402,6 @@ void World::update()
 {
 	static float start_time = 0.0;
 
-	float end_time = glfwGetTime();
 	shootArrows();
 
 	for (int i = 0; i < entities.size(); i++)
@@ -422,13 +415,13 @@ void World::update()
 	}
 	if (!time_stopped)
 	{
-		seconds_passed = end_time - start_time;
+		seconds_passed = glfwGetTime() - start_time;
+		start_time = glfwGetTime();
 	}
 	else
 	{
 		seconds_passed = 0.f;
 	}
-	start_time = glfwGetTime();
 	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();

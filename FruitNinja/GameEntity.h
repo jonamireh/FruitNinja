@@ -32,6 +32,7 @@ public:
 	std::shared_ptr<BoundingBox> largestBB;
     GameEntity() {}
 	GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response = false);
+
     void sebInit();
 	virtual void update() = 0;
     virtual void collision(std::shared_ptr<GameEntity> entity);

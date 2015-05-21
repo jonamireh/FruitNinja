@@ -3,7 +3,6 @@
 #include "LightEntity.h"
 #include "TestSphere.h"
 
-#define ARROW_LIFE_SPAN 10.0
 #include "GuardEntity.h"
 
 
@@ -19,7 +18,7 @@ ProjectileEntity::~ProjectileEntity()
 
 
 ProjectileEntity::ProjectileEntity(std::shared_ptr<MeshSet> mesh,
-	std::shared_ptr<Camera> camera) : GameEntity(glm::vec3(0, 0, 0), mesh), movement(*this, camera), shot(false), timeLeft(ARROW_LIFE_SPAN)
+	std::shared_ptr<Camera> camera) : GameEntity(glm::vec3(0, 0, 0), mesh, true), movement(*this, camera), shot(false), timeLeft(ARROW_LIFE_SPAN)
 {
 
 }

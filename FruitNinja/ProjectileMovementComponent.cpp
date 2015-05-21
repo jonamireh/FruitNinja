@@ -23,6 +23,7 @@ void ProjectileMovementComponent::update()
 		entity.shot = true;
 	}
 	else {
+		velocity.y -= GRAVITY * (float)seconds_passed;
 		entity.position += velocity * (float)seconds_passed;
 		entity.timeLeft -= seconds_passed;
 		if (entity.timeLeft < 0) 

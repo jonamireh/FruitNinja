@@ -14,7 +14,8 @@
 #include "ChewyEntity.h"
 
 #define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720	
+#define SCREEN_HEIGHT 720
+#define GRAVITY 33
 
 class ArcheryCamera;
 const string assetPath = "assets/";

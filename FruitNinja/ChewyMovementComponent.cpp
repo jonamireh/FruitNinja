@@ -4,8 +4,6 @@
 #include "World.h"
 #include <iostream>
 
-#define GRAVITY 33
-
 using namespace glm;
 using namespace std;
 
