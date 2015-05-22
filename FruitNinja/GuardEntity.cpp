@@ -21,9 +21,9 @@ GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std:
 
 void GuardEntity::update()
 {
-	transformed_BB.reset();
-	getTransformedOuterBoundingBox();
+	GameEntity::update();
 	move_component.update();
+	GameEntity::update();
 }
 
 void GuardEntity::collision(shared_ptr<GameEntity> entity)

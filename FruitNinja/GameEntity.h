@@ -34,7 +34,7 @@ public:
 	GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response = false);
 
     void sebInit();
-	virtual void update() = 0;
+	virtual void update();
     virtual void collision(std::shared_ptr<GameEntity> entity);
 	std::shared_ptr<MeshSet> mesh;
 	glm::vec3 position;

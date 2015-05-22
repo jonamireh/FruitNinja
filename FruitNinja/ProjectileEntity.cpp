@@ -25,9 +25,9 @@ ProjectileEntity::ProjectileEntity(std::shared_ptr<MeshSet> mesh,
 
 void ProjectileEntity::update()
 {
-	transformed_BB.reset();
-	getTransformedOuterBoundingBox();
+	GameEntity::update();
 	movement.update();
+	GameEntity::update();
 }
 
 glm::mat4 ProjectileEntity::getModelMat()

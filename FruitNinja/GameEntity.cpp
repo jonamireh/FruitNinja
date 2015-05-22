@@ -145,3 +145,9 @@ glm::mat4 GameEntity::getModelMat()
 
     return model_trans * model_rot_z * model_rot_x * model_rot_y * model_scale;
 }
+
+void GameEntity::update()
+{
+	transformed_BB = nullptr;
+	getTransformedOuterBoundingBox();
+}
