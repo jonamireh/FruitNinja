@@ -38,6 +38,7 @@ mat4 guard_projection = mat4(perspective((float)radians(45.0), screen_width / sc
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
 bool time_stopped = false;
+float game_speed = 1.0f;
 static vector<std::function<void()>> debugShaderQueue;
 
 World::World()
@@ -59,10 +60,10 @@ void World::init()
     tower->scale = 30.0f;
 	tower->list = UNSET_OCTTREE((tower->list));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
-    chewy = std::make_shared<ChewyEntity>(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera);
+    chewy = std::make_shared<ChewyEntity>(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera, archery_camera);
     // chewy bounding box mesh
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
-    chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera))->getOuterBoundingBox();
+    chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera, archery_camera))->getOuterBoundingBox();
     chewy->sebInit();
 	chewy->list = SET_HIDE(chewy->list);
 
@@ -415,13 +416,14 @@ void World::update()
 	}
 	if (!time_stopped)
 	{
-		seconds_passed = glfwGetTime() - start_time;
-		start_time = glfwGetTime();
+		seconds_passed = (glfwGetTime() - start_time) * game_speed;
 	}
 	else
 	{
 		seconds_passed = 0.f;
 	}
+	start_time = glfwGetTime();
+
 	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
