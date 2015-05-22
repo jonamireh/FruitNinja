@@ -1,5 +1,6 @@
 #include "GuardEntity.h"
 #include "World.h"
+#include <glm/geometric.hpp>
 
 using namespace glm;
 using namespace std;
@@ -48,29 +49,62 @@ float GuardEntity::getRadius()
 	return DETECTION_OUTER_RADIUS;
 }
 
-bool segment_aabb(vec3 center, vec3 w, vec3 h)
+pair<bool, float> obb_ray(vec3 origin, vec3 direction, shared_ptr<BoundingBox> bb)
 {
-	vec3 v = vec3(fabs(w.x), fabs(w.y), fabs(w.z));
-	vec3 nW = normalize(w);
-	if (fabs(center.x) > v.x + h.x)
-		return false;
-	if (fabs(center.y) > v.y + h.y)
-		return false;
-	if (fabs(center.z) > v.z + h.z)
-		return false;
-	if ((fabs(center.y * nW.z - center.z * nW.y)) > (h.y*v.z + h.z*v.y))
-		return false;
-	if ((fabs(center.x * nW.z - center.z * nW.x)) > (h.x*v.z + h.z*v.x))
-		return false;
-	if ((fabs(center.x * nW.y - center.y * nW.x)) > (h.x*v.y + h.y*v.x))
-		return false;
-	return true;
+	vec3 center = (bb->upper_bound + bb->lower_bound) / 2.f;
+	vec3 h = bb->upper_bound - center;
+
+	float tMin = FLT_MIN;
+	float tMax = FLT_MAX;
+	vec3 p = center - origin;
+	for (int i = 0; i < 3; i++)
+	{
+		vec3 ai(0.f);
+		if (i == 0)
+			ai = vec3(1.f, 0.f, 0.f);
+		if (i == 1)
+			ai = vec3(0.f, 1.f, 0.f);
+		if (i == 2)
+			ai = vec3(0.f, 0.f, 1.f);
+
+		float e = dot(ai, p);
+		float f = dot(ai, direction);
+
+		if (abs(f) > FLT_EPSILON)
+		{
+			float t1 = (e + h[i]) / f;
+			float t2 = (e - h[i]) / f;
+
+			if (t1 > t2)
+			{
+				//swap
+				float temp = t2;
+				t2 = t1;
+				t1 = temp;
+			}
+
+			if (t1 > tMin)
+				tMin = t1;
+			if (t2 < tMax)
+				tMax = t2;
+			if (tMin > tMax)
+				return pair<bool, float>(false, 0.f);
+			if (tMax < 0)
+				return pair<bool, float>(false, 0);
+ 		}
+		else if (-e - h[i] > 0 || -e + h[i] < 0)
+			return pair<bool, float>(false, 0);
+	}
+	if (tMin > 0)
+		return pair<bool, float>(true, tMin);
+	else
+		return pair<bool, float>(false, tMax);
 }
 
 void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::shared_ptr<GameEntity>> entities)
 {
-	vec3 lookAt = getCenter() + move_component.direction;
-	mat4 view = glm::lookAt(getCenter(), lookAt, vec3(0.f, 1.f, 0.f));
+	vec3 lookAt = getCenter() + 2.f * move_component.direction;
+	mat4 view = glm::lookAt(getCenter() + move_component.direction, lookAt, vec3(0.f, 1.f, 0.f));
 
 	vector<shared_ptr<GameEntity>> just_chewy;
 	just_chewy.push_back(chewy);
@@ -82,11 +116,6 @@ void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
 		entities_in_view = get_objects_in_view(entities, view, true);
 		shared_ptr<BoundingBox> chewy_bb = chewy->getTransformedOuterBoundingBox();
 		
-		vec3 lower_center = (chewy_bb->lower_bound + getCenter()) / 2.f;
-		vec3 lower_w = chewy_bb->lower_bound - lower_center;
-
-		vec3 upper_center = (chewy_bb->upper_bound + getCenter()) / 2.f;
-		vec3 upper_w = chewy_bb->upper_bound - upper_center;
 		chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
 		bool hidden = false;
 		for (int i = 0; i < entities_in_view.size(); i++)
@@ -94,16 +123,21 @@ void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
 			if (entities_in_view.at(i) != chewy)
 			{
 				shared_ptr<BoundingBox> bb = entities_in_view.at(i)->getTransformedOuterBoundingBox();
-				vec3 h = bb->upper_bound - ((bb->upper_bound + bb->lower_bound) / 2.f);
-				vec3 bb_center = (bb->upper_bound + bb->lower_bound) / 2.f - entities_in_view.at(i)->position;
-				bb_center.y -= h.y;
-				if (segment_aabb(lower_center - entities_in_view.at(i)->position - h.y, lower_w, h) && segment_aabb(upper_center - entities_in_view.at(i)->position - h.y, upper_w, h))
+
+				pair<bool, float> lower_result = obb_ray(getCenter(), normalize(chewy_bb->lower_bound - getCenter()), bb);
+				pair<bool, float> upper_result = obb_ray(getCenter(), normalize(chewy_bb->upper_bound - getCenter()), bb);
+				float chewy_distance = glm::distance(getCenter(), (chewy_bb->lower_bound + chewy_bb->upper_bound) / 2.f);
+				if (lower_result.first && upper_result.first)
 				{
-					hidden = true;
-					break;
+					if (chewy_distance > lower_result.second && chewy_distance > upper_result.second)
+					{
+						hidden = true;
+						break;
+					}
 				}
 			}
 		}
+		//seen
 		if (!hidden)
 		{
 			chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));

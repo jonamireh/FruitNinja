@@ -33,7 +33,7 @@ float screen_width = SCREEN_WIDTH;
 float screen_height = SCREEN_HEIGHT;
 
 mat4 projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f));
-mat4 guard_projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 30.f));
+mat4 guard_projection = mat4(perspective((float)radians(60.0), screen_width / screen_height, 0.1f, 30.f));
 
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
@@ -68,8 +68,8 @@ void World::init()
 	chewy->list = SET_HIDE(chewy->list);
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai2.dae"))));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
-		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 0.f));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(99.0, 0.0, 0.0), 
+		vec3(98.0, 0.0, 0.0), vec3(97.0, 0.0, 0.0) }, 0.f));
 	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(-50.0, 0.0, 60.0), meshes.at("guard"), { vec3(-50.0, 0.0, 60.0), vec3(-25.0, 0.0, 45.0),
 		vec3(3.0, 0.0, 45.0), vec3(50.0, 0.0, 60.0), vec3(90.0, 0.0, 20.0) }, 15.f));
 	shared_ptr<GameEntity> guard2(new GuardEntity(vec3(-103.0, 0.0, -35.0), meshes.at("guard"), { vec3(-103.0, 0.0, -35.0), vec3(-60.0, 0.0, -25.0),
@@ -449,6 +449,15 @@ void World::draw_point(vec3 p, vec3 color, float radius)
 	glUseProgram(debugShader->getProgramID());
 	debugShaderQueue.push_back([=](){debugShader->drawPoint(p, color, radius, camera->getViewMatrix());  });
 	glUseProgram(0);
+}
+
+void World::draw_box(shared_ptr<BoundingBox> box, vec3 color)
+{
+	shared_ptr<vector<pair<vec3, vec3>>> points = box->get_line_segments();
+	for (int j = 0; j < points->size(); j++)
+	{
+		draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));
+	}
 }
 
 void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
