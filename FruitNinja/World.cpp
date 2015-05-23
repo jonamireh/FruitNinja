@@ -204,7 +204,13 @@ void World::shootArrows()
 {
 
 	static bool held = false;
-	if (keys[GLFW_KEY_E] && archery_camera->in_use && !held)
+	bool shot = false;
+	for (auto it = entities.begin(); it != entities.end(); ++it) {
+		if (typeid(*(*it)) == typeid(ProjectileEntity)) {
+			shot = true;
+		}
+	}
+	if (keys[GLFW_KEY_E] && archery_camera->in_use && !held && !shot)
 	{
 		held = true;
 	}
@@ -276,6 +282,10 @@ void World::draw()
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
 			}
+			//if there's an arrow have archery camera follow it and make game slow-mo
+			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
+				archery_camera->cameraPosition = entities[i]->position - archery_camera->cameraFront;
+			}
 
 			if (!SHOULD_DRAW(entities[i]->list)) {
 				entities.erase(entities.begin() + i);
@@ -289,7 +299,6 @@ void World::draw()
 				i--;
 			}
 		}
-		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(shaders.at("defShader")->getProgramID());

@@ -28,6 +28,7 @@ extern float screen_height;
 extern bool time_stopped;
 extern glm::mat4 projection;
 extern glm::mat4 guard_projection;
+extern float game_speed;
 
 class World
 {
