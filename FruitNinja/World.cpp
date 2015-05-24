@@ -19,6 +19,7 @@
 #include <queue>
 #include "LightEntity.h"
 #include "FrustrumCulling.h"
+#include "ParticleShader.h"
 
 using namespace std;
 using namespace glm;
@@ -294,7 +295,7 @@ void World::draw()
 		}
 		for (int i = 0; i < in_view.size(); i++)
 		{
-			if (!SHOULD_DRAW(entities[i]->list)) {
+			if (!SHOULD_DRAW(in_view[i]->list)) { //used to be !SHOULD_DRAW(entities[i]->list) but caused crashing. This is a guess
 				in_view.erase(in_view.begin() + i);
 				i--;
 			}
