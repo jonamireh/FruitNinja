@@ -9,22 +9,32 @@ OctTree::OctTree()
 OctTree::OctTree(Voxel param_box, vector<shared_ptr<GameEntity>> objects_in_section, shared_ptr<OctTree> root_ref)
 {
     voxel = param_box;
-    objects = objects_in_section;
+	if (root_ref == nullptr)
+	{
+		root = shared_ptr<OctTree>(this);
+		collision_pairs = shared_ptr<set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>>(new set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>());
+
+		for (int i = 0; i < objects_in_section.size(); i++)
+		{
+			if (IN_OCTTREE(objects_in_section.at(i)->list))
+				objects.push_back(objects_in_section.at(i));
+		}
+	}
+	else
+	{
+		root = root_ref;
+		objects = objects_in_section;
+	}
+
+	
     min_radius = FLT_MAX;
-    for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < objects.size() && IN_OCTTREE((objects.at(i)->list)); i++)
     {
         float temp = objects.at(i)->getRadius();
         if (temp < min_radius)
             min_radius = temp;
     }
 
-    if (root_ref == nullptr)
-    {
-        root = shared_ptr<OctTree>(this);
-		collision_pairs = shared_ptr<set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>>(new set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>());
-    }
-    else
-        root = root_ref;
 
     branch();
 }

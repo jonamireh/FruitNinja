@@ -4,8 +4,6 @@
 #include "World.h"
 #include <iostream>
 
-#define GRAVITY 33
-
 using namespace glm;
 using namespace std;
 
@@ -39,7 +37,7 @@ float angleDiff(float angle_a, float angle_b)
 
 void ChewyMovementComponent::update()
 {
-	if (camera->in_use) 
+	if (player_cam->in_use) 
     {
 		direction.x = 0.f;
 		direction.y = 0.f;
@@ -57,16 +55,16 @@ void ChewyMovementComponent::update()
         }
 		
 		if (keys[GLFW_KEY_W]) {
-			direction += forwardDirection(camera);
+			direction += forwardDirection(player_cam);
 		}
 		if (keys[GLFW_KEY_S]) {
-			direction += backDirection(camera);
+			direction += backDirection(player_cam);
 		}
 		if (keys[GLFW_KEY_A]) {
-			direction += leftDirection(camera);
+			direction += leftDirection(player_cam);
 		}
 		if (keys[GLFW_KEY_D]) {
-			direction += rightDirection(camera);
+			direction += rightDirection(player_cam);
 		}
 
         vec3 pos_offset;
@@ -110,5 +108,8 @@ void ChewyMovementComponent::update()
 			entity.velocity.y = 0;
 		}
         dynamic_cast<ChewyEntity&>(entity)._falling = true;
+	}
+	else if(archery_cam->in_use) {
+		entity.rotations = entity.turnAngle(archery_cam->cameraFront);
 	}
 }

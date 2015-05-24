@@ -1,6 +1,8 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include "GameEntity.h"
 
-#define PI 3.14159
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -11,6 +13,14 @@
 using namespace glm;
 using namespace std;
 
+GameEntity::GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response) : position(position), mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f)),
+collision_response(collision_response), transformed_BB(nullptr)
+{
+	sebInit();
+	list = SET_DRAW(list);
+	list = SET_OCTTREE(list);
+};
+
 
 vec3 GameEntity::turnAngle(vec3 cartesian) {
 	vec3 rot_angles(0, 0, 0);
@@ -18,9 +28,9 @@ vec3 GameEntity::turnAngle(vec3 cartesian) {
 	if (cartesian.x < 0)
 		rot_angles.y = -1.0f * atan(cartesian.z / cartesian.x);
 	else
-		rot_angles.y = atan(cartesian.z / -cartesian.x) + PI;
+		rot_angles.y = atan(cartesian.z / -cartesian.x) + M_PI;
 
-    rot_angles.y -= PI / 2.f;
+    rot_angles.y -= M_PI / 2.f;
 
 	return rot_angles;
 }
@@ -72,44 +82,39 @@ shared_ptr<BoundingBox> GameEntity::getOuterBoundingBox()
 shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
 {
 	shared_ptr<BoundingBox> obb = getOuterBoundingBox();
-	
-	vec3 lower_bound(obb->lower_bound);
-	vec3 upper_bound(obb->upper_bound);
-	vector<vec3> points;
-	points.push_back(lower_bound);
-	points.push_back(vec3(lower_bound.x, lower_bound.y, upper_bound.z));
-	points.push_back(vec3(lower_bound.x, upper_bound.y, lower_bound.z));
-	points.push_back(vec3(upper_bound.x, lower_bound.y, lower_bound.z));
-	points.push_back(upper_bound);
-	points.push_back(vec3(upper_bound.x, upper_bound.y, lower_bound.z));
-	points.push_back(vec3(upper_bound.x, lower_bound.y, upper_bound.z));
-    points.push_back(vec3(lower_bound.x, upper_bound.y, upper_bound.z));
-
-	vector<vec3> transformed_points;
-
-    // Connor added this to try to get the outer box for chewy without rotations
-    vec3 saved_rotation_values = rotations;
-    rotations = vec3(0.f);
-	mat4 model = getModelMat();
-    rotations = saved_rotation_values;
-	
-	for (int i = 0; i < points.size(); i++)
+	if (transformed_BB == nullptr)
 	{
-		transformed_points.push_back(vec3(model * vec4(points.at(i), 1.f)));
-	}
-	vec3 min(FLT_MAX, FLT_MAX, FLT_MAX);
-	vec3 max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-	for (int i = 0; i < transformed_points.size(); i++)
-	{
-		if (transformed_points.at(i).x < min.x) min.x = transformed_points.at(i).x;
-		if (transformed_points.at(i).x > max.x) max.x = transformed_points.at(i).x;
-		if (transformed_points.at(i).y < min.y) min.y = transformed_points.at(i).y;
-		if (transformed_points.at(i).y > max.y) max.y = transformed_points.at(i).y;
-		if (transformed_points.at(i).z < min.z) min.z = transformed_points.at(i).z;
-		if (transformed_points.at(i).z > max.z) max.z = transformed_points.at(i).z;
-	}
+		vec3 lower_bound(obb->lower_bound);
+		vec3 upper_bound(obb->upper_bound);
+		vector<vec3> points = obb->get_points();
 
-	return shared_ptr<BoundingBox>(new  BoundingBox(min, max));
+		vector<vec3> transformed_points;
+
+		// Connor added this to try to get the outer box for chewy without rotations
+		vec3 saved_rotation_values = rotations;
+		rotations = vec3(0.f);
+		mat4 model = getModelMat();
+		rotations = saved_rotation_values;
+
+		for (int i = 0; i < points.size(); i++)
+		{
+			transformed_points.push_back(vec3(model * vec4(points.at(i), 1.f)));
+		}
+		vec3 min(FLT_MAX, FLT_MAX, FLT_MAX);
+		vec3 max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+		for (int i = 0; i < transformed_points.size(); i++)
+		{
+			if (transformed_points.at(i).x < min.x) min.x = transformed_points.at(i).x;
+			if (transformed_points.at(i).x > max.x) max.x = transformed_points.at(i).x;
+			if (transformed_points.at(i).y < min.y) min.y = transformed_points.at(i).y;
+			if (transformed_points.at(i).y > max.y) max.y = transformed_points.at(i).y;
+			if (transformed_points.at(i).z < min.z) min.z = transformed_points.at(i).z;
+			if (transformed_points.at(i).z > max.z) max.z = transformed_points.at(i).z;
+		}
+		transformed_BB = shared_ptr<BoundingBox>(new  BoundingBox(min, max));
+	}
+	
+	return transformed_BB;
 }
 
 bool GameEntity::compare(std::shared_ptr<GameEntity> ge)
@@ -139,4 +144,10 @@ glm::mat4 GameEntity::getModelMat()
     mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
 
     return model_trans * model_rot_z * model_rot_x * model_rot_y * model_scale;
+}
+
+void GameEntity::update()
+{
+	transformed_BB = nullptr;
+	getTransformedOuterBoundingBox();
 }

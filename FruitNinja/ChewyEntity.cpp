@@ -6,18 +6,19 @@
 
 using namespace glm;
 
-ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera())), animComponent(this)
+ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera()), std::shared_ptr<Camera>(new PlayerCamera())), animComponent(this)
 {
 	
 }
 
-ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> camera) : GameEntity(position, mesh), moveComponent(*this, camera), animComponent(this)
+ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> player_cam, std::shared_ptr<Camera> archery_cam) : GameEntity(position, mesh, true), moveComponent(*this, player_cam, archery_cam), animComponent(this)
 {
 	current_animation = &mesh->getAnimations()[0];
 }
 
 void ChewyEntity::update()
 {
+	GameEntity::update();
 	std::vector<Mesh*> meshes = mesh->getMeshes();
 	for (int i = 0; i < meshes.size(); i++)
 	{
@@ -25,6 +26,7 @@ void ChewyEntity::update()
 	}
 	moveComponent.update();
 	animComponent.update();
+	GameEntity::update();
 }
 
 void ChewyEntity::set_material(Material material)

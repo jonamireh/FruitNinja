@@ -9,7 +9,6 @@
 #include "ObstacleEntity.h"
 #include "OctTree.h"
 #include "DeferredShader.h"
-#include "FrustrumCulling.h"
 #include "CollisionHandler.h"
 #include "DebugShader.h"
 #include <glm/gtx/rotate_vector.hpp>
@@ -19,7 +18,7 @@
 #include <functional>
 #include <queue>
 #include "LightEntity.h"
-#include "ChewyEntity.h"
+#include "FrustrumCulling.h"
 
 using namespace std;
 using namespace glm;
@@ -33,9 +32,13 @@ bool debug_enabled = false;
 float screen_width = SCREEN_WIDTH;
 float screen_height = SCREEN_HEIGHT;
 
+mat4 projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f));
+mat4 guard_projection = mat4(perspective((float)radians(60.0), screen_width / screen_height, 0.1f, 30.f));
+
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
 bool time_stopped = false;
+float game_speed = 1.0f;
 static vector<std::function<void()>> debugShaderQueue;
 
 World::World()
@@ -51,28 +54,26 @@ void World::init()
 	debug_camera = shared_ptr<Camera>(new DebugCamera());
     player_camera = shared_ptr<Camera>(new PlayerCamera());
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
+
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
     tower->scale = 30.0f;
+	tower->list = UNSET_OCTTREE((tower->list));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
-    chewy = std::make_shared<ChewyEntity>(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera);
+    chewy = std::make_shared<ChewyEntity>(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera, archery_camera);
     // chewy bounding box mesh
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
-    chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera))->getOuterBoundingBox();
+    chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera, archery_camera))->getOuterBoundingBox();
     chewy->sebInit();
-    chewy->collision_response = true;
+	chewy->list = SET_HIDE(chewy->list);
 
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai.dae"))));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
-		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 10.f));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai2.dae"))));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(99.0, 0.0, 0.0), 
+		vec3(98.0, 0.0, 0.0), vec3(97.0, 0.0, 0.0) }, 0.f));
 	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(-50.0, 0.0, 60.0), meshes.at("guard"), { vec3(-50.0, 0.0, 60.0), vec3(-25.0, 0.0, 45.0),
 		vec3(3.0, 0.0, 45.0), vec3(50.0, 0.0, 60.0), vec3(90.0, 0.0, 20.0) }, 15.f));
 	shared_ptr<GameEntity> guard2(new GuardEntity(vec3(-103.0, 0.0, -35.0), meshes.at("guard"), { vec3(-103.0, 0.0, -35.0), vec3(-60.0, 0.0, -25.0),
 		vec3(-12.0, 0.0, -25.0), vec3(35.0, 0.0, -25.0), vec3(45.0, 0.0, -35.0), vec3(25.0, 0, -35.0), vec3(-2.0,0 , -50.0) }, 30.f));
-
-    guard->collision_response = true;
-    guard1->collision_response = true;
-    guard2->collision_response = true;
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
 	//shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
@@ -101,25 +102,37 @@ void World::init()
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
     shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(48.0, 0.0, 30.0), meshes.at("closedBarrel")));
     cBarrel->scale = 3.0f;
+	cBarrel->list = SET_HIDE((cBarrel->list));
 	shared_ptr <GameEntity> cBarrel2(new ObstacleEntity(vec3(-50.0, 0.0, -10.0), meshes.at("closedBarrel")));
 	cBarrel2->scale = 3.0f;
+	cBarrel2->list = SET_HIDE((cBarrel2->list));
 	shared_ptr <GameEntity> cBarrel3(new ObstacleEntity(vec3(-58.0, 0.0, 10.0), meshes.at("closedBarrel")));
 	cBarrel3->scale = 3.0f;
+	cBarrel2->list = SET_HIDE((cBarrel2->list));
 
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
     shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(30.0, 0.0, 40.0), meshes.at("openBarrel")));
     oBarrel->scale = 3.0f;
+	oBarrel->list = SET_HIDE((oBarrel->list));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
     shared_ptr <GameEntity> box1(new ObstacleEntity(vec3(50.0, 0.0, 20.0), meshes.at("box")));
     box1->scale = 3.0f;
+	box1->list = SET_HIDE((box1->list));
     shared_ptr <GameEntity> box2(new ObstacleEntity(vec3(50.0, 7.0, 20.0), meshes.at("box")));
     box2->scale = 3.0f;
+	box2->list = SET_HIDE((box2->list));
     shared_ptr <GameEntity> box3(new ObstacleEntity(vec3(50.0, 14.0, 20.0), meshes.at("box")));
     box3->scale = 3.0f;
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae"))));
+	box3->list = SET_HIDE((box3->list));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->scale = 750.f;
+	_skybox->list = UNSET_OCTTREE((_skybox->list));
+
+	shared_ptr <GameEntity> box4(new ObstacleEntity(vec3(80.0, 0.0, 0.0), meshes.at("box")));
+	box4->scale = 3.0f;
+	box4->list = SET_HIDE((box4->list));
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
 	shared_ptr <TestSphere> testSphere(new TestSphere(meshes.at("testsphere")));
@@ -140,12 +153,11 @@ void World::init()
     shared_ptr <GameEntity> g(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("ground")));
     g->scale = 30.f;
 
-    
 
     camera = player_camera;
     player_camera->in_use = true;
-    entities.push_back(tower);
 	entities.push_back(chewy);
+	entities.push_back(tower);
 	entities.push_back(guard);
 	entities.push_back(guard1);
 	entities.push_back(guard2);
@@ -165,6 +177,7 @@ void World::init()
     entities.push_back(box1);
     entities.push_back(box2);
     entities.push_back(box3);
+	entities.push_back(box4);
     entities.push_back(testSphere);
     entities.push_back(wb);
     entities.push_back(wf);
@@ -173,26 +186,31 @@ void World::init()
     entities.push_back(g);
 
 
-shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
-shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
+	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
+	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
+	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
+	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
 
-shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
-shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
+	shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
 
-shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
+	shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
+	shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
 
-shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
-shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
-
-//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
-//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
+	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 }
 
 void World::shootArrows()
 {
 
 	static bool held = false;
-	if (keys[GLFW_KEY_E] && archery_camera->in_use && !held)
+	bool shot = false;
+	for (auto it = entities.begin(); it != entities.end(); ++it) {
+		if (typeid(*(*it)) == typeid(ProjectileEntity)) {
+			shot = true;
+		}
+	}
+	if (keys[GLFW_KEY_E] && archery_camera->in_use && !held && !shot)
 	{
 		held = true;
 	}
@@ -239,7 +257,7 @@ void World::draw()
 	vector<shared_ptr<GameEntity>> in_view;
     if (c_test != nullptr)
     {
-        in_view = get_objects_in_view(entities, camera->getViewMatrix());
+        in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
 	}
 	else
 	{
@@ -260,38 +278,33 @@ void World::draw()
 		//even if lantern culled still need light from it
 		vector<Light*> lights;
 		for (int i = 0; i < entities.size(); i++) {
-			if (typeid(*entities[i]) == typeid(LightEntity) && entities[i]->should_draw) {
+			if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list)) {
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
 			}
-			//remove arrows with no time left
-			/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
-				shared_ptr<ProjectileEntity> pe = dynamic_pointer_cast<ProjectileEntity>(entities[i]);
-				if (pe->timeLeft < 0.0) {
-					entities.erase(entities.begin() + i);
-					i--;
-				}
-			}*/
-			if (!entities[i]->should_draw) {
+			//if there's an arrow have archery camera follow it and make game slow-mo
+			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
+				archery_camera->cameraPosition = entities[i]->position - archery_camera->cameraFront;
+			}
+
+			if (!SHOULD_DRAW(entities[i]->list)) {
 				entities.erase(entities.begin() + i);
 				i--;
 			}
 		}
 		for (int i = 0; i < in_view.size(); i++)
 		{
-			if (!in_view[i]->should_draw) {
+			if (!SHOULD_DRAW(entities[i]->list)) {
 				in_view.erase(in_view.begin() + i);
 				i--;
 			}
 		}
-		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(shaders.at("defShader")->getProgramID());
 		glViewport(0, 0, screen_width, screen_height);
 		shaders.at("defShader")->draw(camera, in_view, lights);
 	}
-
 
     glUseProgram(0);
 	if (debug_enabled)
@@ -399,22 +412,28 @@ void World::update()
 {
 	static float start_time = 0.0;
 
-	float end_time = glfwGetTime();
 	shootArrows();
 
 	for (int i = 0; i < entities.size(); i++)
+	{
 		entities[i]->update();
+		shared_ptr<GuardEntity> guard_temp = dynamic_pointer_cast<GuardEntity>(entities[i]);
+		if (guard_temp != nullptr)
+		{
+			guard_temp->check_view(chewy, entities);
+		}
+	}
 	if (!time_stopped)
 	{
-		seconds_passed = end_time - start_time;
+		seconds_passed = (glfwGetTime() - start_time) * game_speed;
 	}
 	else
 	{
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-    std::vector<shared_ptr<GameEntity>> v1(entities.begin() + 1, entities.end() );
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), v1, nullptr);
+
+	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
 	_skybox->update();
@@ -439,6 +458,15 @@ void World::draw_point(vec3 p, vec3 color, float radius)
 	glUseProgram(debugShader->getProgramID());
 	debugShaderQueue.push_back([=](){debugShader->drawPoint(p, color, radius, camera->getViewMatrix());  });
 	glUseProgram(0);
+}
+
+void World::draw_box(shared_ptr<BoundingBox> box, vec3 color)
+{
+	shared_ptr<vector<pair<vec3, vec3>>> points = box->get_line_segments();
+	for (int j = 0; j < points->size(); j++)
+	{
+		draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));
+	}
 }
 
 void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)

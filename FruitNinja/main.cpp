@@ -74,6 +74,8 @@ void AppMain()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
+	glfwSetTime(0.f);
+	int i = 0;
     while (!glfwWindowShouldClose(window))
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -81,6 +83,12 @@ void AppMain()
 
 		world.update();
         world.draw();
+
+		if (!(i % 50))
+		{
+			cout << "Frame Rate: " << 1 / seconds_passed << endl;
+		}
+		i++;
 
         glfwSwapBuffers(window);
         glfwPollEvents();

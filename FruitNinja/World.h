@@ -11,9 +11,11 @@
 #include "PlayerCamera.h"
 #include "Skybox.h"
 #include "DebugShader.h"
+#include "ChewyEntity.h"
 
 #define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720	
+#define SCREEN_HEIGHT 720
+#define GRAVITY 33
 
 class ArcheryCamera;
 const string assetPath = "assets/";
@@ -24,6 +26,9 @@ extern float y_offset;
 extern float screen_width;
 extern float screen_height;
 extern bool time_stopped;
+extern glm::mat4 projection;
+extern glm::mat4 guard_projection;
+extern float game_speed;
 
 class World
 {
@@ -44,6 +49,7 @@ public:
     static void draw_line(glm::vec3 p1, glm::vec3 p2, glm::vec3 color);
 	static void draw_point(glm::vec3 p, glm::vec3 color, float radius);
 	static void draw_sphere(glm::vec3 center, float radius, glm::vec3 color, float delta);
+	static void draw_box(std::shared_ptr<BoundingBox> box, glm::vec3 color);
 private:
     std::shared_ptr<Camera> debug_camera;
     std::shared_ptr<Camera> archery_camera;
@@ -51,6 +57,6 @@ private:
 	std::shared_ptr<Skybox> _skybox;
 	void init();
 	void shootArrows();
-    std::shared_ptr<GameEntity> chewy;
+    std::shared_ptr<ChewyEntity> chewy;
 };
 

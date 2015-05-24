@@ -31,8 +31,7 @@ void StencilShader::stencilPass(std::shared_ptr<Camera> camera, GBuffer* gbuffer
 
 	glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, glm::value_ptr(light->transform()));
 	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, glm::value_ptr(camera->getViewMatrix()));
-	glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, glm::value_ptr(
-		glm::mat4(glm::perspective((float)glm::radians(45.0), screen_width / screen_height, 0.1f, 800.f))));
+	glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, glm::value_ptr(projection));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, light->IND());
 	check_gl_error("stencil before");

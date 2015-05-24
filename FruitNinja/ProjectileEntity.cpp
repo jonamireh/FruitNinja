@@ -3,7 +3,6 @@
 #include "LightEntity.h"
 #include "TestSphere.h"
 
-#define ARROW_LIFE_SPAN 10.0
 #include "GuardEntity.h"
 
 
@@ -13,20 +12,23 @@ ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryC
 
 ProjectileEntity::~ProjectileEntity()
 {
-	
+	//not called til out of world scope. sort of a mem leak
+	std::cout << "Arrow destroyed!!!!!!!";
 }
 
 
 
 ProjectileEntity::ProjectileEntity(std::shared_ptr<MeshSet> mesh,
-	std::shared_ptr<Camera> camera) : GameEntity(glm::vec3(0, 0, 0), mesh), movement(*this, camera), shot(false), timeLeft(ARROW_LIFE_SPAN)
+	std::shared_ptr<Camera> camera) : GameEntity(glm::vec3(0, 0, 0), mesh, true), movement(*this, camera), shot(false), timeLeft(ARROW_LIFE_SPAN)
 {
-
+	game_speed = 0.2;
 }
 
 void ProjectileEntity::update()
 {
+	GameEntity::update();
 	movement.update();
+	GameEntity::update();
 }
 
 glm::mat4 ProjectileEntity::getModelMat()
@@ -37,12 +39,17 @@ glm::mat4 ProjectileEntity::getModelMat()
 
 	return model_trans * rot * model_scale;
 }
-
 void ProjectileEntity::collision(std::shared_ptr<GameEntity> entity)
 {
-	if (typeid(*entity) == typeid(LightEntity) || typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity))
-	{
-        if (entity->getTransformedOuterBoundingBox()->boxes_collide(*getTransformedOuterBoundingBox()))
-            entity->should_draw = false;
+	if (entity->getTransformedOuterBoundingBox()->boxes_collide(*getTransformedOuterBoundingBox())) {
+		if (typeid(*entity) == typeid(LightEntity) || typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity)) {
+			//get rid of hit entity
+			entity->list = UNSET_DRAW(entity->list);
+		}
+		//get rid of arrow
+		if (!(typeid(*entity) == typeid(ChewyEntity))) {
+			list = UNSET_DRAW(list);
+			game_speed = 1.0;
+		}
 	}
 }

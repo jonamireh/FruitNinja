@@ -5,15 +5,16 @@
 #include "World.h"
 #include <glm/glm.hpp>
 #include <iostream>
+#include "ChewyEntity.h"
 
-glm::vec4 normalize_plane(glm::vec4& p1)
+static glm::vec4 normalize_plane(glm::vec4& p1)
 {
 	glm::vec4 p1_c(p1);
 	float mag = glm::length(glm::vec3(p1_c));
 	return p1_c / mag;
 }
 
-int PlaneAABBIntersect(shared_ptr<BoundingBox> bb, glm::vec4& p)
+static int PlaneAABBIntersect(shared_ptr<BoundingBox> bb, glm::vec4& p)
 {
 	glm::vec3 c = (bb->upper_bound + bb->lower_bound) / 2.f;
 	glm::vec3 h = (bb->upper_bound - bb->lower_bound) / 2.f;
@@ -28,11 +29,15 @@ int PlaneAABBIntersect(shared_ptr<BoundingBox> bb, glm::vec4& p)
 	return 2;
 }
 
-std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<std::shared_ptr<GameEntity>> entities, glm::mat4& view_mat)
+static std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<std::shared_ptr<GameEntity>> entities, glm::mat4& view_mat, bool chewy_check = false)
 {
 	glm::vec4 p_planes[6];
 	std::vector<std::shared_ptr<GameEntity>> toReturn;
-	glm::mat4 combo_mat = glm::perspective((float)glm::radians(45.0), screen_width / screen_height, 0.1f, 800.f) * view_mat;
+	glm::mat4 combo_mat;
+	if (chewy_check)
+		combo_mat = guard_projection * view_mat;
+	else
+		combo_mat = projection * view_mat;
 
 	//left clipping plane
 	p_planes[0].x = combo_mat[0][3] + combo_mat[0][0];
@@ -65,21 +70,37 @@ std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<std::sh
 	p_planes[5].z = combo_mat[2][3] - combo_mat[2][2];
 	p_planes[5].w = combo_mat[3][3] - combo_mat[3][2];
 
+	bool chewy_not_found = 0;
+
 	for (int i = 0; i < entities.size(); i++)
 	{
 		bool in_frustrum = true;
-		for (int j = 0; j < 6; j++)
+		shared_ptr<GameEntity> entity = entities.at(i);
+		if ((chewy_check && HIDE_BEHIND(entity->list)) || !chewy_check)
 		{
-			if (PlaneAABBIntersect(entities.at(i)->getTransformedOuterBoundingBox(), p_planes[j]) == 2)
+			for (int j = 0; j < 6; j++)
 			{
-				in_frustrum = false;
-				break;
+				if (PlaneAABBIntersect(entity->getTransformedOuterBoundingBox(), p_planes[j]) == 2)
+				{
+					in_frustrum = false;
+					break;
+				}
+			}
+			if (in_frustrum)
+			{
+				toReturn.push_back(entity);
+			}
+			else
+			{
+				shared_ptr<ChewyEntity> chewy = dynamic_pointer_cast<ChewyEntity>(entity);
+				if (chewy != nullptr)
+				{
+					chewy_not_found = true;
+				}
 			}
 		}
-		if (in_frustrum)
-		{
-			toReturn.push_back(entities.at(i));
-		}
 	}
+	if (chewy_check && chewy_not_found)
+		toReturn.clear();
 	return toReturn;
 }

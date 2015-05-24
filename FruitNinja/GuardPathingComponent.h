@@ -7,14 +7,17 @@ class GuardPathingComponent
 {
 public:
 	std::vector<glm::vec3> control_points;
-	float animation_time;
 
-	GuardPathingComponent(std::vector<glm::vec3> control_points, float animation_time);
+	GuardPathingComponent(std::vector<glm::vec3> control_points, float move_speed);
 
-	glm::vec3 getPosition(float dt);
-	glm::vec3 getDirection(float dt);
+	glm::vec3 getDirection();
 
 	void reverse();
-
-	std::pair<int, float> getInterpolatedTime(float dt);
+private:
+	int current_curve;
+	float current_distance;
+	float move_speed;
+	float current_time;
+	float time_elapsed;
+	void change_path();
 };

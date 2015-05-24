@@ -124,6 +124,9 @@
     <ClCompile Include="DirLightShader.cpp">
       <Filter>DeferredShader</Filter>
     </ClCompile>
+    <ClCompile Include="GuardPathingComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -248,6 +251,9 @@
     </ClInclude>
     <ClInclude Include="DirLightShader.h">
       <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="GuardPathingComponent.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
