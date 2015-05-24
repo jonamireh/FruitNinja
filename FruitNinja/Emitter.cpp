@@ -5,7 +5,7 @@ Emitter::Emitter() {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			particles.positions.push_back(glm::vec3((float)i, 2.0f, (float)j));
-			particles.frame.push_back(0);
+			particles.frame.push_back(rand() % 36);
 		}
 	}
 
