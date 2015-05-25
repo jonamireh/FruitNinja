@@ -28,7 +28,7 @@ OctTree::OctTree(Voxel param_box, vector<shared_ptr<GameEntity>> objects_in_sect
 
 	
     min_radius = FLT_MAX;
-	for (int i = 0; i < objects.size() && IN_OCTTREE((objects.at(i)->list)); i++)
+	for (int i = 0; i < objects.size(); i++)
     {
         float temp = objects.at(i)->getRadius();
         if (temp < min_radius)

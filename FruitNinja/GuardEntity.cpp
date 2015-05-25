@@ -49,7 +49,7 @@ float GuardEntity::getRadius()
 	return DETECTION_OUTER_RADIUS;
 }
 
-pair<bool, float> obb_ray(vec3 origin, vec3 direction, shared_ptr<BoundingBox> bb)
+pair<bool, float> static obb_ray(vec3 origin, vec3 direction, shared_ptr<BoundingBox> bb)
 {
 	vec3 center = (bb->upper_bound + bb->lower_bound) / 2.f;
 	vec3 h = bb->upper_bound - center;
