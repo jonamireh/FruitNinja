@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "DeferredRenderer.h"
 #include "SimpleTextureShader.h"
+#include "ParticleShader.h"
 
 //#include <glm/gtc/type_ptr.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
@@ -28,8 +29,11 @@ private:
 	void startLightPasses();
 	void finalPass();
 	void skyboxPass(std::shared_ptr<Camera> camera);
+	void particlePass(std::shared_ptr<Camera> camera);
 	std::shared_ptr<Skybox> skybox;
 	SimpleTextureShader skyShader;
+	ParticleShader fireShader;
+	Emitter em;
 
 	DeferredRenderer renderer;
 	DisplayMode disp_mode;

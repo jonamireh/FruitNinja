@@ -18,4 +18,7 @@ public:
     void movement(std::shared_ptr<GameEntity> chewy);
     glm::mat4 getViewMatrix();
     void update_radius(float delta);
+	void reorient(std::vector<std::shared_ptr<GameEntity>> entities, std::shared_ptr<ChewyEntity> chewy);
+	glm::vec3* PlayerCamera::get_near_plane_corners();
+	glm::vec3 handle_collision_zoom(float minOffsetDist, glm::vec3* frustumNearCorners, std::vector<std::shared_ptr<GameEntity>> entities, std::shared_ptr<ChewyEntity> chewy);
 };

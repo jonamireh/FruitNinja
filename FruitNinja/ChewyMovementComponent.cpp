@@ -37,22 +37,23 @@ float angleDiff(float angle_a, float angle_b)
 
 void ChewyMovementComponent::update()
 {
+
+	entity.last_position = entity.position;
+
+	if (dynamic_cast<ChewyEntity&>(entity)._falling)
+	{
+		entity.velocity.y -= GRAVITY * seconds_passed;
+	}
+	else
+	{
+		entity.velocity = vec3(0.f);
+	}
+
 	if (player_cam->in_use) 
     {
 		direction.x = 0.f;
 		direction.y = 0.f;
 		direction.z = 0.f;
-
-		entity.last_position = entity.position;
-
-        if (dynamic_cast<ChewyEntity&>(entity)._falling)
-        {
-            entity.velocity.y -= GRAVITY * seconds_passed;
-        }
-        else
-        {
-            entity.velocity = vec3(0.f);
-        }
 		
 		if (keys[GLFW_KEY_W]) {
 			direction += forwardDirection(player_cam);
@@ -100,16 +101,16 @@ void ChewyMovementComponent::update()
 		{
 			entity.velocity.y += 30;
 		} 
-
-		entity.position += entity.velocity * seconds_passed;
-		if (entity.position.y < 0)
-		{
-			entity.position.y = 0;
-			entity.velocity.y = 0;
-		}
-        dynamic_cast<ChewyEntity&>(entity)._falling = true;
 	}
 	else if(archery_cam->in_use) {
 		entity.rotations = entity.turnAngle(archery_cam->cameraFront);
 	}
+
+	entity.position += entity.velocity * seconds_passed;
+	if (entity.position.y < 0)
+	{
+		entity.position.y = 0;
+		entity.velocity.y = 0;
+	}
+	dynamic_cast<ChewyEntity&>(entity)._falling = true;
 }

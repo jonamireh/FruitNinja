@@ -7,8 +7,6 @@
 //#include <SDL_image.h>
 #include <iostream> 
 #include <assert.h>
-#include "tdogl/Texture.h"
-#include "tdogl/Bitmap.h"
 #include "World.h"
 #include <fstream>
 
@@ -77,7 +75,7 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene, GLuint texInterpol
 			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(tempStr);
 			tdogl::Texture* tex = new tdogl::Texture(bmp, texInterpolation, texWrap);
 			tmp.id = tex->object();
-			//delete tex;//possible memory leak
+			texturesToDel.push_back(tex);
 			//-------------------------------------
 			tmp.type = 0;
 			textures.push_back(tmp);
@@ -197,6 +195,8 @@ void MeshSet::processAnimations()
 MeshSet::~MeshSet() {
 	for (int i = 0; i < meshes.size(); i++)
 		delete meshes[i];
+	for (int i = 0; i < texturesToDel.size(); i++)
+		delete texturesToDel[i];
 }
 
 std::vector<Mesh*>& MeshSet::getMeshes() {

@@ -5,6 +5,8 @@
 #include "Mesh.h"
 #include <string>
 #include <map>
+#include "tdogl/Texture.h"
+#include "tdogl/Bitmap.h"
 
 struct BoneInfo
 {
@@ -35,4 +37,6 @@ private:
 	unsigned int loadTexture(const char* filename, int width, int height);
 	std::vector<Mesh*> meshes;
 	std::vector<aiAnimation> animations;
+	//to avoid a memory leak 
+	std::vector<tdogl::Texture*> texturesToDel;
 };

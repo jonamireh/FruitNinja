@@ -1,12 +1,9 @@
 #include "OctTree.h"
 #include <iostream>
-#include "Timer.h"
-
 using namespace std;
 
 OctTree::OctTree()
 {
-    
 }
 
 OctTree::OctTree(Voxel param_box, vector<shared_ptr<GameEntity>> objects_in_section, shared_ptr<OctTree> root_ref)
@@ -31,13 +28,11 @@ OctTree::OctTree(Voxel param_box, vector<shared_ptr<GameEntity>> objects_in_sect
 
 	
     min_radius = FLT_MAX;
-	for (int i = 0; i < objects.size() && IN_OCTTREE((objects.at(i)->list)); i++)
+	for (int i = 0; i < objects.size(); i++)
     {
         float temp = objects.at(i)->getRadius();
         if (temp < min_radius)
-        {
             min_radius = temp;
-        }
     }
 
 
@@ -49,15 +44,10 @@ This needs to do it based off of bounding boxes rather than points, but this sho
 */
 void OctTree::branch()
 {
-    Timer timer = Timer();
-
-
     if (glm::distance(voxel.lower_bound, voxel.upper_bound) < min_radius)
     {
         for (int i = 0; i < objects.size() - 1; i++)
-        {
 			root->collision_pairs->insert(pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>(objects.at(i), objects.at(i + 1)));
-        }
         return;
     }
 
@@ -78,8 +68,6 @@ void OctTree::branch()
         }
 
         if (subset_objects.size() > 1 && has_collision_response)
-        {
             OctTree(subset_voxels.at(i), subset_objects, root);
-        }
     }
 }

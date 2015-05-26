@@ -17,9 +17,11 @@ void ProjectileMovementComponent::update()
 	else {
 		velocity.y -= GRAVITY * (float)seconds_passed;
 		entity.position += velocity * (float)seconds_passed;
-		entity.timeLeft -= seconds_passed;
-		if (entity.timeLeft < 0) 
+		entity.timeLeft -= seconds_passed * (1.0 / game_speed);
+		if (entity.timeLeft < 0) {
 			entity.list = UNSET_DRAW(entity.list);
+			game_speed = 1.0;
+		}
 	}
 
 	glm::vec3 look = glm::normalize(velocity);

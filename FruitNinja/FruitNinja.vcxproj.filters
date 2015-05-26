@@ -127,6 +127,15 @@
     <ClCompile Include="GuardPathingComponent.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="Emitter.cpp">
+      <Filter>Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleShader.cpp">
+      <Filter>Fire</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -255,6 +264,15 @@
     <ClInclude Include="GuardPathingComponent.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="Emitter.h">
+      <Filter>Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleShader.h">
+      <Filter>Fire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -303,6 +321,12 @@
     <None Include="StencilFrag.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="FireVert.glsl">
+      <Filter>Fire</Filter>
+    </None>
+    <None Include="FireFrag.glsl">
+      <Filter>Fire</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -316,6 +340,9 @@
     </Filter>
     <Filter Include="DeferredShader">
       <UniqueIdentifier>{6dcbd46a-1231-4229-bca7-0dd0e49c0401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fire">
+      <UniqueIdentifier>{f4747659-5776-4b40-ae69-be5c52b0dfcc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

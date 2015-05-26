@@ -19,6 +19,7 @@
 #include <queue>
 #include "LightEntity.h"
 #include "FrustrumCulling.h"
+#include "ParticleShader.h"
 
 using namespace std;
 using namespace glm;
@@ -32,8 +33,8 @@ bool debug_enabled = false;
 float screen_width = SCREEN_WIDTH;
 float screen_height = SCREEN_HEIGHT;
 
-mat4 projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 800.f));
-mat4 guard_projection = mat4(perspective((float)radians(45.0), screen_width / screen_height, 0.1f, 30.f));
+mat4 projection = mat4(perspective((float)radians(PLAYER_FOV), screen_width / screen_height, PLAYER_NEAR, PLAYER_FAR));
+mat4 guard_projection = mat4(perspective((float)radians(GUARD_FOV), screen_width / screen_height, GUARD_NEAR, GUARD_FAR));
 
 static std::shared_ptr<Camera> camera;
 static shared_ptr<DebugShader> debugShader;
@@ -68,8 +69,8 @@ void World::init()
 	chewy->list = SET_HIDE(chewy->list);
 
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai2.dae"))));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(80.0, 0.0, -6.0), 
-		vec3(60.0, 0.0, 0.0), vec3(40.0, 0.0, -6.0), vec3(20.0, 0.0, 0.0)}, 0.f));
+	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(99.0, 0.0, 0.0), 
+		vec3(98.0, 0.0, 0.0), vec3(97.0, 0.0, 0.0) }, 0.f));
 	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(-50.0, 0.0, 60.0), meshes.at("guard"), { vec3(-50.0, 0.0, 60.0), vec3(-25.0, 0.0, 45.0),
 		vec3(3.0, 0.0, 45.0), vec3(50.0, 0.0, 60.0), vec3(90.0, 0.0, 20.0) }, 15.f));
 	shared_ptr<GameEntity> guard2(new GuardEntity(vec3(-103.0, 0.0, -35.0), meshes.at("guard"), { vec3(-103.0, 0.0, -35.0), vec3(-60.0, 0.0, -25.0),
@@ -140,18 +141,23 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_back", make_shared<MeshSet>(assetPath + "wall_back.dae")));
     shared_ptr <GameEntity> wb(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_back")));
     wb->scale = 30.f;
+	//wb->list = UNSET_OCTTREE(wb->list);
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_front", make_shared<MeshSet>(assetPath + "wall_front.dae")));
     shared_ptr <GameEntity> wf(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_front")));
     wf->scale = 30.f;
+	//wf->list = UNSET_OCTTREE(wf->list);
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_left", make_shared<MeshSet>(assetPath + "wall_left.dae")));
     shared_ptr <GameEntity> wl(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_left")));
     wl->scale = 30.f;
+	//wl->list = UNSET_OCTTREE(wl->list);
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_right", make_shared<MeshSet>(assetPath + "wall_right.dae")));
     shared_ptr <GameEntity> wr(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_right")));
     wr->scale = 30.f;
+	//wr->list = UNSET_OCTTREE(wr->list);
     meshes.insert(pair<string, shared_ptr<MeshSet>>("ground", make_shared<MeshSet>(assetPath + "ground.dae")));
     shared_ptr <GameEntity> g(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("ground")));
     g->scale = 30.f;
+	//g->list = UNSET_OCTTREE(g->list);
 
 
     camera = player_camera;
@@ -204,7 +210,13 @@ void World::shootArrows()
 {
 
 	static bool held = false;
-	if (keys[GLFW_KEY_E] && archery_camera->in_use && !held)
+	bool shot = false;
+	for (auto it = entities.begin(); it != entities.end(); ++it) {
+		if (typeid(*(*it)) == typeid(ProjectileEntity)) {
+			shot = true;
+		}
+	}
+	if (keys[GLFW_KEY_E] && archery_camera->in_use && !held && !shot)
 	{
 		held = true;
 	}
@@ -247,16 +259,21 @@ void World::draw()
 		shaders.at("simpleShader")->draw(camera->getViewMatrix(), _skybox);
 	}
 
-	shared_ptr<DebugCamera> c_test = dynamic_pointer_cast<DebugCamera>(camera);
+	shared_ptr<DebugCamera> d_test = dynamic_pointer_cast<DebugCamera>(camera);
 	vector<shared_ptr<GameEntity>> in_view;
-    if (c_test != nullptr)
+    if (d_test != nullptr)
     {
         in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
 	}
 	else
 	{
 		in_view = get_objects_in_view(entities, camera->getViewMatrix());
+	}
 
+	shared_ptr<PlayerCamera> p_test = dynamic_pointer_cast<PlayerCamera>(camera);
+	if (p_test != nullptr)
+	{
+		p_test->reorient(entities, chewy);
 	}
 	glUseProgram(0);
 
@@ -276,6 +293,10 @@ void World::draw()
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
 			}
+			//if there's an arrow have archery camera follow it and make game slow-mo
+			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
+				archery_camera->cameraPosition = entities[i]->position - archery_camera->cameraFront;
+			}
 
 			if (!SHOULD_DRAW(entities[i]->list)) {
 				entities.erase(entities.begin() + i);
@@ -284,12 +305,11 @@ void World::draw()
 		}
 		for (int i = 0; i < in_view.size(); i++)
 		{
-			if (!SHOULD_DRAW(entities[i]->list)) {
+			if (!SHOULD_DRAW(in_view[i]->list)) { //used to be !SHOULD_DRAW(entities[i]->list) but caused crashing. This is a guess
 				in_view.erase(in_view.begin() + i);
 				i--;
 			}
 		}
-		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(shaders.at("defShader")->getProgramID());
@@ -449,6 +469,15 @@ void World::draw_point(vec3 p, vec3 color, float radius)
 	glUseProgram(debugShader->getProgramID());
 	debugShaderQueue.push_back([=](){debugShader->drawPoint(p, color, radius, camera->getViewMatrix());  });
 	glUseProgram(0);
+}
+
+void World::draw_box(shared_ptr<BoundingBox> box, vec3 color)
+{
+	shared_ptr<vector<pair<vec3, vec3>>> points = box->get_line_segments();
+	for (int j = 0; j < points->size(); j++)
+	{
+		draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));
+	}
 }
 
 void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
