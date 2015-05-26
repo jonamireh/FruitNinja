@@ -18,6 +18,8 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, s
 
 void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEntity>> ents)
 {
+	check_gl_error("Before geom pass");
+
 	gbuffer.BindForGeomPass();
 
 	glDepthMask(GL_TRUE);
@@ -65,6 +67,8 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 			glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
+
+			check_gl_error("Mesh.draw before texture");
 
 			glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 

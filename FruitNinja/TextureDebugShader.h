@@ -7,6 +7,7 @@ class TextureDebugShader :
 {
 	static const GLfloat g_quad_vertex_buffer_data[];
 	GLuint quad_vertexbuffer;
+	GLuint VAO;
 public:
 	void draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity) override;
 	void drawTexture(GLuint textureId, int xloc, int yloc, int width, int height);

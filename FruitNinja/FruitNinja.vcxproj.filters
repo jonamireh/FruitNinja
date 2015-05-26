@@ -136,6 +136,9 @@
     <ClCompile Include="ParticleShader.cpp">
       <Filter>Fire</Filter>
     </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>HUD Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -273,6 +276,9 @@
     <ClInclude Include="ParticleShader.h">
       <Filter>Fire</Filter>
     </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>HUD Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -343,6 +349,9 @@
     </Filter>
     <Filter Include="Fire">
       <UniqueIdentifier>{f4747659-5776-4b40-ae69-be5c52b0dfcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HUD Shader">
+      <UniqueIdentifier>{9e724d8e-bc7b-4c7a-83a4-3d31327947d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

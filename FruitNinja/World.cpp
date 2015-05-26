@@ -99,7 +99,7 @@ void World::init()
 	entities.push_back(chewy);
     entities.push_back(tower);
 
-
+	hud = HUD();
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
@@ -379,6 +379,8 @@ void World::draw()
 		debugShaderQueue.clear();
 	}
 	glUseProgram(0);
+
+	hud.draw();
 }
 
 void World::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)

@@ -12,6 +12,7 @@
 #include "Skybox.h"
 #include "DebugShader.h"
 #include "ChewyEntity.h"
+#include "HUD.h"
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
@@ -63,6 +64,7 @@ private:
     std::shared_ptr<Camera> archery_camera;
     std::shared_ptr<Camera> player_camera;
 	std::shared_ptr<Skybox> _skybox;
+	HUD hud;
 	void init();
     void setup_level(string file_path);
     void setup_token(char obj_to_place, glm::vec3 file_index);
