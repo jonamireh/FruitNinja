@@ -1,0 +1,40 @@
+_______________________________________
+| XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|
+| XlOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOlX|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                    1             X|
+| X                                  X|
+| X                                  X|
+| X         2               0        X|
+| X                                  X|
+| X                                  X|
+| X                           4      X|
+| X                  G               X|
+| X                                  X|
+| X                                  X|
+| X              3                   X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| X                                  X|
+| XlCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCClX|
+| XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|
+_______________________________________

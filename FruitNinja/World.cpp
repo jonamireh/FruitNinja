@@ -19,7 +19,11 @@
 #include <queue>
 #include "LightEntity.h"
 #include "FrustrumCulling.h"
+#include <iostream>
+#include <fstream>
 #include "ParticleShader.h"
+
+#define FILE_TO_WORLD_SCALE 6.f
 
 using namespace std;
 using namespace glm;
@@ -57,139 +61,44 @@ void World::init()
     archery_camera = shared_ptr<Camera>(new ArcheryCamera());
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
-    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
-    tower->scale = 30.0f;
-	tower->list = UNSET_OCTTREE((tower->list));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
-    chewy = std::make_shared<ChewyEntity>(vec3(0.0, 0.0, 0.0), meshes.at("chewy"), player_camera, archery_camera);
-    // chewy bounding box mesh
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
-    chewy->largestBB = (new ChewyEntity(vec3(0.0, 0.0, 0.0), meshes.at("chewy_bb"), player_camera, archery_camera))->getOuterBoundingBox();
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai2.dae"))));
+    //meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
+    //meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
+    
+    chewy = std::make_shared<ChewyEntity>(vec3(60.0, 0.0, 60.0), meshes.at("chewy"), player_camera, archery_camera);
+    // chewy bounding box mesh
+    chewy->largestBB = (new ChewyEntity(vec3(60.0, 0.0, 60.0), meshes.at("chewy_bb"), player_camera, archery_camera))->getOuterBoundingBox();
     chewy->sebInit();
 	chewy->list = SET_HIDE(chewy->list);
 
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai2.dae"))));
-	shared_ptr<GameEntity> guard(new GuardEntity(vec3(100.0, 0.0, 0.0), meshes.at("guard"), { vec3(100.0, 0.0, 0.0), vec3(99.0, 0.0, 0.0), 
-		vec3(98.0, 0.0, 0.0), vec3(97.0, 0.0, 0.0) }, 0.f));
-	shared_ptr<GameEntity> guard1(new GuardEntity(vec3(-50.0, 0.0, 60.0), meshes.at("guard"), { vec3(-50.0, 0.0, 60.0), vec3(-25.0, 0.0, 45.0),
-		vec3(3.0, 0.0, 45.0), vec3(50.0, 0.0, 60.0), vec3(90.0, 0.0, 20.0) }, 15.f));
-	shared_ptr<GameEntity> guard2(new GuardEntity(vec3(-103.0, 0.0, -35.0), meshes.at("guard"), { vec3(-103.0, 0.0, -35.0), vec3(-60.0, 0.0, -25.0),
-		vec3(-12.0, 0.0, -25.0), vec3(35.0, 0.0, -25.0), vec3(45.0, 0.0, -35.0), vec3(25.0, 0, -35.0), vec3(-2.0,0 , -50.0) }, 30.f));
-
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
-	//shared_ptr<GameEntity> arrow(new ProjectileEntity(vec3(40.0f, 15.0f, -2.0f), meshes.at("arrow"), chewy, archery_camera));
-
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
-    
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
-
-
-	shared_ptr <GameEntity> lantern(new LightEntity(vec3(30.0, 16.0, 31.5), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
-    lantern->rotations.y = M_PI_2;
-	shared_ptr <GameEntity> lantern2(new LightEntity(vec3(0.0, 16.0, 31.5), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
-	lantern2->rotations.y = M_PI_2;
-	shared_ptr <GameEntity> lantern3(new LightEntity(vec3(30.0, 16.0, 0.0), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
-	lantern3->rotations.y = M_PI_2;
-	shared_ptr <GameEntity> lantern4(new LightEntity(vec3(-30.0, 2.0, 20), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
-	lantern4->rotations.y = M_PI_2;
-	shared_ptr <GameEntity> lantern5(new LightEntity(vec3(-50.0, 10.0, 0.0), meshes.at("lantern"), 500.0f, meshes.at("unit_sphere")));
-	lantern5->rotations.y = M_PI_2;
-
-
-
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
-    shared_ptr <GameEntity> lantern_pole(new ObstacleEntity(vec3(30.0, 0.0, 30.0), meshes.at("lanternPole")));
-
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
-    shared_ptr <GameEntity> cBarrel(new ObstacleEntity(vec3(48.0, 0.0, 30.0), meshes.at("closedBarrel")));
-    cBarrel->scale = 3.0f;
-	cBarrel->list = SET_HIDE((cBarrel->list));
-	shared_ptr <GameEntity> cBarrel2(new ObstacleEntity(vec3(-50.0, 0.0, -10.0), meshes.at("closedBarrel")));
-	cBarrel2->scale = 3.0f;
-	cBarrel2->list = SET_HIDE((cBarrel2->list));
-	shared_ptr <GameEntity> cBarrel3(new ObstacleEntity(vec3(-58.0, 0.0, 10.0), meshes.at("closedBarrel")));
-	cBarrel3->scale = 3.0f;
-	cBarrel2->list = SET_HIDE((cBarrel2->list));
-
-
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
-    shared_ptr <GameEntity> oBarrel(new ObstacleEntity(vec3(30.0, 0.0, 40.0), meshes.at("openBarrel")));
-    oBarrel->scale = 3.0f;
-	oBarrel->list = SET_HIDE((oBarrel->list));
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
-    shared_ptr <GameEntity> box1(new ObstacleEntity(vec3(50.0, 0.0, 20.0), meshes.at("box")));
-    box1->scale = 3.0f;
-	box1->list = SET_HIDE((box1->list));
-    shared_ptr <GameEntity> box2(new ObstacleEntity(vec3(50.0, 7.0, 20.0), meshes.at("box")));
-    box2->scale = 3.0f;
-	box2->list = SET_HIDE((box2->list));
-    shared_ptr <GameEntity> box3(new ObstacleEntity(vec3(50.0, 14.0, 20.0), meshes.at("box")));
-    box3->scale = 3.0f;
-	box3->list = SET_HIDE((box3->list));
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->scale = 750.f;
 	_skybox->list = UNSET_OCTTREE((_skybox->list));
 
-	shared_ptr <GameEntity> box4(new ObstacleEntity(vec3(80.0, 0.0, 0.0), meshes.at("box")));
-	box4->scale = 3.0f;
-	box4->list = SET_HIDE((box4->list));
-
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
-	shared_ptr <TestSphere> testSphere(new TestSphere(meshes.at("testsphere")));
-
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_back", make_shared<MeshSet>(assetPath + "wall_back.dae")));
-    shared_ptr <GameEntity> wb(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_back")));
-    wb->scale = 30.f;
-	//wb->list = UNSET_OCTTREE(wb->list);
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_front", make_shared<MeshSet>(assetPath + "wall_front.dae")));
-    shared_ptr <GameEntity> wf(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_front")));
-    wf->scale = 30.f;
-	//wf->list = UNSET_OCTTREE(wf->list);
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_left", make_shared<MeshSet>(assetPath + "wall_left.dae")));
-    shared_ptr <GameEntity> wl(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_left")));
-    wl->scale = 30.f;
-	//wl->list = UNSET_OCTTREE(wl->list);
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_right", make_shared<MeshSet>(assetPath + "wall_right.dae")));
-    shared_ptr <GameEntity> wr(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("wall_right")));
-    wr->scale = 30.f;
-	//wr->list = UNSET_OCTTREE(wr->list);
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("ground", make_shared<MeshSet>(assetPath + "ground.dae")));
-    shared_ptr <GameEntity> g(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("ground")));
-    g->scale = 30.f;
-	//g->list = UNSET_OCTTREE(g->list);
-
+    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
+    tower->scale = 30.0f;
+    tower->list = UNSET_OCTTREE((tower->list));
 
     camera = player_camera;
     player_camera->in_use = true;
+
+
+    setup_level(assetPath + "first_courtyard.txt");
+    setup_guard(assetPath + "first_courtyard_guard.txt");
+    setup_guard(assetPath + "first_courtyard_second_guard.txt");
+
 	entities.push_back(chewy);
-	entities.push_back(tower);
-	entities.push_back(guard);
-	entities.push_back(guard1);
-	entities.push_back(guard2);
+    entities.push_back(tower);
 
-    entities.push_back(lantern);
-	entities.push_back(lantern2);
-	entities.push_back(lantern3);
-	entities.push_back(lantern4);
-	entities.push_back(lantern5);
-
-    entities.push_back(lantern_pole);
-    entities.push_back(oBarrel);
-    entities.push_back(cBarrel);
-	entities.push_back(cBarrel2);
-	entities.push_back(cBarrel3);
-
-    entities.push_back(box1);
-    entities.push_back(box2);
-    entities.push_back(box3);
-	entities.push_back(box4);
-    entities.push_back(testSphere);
-    entities.push_back(wb);
-    entities.push_back(wf);
-    entities.push_back(wr);
-    entities.push_back(wl);
-    entities.push_back(g);
 
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
@@ -204,6 +113,127 @@ void World::init()
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+}
+
+void World::setup_level(string file_path)
+{
+    ifstream level_file;
+    level_file.open(file_path);
+
+    string current_line;
+    int current_row = 0;
+
+    while (!level_file.eof()) // runs through every line
+    {
+        getline(level_file, current_line);
+
+        for (int i = 0; i < current_line.length(); i++)
+        {
+            setup_token(current_line.at(i), vec3(i, 0, current_row));
+        }
+        current_row++;
+    }
+    level_file.close();
+}
+
+void World::setup_guard(string file_path)
+{
+    ifstream level_file;
+    level_file.open(file_path);
+
+    string current_line;
+    int current_row = 0;
+
+    vec3 control_points[10];
+    vec3 starting_position;
+
+    while (!level_file.eof()) // runs through every line
+    {
+        getline(level_file, current_line);
+
+        for (int i = 0; i < current_line.length(); i++)
+        {
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, 0, current_row);
+
+            switch (current_line.at(i))
+            {
+            case 'G':
+                starting_position = world_position;
+                break;
+            case '0':
+                control_points[0] = world_position;
+                break;
+            case '1':
+                control_points[1] = world_position;
+                break;
+            case '2':
+                control_points[2] = world_position;
+                break;
+            case '3':
+                control_points[3] = world_position;
+                break;
+            case '4':
+                control_points[4] = world_position;
+                break;
+            case '5':
+                control_points[5] = world_position;
+                break;
+            case '6':
+                control_points[6] = world_position;
+                break;
+            case '7':
+                control_points[7] = world_position;
+                break;
+            case '8':
+                control_points[8] = world_position;
+                break;
+            case '9':
+                control_points[9] = world_position;
+                break;
+            }
+        }
+        current_row++;
+    }
+
+    vector<vec3> spline_points;
+    spline_points.push_back(starting_position);
+    for (int i = 0; i < 10; i++)
+    {
+        if (control_points[i] != vec3(0))
+            spline_points.push_back(glm::vec3(control_points[i]));
+        else
+            break;
+    }
+
+    entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(starting_position, meshes.at("guard"), spline_points, 15.f)));
+    level_file.close();
+}
+
+void World::setup_token(char obj_to_place, glm::vec3 file_index)
+{
+    glm::vec3 placement_position = FILE_TO_WORLD_SCALE * file_index;
+
+    switch (obj_to_place)
+    {
+    case 'X':
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("box"))));
+        entities.back()->scale = 3.f;
+        break;
+    case 'O':
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("openBarrel"))));
+        entities.back()->scale = 3.f;
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        break;
+    case 'C':
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
+        entities.back()->scale = 3.f;
+        break;
+    case 'l': // Lantern Pole with Lantern
+        entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 7.f, 1.2f), meshes.at("lantern"), 500.f, meshes.at("unit_sphere"))));
+        entities.back()->rotations.y = M_PI_2;
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("lanternPole"))));
+        break;
+    }
 }
 
 void World::shootArrows()

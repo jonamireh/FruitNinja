@@ -64,7 +64,10 @@ private:
     std::shared_ptr<Camera> player_camera;
 	std::shared_ptr<Skybox> _skybox;
 	void init();
-	void shootArrows();
+    void setup_level(string file_path);
+    void setup_token(char obj_to_place, glm::vec3 file_index);
+    void setup_guard(string file_path);
+    void shootArrows();
     std::shared_ptr<ChewyEntity> chewy;
 };
 
