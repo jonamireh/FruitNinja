@@ -275,8 +275,6 @@ void World::draw()
 	{
 		p_test->reorient(entities, chewy);
 	}
-	shared_ptr<PlayerCamera> p_camera = dynamic_pointer_cast<PlayerCamera>(player_camera);
-	p_camera->get_near_plane_corners();
 	glUseProgram(0);
 
 
