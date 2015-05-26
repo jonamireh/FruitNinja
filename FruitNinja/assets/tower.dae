@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.74.0 commit date:2015-03-31, commit time:13:39, hash:000dfc0</authoring_tool>
     </contributor>
-    <created>2015-05-25T23:50:03</created>
-    <modified>2015-05-25T23:50:03</modified>
+    <created>2015-05-26T00:05:20</created>
+    <modified>2015-05-26T00:05:20</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -185,7 +185,7 @@
               <color sid="ambient">0 0 0 1</color>
             </ambient>
             <diffuse>
-              <texture texture="StoneTexture1_png-sampler"/>
+              <texture texture="StoneTexture1_png-sampler" texcoord="UVMap"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
@@ -1233,7 +1233,9 @@
         <instance_geometry url="#Cube_010-mesh">
           <bind_material>
             <technique_common>
-              <instance_material symbol="Material_004-material" target="#Material_004-material"/>
+              <instance_material symbol="Material_004-material" target="#Material_004-material">
+                <bind_vertex_input semantic="UVMap" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
             </technique_common>
           </bind_material>
         </instance_geometry>
