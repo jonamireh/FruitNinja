@@ -113,9 +113,6 @@ void World::init()
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
-
-	entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(vec3(60.f, 0.f, 60.f), meshes.at("guard"), { vec3(60.0, 0.0, 60.0), vec3(70.0, 0.0, 60.0),
-		vec3(70.0, 0.0, 70.0), vec3(60.0, 0.0, 70.0) }, 1.f, true)));
 }
 
 void World::setup_level(string file_path)
