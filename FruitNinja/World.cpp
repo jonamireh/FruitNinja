@@ -325,7 +325,7 @@ void World::draw()
 			}
 			//if there's an arrow have archery camera follow it and make game slow-mo
 			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
-				archery_camera->cameraPosition = entities[i]->position - archery_camera->cameraFront;
+				archery_camera->cameraPosition = entities[i]->getPosition() - archery_camera->cameraFront;
 			}
 
 			if (!SHOULD_DRAW(entities[i]->list)) {
@@ -476,8 +476,8 @@ void World::update()
 	}
 	start_time = glfwGetTime();
 
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
-	collision_handler(world_oct_tree->collision_pairs);
+	//OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+	//collision_handler(world_oct_tree->collision_pairs);
     update_key_callbacks();
 	_skybox->update();
 }

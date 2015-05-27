@@ -33,7 +33,7 @@ void ProjectileEntity::update()
 
 glm::mat4 ProjectileEntity::getModelMat()
 {
-	glm::mat4 model_trans = translate(glm::mat4(1.0f), position);
+	glm::mat4 model_trans = translate(glm::mat4(1.0f), getPosition());
 	
 	glm::mat4 model_scale = glm::scale(glm::mat4(1.0f), glm::vec3(scale, scale, scale));
 

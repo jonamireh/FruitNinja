@@ -27,6 +27,9 @@
 class GameEntity
 {
     float radius;
+	//glm::vec4 modelMat;
+	//bool validModelMat = false;
+	glm::vec3 position;
 public:
     bool collision_response;
 	std::shared_ptr<BoundingBox> largestBB;
@@ -36,8 +39,11 @@ public:
     void sebInit();
 	virtual void update();
     virtual void collision(std::shared_ptr<GameEntity> entity);
+
+	glm::vec3 getPosition();
+	void setPosition(glm::vec3 pos);
+
 	std::shared_ptr<MeshSet> mesh;
-	glm::vec3 position;
 	glm::vec3 last_position;
     glm::vec3 rotations;
     float scale = 1.0f;

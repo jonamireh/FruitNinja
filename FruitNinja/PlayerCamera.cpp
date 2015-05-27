@@ -66,8 +66,8 @@ void PlayerCamera::movement(std::shared_ptr<GameEntity> chewy)
 {
     mouse_update();
 
-    cameraPosition = chewy->position + vec3(0.f, 5.0f, 0.f) -radius * cameraFront;
-    lookAtPoint = chewy->position + vec3(0.f, 5.0f, 0.f);
+    cameraPosition = chewy->getPosition() + vec3(0.f, 5.0f, 0.f) -radius * cameraFront;
+    lookAtPoint = chewy->getPosition() + vec3(0.f, 5.0f, 0.f);
 }
 
 mat4 PlayerCamera::getViewMatrix()

@@ -4,7 +4,7 @@
 
 void Skybox::update()
 {
-	position = (*_camera)->cameraPosition;
+	setPosition((*_camera)->cameraPosition);
 }
 
 Skybox::Skybox(std::shared_ptr<Camera>* camera, std::shared_ptr<MeshSet> mesh) : GameEntity(glm::vec3(0), mesh)

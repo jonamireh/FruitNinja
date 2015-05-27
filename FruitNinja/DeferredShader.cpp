@@ -103,7 +103,7 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 		renderer.draw(camera, ents, lights);
 		
 		skyboxPass(camera);
-		particlePass(camera);
+		//particlePass(camera);
 		finalPass();
 	}
 		

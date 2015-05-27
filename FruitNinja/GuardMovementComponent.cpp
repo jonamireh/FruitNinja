@@ -29,5 +29,5 @@ void GuardMovementComponent::update()
 
 	//vec3 pos_offset = direction * GUARD_MOVE_SPEED * seconds_passed;
 	//entity.position += pos_offset;
-	entity.position += seconds_passed * move_speed * direction; 
+	entity.setPosition(entity.getPosition() + seconds_passed * move_speed * direction);
 }

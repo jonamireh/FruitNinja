@@ -42,6 +42,16 @@ void GameEntity::sebInit()
     center = (outer_bb->lower_bound + outer_bb->upper_bound)  / 2.f;
 }
 
+glm::vec3 GameEntity::getPosition()
+{
+	return position;
+}
+
+void GameEntity::setPosition(glm::vec3 pos)
+{
+	position = pos;
+}
+
 float GameEntity::getRadius()
 {
     return scale * radius;
