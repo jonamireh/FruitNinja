@@ -37,8 +37,10 @@ float angleDiff(float angle_a, float angle_b)
 
 void ChewyMovementComponent::update()
 {
+	entity.last_position = entity.getPosition();
 
-	entity.last_position = entity.position;
+	vec3 position = entity.getPosition();
+	vec3 rotations = entity.getRotations();
 
 	if (dynamic_cast<ChewyEntity&>(entity)._falling)
 	{
@@ -76,41 +78,44 @@ void ChewyMovementComponent::update()
             pos_offset = direction * CHEWY_MOVE_SPEED * seconds_passed;
 
 			float toAngle = entity.turnAngle(direction).y;
-			float fromAngle = entity.rotations.y;
+			float fromAngle = rotations.y;
 			
 			if (toAngle - fromAngle < -M_PI)
 			{
 				toAngle += 2 * M_PI;
-				entity.rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
-				if (entity.rotations.y > M_PI)
-					entity.rotations.y -= 2 * M_PI;
+				rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
+				if (rotations.y > M_PI)
+					rotations.y -= 2 * M_PI;
 			}
 			else if (toAngle - fromAngle > M_PI)
 			{
 				fromAngle += 2 * M_PI;
-				entity.rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
-				if (entity.rotations.y < -M_PI)
-					entity.rotations.y += 2 * M_PI;
+				rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
+				if (rotations.y < -M_PI)
+					rotations.y += 2 * M_PI;
 			}
 			else
-				entity.rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
+				rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
 
-            entity.position += pos_offset;
+            position += pos_offset;
 		}
-        if ((entity.position.y <= 0 || !dynamic_cast<ChewyEntity&>(entity)._falling) && keys[GLFW_KEY_SPACE])
+        if ((position.y <= 0 || !dynamic_cast<ChewyEntity&>(entity)._falling) && keys[GLFW_KEY_SPACE])
 		{
 			entity.velocity.y += 30;
 		} 
 	}
 	else if(archery_cam->in_use) {
-		entity.rotations = entity.turnAngle(archery_cam->cameraFront);
+		rotations = entity.turnAngle(archery_cam->cameraFront);
 	}
 
-	entity.position += entity.velocity * seconds_passed;
-	if (entity.position.y < 0)
+	position += entity.velocity * seconds_passed;
+	if (position.y < 0)
 	{
-		entity.position.y = 0;
+		position.y = 0;
 		entity.velocity.y = 0;
 	}
 	dynamic_cast<ChewyEntity&>(entity)._falling = true;
+
+	entity.setPosition(position);
+	entity.setRotations(rotations);
 }

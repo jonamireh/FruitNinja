@@ -13,7 +13,7 @@ class GuardMovementComponent : public Component
 {
 public:
 	GuardMovementComponent(GameEntity& entity, std::vector<glm::vec3> control_points, float move_speed) : entity(entity),
-		start_position(entity.position), control_points(control_points), move_speed(move_speed),pathing(control_points, move_speed) {}
+		start_position(entity.getPosition()), control_points(control_points), move_speed(move_speed),pathing(control_points, move_speed) {}
 	void update();
 	std::vector<glm::vec3> control_points;
 	glm::vec3 start_position;
