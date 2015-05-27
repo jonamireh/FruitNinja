@@ -28,7 +28,9 @@ class GameEntity
 {
     float radius;
 	glm::mat4 modelMat;
+	glm::mat4 alignedModelMat;
 	bool validModelMat = false;
+	bool validAlignedModelMat = false;
 	glm::vec3 position;
 	float scale = 1.0f;
 	glm::vec3 rotations;
@@ -61,6 +63,7 @@ public:
     bool compare(std::shared_ptr<GameEntity> ge);
     std::shared_ptr<std::vector<BoundingBox>> GameEntity::getTransformedBoundingBoxes();
     virtual glm::mat4 getModelMat();
+	glm::mat4 getAlignedModelMat();
 	std::shared_ptr<BoundingBox> getOuterBoundingBox();
 	std::shared_ptr<BoundingBox> getTransformedOuterBoundingBox();
 	std::shared_ptr<BoundingBox> transformed_BB;
