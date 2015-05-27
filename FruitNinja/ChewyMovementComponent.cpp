@@ -37,10 +37,10 @@ float angleDiff(float angle_a, float angle_b)
 
 void ChewyMovementComponent::update()
 {
-
 	entity.last_position = entity.getPosition();
 
 	vec3 position = entity.getPosition();
+	vec3 rotations = entity.getRotations();
 
 	if (dynamic_cast<ChewyEntity&>(entity)._falling)
 	{
@@ -78,24 +78,24 @@ void ChewyMovementComponent::update()
             pos_offset = direction * CHEWY_MOVE_SPEED * seconds_passed;
 
 			float toAngle = entity.turnAngle(direction).y;
-			float fromAngle = entity.rotations.y;
+			float fromAngle = rotations.y;
 			
 			if (toAngle - fromAngle < -M_PI)
 			{
 				toAngle += 2 * M_PI;
-				entity.rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
-				if (entity.rotations.y > M_PI)
-					entity.rotations.y -= 2 * M_PI;
+				rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
+				if (rotations.y > M_PI)
+					rotations.y -= 2 * M_PI;
 			}
 			else if (toAngle - fromAngle > M_PI)
 			{
 				fromAngle += 2 * M_PI;
-				entity.rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
-				if (entity.rotations.y < -M_PI)
-					entity.rotations.y += 2 * M_PI;
+				rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
+				if (rotations.y < -M_PI)
+					rotations.y += 2 * M_PI;
 			}
 			else
-				entity.rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
+				rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
 
             position += pos_offset;
 		}
@@ -105,7 +105,7 @@ void ChewyMovementComponent::update()
 		} 
 	}
 	else if(archery_cam->in_use) {
-		entity.rotations = entity.turnAngle(archery_cam->cameraFront);
+		rotations = entity.turnAngle(archery_cam->cameraFront);
 	}
 
 	position += entity.velocity * seconds_passed;
@@ -117,4 +117,5 @@ void ChewyMovementComponent::update()
 	dynamic_cast<ChewyEntity&>(entity)._falling = true;
 
 	entity.setPosition(position);
+	entity.setRotations(rotations);
 }

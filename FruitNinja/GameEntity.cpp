@@ -62,6 +62,16 @@ void GameEntity::setScale(float entScale)
 	scale = entScale;
 }
 
+glm::vec3 GameEntity::getRotations()
+{
+	return rotations;
+}
+
+void GameEntity::setRotations(glm::vec3 rots)
+{
+	rotations = rots;
+}
+
 float GameEntity::getRadius()
 {
     return scale * radius;

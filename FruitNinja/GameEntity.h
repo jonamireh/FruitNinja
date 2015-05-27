@@ -31,6 +31,7 @@ class GameEntity
 	//bool validModelMat = false;
 	glm::vec3 position;
 	float scale = 1.0f;
+	glm::vec3 rotations;
 public:
     bool collision_response;
 	std::shared_ptr<BoundingBox> largestBB;
@@ -45,10 +46,11 @@ public:
 	void setPosition(glm::vec3 pos);
 	float getScale();
 	void setScale(float entScale);
+	glm::vec3 getRotations();
+	void setRotations(glm::vec3 rots);
 
 	std::shared_ptr<MeshSet> mesh;
 	glm::vec3 last_position;
-    glm::vec3 rotations;
 	glm::vec3 turnAngle(glm::vec3 cartesian);
 
 	glm::vec3 velocity = glm::vec3(0);
