@@ -52,6 +52,16 @@ void GameEntity::setPosition(glm::vec3 pos)
 	position = pos;
 }
 
+float GameEntity::getScale()
+{
+	return scale;
+}
+
+void GameEntity::setScale(float entScale)
+{
+	scale = entScale;
+}
+
 float GameEntity::getRadius()
 {
     return scale * radius;
