@@ -50,6 +50,7 @@ glm::vec3 GameEntity::getPosition()
 void GameEntity::setPosition(glm::vec3 pos)
 {
 	position = pos;
+	validModelMat = false;
 }
 
 float GameEntity::getScale()
@@ -60,6 +61,7 @@ float GameEntity::getScale()
 void GameEntity::setScale(float entScale)
 {
 	scale = entScale;
+	validModelMat = false;
 }
 
 glm::vec3 GameEntity::getRotations()
@@ -70,6 +72,7 @@ glm::vec3 GameEntity::getRotations()
 void GameEntity::setRotations(glm::vec3 rots)
 {
 	rotations = rots;
+	validModelMat = false;
 }
 
 float GameEntity::getRadius()
@@ -167,13 +170,20 @@ void GameEntity::collision(std::shared_ptr<GameEntity> bb)
 
 glm::mat4 GameEntity::getModelMat()
 {
+	if (validModelMat) {
+		return modelMat;
+	}
+
     mat4 model_trans = translate(mat4(1.0f), position);
     mat4 model_rot_x = rotate(mat4(1.0f), rotations.x, vec3(1.f, 0.f, 0.f));
     mat4 model_rot_y = rotate(mat4(1.0f), rotations.y, vec3(0.f, 1.f, 0.f));
     mat4 model_rot_z = rotate(mat4(1.0f), rotations.z, vec3(0.f, 0.f, 1.f));
     mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
 
-    return model_trans * model_rot_z * model_rot_x * model_rot_y * model_scale;
+    modelMat = model_trans * model_rot_z * model_rot_x * model_rot_y * model_scale;
+	validModelMat = true;
+
+	return modelMat;
 }
 
 void GameEntity::update()

@@ -27,8 +27,8 @@
 class GameEntity
 {
     float radius;
-	//glm::vec4 modelMat;
-	//bool validModelMat = false;
+	glm::mat4 modelMat;
+	bool validModelMat = false;
 	glm::vec3 position;
 	float scale = 1.0f;
 	glm::vec3 rotations;
