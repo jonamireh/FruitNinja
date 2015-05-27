@@ -6,7 +6,7 @@ using namespace std;
 
 void GuardMovementComponent::update()
 {
-	direction = pathing.getDirection();
+	direction = pathing.get_direction();
 	float toAngle = entity.turnAngle(direction).y;
 	vec3 rotations = entity.getRotations();
 	float fromAngle = rotations.y;
