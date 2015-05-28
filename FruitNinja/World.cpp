@@ -22,11 +22,8 @@
 #include <iostream>
 #include <fstream>
 #include "ParticleShader.h"
-<<<<<<< HEAD
 #include "CinematicCamera.h"
-=======
 #include "MyOctree.h"
->>>>>>> e63377e3ca8ede2a797aa370d9beecd05d9d3ab7
 
 #define FILE_TO_WORLD_SCALE 6.f
 

@@ -9,4 +9,7 @@ public:
 	ObstacleEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh);
 	void update();
 	glm::vec3 getCenter();
+private:
+	bool centerSet = false;
+	bool initBox = false;
 };
