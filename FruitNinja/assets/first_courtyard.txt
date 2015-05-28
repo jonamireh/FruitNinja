@@ -1,40 +1,40 @@
 _______________________________________
-| XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|
-| XlOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOlX|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| XlCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCClX|
-| XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|
+|                                      |
+|                                      |
+|     l                                |
+|        C      C      C      C        |
+|                                      |
+|                                      |
+|                                      |
+|      X                               |
+|               O                      |
+|                                      |
+|       l                              |
+|                          O           |
+|               X                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|             C           O            |
+|                                      |
+|      X                               |
+|                 O              l     |
+|                                      |
+|                         X            |
+|      l                               |
+|                                      |
+|                   X                  |
+|                                   l  |
+|                                      |
+|      X                               |
+|                             O        |
+|                                      |
+|                                      |
+|                  X                   |
+|      O                               |
+|                             O        |
+|          O      l                    |
+|                                      |
+|                                      |
 _______________________________________
