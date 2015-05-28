@@ -1,11 +1,14 @@
 #version 330
 
 uniform sampler2D uTexture;
+uniform float percent;
 
 in vec2 UV;
 
 out vec4 finalColor;
 
 void main(){
+	if (UV.y > percent)
+		discard;
 	finalColor = texture(uTexture, UV);
 }

@@ -60,7 +60,7 @@ void TextureDebugShader::draw(glm::mat4 & view_mat, std::shared_ptr<GameEntity> 
 /*
 	Draws a specified texture starting at the initial location and expanding the width to the right and height upwards.
  */
-void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height)
+void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height, float percent)
 {
 	glUseProgram(getProgramID());
 	
@@ -74,6 +74,8 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	// Set our "renderedTexture" sampler to user Texture Unit 0
 	glUniform1i(getUniformHandle("uTexture"), 0);
 
+	glUniform1f(getUniformHandle("percent"), percent);
+
 	// Draw the triangles !
 	// You have to disable GL_COMPARE_R_TO_TEXTURE above in order to see anything !
 	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
@@ -83,6 +85,11 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	glUseProgram(0);
 
 	check_gl_error("TextureDebugShader error");
+}
+
+void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height)
+{
+	drawTexture(textureId, xloc, yloc, width, height, 1.0f);
 }
 
 /*

@@ -19,8 +19,11 @@ void BasicAnimationComponent::update()
 			frameTime -= duration;
 		}
 	}
-	else
+	else if (!looping)
+	{
 		frameTime = min(frameTime, end_frame_time);
+		animationComplete = frameTime - end_frame_time < .0001;
+	}
 
 	frameTime = max(starting_frame_time, frameTime);
 
@@ -203,6 +206,7 @@ void BasicAnimationComponent::changeToLoopingAnimation(float start, float end)
 	starting_frame_time = start;
 	end_frame_time = end;
 	looping = true;
+	animationComplete = true;
 }
 
 void BasicAnimationComponent::changeToSingleAnimation(float start, float end)
@@ -211,6 +215,7 @@ void BasicAnimationComponent::changeToSingleAnimation(float start, float end)
 	starting_frame_time = start;
 	end_frame_time = end;
 	looping = false;
+	animationComplete = false;
 }
 
 BasicAnimationComponent::BasicAnimationComponent(GameEntity *entity)

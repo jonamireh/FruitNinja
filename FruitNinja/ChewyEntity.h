@@ -15,8 +15,6 @@ public:
 	void set_material(Material material);
 	float up_velocity = 0;
     bool _falling;
-
-private:
 	ChewyMovementComponent moveComponent;
 	ChewyAnimationComponent animComponent;
 };

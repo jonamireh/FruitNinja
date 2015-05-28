@@ -13,6 +13,7 @@ public:
 	void changeToLoopingAnimation(float start, float end);
 	void changeToSingleAnimation(float start, float end);
 	float frameTime;
+	bool animationComplete;
 private:
 	void calculateAnimationTransforms(aiNode *node, aiMatrix4x4 parentTransform);
 	aiNodeAnim* FindAnimationNode(std::string boneName);

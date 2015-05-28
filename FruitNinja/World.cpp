@@ -48,6 +48,8 @@ bool time_stopped = false;
 float game_speed = 1.0f;
 static vector<std::function<void()>> debugShaderQueue;
 
+float bow_strength = .5f;
+
 World::World()
 {
     debugShader = shared_ptr<DebugShader>(new DebugShader("debugVert.glsl", "debugFrag.glsl"));
@@ -62,7 +64,6 @@ void World::init()
     player_camera = shared_ptr<PlayerCamera>(new PlayerCamera());
     archery_camera = shared_ptr<ArcheryCamera>(new ArcheryCamera());
 	cinematic_camera = shared_ptr<CinematicCamera>(new CinematicCamera());
-	
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final3.dae"))));
@@ -110,7 +111,7 @@ void World::init()
     setup_guard(assetPath + "first_courtyard_guard.txt");
     setup_guard(assetPath + "first_courtyard_second_guard.txt");
 
-	hud = HUD();
+	hud = HUD(chewy);
 
 	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
 	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
@@ -515,20 +516,29 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
-	collision_handler(world_oct_tree->collision_pairs);
-	//MyOctree* world_oct_tree = new MyOctree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities);
-	//world_oct_tree->handle_collisions();
-	//delete world_oct_tree;
+	//OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
+	//collision_handler(world_oct_tree->collision_pairs);
+	MyOctree* world_oct_tree = new MyOctree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities);
+	world_oct_tree->handle_collisions();
+	delete world_oct_tree;
     update_key_callbacks();
 	_skybox->update();
 }
 
 void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)
 {
-    shared_ptr<PlayerCamera> radius_changer = dynamic_pointer_cast<PlayerCamera>(camera);
-    if (radius_changer)
-        radius_changer->update_radius(y_pos);
+	if (dynamic_pointer_cast<PlayerCamera>(camera))
+	{
+		shared_ptr<PlayerCamera> radius_changer = dynamic_pointer_cast<PlayerCamera>(camera);
+		if (radius_changer)
+			radius_changer->update_radius(y_pos);
+	}
+	else if (dynamic_pointer_cast<ArcheryCamera>(camera))
+	{
+		bow_strength -= y_pos * .05;
+		bow_strength = bow_strength < 0.01 ? 0.01 : bow_strength;
+		bow_strength = bow_strength > 1.0 ? 1.0 : bow_strength;
+	}
 }
 
 void World::draw_line(vec3 p1, vec3 p2, vec3 color)

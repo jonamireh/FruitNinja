@@ -115,9 +115,9 @@ shared_ptr<BoundingBox> GameEntity::getOuterBoundingBox()
 
 shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
 {
-	shared_ptr<BoundingBox> obb = getOuterBoundingBox();
 	if (transformed_BB == nullptr)
 	{
+		shared_ptr<BoundingBox> obb = getOuterBoundingBox();
 		vec3 lower_bound(obb->lower_bound);
 		vec3 upper_bound(obb->upper_bound);
 		vector<vec3> points = obb->get_points();
