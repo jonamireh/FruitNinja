@@ -92,7 +92,7 @@ AudioManager* AudioManager::instance()
 	return amInstance;
 }
 
-void AudioManager::playAmbient(string filename)
+void AudioManager::playAmbient(string filename, float volume)
 {
 	FMOD_RESULT result;
 
@@ -109,7 +109,13 @@ void AudioManager::playAmbient(string filename)
 	result = system->createSound(filename.c_str(), FMOD_DEFAULT | FMOD_LOOP_NORMAL, nullptr, &ambientSound);
 	FMODErrorCheck(result);
 
-	result = system->playSound(FMOD_CHANNEL_FREE, ambientSound, false, &ambientChannel);
+	result = system->playSound(FMOD_CHANNEL_FREE, ambientSound, true, &ambientChannel);
+	FMODErrorCheck(result);
+
+	result = ambientChannel->setVolume(volume);
+	FMODErrorCheck(result);
+
+	result = ambientChannel->setPaused(false);
 	FMODErrorCheck(result);
 }
 
