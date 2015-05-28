@@ -10,7 +10,8 @@ public:
 	void update() override;
 	BasicAnimationComponent(GameEntity *chewy);
 	~BasicAnimationComponent();
-	void changeToAnimationBlock(float start, float end);
+	void changeToLoopingAnimation(float start, float end);
+	void changeToSingleAnimation(float start, float end);
 	float frameTime;
 private:
 	void calculateAnimationTransforms(aiNode *node, aiMatrix4x4 parentTransform);
@@ -25,5 +26,6 @@ private:
 	GameEntity *entity;
 	float starting_frame_time;
 	float end_frame_time;
+	bool looping;
 };
 

@@ -10,7 +10,7 @@ void BasicAnimationComponent::update()
 
 	std::vector<Mesh*> entityMeshses = entity->mesh->getMeshes();
 	frameTime += seconds_passed;
-	if (frameTime > end_frame_time)
+	if (looping && frameTime > end_frame_time)
 	{
 		float duration = end_frame_time - starting_frame_time;
 		assert(duration > 0);
@@ -19,6 +19,8 @@ void BasicAnimationComponent::update()
 			frameTime -= duration;
 		}
 	}
+	else
+		frameTime = min(frameTime, end_frame_time);
 
 	frameTime = max(starting_frame_time, frameTime);
 
@@ -195,11 +197,20 @@ glm::mat4 BasicAnimationComponent::convertAiMatrix4x4ToMat4(aiMatrix4x4 inMat)
 		inMat.a4, inMat.b4, inMat.c4, inMat.d4);
 }
 
-void BasicAnimationComponent::changeToAnimationBlock(float start, float end)
+void BasicAnimationComponent::changeToLoopingAnimation(float start, float end)
 {
 	frameTime = start;
 	starting_frame_time = start;
 	end_frame_time = end;
+	looping = true;
+}
+
+void BasicAnimationComponent::changeToSingleAnimation(float start, float end)
+{
+	frameTime = start;
+	starting_frame_time = start;
+	end_frame_time = end;
+	looping = false;
 }
 
 BasicAnimationComponent::BasicAnimationComponent(GameEntity *entity)
@@ -207,6 +218,7 @@ BasicAnimationComponent::BasicAnimationComponent(GameEntity *entity)
 	this->entity = entity;
 	starting_frame_time = 1.0 / FRAMES_PER_SEC;
 	end_frame_time = entity->mesh->getAnimations().at(0).mDuration;
+	looping = true;
 }
 
 

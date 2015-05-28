@@ -72,7 +72,7 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	// Set our "renderedTexture" sampler to user Texture Unit 0
-	glUniform1i(getUniformHandle("texture"), 0);
+	glUniform1i(getUniformHandle("uTexture"), 0);
 
 	// Draw the triangles !
 	// You have to disable GL_COMPARE_R_TO_TEXTURE above in order to see anything !

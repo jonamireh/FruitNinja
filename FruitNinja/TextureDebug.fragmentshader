@@ -1,11 +1,11 @@
 #version 330
 
-uniform sampler2D texture;
+uniform sampler2D uTexture;
 
 in vec2 UV;
 
-out vec4 color;
+out vec4 finalColor;
 
 void main(){
-	color = texture(texture, UV);
+	finalColor = texture(uTexture, UV);
 }
