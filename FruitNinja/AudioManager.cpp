@@ -4,8 +4,11 @@
 #include "AudioManager.h"
 #include "fmodex\fmod.hpp"
 #include "fmodex\fmod_errors.h"
+#include "Camera.h"
 
 using namespace std;
+
+AudioManager *AudioManager::amInstance = nullptr;
 
 void AudioManager::FMODErrorCheck(FMOD_RESULT result)
 {
@@ -73,18 +76,91 @@ AudioManager::AudioManager()
 	}
 	FMODErrorCheck(result);
 
+	ambientSound = nullptr;
+	ambientChannel = nullptr;
+
 	cout << "Audio successfully initialized!" << endl;
 }
 
-void AudioManager::play(string filename)
+AudioManager* AudioManager::instance()
+{
+	if (amInstance == nullptr)
+	{
+		amInstance = new AudioManager();
+	}
+
+	return amInstance;
+}
+
+void AudioManager::playAmbient(string filename)
+{
+	FMOD_RESULT result;
+
+	if (ambientChannel != nullptr)
+	{
+		ambientChannel->stop();
+	}
+
+	if (ambientSound != nullptr)
+	{
+		ambientSound->release();
+	}
+
+	result = system->createSound(filename.c_str(), FMOD_DEFAULT | FMOD_LOOP_NORMAL, nullptr, &ambientSound);
+	FMODErrorCheck(result);
+
+	result = system->playSound(FMOD_CHANNEL_FREE, ambientSound, false, &ambientChannel);
+	FMODErrorCheck(result);
+}
+
+void AudioManager::updateListener(glm::vec3 position, glm::vec3 forward, glm::vec3 up)
+{
+	FMOD_VECTOR pos = { position.x, position.y, -position.z };
+	FMOD_VECTOR fwd = { forward.x, forward.y, -forward.z };
+	FMOD_VECTOR upvec = { up.x, up.y, -up.z };
+	FMOD_RESULT result;
+	result = system->set3DListenerAttributes(0, &pos, nullptr, &fwd, &upvec);
+	FMODErrorCheck(result);
+
+	system->update();
+	FMODErrorCheck(result);
+}
+
+FMOD::Channel *AudioManager::play3DLoop(string filename, glm::vec3 position, bool loop)
 {
 	FMOD_RESULT result;
 	FMOD::Sound *sound;
-	FMOD::Channel *channel;
+	map<string, FMOD::Sound*>::iterator soundItr = soundMap.find(filename);
 
-	result = system->createSound(filename.c_str(), FMOD_DEFAULT | FMOD_LOOP_NORMAL, nullptr, &sound);
+	if (soundItr == soundMap.end()) {
+		cout << "Loading " << filename << "..." << endl;
+		result = system->createSound(filename.c_str(), FMOD_3D | (loop ? FMOD_LOOP_NORMAL : 0), nullptr, &sound);
+		FMODErrorCheck(result);
+
+		cout << "Loaded " << filename << endl;
+
+		soundMap.insert(pair<string, FMOD::Sound*>(filename, sound));
+	}
+	else {
+		sound = soundItr->second;
+	}
+
+	FMOD::Channel *channel;
+	result = system->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
 	FMODErrorCheck(result);
 
-	result = system->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+	updateChannelPosition(channel, position);
+
+	result = channel->setPaused(false);
+	FMODErrorCheck(result);
+
+	return channel;
+}
+
+void AudioManager::updateChannelPosition(FMOD::Channel* channel, glm::vec3 position)
+{
+	FMOD_VECTOR pos = { position.x, position.y, -position.z };
+	FMOD_RESULT result;
+	result = channel->set3DAttributes(&pos, nullptr);
 	FMODErrorCheck(result);
 }
