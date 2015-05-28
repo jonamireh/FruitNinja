@@ -31,12 +31,6 @@
     <ClCompile Include="PhongShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="ProjectileMovementComponent.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="ProjectileEntity.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="ObstacleEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -150,6 +144,12 @@
     </ClCompile>
     <ClCompile Include="CinematicPathingComponent.cpp">
       <Filter>Source</Filter>
+	</ClCompile>
+    <ClCompile Include="ProjectileMovementComponent.cpp">
+      <Filter>Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileEntity.cpp">
+      <Filter>Projectiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -183,13 +183,7 @@
     <ClInclude Include="World.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="ProjectileMovementComponent.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectileEntity.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="ObstacleEntity.h">
@@ -302,6 +296,12 @@
     </ClInclude>
     <ClInclude Include="CinematicPathingComponent.h">
       <Filter>Headers</Filter>
+	</ClInclude>
+    <ClInclude Include="ProjectileMovementComponent.h">
+      <Filter>Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileEntity.h">
+      <Filter>Projectiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +388,9 @@
     </Filter>
     <Filter Include="Test">
       <UniqueIdentifier>{e280dec0-0464-47f0-ae60-e833c875f5d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projectiles">
+      <UniqueIdentifier>{2b49bc61-52ec-4b6d-9ef2-115b165168ef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

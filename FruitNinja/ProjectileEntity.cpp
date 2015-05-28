@@ -13,7 +13,7 @@ ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryC
 ProjectileEntity::~ProjectileEntity()
 {
 	//not called til out of world scope. sort of a mem leak
-	std::cout << "Arrow destroyed!!!!!!!";
+	std::cout << "Arrow destroyed!!!!!!!\n";
 }
 
 
@@ -28,6 +28,10 @@ void ProjectileEntity::update()
 {
 	GameEntity::update();
 	movement.update();
+	if (getPosition().y < 0.0) {
+		list = UNSET_DRAW(list);
+		game_speed = 1.0;
+	}
 	GameEntity::update();
 }
 
