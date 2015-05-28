@@ -70,9 +70,11 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai3.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow_bb", make_shared<MeshSet>(assetPath + "arrow_boundingbox.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole_boundingbox", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole_boundingbox.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
@@ -253,6 +255,7 @@ void World::setup_token(char obj_to_place, glm::vec3 file_index)
         rots.y = M_PI_2;
 		entities.back()->setRotations(rots);
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("lanternPole"))));
+        entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
         break;
     }
 }
@@ -274,6 +277,7 @@ void World::shootArrows()
 	if (held && !keys[GLFW_KEY_E])
 	{
 		entities.push_back(make_shared<ProjectileEntity>(meshes["arrow"], archery_camera));
+        entities.back()->setup_entity_box(meshes.at("arrow_bb"));
 		held = false;
 	}
 }
