@@ -51,5 +51,5 @@ void ArcheryCamera::movement(shared_ptr<GameEntity> chewy) {
     mouse_update();
 
     // Should set the Archery Camera to be at chewy but slightly to the right?
-	cameraPosition = chewy->getPosition() + glm::rotateY(vec3(-1.5f, 4.f, -3.f), chewy->turnAngle(cameraFront).y);
+	cameraPosition = chewy->getPosition() + glm::rotateY(vec3(-1.5f, 1.5f, -3.f), chewy->turnAngle(cameraFront).y);
 }

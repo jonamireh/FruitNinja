@@ -14,10 +14,11 @@ static glm::vec4 normalize_plane(glm::vec4& p1)
 	return p1_c / mag;
 }
 
-static int PlaneAABBIntersect(shared_ptr<BoundingBox> bb, glm::vec4& p)
+static int PlaneAABBIntersect(EntityBox bb, glm::vec4& p)
 {
-	glm::vec3 c = (bb->upper_bound + bb->lower_bound) / 2.f;
-	glm::vec3 h = (bb->upper_bound - bb->lower_bound) / 2.f;
+
+    glm::vec3 c = bb.center;
+	glm::vec3 h = glm::vec3(bb.half_width, bb.half_height, bb.half_depth); // CHECK HERE IF FRUSTUM BREAKS
 
 	float e = h.x * fabs(p.x) + h.y * fabs(p.y) + h.z * fabs(p.z);
 	float s = glm::dot(c, glm::vec3(p)) + p.w;
@@ -80,7 +81,7 @@ static std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<
 		{
 			for (int j = 0; j < 6; j++)
 			{
-				if (PlaneAABBIntersect(entity->getTransformedOuterBoundingBox(), p_planes[j]) == 2)
+				if (PlaneAABBIntersect(entity->bounding_box, p_planes[j]) == 2)
 				{
 					in_frustrum = false;
 					break;

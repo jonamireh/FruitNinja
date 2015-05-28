@@ -22,7 +22,6 @@
 #include <iostream>
 #include <fstream>
 #include "ParticleShader.h"
-#include "MyOctree.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
 
@@ -77,8 +76,7 @@ void World::init()
     
     chewy = std::make_shared<ChewyEntity>(vec3(60.0, 0.0, 60.0), meshes.at("chewy"), player_camera, archery_camera);
     // chewy bounding box mesh
-    chewy->largestBB = (new ChewyEntity(vec3(60.0, 0.0, 60.0), meshes.at("chewy_bb"), player_camera, archery_camera))->getOuterBoundingBox();
-    chewy->sebInit();
+    chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);
 
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
@@ -328,7 +326,7 @@ void World::draw()
 			}
 			//if there's an arrow have archery camera follow it and make game slow-mo
 			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
-				archery_camera->cameraPosition = entities[i]->getPosition() - archery_camera->cameraFront;
+				archery_camera->cameraPosition = entities[i]->bounding_box.center - archery_camera->cameraFront;
 			}
 
 			if (!SHOULD_DRAW(entities[i]->list)) {
@@ -356,18 +354,18 @@ void World::draw()
 		glUseProgram(debugShader->getProgramID());
 		for (int i = 0; i < in_view.size(); i++)
 		{
-			shared_ptr<BoundingBox> box = in_view.at(i)->getTransformedOuterBoundingBox();
-			shared_ptr<vector<pair<vec3, vec3>>> points = box->get_line_segments();
+			EntityBox box = in_view.at(i)->bounding_box;
+			shared_ptr<vector<pair<vec3, vec3>>> points = box.get_line_segments();
 			for (int j = 0; j < points->size(); j++)
 			{
 				draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));
 			}
-			vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
-			for (int k = 0; k < planes.size(); k++)
-			{
-				draw_line(planes.at(k).first, planes.at(k).first + box->getMaxWidth(5.0f) * planes.at(k).second, vec3(0, 1.f, 0));
-			}
-			draw_sphere(in_view.at(i)->getCenter(), in_view.at(i)->getRadius(), vec3(1.f, 1.f, 0.f), 3.f);
+			//vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
+			//for (int k = 0; k < planes.size(); k++)
+			//{
+			//	draw_line(planes.at(k).first, planes.at(k).first + box->getMaxWidth(5.0f) * planes.at(k).second, vec3(0, 1.f, 0));
+			//}
+			//draw_sphere(in_view.at(i)->getCenter(), in_view.at(i)->getRadius(), vec3(1.f, 1.f, 0.f), 3.f);
 		}
 		glUseProgram(0);
 	}
@@ -478,11 +476,11 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
-	collision_handler(world_oct_tree->collision_pairs);
+	OctTree* world_oct_tree = new OctTree(Voxel(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f)), entities);
+	world_oct_tree->handle_collisions();
 	//MyOctree* world_oct_tree = new MyOctree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities);
 	//world_oct_tree->handle_collisions();
-	//delete world_oct_tree;
+	delete world_oct_tree;
     update_key_callbacks();
 	_skybox->update();
 }
@@ -508,53 +506,11 @@ void World::draw_point(vec3 p, vec3 color, float radius)
 	glUseProgram(0);
 }
 
-void World::draw_box(shared_ptr<BoundingBox> box, vec3 color)
+void World::draw_box(shared_ptr<EntityBox> box, vec3 color)
 {
 	shared_ptr<vector<pair<vec3, vec3>>> points = box->get_line_segments();
 	for (int j = 0; j < points->size(); j++)
 	{
 		draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));
 	}
-}
-
-void World::draw_sphere(vec3 center, float radius, vec3 color, float delta)
-{
-	glUseProgram(debugShader->getProgramID());
-	vector<float> points;
-	for (float theta = 0.f; theta < 360.f; theta +=delta)
-	{
-		float x = radius * cos(radians(theta)) * cos(radians(0.f));
-		points.push_back(x + center.x);
-		float y = radius * sin(radians(0.f));
-		points.push_back(y + center.y);
-		float z = radius * sin(radians(theta)) * cos(radians(0.f));
-		points.push_back(z + center.z);
-	}
-	//assert(points.size() == 360.f / delta);
-	debugShaderQueue.push_back([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
-	points.clear();
-	for (float phi = 0.f; phi < 360.f; phi +=delta)
-	{
-		float x = radius * cos(radians(0.f)) * cos(radians(phi));
-		points.push_back(x + center.x);
-		float y = radius * sin(radians(phi));
-		points.push_back(y + center.y);
-		float z = radius * sin(radians(0.f)) * cos(radians(phi));
-		points.push_back(z + center.z);
-	}
-	//assert(points.size() == 360.f / delta);
-	debugShaderQueue.push_back([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
-	points.clear();
-	for (float phi = -180.f; phi < 180.f; phi += delta)
-	{
-		float x = radius * cos(radians(90.f)) * cos(radians(phi));
-		points.push_back(x + center.x);
-		float y = radius * sin(radians(phi));
-		points.push_back(y + center.y);
-		float z = radius * sin(radians(90.f)) * cos(radians(phi));
-		points.push_back(z + center.z);
-	}
-	//assert(points.size() == 360.f / delta);
-	debugShaderQueue.push_back([=](){debugShader->drawPoints(points, color, camera->getViewMatrix()); });
-	glUseProgram(0);
 }

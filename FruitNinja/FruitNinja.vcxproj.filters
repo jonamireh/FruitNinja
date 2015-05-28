@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="GLSL.cpp">
@@ -62,9 +62,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="TextureDebugShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="BoundingBox.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
@@ -139,11 +136,11 @@
     <ClCompile Include="PlayerCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="MyOctree.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionHandler.h">
       <Filter>Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityBox.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -211,9 +208,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="FrustrumCulling.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundingBox.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Skybox.h">
@@ -288,8 +282,8 @@
     <ClInclude Include="PlayerCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
-    <ClInclude Include="MyOctree.h">
-      <Filter>Test</Filter>
+    <ClInclude Include="EntityBox.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

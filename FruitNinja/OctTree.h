@@ -4,19 +4,29 @@
 #include "Voxel.h"
 #include <set>
 #include <functional>
+#include <queue>
+
+//decided to not have children because we don't reuse the same tree twice
+struct MyNode
+{
+    std::vector<std::shared_ptr<GameEntity>> objects;
+    Voxel voxel;
+
+    MyNode(std::vector<std::shared_ptr<GameEntity>> objs, Voxel vox)
+    {
+        objects = objs;
+        voxel = vox;
+    }
+};
 
 class OctTree
 {
 public:
-    Voxel voxel;
-    std::vector<std::shared_ptr<GameEntity>> objects;
-    std::shared_ptr<OctTree> root;
-	std::shared_ptr<std::set<std::pair<std::shared_ptr<GameEntity>, std::shared_ptr<GameEntity>>>> collision_pairs;
+    std::set<std::pair<std::shared_ptr<GameEntity>, std::shared_ptr<GameEntity>>> collision_pairs;
+    void handle_collisions();
     float min_radius;
-    // store the pairs of collisions in here too
 
     OctTree();
-    OctTree(Voxel, std::vector<std::shared_ptr<GameEntity>>, std::shared_ptr<OctTree>);
-    void branch();
-    std::vector<OctTree> children;
+    ~OctTree();
+    OctTree(Voxel param_box, std::vector<std::shared_ptr<GameEntity>> objects_in_section);
 };

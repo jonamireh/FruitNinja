@@ -2,7 +2,7 @@
 #include "MeshSet.h"
 #include <memory>
 #include <vector>
-#include "BoundingBox.h"
+#include "EntityBox.h"
 
 #define DRAW_MASK 0x01
 #define OCTTREE_MASK 0x02
@@ -26,47 +26,41 @@
 
 class GameEntity
 {
-    float radius;
 	glm::mat4 modelMat;
 	glm::mat4 alignedModelMat;
 	bool validModelMat = false;
 	bool validAlignedModelMat = false;
-	glm::vec3 position;
 	float scale = 1.0f;
 	glm::vec3 rotations;
 public:
+    EntityBox bounding_box;
+    std::shared_ptr<MeshSet> mesh;
+    glm::vec3 last_position;
+    glm::vec3 velocity = glm::vec3(0);
+    aiAnimation *current_animation;
+    char list = 0;
+
     bool collision_response;
 	bool moving = false;
-	std::shared_ptr<BoundingBox> largestBB;
+
+    glm::vec3 getPosition();
+    void setPosition(glm::vec3 position);
+
     GameEntity() {}
 	GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response = false);
 
-    void sebInit();
+    void setup_entity_box();
+    void setup_entity_box(std::shared_ptr<MeshSet> mesh);
+
 	virtual void update();
     virtual void collision(std::shared_ptr<GameEntity> entity);
+    glm::vec3 turnAngle(glm::vec3 cartesian);
+    virtual glm::mat4 getModelMat();
+    glm::mat4 getAlignedModelMat();
 
-	glm::vec3 getPosition();
-	void setPosition(glm::vec3 pos);
 	float getScale();
 	void setScale(float entScale);
+
 	glm::vec3 getRotations();
 	void setRotations(glm::vec3 rots);
-
-	std::shared_ptr<MeshSet> mesh;
-	glm::vec3 last_position;
-	glm::vec3 turnAngle(glm::vec3 cartesian);
-
-	glm::vec3 velocity = glm::vec3(0);
-    virtual float getRadius();
-    glm::vec3 getCenter();
-	glm::vec3 center;
-	aiAnimation *current_animation;
-    bool compare(std::shared_ptr<GameEntity> ge);
-    std::shared_ptr<std::vector<BoundingBox>> GameEntity::getTransformedBoundingBoxes();
-    virtual glm::mat4 getModelMat();
-	glm::mat4 getAlignedModelMat();
-	std::shared_ptr<BoundingBox> getOuterBoundingBox();
-	std::shared_ptr<BoundingBox> getTransformedOuterBoundingBox();
-	std::shared_ptr<BoundingBox> transformed_BB;
-	char list = 0;
 };

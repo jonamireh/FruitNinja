@@ -27,32 +27,10 @@ void GuardEntity::update()
 	GameEntity::update();
 }
 
-void GuardEntity::collision(shared_ptr<GameEntity> entity)
+pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 {
-	shared_ptr<ChewyEntity> chewy = dynamic_pointer_cast<ChewyEntity>(entity);
-	if (chewy != nullptr)
-	{
-		if (glm::distance(entity->getCenter(), this->getCenter()) < DETECTION_INNER_RADIUS)
-		{
-			chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
-		}
-		else if (glm::distance(entity->getCenter(), this->getCenter()) < DETECTION_OUTER_RADIUS
-			&& degrees(acos(dot(normalize(entity->getCenter() - this->getCenter()), normalize(move_component.direction)))) < COS_ANGLE)
-		{
-			chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
-		}
-	}
-}
-
-float GuardEntity::getRadius()
-{
-	return DETECTION_OUTER_RADIUS;
-}
-
-pair<bool, float> static obb_ray(vec3 origin, vec3 direction, shared_ptr<BoundingBox> bb)
-{
-	vec3 center = (bb->upper_bound + bb->lower_bound) / 2.f;
-	vec3 h = bb->upper_bound - center;
+    vec3 center = bb.center;
+    vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth); // IF VIEW FRUSTUM WAS OFF THIS IS OFF IN THE SAME WAY
 
 	float tMin = FLT_MIN;
 	float tMax = FLT_MAX;
@@ -103,8 +81,8 @@ pair<bool, float> static obb_ray(vec3 origin, vec3 direction, shared_ptr<Boundin
 
 void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::shared_ptr<GameEntity>> entities)
 {
-	vec3 lookAt = getCenter() + 2.f * move_component.direction;
-	mat4 view = glm::lookAt(getCenter() + move_component.direction, lookAt, vec3(0.f, 1.f, 0.f));
+	vec3 lookAt = bounding_box.center + 2.f * move_component.direction;
+    mat4 view = glm::lookAt(bounding_box.center + move_component.direction, lookAt, vec3(0.f, 1.f, 0.f));
 
 	vector<shared_ptr<GameEntity>> just_chewy;
 	just_chewy.push_back(chewy);
@@ -114,19 +92,22 @@ void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
 	if (entities_in_view.size() > 0)
 	{
 		entities_in_view = get_objects_in_view(entities, view, true);
-		shared_ptr<BoundingBox> chewy_bb = chewy->getTransformedOuterBoundingBox();
+		EntityBox chewy_bb = chewy->bounding_box;
 		
+        vec3 chewy_lower_bound = chewy_bb.get_lower_bound();
+        vec3 chewy_upper_bound = chewy_bb.get_upper_bound();
+
 		chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
 		bool hidden = false;
 		for (int i = 0; i < entities_in_view.size(); i++)
 		{
 			if (entities_in_view.at(i) != chewy)
 			{
-				shared_ptr<BoundingBox> bb = entities_in_view.at(i)->getTransformedOuterBoundingBox();
+				EntityBox bb = entities_in_view.at(i)->bounding_box;
 
-				pair<bool, float> lower_result = obb_ray(getCenter(), normalize(chewy_bb->lower_bound - getCenter()), bb);
-				pair<bool, float> upper_result = obb_ray(getCenter(), normalize(chewy_bb->upper_bound - getCenter()), bb);
-				float chewy_distance = glm::distance(getCenter(), (chewy_bb->lower_bound + chewy_bb->upper_bound) / 2.f);
+                pair<bool, float> lower_result = obb_ray(bounding_box.center, normalize(chewy_lower_bound - bounding_box.center), bb);
+                pair<bool, float> upper_result = obb_ray(bounding_box.center, normalize(chewy_upper_bound - bounding_box.center), bb);
+                float chewy_distance = glm::distance(bounding_box.center, (chewy_lower_bound + chewy_upper_bound) / 2.f);
 				if (lower_result.first && upper_result.first)
 				{
 					if (chewy_distance > lower_result.second && chewy_distance > upper_result.second)
@@ -143,4 +124,9 @@ void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
 			chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
 		}
 	}
+}
+
+void GuardEntity::collision(std::shared_ptr<GameEntity> entity)
+{
+    
 }

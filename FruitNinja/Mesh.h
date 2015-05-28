@@ -4,7 +4,6 @@
 #include <vector>
 #include <GL/glew.h>
 #include "Material.h"
-#include "BoundingBox.h"
 #include <map>
 
 struct TextureData
@@ -40,10 +39,9 @@ public:
 	std::vector<glm::vec4> boneWeights;
 	std::vector<aiAnimation> animations;
 	std::vector<glm::mat4> boneTransformations;
-	std::shared_ptr<BoundingBox> getBoundingBox();
+    std::pair<glm::vec3, glm::vec3> get_lower_and_upper_bounds();
 	Material mat;
 	Material bMat;
 private:
-	std::shared_ptr<BoundingBox> cache;
 	bool checkError(std::string msg);
 };

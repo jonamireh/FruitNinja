@@ -1,74 +1,83 @@
 #include "OctTree.h"
 #include <iostream>
+#include <thread> 
 using namespace std;
+
+#define MINIMUM_DIMENSION 5.f
 
 OctTree::OctTree()
 {
 }
 
-OctTree::OctTree(Voxel param_box, vector<shared_ptr<GameEntity>> objects_in_section, shared_ptr<OctTree> root_ref)
+
+void OctTree::handle_collisions()
 {
-    voxel = param_box;
-	if (root_ref == nullptr)
-	{
-		root = shared_ptr<OctTree>(this);
-		collision_pairs = shared_ptr<set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>>(new set<pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>>());
-
-		for (int i = 0; i < objects_in_section.size(); i++)
-		{
-			if (IN_OCTTREE(objects_in_section.at(i)->list))
-				objects.push_back(objects_in_section.at(i));
-		}
-	}
-	else
-	{
-		root = root_ref;
-		objects = objects_in_section;
-	}
-
-	
-    min_radius = FLT_MAX;
-	for (int i = 0; i < objects.size(); i++)
+    for (auto it = collision_pairs.begin(); it != collision_pairs.end(); ++it)
     {
-        float temp = objects.at(i)->getRadius();
-        if (temp < min_radius)
-            min_radius = temp;
+        it->first->collision(it->second);
+        it->second->collision(it->first);
     }
-
-
-    branch();
 }
 
-/**
-This needs to do it based off of bounding boxes rather than points, but this should suffice for now.
-*/
-void OctTree::branch()
+OctTree::OctTree(Voxel vox, vector<shared_ptr<GameEntity>> objects_in_section)
 {
-    if (glm::distance(voxel.lower_bound, voxel.upper_bound) < min_radius)
+    vector<shared_ptr<GameEntity>> objs;
+    for (int i = 0; i < objects_in_section.size(); i++)
     {
-        for (int i = 0; i < objects.size() - 1; i++)
-			root->collision_pairs->insert(pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>(objects.at(i), objects.at(i + 1)));
-        return;
+        if (IN_OCTTREE(objects_in_section[i]->list))
+            objs.push_back(shared_ptr<GameEntity>(objects_in_section[i]));
     }
+    queue<MyNode*> q;
+    q.push(new MyNode(objs, vox));
 
-    vector<Voxel> subset_voxels = voxel.split();
-
-    for (int i = 0; i < 8; i++)
+    while (!q.empty())
     {
-        bool has_collision_response = false;
-        vector<shared_ptr<GameEntity>> subset_objects;
-        for (int j = 0; j < objects.size(); j++)
+        MyNode* cur = q.front();
+        q.pop();
+        min_radius = FLT_MAX;
+       /* for (int i = 0; i < cur->objects.size(); i++)
         {
-            if (subset_voxels.at(i).contains(objects.at(j)->getCenter(), objects.at(j)->getRadius()))
+            float temp = cur->objects[i]->getRadius();
+            if (temp < min_radius)
+                min_radius = temp;
+        }*/
+        if (cur->voxel.upper_bound.x - cur->voxel.lower_bound.x <= MINIMUM_DIMENSION)
+        {
+            for (int i = 0; i < cur->objects.size() - 1; i++)
             {
-                if (objects.at(j)->collision_response)
-                    has_collision_response = true;
-                subset_objects.push_back(objects.at(j));
+                for (int j = i + 1; j < cur->objects.size(); j++)
+                    collision_pairs.insert(pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>(cur->objects.at(i), cur->objects.at(j)));
             }
         }
+        else
+        {
+            vector<Voxel> subset_voxels = cur->voxel.split();
 
-        if (subset_objects.size() > 1 && has_collision_response)
-            OctTree(subset_voxels.at(i), subset_objects, root);
+            for (int i = 0; i < 8; i++)
+            {
+                bool has_collision_response = false;
+                vector<shared_ptr<GameEntity>> subset_objects;
+                for (int j = 0; j < cur->objects.size(); j++)
+                {
+                    if (subset_voxels[i].contains(cur->objects[j]))
+                    {
+                        if (cur->objects[j]->collision_response)
+                            has_collision_response = true;
+                        subset_objects.push_back(cur->objects[j]);
+                    }
+                }
+
+                if (subset_objects.size() > 1 && has_collision_response)
+                {
+                    q.push(new MyNode(subset_objects, subset_voxels[i]));
+                }
+            }
+        }
+        delete cur;
     }
+
 }
 
+OctTree::~OctTree()
+{
+}

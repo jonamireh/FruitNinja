@@ -66,8 +66,8 @@ void PlayerCamera::movement(std::shared_ptr<GameEntity> chewy)
 {
     mouse_update();
 
-    cameraPosition = chewy->getPosition() + vec3(0.f, 5.0f, 0.f) -radius * cameraFront;
-    lookAtPoint = chewy->getPosition() + vec3(0.f, 5.0f, 0.f);
+    cameraPosition = chewy->bounding_box.center + vec3(0.f, chewy->bounding_box.half_height, 0.f) - radius * cameraFront;
+    lookAtPoint = chewy->bounding_box.center + vec3(0.f, chewy->bounding_box.half_height, 0.f);
 }
 
 mat4 PlayerCamera::getViewMatrix()
@@ -86,56 +86,56 @@ void PlayerCamera::update_radius(float delta)
     radius = new_radius;
 }
 
-pair<bool, float> obb_ray(vec3 origin, vec3 direction, shared_ptr<BoundingBox> bb)
+pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 {
-	vec3 center = (bb->upper_bound + bb->lower_bound) / 2.f;
-	vec3 h = bb->upper_bound - center;
+    vec3 center = bb.center;
+    vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth); // IF VIEW FRUSTUM WAS OFF THIS IS OFF IN THE SAME WAY
 
-	float tMin = FLT_MIN;
-	float tMax = FLT_MAX;
-	vec3 p = center - origin;
-	for (int i = 0; i < 3; i++)
-	{
-		vec3 ai(0.f);
-		if (i == 0)
-			ai = vec3(1.f, 0.f, 0.f);
-		if (i == 1)
-			ai = vec3(0.f, 1.f, 0.f);
-		if (i == 2)
-			ai = vec3(0.f, 0.f, 1.f);
+    float tMin = FLT_MIN;
+    float tMax = FLT_MAX;
+    vec3 p = center - origin;
+    for (int i = 0; i < 3; i++)
+    {
+        vec3 ai(0.f);
+        if (i == 0)
+            ai = vec3(1.f, 0.f, 0.f);
+        if (i == 1)
+            ai = vec3(0.f, 1.f, 0.f);
+        if (i == 2)
+            ai = vec3(0.f, 0.f, 1.f);
 
-		float e = dot(ai, p);
-		float f = dot(ai, direction);
+        float e = dot(ai, p);
+        float f = dot(ai, direction);
 
-		if (abs(f) > FLT_EPSILON)
-		{
-			float t1 = (e + h[i]) / f;
-			float t2 = (e - h[i]) / f;
+        if (abs(f) > FLT_EPSILON)
+        {
+            float t1 = (e + h[i]) / f;
+            float t2 = (e - h[i]) / f;
 
-			if (t1 > t2)
-			{
-				//swap
-				float temp = t2;
-				t2 = t1;
-				t1 = temp;
-			}
+            if (t1 > t2)
+            {
+                //swap
+                float temp = t2;
+                t2 = t1;
+                t1 = temp;
+            }
 
-			if (t1 > tMin)
-				tMin = t1;
-			if (t2 < tMax)
-				tMax = t2;
-			if (tMin > tMax)
-				return pair<bool, float>(false, 0.f);
-			if (tMax < 0)
-				return pair<bool, float>(false, 0);
-		}
-		else if (-e - h[i] > 0 || -e + h[i] < 0)
-			return pair<bool, float>(false, 0);
-	}
-	if (tMin > 0)
-		return pair<bool, float>(true, tMin);
-	else
-		return pair<bool, float>(false, tMax);
+            if (t1 > tMin)
+                tMin = t1;
+            if (t2 < tMax)
+                tMax = t2;
+            if (tMin > tMax)
+                return pair<bool, float>(false, 0.f);
+            if (tMax < 0)
+                return pair<bool, float>(false, 0);
+        }
+        else if (-e - h[i] > 0 || -e + h[i] < 0)
+            return pair<bool, float>(false, 0);
+    }
+    if (tMin > 0)
+        return pair<bool, float>(true, tMin);
+    else
+        return pair<bool, float>(false, tMax);
 }
 
 void PlayerCamera::reorient(vector<shared_ptr<GameEntity>> entities, shared_ptr<ChewyEntity> chewy)
@@ -179,7 +179,7 @@ float static cast_ray(vec3 ray_start, vec3 ray_end, vector<shared_ptr<GameEntity
 		shared_ptr<ChewyEntity> c_test = dynamic_pointer_cast<ChewyEntity>(entities.at(i));
 		if (c_test == nullptr && IN_OCTTREE(entities.at(i)->list))
 		{
-			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->getTransformedOuterBoundingBox());
+			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->bounding_box);
 			if (result.first && result.second < ray_dist)
 			{
 				//cout << "camera hit made" << endl;

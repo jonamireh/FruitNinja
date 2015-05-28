@@ -2,8 +2,7 @@
 #include "GameEntity.h"
 #include "Camera.h"
 
-class Skybox :
-	public GameEntity
+class Skybox : public GameEntity
 {
 	std::shared_ptr<Camera>* _camera;
 public:
