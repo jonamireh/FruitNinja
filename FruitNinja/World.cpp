@@ -23,6 +23,7 @@
 #include <fstream>
 #include "ParticleShader.h"
 #include "MyOctree.h"
+#include "AudioManager.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
 
@@ -114,6 +115,9 @@ void World::init()
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+
+	AudioManager audioManager;
+	audioManager.play(assetPath + "ninjatune.mp3");
 }
 
 void World::setup_level(string file_path)
