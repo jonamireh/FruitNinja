@@ -82,8 +82,9 @@ float GameEntity::getRadius()
 
 vec3 GameEntity::getCenter()
 {
-	shared_ptr<BoundingBox> outer_bb = getOuterBoundingBox();
-	return vec3(center + position) + ((scale != 1.f) ? vec3(0.f, glm::distance(outer_bb->lower_bound, vec3(outer_bb->lower_bound.x, outer_bb->lower_bound.y, outer_bb->upper_bound.z)) / 2.f, 0.f) : vec3(0.f));
+	shared_ptr<BoundingBox> outer_bb = getTransformedOuterBoundingBox();
+	//return vec3(center + position) +((scale != 1.f) ? vec3(0.f, glm::distance(outer_bb->lower_bound, vec3(outer_bb->lower_bound.x, outer_bb->lower_bound.y, outer_bb->upper_bound.z)) / 2.f, 0.f) : vec3(0.f));
+	return (outer_bb->upper_bound + outer_bb->lower_bound) / 2.f;
 }
 
 shared_ptr<BoundingBox> GameEntity::getOuterBoundingBox()

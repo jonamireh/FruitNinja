@@ -22,6 +22,7 @@
 #include <iostream>
 #include <fstream>
 #include "ParticleShader.h"
+#include "CinematicCamera.h"
 #include "MyOctree.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
@@ -57,9 +58,11 @@ World::World()
 
 void World::init()
 {
-	debug_camera = shared_ptr<Camera>(new DebugCamera());
-    player_camera = shared_ptr<Camera>(new PlayerCamera());
-    archery_camera = shared_ptr<Camera>(new ArcheryCamera());
+	debug_camera = shared_ptr<DebugCamera>(new DebugCamera());
+    player_camera = shared_ptr<PlayerCamera>(new PlayerCamera());
+    archery_camera = shared_ptr<ArcheryCamera>(new ArcheryCamera());
+	cinematic_camera = shared_ptr<CinematicCamera>(new CinematicCamera());
+	
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final3.dae"))));
@@ -81,6 +84,12 @@ void World::init()
     chewy->sebInit();
 	chewy->list = SET_HIDE(chewy->list);
 
+	x_offset = -30.0f;
+	player_camera->movement(chewy);
+	cinematic_camera->init(player_camera->lookAtPoint, vec3(110.f, 10.f, 150.f), { player_camera->cameraPosition, /*vec3(0.0, 30.0, 10.0),*/
+		vec3(10.0, 30.0, 115.0), vec3(10.0, 30.0, 230.0), vec3(85.0, 30.0, 230.0), vec3(210.0, 30.0, 230.0), vec3(230.0, 30.0, 140.0), vec3(220.0, 30.0, 30.0), 
+		vec3(100.0, 30.0, 10.0), /*vec3(0.0, 30.0, 10.0),*/ player_camera->cameraPosition }, 40.f);
+
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->setScale(750.f);
 	_skybox->list = UNSET_OCTTREE((_skybox->list));
@@ -89,8 +98,10 @@ void World::init()
     tower->setScale(30.0f);
     tower->list = UNSET_OCTTREE((tower->list));
 
-    camera = player_camera;
-    player_camera->in_use = true;
+    /*camera = player_camera;
+    player_camera->in_use = true;*/
+	camera = cinematic_camera;
+	cinematic_camera->in_use = true;
 
 
     setup_level(assetPath + "first_courtyard.txt");
@@ -435,13 +446,34 @@ void World::enable_debugging()
 	if (keys[GLFW_KEY_X])
 		debug_enabled = false;
 }
-
+void World::cancel_cinematic()
+{
+	if (keys[GLFW_KEY_0])
+	{
+		cinematic_runthrough = true;
+		camera = player_camera;
+		player_camera->in_use = true;
+	}
+}
 void World::update_key_callbacks()
 {
     camera->movement(chewy);
-    change_camera();
-	enable_debugging();
-	stop_time();
+	if (!cinematic_runthrough)
+	{
+		cancel_cinematic();
+		if (cinematic_camera->pathing.done)
+		{
+			cinematic_runthrough = true;
+			camera = player_camera;
+			player_camera->in_use = true;
+		}
+	}
+	else
+	{
+		change_camera();
+		enable_debugging();
+		stop_time();
+	}
     x_offset = 0;
     y_offset = 0;
 }

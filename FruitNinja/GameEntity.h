@@ -58,7 +58,7 @@ public:
 
 	glm::vec3 velocity = glm::vec3(0);
     virtual float getRadius();
-    glm::vec3 getCenter();
+    virtual glm::vec3 getCenter();
 	glm::vec3 center;
 	aiAnimation *current_animation;
     bool compare(std::shared_ptr<GameEntity> ge);

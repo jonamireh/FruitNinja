@@ -9,6 +9,7 @@
 #include "Timer.h"
 #include "DebugCamera.h"
 #include "PlayerCamera.h"
+#include "CinematicCamera.h"
 #include "Skybox.h"
 #include "DebugShader.h"
 #include "ChewyEntity.h"
@@ -19,9 +20,9 @@
 #define GRAVITY 33
 #define PLAYER_FOV 45.f
 #define GUARD_FOV 60.f
-#define PLAYER_NEAR 0.001f
-#define PLAYER_FAR 800.f
-#define GUARD_NEAR 0.001f
+#define PLAYER_NEAR 0.1f
+#define PLAYER_FAR 1000.f
+#define GUARD_NEAR 0.1f
 #define GUARD_FAR 30.f
 #define PLAYER_DIST (PLAYER_FAR - PLAYER_NEAR)
 #define GUARD_DIST (GUARD_FAR - GUARD_NEAR)
@@ -55,14 +56,16 @@ public:
     void change_camera();
     std::map<std::string, std::shared_ptr<MeshSet>> meshes;
 	void enable_debugging();
+	void cancel_cinematic();
     static void draw_line(glm::vec3 p1, glm::vec3 p2, glm::vec3 color);
 	static void draw_point(glm::vec3 p, glm::vec3 color, float radius);
 	static void draw_sphere(glm::vec3 center, float radius, glm::vec3 color, float delta);
 	static void draw_box(std::shared_ptr<BoundingBox> box, glm::vec3 color);
 private:
-    std::shared_ptr<Camera> debug_camera;
-    std::shared_ptr<Camera> archery_camera;
-    std::shared_ptr<Camera> player_camera;
+    std::shared_ptr<DebugCamera> debug_camera;
+    std::shared_ptr<ArcheryCamera> archery_camera;
+    std::shared_ptr<PlayerCamera> player_camera;
+	std::shared_ptr<CinematicCamera> cinematic_camera;
 	std::shared_ptr<Skybox> _skybox;
 	HUD hud;
 	void init();
@@ -71,5 +74,7 @@ private:
     void setup_guard(string file_path);
     void shootArrows();
     std::shared_ptr<ChewyEntity> chewy;
+
+	bool cinematic_runthrough = false;
 };
 
