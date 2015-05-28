@@ -139,6 +139,12 @@
     <ClCompile Include="HUD.cpp">
       <Filter>HUD Shader</Filter>
     </ClCompile>
+    <ClCompile Include="CinematicCamera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CinematicPathingComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h">
@@ -278,6 +284,12 @@
     </ClInclude>
     <ClInclude Include="HUD.h">
       <Filter>HUD Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="CinematicCamera.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CinematicPathingComponent.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
