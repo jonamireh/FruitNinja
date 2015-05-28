@@ -1,17 +1,12 @@
 #include "MyOctree.h"
 #include <iostream>
-#include <queue>
+#include <thread> 
 using namespace std;
 
 MyOctree::MyOctree()
 {
 }
 
-void do_collision(std::shared_ptr<GameEntity> ent1, std::shared_ptr<GameEntity> ent2)
-{
-	ent1->collision(ent2);
-	ent2->collision(ent1);
-}
 
 void MyOctree::handle_collisions()
 {
@@ -45,7 +40,6 @@ MyOctree::MyOctree(Voxel vox, vector<shared_ptr<GameEntity>> objects_in_section)
 		if (glm::distance(cur->voxel.lower_bound, cur->voxel.upper_bound) < min_radius)
 		{
 			for (int i = 0; i < cur->objects.size() - 1; i++) {
-				//do_collision(cur->objects[i], cur->objects[i + 1]);
 				collision_pairs.insert(pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>(cur->objects.at(i), cur->objects.at(i + 1)));
 			}
 		}

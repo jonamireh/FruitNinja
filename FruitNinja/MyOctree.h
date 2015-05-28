@@ -4,6 +4,7 @@
 #include "Voxel.h"
 #include <set>
 #include <functional>
+#include <queue>
 
 //decided to not have children because we don't reuse the same tree twice
 struct MyNode {
@@ -22,7 +23,6 @@ public:
 	std::set<std::pair<std::shared_ptr<GameEntity>, std::shared_ptr<GameEntity>>> collision_pairs;
 	void handle_collisions();
 	float min_radius;
-	// store the pairs of collisions in here too
 
 	MyOctree();
 	~MyOctree();
