@@ -151,6 +151,9 @@
     <ClCompile Include="CinematicPathingComponent.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="GuardAnimationComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -322,6 +325,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="CinematicPathingComponent.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GuardAnimationComponent.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
