@@ -13,7 +13,9 @@
 #define FALLING_START JUMPING_START + JUMPING_DURATION + 1.0 / FRAMES_PER_SEC
 #define FALLING_DURATION 14.0 / FRAMES_PER_SEC
 #define LANDING_START FALLING_START + FALLING_DURATION + 1.0 / FRAMES_PER_SEC
-#define LANDING_DURATION 18.0 / FRAMES_PER_SEC
+#define LANDING_DURATION 19.0 / FRAMES_PER_SEC
+#define BOWPULL_START LANDING_START + LANDING_DURATION + 1.0 / FRAMES_PER_SEC
+#define BOWPULL_DURATION 9.0 / FRAMES_PER_SEC
 
 enum AnimationState
 {
@@ -22,7 +24,8 @@ enum AnimationState
 	walking,
 	jumping,
 	falling, 
-	landing
+	landing,
+	bowpull
 };
 
 class ChewyAnimationComponent : public Component

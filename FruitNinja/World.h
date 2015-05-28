@@ -39,6 +39,7 @@ extern bool time_stopped;
 extern glm::mat4 projection;
 extern glm::mat4 guard_projection;
 extern float game_speed;
+extern float bow_strength;
 
 class World
 {

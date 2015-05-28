@@ -9,7 +9,7 @@ void ProjectileMovementComponent::update()
 	
 	if (!entity.shot) {
 		entity.setPosition(camera->cameraPosition);
-		velocity = camera->cameraFront * ARROW_SPEED;
+		velocity = camera->cameraFront * ARROW_SPEED * bow_strength;
 
 		entity.list = SET_DRAW(entity.list);
 		entity.shot = true;

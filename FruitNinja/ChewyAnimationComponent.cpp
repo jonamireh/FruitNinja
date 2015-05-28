@@ -1,6 +1,6 @@
 #include "ChewyAnimationComponent.h"
 #include "GameEntity.h"
-#include "ChewyEntity.h"
+#include "World.h"
 
 ChewyAnimationComponent::ChewyAnimationComponent(GameEntity* chewy) : basicAnimation(chewy)
 {
@@ -16,6 +16,11 @@ ChewyAnimationComponent::~ChewyAnimationComponent()
 
 void ChewyAnimationComponent::update()
 {
+	if (static_cast<ChewyEntity*>(chewy)->moveComponent.archery_cam->in_use)
+	{
+		basicAnimation.changeToSingleAnimation(BOWPULL_START + bow_strength * BOWPULL_DURATION, BOWPULL_START + BOWPULL_DURATION);
+		currentAnimtion = bowpull;
+	}
 	if (basicAnimation.animationComplete)
 	{
 		
