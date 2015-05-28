@@ -29,7 +29,7 @@ private:
 	void startLightPasses();
 	void finalPass();
 	void skyboxPass(std::shared_ptr<Camera> camera);
-	void particlePass(std::shared_ptr<Camera> camera);
+	void particlePass(std::shared_ptr<Camera> camera, std::vector<Light*> lights);
 	std::shared_ptr<Skybox> skybox;
 	SimpleTextureShader skyShader;
 	ParticleShader fireShader;

@@ -85,9 +85,6 @@
     <ClCompile Include="BoundingBox.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionHandler.h">
-      <Filter>Headers</Filter>
-    </ClCompile>
     <ClCompile Include="Skybox.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -138,6 +135,12 @@
     </ClCompile>
     <ClCompile Include="HUD.cpp">
       <Filter>HUD Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="MyOctree.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionHandler.h">
+      <Filter>Headers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -279,6 +282,9 @@
     <ClInclude Include="HUD.h">
       <Filter>HUD Shader</Filter>
     </ClInclude>
+    <ClInclude Include="MyOctree.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -333,6 +339,9 @@
     <None Include="FireFrag.glsl">
       <Filter>Fire</Filter>
     </None>
+    <None Include="FireGeom.glsl">
+      <Filter>Fire</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -352,6 +361,9 @@
     </Filter>
     <Filter Include="HUD Shader">
       <UniqueIdentifier>{9e724d8e-bc7b-4c7a-83a4-3d31327947d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{e280dec0-0464-47f0-ae60-e833c875f5d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
