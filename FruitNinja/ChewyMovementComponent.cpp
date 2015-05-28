@@ -55,18 +55,26 @@ void ChewyMovementComponent::update()
 		direction.y = 0.f;
 		direction.z = 0.f;
 		
+		bool moved = false;
+
 		if (keys[GLFW_KEY_W]) {
 			direction += forwardDirection(player_cam);
+			moved = true;
 		}
 		if (keys[GLFW_KEY_S]) {
 			direction += backDirection(player_cam);
+			moved = true;
 		}
 		if (keys[GLFW_KEY_A]) {
 			direction += leftDirection(player_cam);
+			moved = true;
 		}
 		if (keys[GLFW_KEY_D]) {
 			direction += rightDirection(player_cam);
+			moved = true;
 		}
+
+		entity.moving = moved;
 
         vec3 pos_offset;
 

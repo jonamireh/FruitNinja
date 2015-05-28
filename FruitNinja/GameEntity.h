@@ -29,6 +29,7 @@ class GameEntity
     float radius;
 public:
     bool collision_response;
+	bool moving = false;
 	std::shared_ptr<BoundingBox> largestBB;
     GameEntity() {}
 	GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response = false);

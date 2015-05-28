@@ -1,21 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="ArcheryCamera.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="ChewyEntity.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="ChewyMovementComponent.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugCamera.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="GLSL.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -32,9 +17,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="MeshSet.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerCamera.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
@@ -139,27 +121,33 @@
     <ClCompile Include="HUD.cpp">
       <Filter>HUD Shader</Filter>
     </ClCompile>
+    <ClCompile Include="ChewyMovementComponent.cpp">
+      <Filter>Chewy</Filter>
+    </ClCompile>
+    <ClCompile Include="ChewyEntity.cpp">
+      <Filter>Chewy</Filter>
+    </ClCompile>
+    <ClCompile Include="ChewyAnimationComponent.cpp">
+      <Filter>Chewy</Filter>
+    </ClCompile>
+    <ClCompile Include="ArcheryCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCamera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArcheryCamera.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ChewyEntity.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ChewyMovementComponent.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="GameEntity.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugCamera.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="GLSL.h">
@@ -184,9 +172,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerCamera.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="ProjectileMovementComponent.h">
@@ -279,6 +264,27 @@
     <ClInclude Include="HUD.h">
       <Filter>HUD Shader</Filter>
     </ClInclude>
+    <ClInclude Include="ChewyEntity.h">
+      <Filter>Chewy</Filter>
+    </ClInclude>
+    <ClInclude Include="ChewyMovementComponent.h">
+      <Filter>Chewy</Filter>
+    </ClInclude>
+    <ClInclude Include="ChewyAnimationComponent.h">
+      <Filter>Chewy</Filter>
+    </ClInclude>
+    <ClInclude Include="ArcheryCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -352,6 +358,12 @@
     </Filter>
     <Filter Include="HUD Shader">
       <UniqueIdentifier>{9e724d8e-bc7b-4c7a-83a4-3d31327947d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chewy">
+      <UniqueIdentifier>{7a88a7bb-1265-4653-b405-44b1923a6d0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{c1d6f6cc-72b6-4b79-a147-3aaa6ae4fe9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -10,13 +10,17 @@ void BasicAnimationComponent::update()
 
 	std::vector<Mesh*> entityMeshses = entity->mesh->getMeshes();
 	frameTime += seconds_passed;
-	if (frameTime > entity->current_animation->mDuration)
+	if (frameTime > end_frame_time)
 	{
-		while (frameTime - entity->current_animation->mDuration > 0)
-			frameTime -= entity->current_animation->mDuration;
+		float duration = end_frame_time - starting_frame_time;
+		assert(duration > 0);
+		while (frameTime - duration > starting_frame_time)
+		{
+			frameTime -= duration;
+		}
 	}
 
-	frameTime = max(1 / 24.0f, frameTime);
+	frameTime = max(starting_frame_time, frameTime);
 
 	aiMatrix4x4 identity = aiMatrix4x4();
 	calculateAnimationTransforms(entity->mesh->bone_tree, identity);
@@ -191,9 +195,18 @@ glm::mat4 BasicAnimationComponent::convertAiMatrix4x4ToMat4(aiMatrix4x4 inMat)
 		inMat.a4, inMat.b4, inMat.c4, inMat.d4);
 }
 
+void BasicAnimationComponent::changeToAnimationBlock(float start, float end)
+{
+	frameTime = start;
+	starting_frame_time = start;
+	end_frame_time = end;
+}
+
 BasicAnimationComponent::BasicAnimationComponent(GameEntity *entity)
 {
 	this->entity = entity;
+	starting_frame_time = 1.0 / FRAMES_PER_SEC;
+	end_frame_time = entity->mesh->getAnimations().at(0).mDuration;
 }
 
 

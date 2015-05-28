@@ -92,6 +92,7 @@
     <ClCompile Include="ArcheryCamera.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="BasicAnimationComponent.cpp" />
+    <ClCompile Include="ChewyAnimationComponent.cpp" />
     <ClCompile Include="CollisionHandler.h" />
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="DeferredRenderer.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="ArcheryCamera.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="BasicAnimationComponent.h" />
+    <ClInclude Include="ChewyAnimationComponent.h" />
     <ClInclude Include="DebugShader.h" />
     <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DeferredShader.h" />
