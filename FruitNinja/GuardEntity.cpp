@@ -27,11 +27,6 @@ void GuardEntity::update()
 	GameEntity::update();
 }
 
-void GuardEntity::collision(shared_ptr<GameEntity> entity)
-{
-	
-}
-
 float GuardEntity::getRadius()
 {
 	return DETECTION_OUTER_RADIUS;

@@ -27,6 +27,7 @@ void ChewyEntity::update()
 	moveComponent.update();
 	GameEntity::update();
 	animComponent.update();
+	GameEntity::update();
 }
 
 void ChewyEntity::set_material(Material material)
