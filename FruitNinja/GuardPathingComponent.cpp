@@ -7,14 +7,14 @@ using namespace glm;
 
 #define MIN_NUM_CONTROL_POINTS 4
 
-GuardPathingComponent::GuardPathingComponent(vector<vec3> control_points, float move_speed) : control_points(control_points), move_speed(move_speed)
+GuardPathingComponent::GuardPathingComponent(vector<vec3> control_points, float move_speed, bool linear_curve) : control_points(control_points), move_speed(move_speed), linear_curve(linear_curve)
 {
 	assert(control_points.size() >= MIN_NUM_CONTROL_POINTS);
 	current_curve = 0;
 	change_path();
 }
 
-glm::vec3 GuardPathingComponent::getDirection()
+glm::vec3 GuardPathingComponent::get_direction()
 {
 	time_elapsed += seconds_passed;
 	if (time_elapsed > current_time)
@@ -29,8 +29,21 @@ glm::vec3 GuardPathingComponent::getDirection()
 			change_path();
 		}
 	}
-	float time = time_elapsed * (1 / current_time);
 
+	if (linear_curve)
+		return get_linear_direction();
+	else
+		return get_rom_catmull_direction();
+}
+
+glm::vec3 GuardPathingComponent::get_linear_direction()
+{
+	return control_points.at(current_curve + 1) - control_points.at(current_curve);
+}
+
+glm::vec3 GuardPathingComponent::get_rom_catmull_direction()
+{
+	float time = time_elapsed * (1 / current_time);
 	//assert(time <= current_time);
 	assert(current_curve <= control_points.size() - 2);
 
@@ -68,6 +81,7 @@ glm::vec3 GuardPathingComponent::getDirection()
 
 	return normalize(f.x * points.at(0) + f.y * points.at(1) + f.z * points.at(2) + f.w * points.at(3));
 }
+
 
 void GuardPathingComponent::reverse()
 {

@@ -60,6 +60,73 @@ Shader::Shader(string vertShader, string fragShader)
     assert(printError() == GL_NO_ERROR);
 }
 
+Shader::Shader(string vertShader, string geomShader, string fragShader) {
+	GLint rc;
+
+	// Create shader handles
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+	// Read shader sources
+	const char *vshader = textFileRead(vertShader.c_str());
+	const char *gshader = textFileRead(geomShader.c_str());
+	const char *fshader = textFileRead(fragShader.c_str());
+	glShaderSource(vertexShader, 1, &vshader, NULL);
+	glShaderSource(geometryShader, 1, &gshader, NULL);
+	glShaderSource(fragmentShader, 1, &fshader, NULL);
+
+	// Compile vertex shader
+	glCompileShader(vertexShader);
+	printError();
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &rc);
+	printShaderInfoLog(vertexShader);
+	if (!rc)
+	{
+		printf("Error compiling vertex shader %s\n", vertShader.c_str());
+	}
+
+	//compile geometry shader
+	glCompileShader(geometryShader);
+	printError();
+	glGetShaderiv(geometryShader, GL_COMPILE_STATUS, &rc);
+	printShaderInfoLog(geometryShader);
+	if (!rc)
+	{
+		printf("Error compiling vertex shader %s\n", geomShader.c_str());
+	}
+
+	// Compile fragment shader
+	glCompileShader(fragmentShader);
+	printError();
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &rc);
+	printShaderInfoLog(fragmentShader);
+	if (!rc)
+	{
+		printf("Error compiling fragment shader %s\n", fragShader.c_str());
+	}
+
+	// Create the program and link
+	program = glCreateProgram();
+	glAttachShader(program, vertexShader);
+	glAttachShader(program, geometryShader);
+	glAttachShader(program, fragmentShader);
+	glLinkProgram(program);
+
+	printError();
+	glGetProgramiv(program, GL_LINK_STATUS, &rc);
+	printProgramInfoLog(program);
+	if (!rc)
+	{
+		printf("Error linking shaders %s, %s, and %s\n", vertShader.c_str(), geomShader.c_str(), fragShader.c_str());
+	}
+
+	setupHandles();
+
+	assert(printError() == GL_NO_ERROR);
+
+}
+
 void Shader::setupHandles()
 {
     int total = -1;

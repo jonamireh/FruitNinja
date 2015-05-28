@@ -42,6 +42,39 @@ void GameEntity::sebInit()
     center = (outer_bb->lower_bound + outer_bb->upper_bound)  / 2.f;
 }
 
+glm::vec3 GameEntity::getPosition()
+{
+	return position;
+}
+
+void GameEntity::setPosition(glm::vec3 pos)
+{
+	position = pos;
+	validAlignedModelMat = false;
+}
+
+float GameEntity::getScale()
+{
+	return scale;
+}
+
+void GameEntity::setScale(float entScale)
+{
+	scale = entScale;
+	validAlignedModelMat = false;
+}
+
+glm::vec3 GameEntity::getRotations()
+{
+	return rotations;
+}
+
+void GameEntity::setRotations(glm::vec3 rots)
+{
+	rotations = rots;
+	validModelMat = false;
+}
+
 float GameEntity::getRadius()
 {
     return scale * radius;
@@ -89,12 +122,10 @@ shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
 		vector<vec3> points = obb->get_points();
 
 		vector<vec3> transformed_points;
+		transformed_points.reserve(points.size());
 
 		// Connor added this to try to get the outer box for chewy without rotations
-		vec3 saved_rotation_values = rotations;
-		rotations = vec3(0.f);
-		mat4 model = getModelMat();
-		rotations = saved_rotation_values;
+		mat4 model = getAlignedModelMat();
 
 		for (int i = 0; i < points.size(); i++)
 		{
@@ -111,7 +142,7 @@ shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
 			if (transformed_points.at(i).z < min.z) min.z = transformed_points.at(i).z;
 			if (transformed_points.at(i).z > max.z) max.z = transformed_points.at(i).z;
 		}
-		transformed_BB = shared_ptr<BoundingBox>(new  BoundingBox(min, max));
+		transformed_BB = shared_ptr<BoundingBox>(new BoundingBox(min, max));
 	}
 	
 	return transformed_BB;
@@ -137,13 +168,33 @@ void GameEntity::collision(std::shared_ptr<GameEntity> bb)
 
 glm::mat4 GameEntity::getModelMat()
 {
-    mat4 model_trans = translate(mat4(1.0f), position);
+	if (validModelMat == true) {
+		return modelMat;
+	}
+
     mat4 model_rot_x = rotate(mat4(1.0f), rotations.x, vec3(1.f, 0.f, 0.f));
     mat4 model_rot_y = rotate(mat4(1.0f), rotations.y, vec3(0.f, 1.f, 0.f));
     mat4 model_rot_z = rotate(mat4(1.0f), rotations.z, vec3(0.f, 0.f, 1.f));
-    mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
 
-    return model_trans * model_rot_z * model_rot_x * model_rot_y * model_scale;
+    modelMat = getAlignedModelMat() * model_rot_z * model_rot_x * model_rot_y;
+	validModelMat = true;
+
+	return modelMat;
+}
+
+glm::mat4 GameEntity::getAlignedModelMat()
+{
+	if (validAlignedModelMat == true) {
+		return alignedModelMat;
+	}
+
+	mat4 model_trans = translate(mat4(1.0f), position);
+	mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
+
+	alignedModelMat = model_trans * model_scale;
+	validAlignedModelMat = true;
+
+	return alignedModelMat;
 }
 
 void GameEntity::update()

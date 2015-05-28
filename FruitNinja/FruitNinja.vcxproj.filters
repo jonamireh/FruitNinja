@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="GLSL.cpp">
@@ -66,9 +66,6 @@
     </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionHandler.h">
-      <Filter>Headers</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
       <Filter>Source</Filter>
@@ -141,6 +138,12 @@
     </ClCompile>
     <ClCompile Include="PlayerCamera.cpp">
       <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="MyOctree.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionHandler.h">
+      <Filter>Headers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +288,9 @@
     <ClInclude Include="PlayerCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
+    <ClInclude Include="MyOctree.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -339,6 +345,9 @@
     <None Include="FireFrag.glsl">
       <Filter>Fire</Filter>
     </None>
+    <None Include="FireGeom.glsl">
+      <Filter>Fire</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -364,6 +373,9 @@
     </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{c1d6f6cc-72b6-4b79-a147-3aaa6ae4fe9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{e280dec0-0464-47f0-ae60-e833c875f5d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

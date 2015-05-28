@@ -83,7 +83,7 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
     pair<vec3, vec3> collision_plane;
     vector<pair<glm::vec3, glm::vec3>> larger_box_planes;
 
-    float distance_from_last_position = glm::distance(last_position, position);
+    float distance_from_last_position = glm::distance(last_position, getPosition());
 
     bool bounding_boxes_are_colliding = false;
     float closest_distance = FLT_MAX;
@@ -154,12 +154,16 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
     if (collision_plane.second.z)
         cancel_direction.z = 0.f;
 
+	vec3 pos = getPosition();
+
     if (!falling)
-        position.y = last_position.y;
+        pos.y = last_position.y;
        
     _falling = falling;
 
-    position.x = last_position.x;
-    position.z = last_position.z;
-    position += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
+    pos.x = last_position.x;
+    pos.z = last_position.z;
+    pos += moveComponent.direction * cancel_direction * CHEWY_MOVE_SPEED * seconds_passed;
+
+	setPosition(pos);
 }

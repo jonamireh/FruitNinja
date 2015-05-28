@@ -8,7 +8,7 @@ void ProjectileMovementComponent::update()
 {
 	
 	if (!entity.shot) {
-		entity.position = camera->cameraPosition;
+		entity.setPosition(camera->cameraPosition);
 		velocity = camera->cameraFront * ARROW_SPEED;
 
 		entity.list = SET_DRAW(entity.list);
@@ -16,7 +16,7 @@ void ProjectileMovementComponent::update()
 	}
 	else {
 		velocity.y -= GRAVITY * (float)seconds_passed;
-		entity.position += velocity * (float)seconds_passed;
+		entity.setPosition(entity.getPosition() + velocity * (float)seconds_passed);
 		entity.timeLeft -= seconds_passed * (1.0 / game_speed);
 		if (entity.timeLeft < 0) {
 			entity.list = UNSET_DRAW(entity.list);

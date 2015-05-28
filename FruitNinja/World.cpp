@@ -22,6 +22,7 @@
 #include <iostream>
 #include <fstream>
 #include "ParticleShader.h"
+#include "MyOctree.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
 
@@ -64,7 +65,7 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final3.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai2.dae"))));
-    //meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
@@ -81,11 +82,11 @@ void World::init()
 	chewy->list = SET_HIDE(chewy->list);
 
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
-	_skybox->scale = 750.f;
+	_skybox->setScale(750.f);
 	_skybox->list = UNSET_OCTTREE((_skybox->list));
 
     shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
-    tower->scale = 30.0f;
+    tower->setScale(30.0f);
     tower->list = UNSET_OCTTREE((tower->list));
 
     camera = player_camera;
@@ -217,20 +218,22 @@ void World::setup_token(char obj_to_place, glm::vec3 file_index)
     {
     case 'X':
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("box"))));
-        entities.back()->scale = 3.f;
+        entities.back()->setScale(3.f);
         break;
     case 'O':
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("openBarrel"))));
-        entities.back()->scale = 3.f;
+        entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'C':
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
-        entities.back()->scale = 3.f;
+        entities.back()->setScale(3.f);
         break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 7.f, 1.2f), meshes.at("lantern"), 500.f, meshes.at("unit_sphere"))));
-        entities.back()->rotations.y = M_PI_2;
+		vec3 rots = entities.back()->getRotations();
+        rots.y = M_PI_2;
+		entities.back()->setRotations(rots);
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("lanternPole"))));
         break;
     }
@@ -316,16 +319,16 @@ void World::draw()
 	}
 	//otherwise deferred rendering
 	else {
-		//even if lantern culled still need light from it
 		vector<Light*> lights;
 		for (int i = 0; i < entities.size(); i++) {
+			//even if lantern culled still need light from it
 			if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list)) {
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
 			}
 			//if there's an arrow have archery camera follow it and make game slow-mo
 			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
-				archery_camera->cameraPosition = entities[i]->position - archery_camera->cameraFront;
+				archery_camera->cameraPosition = entities[i]->getPosition() - archery_camera->cameraFront;
 			}
 
 			if (!SHOULD_DRAW(entities[i]->list)) {
@@ -335,7 +338,7 @@ void World::draw()
 		}
 		for (int i = 0; i < in_view.size(); i++)
 		{
-			if (!SHOULD_DRAW(in_view[i]->list)) { //used to be !SHOULD_DRAW(entities[i]->list) but caused crashing. This is a guess
+			if (!SHOULD_DRAW(in_view[i]->list)) {
 				in_view.erase(in_view.begin() + i);
 				i--;
 			}
@@ -475,9 +478,11 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-
 	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
+	//MyOctree* world_oct_tree = new MyOctree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities);
+	//world_oct_tree->handle_collisions();
+	//delete world_oct_tree;
     update_key_callbacks();
 	_skybox->update();
 }

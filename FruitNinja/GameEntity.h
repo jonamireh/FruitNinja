@@ -27,6 +27,13 @@
 class GameEntity
 {
     float radius;
+	glm::mat4 modelMat;
+	glm::mat4 alignedModelMat;
+	bool validModelMat = false;
+	bool validAlignedModelMat = false;
+	glm::vec3 position;
+	float scale = 1.0f;
+	glm::vec3 rotations;
 public:
     bool collision_response;
 	bool moving = false;
@@ -37,11 +44,16 @@ public:
     void sebInit();
 	virtual void update();
     virtual void collision(std::shared_ptr<GameEntity> entity);
+
+	glm::vec3 getPosition();
+	void setPosition(glm::vec3 pos);
+	float getScale();
+	void setScale(float entScale);
+	glm::vec3 getRotations();
+	void setRotations(glm::vec3 rots);
+
 	std::shared_ptr<MeshSet> mesh;
-	glm::vec3 position;
 	glm::vec3 last_position;
-    glm::vec3 rotations;
-    float scale = 1.0f;
 	glm::vec3 turnAngle(glm::vec3 cartesian);
 
 	glm::vec3 velocity = glm::vec3(0);
@@ -52,6 +64,7 @@ public:
     bool compare(std::shared_ptr<GameEntity> ge);
     std::shared_ptr<std::vector<BoundingBox>> GameEntity::getTransformedBoundingBoxes();
     virtual glm::mat4 getModelMat();
+	glm::mat4 getAlignedModelMat();
 	std::shared_ptr<BoundingBox> getOuterBoundingBox();
 	std::shared_ptr<BoundingBox> getTransformedOuterBoundingBox();
 	std::shared_ptr<BoundingBox> transformed_BB;
