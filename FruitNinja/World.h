@@ -45,6 +45,7 @@ class World
 {
 public:
 	World();
+	~World();
 	static void stop_time();
 	void update_key_callbacks();
 	void update();

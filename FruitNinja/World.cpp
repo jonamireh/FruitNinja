@@ -350,7 +350,7 @@ void World::draw()
 			}
 			//if there's an arrow have archery camera follow it and make game slow-mo
 			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
-				archery_camera->cameraPosition = entities[i]->bounding_box.center - archery_camera->cameraFront;
+				archery_camera->cameraPosition = entities[i]->bounding_box.center - archery_camera->cameraFront * 4.0f;
 			}
 
 			if (!SHOULD_DRAW(entities[i]->list)) {
@@ -571,4 +571,7 @@ void World::draw_box(shared_ptr<EntityBox> box, vec3 color)
 	{
 		draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));
 	}
+}
+
+World::~World() {
 }
