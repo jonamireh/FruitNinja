@@ -7,7 +7,7 @@
 
 //I think an SOA is better than AOS for gpu...
 struct Particles {
-	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> position;
 	std::vector<int> frame;
 };
 
@@ -20,7 +20,7 @@ public:
 	Emitter();
 	virtual ~Emitter();
 
-	virtual void update(double deltaTime);
+	virtual void update(double deltaTime, std::vector<Light*> lights);
 	int getNumParticles();
 	tdogl::Texture* texture;
 

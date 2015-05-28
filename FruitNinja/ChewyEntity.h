@@ -3,6 +3,7 @@
 #include "GameEntity.h"
 #include "ChewyMovementComponent.h"
 #include "BasicAnimationComponent.h"
+#include "ChewyAnimationComponent.h"
 
 class ChewyEntity : public GameEntity
 {
@@ -17,5 +18,5 @@ public:
 
 private:
 	ChewyMovementComponent moveComponent;
-	BasicAnimationComponent animComponent;
+	ChewyAnimationComponent animComponent;
 };

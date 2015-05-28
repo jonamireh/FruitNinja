@@ -18,12 +18,14 @@ class Shader
 	GLuint program;
 	GLuint vertexShader;
 	GLuint fragmentShader;
+	GLuint geometryShader;
 	std::map<std::string, GLint> attributes;
 	std::map<std::string, GLint> uniforms;
 	std::map<std::string, GLint> uniformBlocks;
 public:
 	Shader();
 	Shader(std::string vertShader, std::string fragShader);
+	Shader(std::string vertShader, std::string geomShader, std::string fragShader);
 	void setupHandles();
 	GLint getAttributeHandle(std::string name);
 	GLint getUniformHandle(std::string name);

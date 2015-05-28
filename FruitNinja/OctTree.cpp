@@ -71,3 +71,4 @@ void OctTree::branch()
             OctTree(subset_voxels.at(i), subset_objects, root);
     }
 }
+

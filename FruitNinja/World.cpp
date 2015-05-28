@@ -22,7 +22,11 @@
 #include <iostream>
 #include <fstream>
 #include "ParticleShader.h"
+<<<<<<< HEAD
 #include "CinematicCamera.h"
+=======
+#include "MyOctree.h"
+>>>>>>> e63377e3ca8ede2a797aa370d9beecd05d9d3ab7
 
 #define FILE_TO_WORLD_SCALE 6.f
 
@@ -64,10 +68,10 @@ void World::init()
 	
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final2.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final3.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai2.dae"))));
-    //meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
@@ -329,9 +333,9 @@ void World::draw()
 	}
 	//otherwise deferred rendering
 	else {
-		//even if lantern culled still need light from it
 		vector<Light*> lights;
 		for (int i = 0; i < entities.size(); i++) {
+			//even if lantern culled still need light from it
 			if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list)) {
 				shared_ptr<LightEntity> le = dynamic_pointer_cast<LightEntity>(entities[i]);
 				lights.push_back(&le->light);
@@ -348,7 +352,7 @@ void World::draw()
 		}
 		for (int i = 0; i < in_view.size(); i++)
 		{
-			if (!SHOULD_DRAW(in_view[i]->list)) { //used to be !SHOULD_DRAW(entities[i]->list) but caused crashing. This is a guess
+			if (!SHOULD_DRAW(in_view[i]->list)) {
 				in_view.erase(in_view.begin() + i);
 				i--;
 			}
@@ -509,9 +513,11 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-
 	OctTree* world_oct_tree = new OctTree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities, nullptr);
 	collision_handler(world_oct_tree->collision_pairs);
+	//MyOctree* world_oct_tree = new MyOctree(Voxel(vec3(-1000.f, -1000.f, -1000.f), vec3(1000.f, 1000.f, 1000.f)), entities);
+	//world_oct_tree->handle_collisions();
+	//delete world_oct_tree;
     update_key_callbacks();
 	_skybox->update();
 }

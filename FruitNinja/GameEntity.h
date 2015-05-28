@@ -36,6 +36,7 @@ class GameEntity
 	glm::vec3 rotations;
 public:
     bool collision_response;
+	bool moving = false;
 	std::shared_ptr<BoundingBox> largestBB;
     GameEntity() {}
 	GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response = false);
@@ -57,7 +58,7 @@ public:
 
 	glm::vec3 velocity = glm::vec3(0);
     virtual float getRadius();
-    glm::vec3 getCenter();
+    virtual glm::vec3 getCenter();
 	glm::vec3 center;
 	aiAnimation *current_animation;
     bool compare(std::shared_ptr<GameEntity> ge);

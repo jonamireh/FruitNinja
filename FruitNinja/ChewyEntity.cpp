@@ -25,8 +25,8 @@ void ChewyEntity::update()
 		meshes.at(i)->mat = meshes.at(i)->bMat;
 	}
 	moveComponent.update();
-	animComponent.update();
 	GameEntity::update();
+	animComponent.update();
 }
 
 void ChewyEntity::set_material(Material material)
