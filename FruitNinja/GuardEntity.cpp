@@ -9,13 +9,13 @@ using namespace std;
 #define DETECTION_INNER_RADIUS 7.f
 #define COS_ANGLE 60.f
 
-GuardEntity::GuardEntity() : move_component(*this, vector<vec3>(), 0.f, false)
+GuardEntity::GuardEntity() : move_component(*this, vector<vec3>(), 0.f, false), animComponent(this)
 {
 
 }
 
 
-GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve) : GameEntity(position, mesh, true), move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f)
+GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve) : GameEntity(position, mesh, true), move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(this)
 {
 
 }
@@ -25,6 +25,7 @@ void GuardEntity::update()
 	GameEntity::update();
 	move_component.update();
 	GameEntity::update();
+	animComponent.update();
 }
 
 float GuardEntity::getRadius()

@@ -28,7 +28,8 @@ void ProjectileEntity::update()
 {
 	GameEntity::update();
 	movement.update();
-	if (getPosition().y < 0.0) {
+	glm::vec3 pos = getPosition();
+	if (pos.y < 0.0 || pos.x < 0.0 || pos.z < 0.0 || pos.x > 240.0 || pos.z > 240.0) {
 		list = UNSET_DRAW(list);
 		game_speed = 1.0;
 	}
