@@ -24,6 +24,7 @@
 #include "ParticleShader.h"
 #include "CinematicCamera.h"
 #include "MyOctree.h"
+#include "AudioManager.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
 
@@ -125,6 +126,8 @@ void World::init()
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+
+	AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3");
 }
 
 void World::setup_level(string file_path)
@@ -523,6 +526,8 @@ void World::update()
 	delete world_oct_tree;
     update_key_callbacks();
 	_skybox->update();
+
+	AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
 }
 
 void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)

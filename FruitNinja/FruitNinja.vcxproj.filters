@@ -139,6 +139,9 @@
     <ClCompile Include="CollisionHandler.h">
       <Filter>Headers</Filter>
     </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
     <ClCompile Include="CinematicCamera.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -296,12 +299,36 @@
     </ClInclude>
     <ClInclude Include="CinematicPathingComponent.h">
       <Filter>Headers</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="ProjectileMovementComponent.h">
       <Filter>Projectiles</Filter>
     </ClInclude>
     <ClInclude Include="ProjectileEntity.h">
       <Filter>Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod.h">
+      <Filter>Headers\FMOD Ex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod.hpp">
+      <Filter>Headers\FMOD Ex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_codec.h">
+      <Filter>Headers\FMOD Ex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_dsp.h">
+      <Filter>Headers\FMOD Ex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_errors.h">
+      <Filter>Headers\FMOD Ex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_memoryinfo.h">
+      <Filter>Headers\FMOD Ex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_output.h">
+      <Filter>Headers\FMOD Ex</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +415,12 @@
     </Filter>
     <Filter Include="Test">
       <UniqueIdentifier>{e280dec0-0464-47f0-ae60-e833c875f5d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\FMOD Ex">
+      <UniqueIdentifier>{74bae4e8-0dff-4926-aa6d-e37b3faa0bc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{df5afead-d837-4d4b-95fd-e86ff9855343}</UniqueIdentifier>
     </Filter>
     <Filter Include="Projectiles">
       <UniqueIdentifier>{2b49bc61-52ec-4b6d-9ef2-115b165168ef}</UniqueIdentifier>
