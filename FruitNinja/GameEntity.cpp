@@ -13,193 +13,142 @@
 using namespace glm;
 using namespace std;
 
-GameEntity::GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response) : position(position), mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f)),
-collision_response(collision_response), transformed_BB(nullptr)
+GameEntity::GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response) : mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f)),
+collision_response(collision_response)
 {
-	sebInit();
-	list = SET_DRAW(list);
-	list = SET_OCTTREE(list);
+    setup_entity_box();
+    setPosition(position + vec3(0.f, bounding_box.half_height, 0.f));
+    list = SET_DRAW(list);
+    list = SET_OCTTREE(list);
 };
 
 
-vec3 GameEntity::turnAngle(vec3 cartesian) {
-	vec3 rot_angles(0, 0, 0);
+vec3 GameEntity::turnAngle(vec3 cartesian)
+{
+    vec3 rot_angles(0, 0, 0);
 
-	if (cartesian.x < 0)
-		rot_angles.y = -1.0f * atan(cartesian.z / cartesian.x);
-	else
-		rot_angles.y = atan(cartesian.z / -cartesian.x) + M_PI;
+    if (cartesian.x < 0)
+        rot_angles.y = -1.0f * atan(cartesian.z / cartesian.x);
+    else
+        rot_angles.y = atan(cartesian.z / -cartesian.x) + M_PI;
 
     rot_angles.y -= M_PI / 2.f;
 
-	return rot_angles;
-}
-
-void GameEntity::sebInit()
-{
-	shared_ptr<BoundingBox> outer_bb = getOuterBoundingBox();
-    radius = glm::distance(outer_bb->lower_bound, outer_bb->upper_bound) / 2.f;
-    center = (outer_bb->lower_bound + outer_bb->upper_bound)  / 2.f;
-}
-
-glm::vec3 GameEntity::getPosition()
-{
-	return position;
-}
-
-void GameEntity::setPosition(glm::vec3 pos)
-{
-	position = pos;
-	validAlignedModelMat = false;
+    return rot_angles;
 }
 
 float GameEntity::getScale()
 {
-	return scale;
+    return scale;
 }
 
 void GameEntity::setScale(float entScale)
 {
-	scale = entScale;
-	validAlignedModelMat = false;
+    scale = entScale;
+
+    bounding_box.half_width *= scale;
+    bounding_box.half_height *= scale;
+    bounding_box.half_depth *= scale;
+    bounding_box.center.y = bounding_box.half_height;
 }
 
 glm::vec3 GameEntity::getRotations()
 {
-	return rotations;
+    return rotations;
 }
 
 void GameEntity::setRotations(glm::vec3 rots)
 {
-	rotations = rots;
-	validModelMat = false;
+    rotations = rots;
 }
 
-float GameEntity::getRadius()
+glm::vec3 GameEntity::getPosition()
 {
-    return scale * radius;
+    return bounding_box.center;
 }
 
-vec3 GameEntity::getCenter()
+void GameEntity::setPosition(glm::vec3 position)
 {
-	shared_ptr<BoundingBox> outer_bb = getTransformedOuterBoundingBox();
-	return vec3(center + position) +((scale != 1.f) ? vec3(0.f, glm::distance(outer_bb->lower_bound, vec3(outer_bb->lower_bound.x, outer_bb->lower_bound.y, outer_bb->upper_bound.z)) / 2.f, 0.f) : vec3(0.f));
-	//return (outer_bb->upper_bound + outer_bb->lower_bound) / 2.f;
+    bounding_box.center = position;
 }
 
-shared_ptr<BoundingBox> GameEntity::getOuterBoundingBox()
+void GameEntity::setup_entity_box()
 {
-	if (largestBB == nullptr)
-	{
-		vector<Mesh*> meshes = mesh->getMeshes();
-		vec3 lower_bound(FLT_MAX, FLT_MAX, FLT_MAX);
-		vec3 upper_bound(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-		for (int i = 0; i < meshes.size(); i++)
-		{
-			vec3 m_lower_bound(meshes.at(i)->getBoundingBox()->lower_bound);
-			vec3 m_upper_bound(meshes.at(i)->getBoundingBox()->upper_bound);
+    vector<Mesh*> meshes = mesh->getMeshes();
+    vec3 lower_bound(FLT_MAX, FLT_MAX, FLT_MAX);
+    vec3 upper_bound(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    for (int i = 0; i < meshes.size(); i++)
+    {
+        pair<vec3, vec3> bounds = meshes.at(i)->get_lower_and_upper_bounds();
+        vec3 m_lower_bound(bounds.first);
+        vec3 m_upper_bound(bounds.second);
 
-			vec3 less = lessThan(m_lower_bound, lower_bound);
-			vec3 greater = greaterThan(m_upper_bound, upper_bound);
-			lower_bound.x = less.x ? m_lower_bound.x : lower_bound.x;
-			lower_bound.y = less.y ? m_lower_bound.y : lower_bound.y;
-			lower_bound.z = less.z ? m_lower_bound.z : lower_bound.z;
-			upper_bound.x = greater.x ? m_upper_bound.x : upper_bound.x;
-			upper_bound.y = greater.y ? m_upper_bound.y : upper_bound.y;
-			upper_bound.z = greater.z ? m_upper_bound.z : upper_bound.z;
-		}
-		largestBB = shared_ptr<BoundingBox>(new BoundingBox(vec3(vec4(lower_bound, 1.0f)), vec3(vec4(upper_bound, 1.0f))));
-	}
-	return largestBB;
+        vec3 less = lessThan(m_lower_bound, lower_bound);
+        vec3 greater = greaterThan(m_upper_bound, upper_bound);
+        lower_bound.x = less.x ? m_lower_bound.x : lower_bound.x;
+        lower_bound.y = less.y ? m_lower_bound.y : lower_bound.y;
+        lower_bound.z = less.z ? m_lower_bound.z : lower_bound.z;
+        upper_bound.x = greater.x ? m_upper_bound.x : upper_bound.x;
+        upper_bound.y = greater.y ? m_upper_bound.y : upper_bound.y;
+        upper_bound.z = greater.z ? m_upper_bound.z : upper_bound.z;
+    }
+
+    bounding_box.half_width = glm::distance(lower_bound.x, upper_bound.x) / 2.f;
+    bounding_box.half_height = glm::distance(lower_bound.y, upper_bound.y) / 2.f;
+    bounding_box.half_depth = glm::distance(lower_bound.z, upper_bound.z) / 2.f;
 }
 
-shared_ptr<BoundingBox> GameEntity::getTransformedOuterBoundingBox()
+void GameEntity::setup_entity_box(std::shared_ptr<MeshSet> mesh)
 {
-	if (transformed_BB == nullptr)
-	{
-		shared_ptr<BoundingBox> obb = getOuterBoundingBox();
-		vec3 lower_bound(obb->lower_bound);
-		vec3 upper_bound(obb->upper_bound);
-		vector<vec3> points = obb->get_points();
+    vector<Mesh*> meshes = mesh->getMeshes();
+    vec3 lower_bound(FLT_MAX, FLT_MAX, FLT_MAX);
+    vec3 upper_bound(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    for (int i = 0; i < meshes.size(); i++)
+    {
+        pair<vec3, vec3> bounds = meshes.at(i)->get_lower_and_upper_bounds();
+        vec3 m_lower_bound(bounds.first);
+        vec3 m_upper_bound(bounds.second);
 
-		vector<vec3> transformed_points;
-		transformed_points.reserve(points.size());
-
-		// Connor added this to try to get the outer box for chewy without rotations
-		mat4 model = getAlignedModelMat();
-
-		for (int i = 0; i < points.size(); i++)
-		{
-			transformed_points.push_back(vec3(model * vec4(points.at(i), 1.f)));
-		}
-		vec3 min(FLT_MAX, FLT_MAX, FLT_MAX);
-		vec3 max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-		for (int i = 0; i < transformed_points.size(); i++)
-		{
-			if (transformed_points.at(i).x < min.x) min.x = transformed_points.at(i).x;
-			if (transformed_points.at(i).x > max.x) max.x = transformed_points.at(i).x;
-			if (transformed_points.at(i).y < min.y) min.y = transformed_points.at(i).y;
-			if (transformed_points.at(i).y > max.y) max.y = transformed_points.at(i).y;
-			if (transformed_points.at(i).z < min.z) min.z = transformed_points.at(i).z;
-			if (transformed_points.at(i).z > max.z) max.z = transformed_points.at(i).z;
-		}
-		transformed_BB = shared_ptr<BoundingBox>(new BoundingBox(min, max));
-	}
-	
-	return transformed_BB;
+        vec3 less = lessThan(m_lower_bound, lower_bound);
+        vec3 greater = greaterThan(m_upper_bound, upper_bound);
+        lower_bound.x = less.x ? m_lower_bound.x : lower_bound.x;
+        lower_bound.y = less.y ? m_lower_bound.y : lower_bound.y;
+        lower_bound.z = less.z ? m_lower_bound.z : lower_bound.z;
+        upper_bound.x = greater.x ? m_upper_bound.x : upper_bound.x;
+        upper_bound.y = greater.y ? m_upper_bound.y : upper_bound.y;
+        upper_bound.z = greater.z ? m_upper_bound.z : upper_bound.z;
+    }
+    bounding_box.half_width = glm::distance(lower_bound.x, upper_bound.x) / 2.f;
+    bounding_box.half_height = glm::distance(lower_bound.y, upper_bound.y) / 2.f;
+    bounding_box.half_depth = glm::distance(lower_bound.z, upper_bound.z) / 2.f;
+    bounding_box.center.y = bounding_box.half_height;
 }
 
-bool GameEntity::compare(std::shared_ptr<GameEntity> ge)
+void GameEntity::collision(std::shared_ptr<GameEntity> entity)
 {
-    std::shared_ptr<BoundingBox> my_bb = getTransformedOuterBoundingBox();
-    std::shared_ptr<BoundingBox> their_bb = ge->getTransformedOuterBoundingBox();
-	
-    return (my_bb->upper_bound.x > their_bb->lower_bound.x &&
-        my_bb->lower_bound.x < their_bb->upper_bound.x &&
-        my_bb->upper_bound.y > their_bb->lower_bound.y &&
-        my_bb->lower_bound.y < their_bb->upper_bound.y &&
-        my_bb->upper_bound.z > their_bb->lower_bound.z &&
-        my_bb->lower_bound.z < their_bb->upper_bound.z);
-}
-
-void GameEntity::collision(std::shared_ptr<GameEntity> bb)
-{
-    //cout << "generic object collided!" << endl;
+    cout << "generic object collided!" << endl;
 }
 
 glm::mat4 GameEntity::getModelMat()
 {
-	if (validModelMat == true) {
-		return modelMat;
-	}
-
     mat4 model_rot_x = rotate(mat4(1.0f), rotations.x, vec3(1.f, 0.f, 0.f));
     mat4 model_rot_y = rotate(mat4(1.0f), rotations.y, vec3(0.f, 1.f, 0.f));
     mat4 model_rot_z = rotate(mat4(1.0f), rotations.z, vec3(0.f, 0.f, 1.f));
 
     modelMat = getAlignedModelMat() * model_rot_z * model_rot_x * model_rot_y;
-	validModelMat = true;
-
-	return modelMat;
+    return modelMat;
 }
 
 glm::mat4 GameEntity::getAlignedModelMat()
 {
-	if (validAlignedModelMat == true) {
-		return alignedModelMat;
-	}
+    mat4 model_trans = translate(mat4(1.0f), bounding_box.center - vec3(0.f, bounding_box.half_height, 0.f));
+    mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
 
-	mat4 model_trans = translate(mat4(1.0f), position);
-	mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
+    alignedModelMat = model_trans * model_scale;
 
-	alignedModelMat = model_trans * model_scale;
-	validAlignedModelMat = true;
-
-	return alignedModelMat;
+    return alignedModelMat;
 }
 
 void GameEntity::update()
 {
-	transformed_BB = nullptr;
-	getTransformedOuterBoundingBox();
 }

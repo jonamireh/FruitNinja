@@ -37,7 +37,7 @@ void ProjectileEntity::update()
 
 glm::mat4 ProjectileEntity::getModelMat()
 {
-	glm::mat4 model_trans = translate(glm::mat4(1.0f), getPosition());
+	glm::mat4 model_trans = translate(glm::mat4(1.0f), bounding_box.center);
 	
 	float scale = getScale();
 	glm::mat4 model_scale = glm::scale(glm::mat4(1.0f), glm::vec3(scale, scale, scale));
@@ -46,7 +46,7 @@ glm::mat4 ProjectileEntity::getModelMat()
 }
 void ProjectileEntity::collision(std::shared_ptr<GameEntity> entity)
 {
-	if (entity->getTransformedOuterBoundingBox()->boxes_collide(*getTransformedOuterBoundingBox())) {
+	if (entity->bounding_box.box_collision(bounding_box)) {
 		if (typeid(*entity) == typeid(LightEntity) || typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity)) {
 			//get rid of hit entity
 			entity->list = UNSET_DRAW(entity->list);

@@ -13,7 +13,6 @@ public:
 	void update();
 	void collision(std::shared_ptr<GameEntity> entity);
 	void set_material(Material material);
-	float up_velocity = 0;
     bool _falling;
 	ChewyMovementComponent moveComponent;
 	ChewyAnimationComponent animComponent;

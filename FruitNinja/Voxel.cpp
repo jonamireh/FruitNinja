@@ -44,7 +44,6 @@ shared_ptr<vector<pair<vec3, vec3>>> Voxel::get_line_segments()
     toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, lower_bound.z)));
 
     return toReturn;
-
 }
 
 
@@ -84,14 +83,8 @@ std::vector<Voxel> Voxel::split()
     return boxes;
 }
 
-bool Voxel::contains(vec3 object_center, float radius)
+bool Voxel::contains(shared_ptr<GameEntity> entity)
 {
-    vec3 point = object_center + radius * normalize(voxel_center - object_center);
-
-    return (point.x >= lower_bound.x && point.x <= upper_bound.x &&
-        point.y >= lower_bound.y && point.y <= upper_bound.y &&
-        point.z >= lower_bound.z && point.z <= upper_bound.z) ||
-        (object_center.x >= lower_bound.x && object_center.x <= upper_bound.x &&
-        object_center.y >= lower_bound.y && object_center.y <= upper_bound.y &&
-        object_center.z >= lower_bound.z && object_center.z <= upper_bound.z);
+    EntityBox voxel_entity_box = EntityBox(voxel_center, fabs(upper_bound.x - lower_bound.x), fabs(upper_bound.y - lower_bound.y), fabs(upper_bound.z - lower_bound.z));
+    return (voxel_entity_box.box_collision(entity->bounding_box));
 }

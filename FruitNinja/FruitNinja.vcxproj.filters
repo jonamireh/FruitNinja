@@ -31,6 +31,12 @@
     <ClCompile Include="PhongShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectileMovementComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
     <ClCompile Include="ObstacleEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -56,9 +62,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="TextureDebugShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="BoundingBox.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
@@ -133,26 +136,20 @@
     <ClCompile Include="PlayerCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="MyOctree.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionHandler.h">
       <Filter>Headers</Filter>
     </ClCompile>
+    <ClCompile Include="EntityBox.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
     <ClCompile Include="AudioManager.cpp">
-      <Filter>Audio</Filter>
+      <Filter>audio</Filter>
     </ClCompile>
     <ClCompile Include="CinematicCamera.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="CinematicPathingComponent.cpp">
       <Filter>Source</Filter>
-	</ClCompile>
-    <ClCompile Include="ProjectileMovementComponent.cpp">
-      <Filter>Projectiles</Filter>
-    </ClCompile>
-    <ClCompile Include="ProjectileEntity.cpp">
-      <Filter>Projectiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,7 +183,13 @@
     <ClInclude Include="World.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ProjectileMovementComponent.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
     <ClInclude Include="Mesh.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileEntity.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="ObstacleEntity.h">
@@ -214,9 +217,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="FrustrumCulling.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundingBox.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Skybox.h">
@@ -291,44 +291,38 @@
     <ClInclude Include="PlayerCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
-    <ClInclude Include="MyOctree.h">
-      <Filter>Test</Filter>
+    <ClInclude Include="EntityBox.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod.h">
+      <Filter>Headers\fmodex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod.hpp">
+      <Filter>Headers\fmodex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_codec.h">
+      <Filter>Headers\fmodex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_dsp.h">
+      <Filter>Headers\fmodex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_errors.h">
+      <Filter>Headers\fmodex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_memoryinfo.h">
+      <Filter>Headers\fmodex</Filter>
+    </ClInclude>
+    <ClInclude Include="fmodex\fmod_output.h">
+      <Filter>Headers\fmodex</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>audio</Filter>
     </ClInclude>
     <ClInclude Include="CinematicCamera.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="CinematicPathingComponent.h">
       <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectileMovementComponent.h">
-      <Filter>Projectiles</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectileEntity.h">
-      <Filter>Projectiles</Filter>
-    </ClInclude>
-    <ClInclude Include="fmodex\fmod.h">
-      <Filter>Headers\FMOD Ex</Filter>
-    </ClInclude>
-    <ClInclude Include="fmodex\fmod.hpp">
-      <Filter>Headers\FMOD Ex</Filter>
-    </ClInclude>
-    <ClInclude Include="fmodex\fmod_codec.h">
-      <Filter>Headers\FMOD Ex</Filter>
-    </ClInclude>
-    <ClInclude Include="fmodex\fmod_dsp.h">
-      <Filter>Headers\FMOD Ex</Filter>
-    </ClInclude>
-    <ClInclude Include="fmodex\fmod_errors.h">
-      <Filter>Headers\FMOD Ex</Filter>
-    </ClInclude>
-    <ClInclude Include="fmodex\fmod_memoryinfo.h">
-      <Filter>Headers\FMOD Ex</Filter>
-    </ClInclude>
-    <ClInclude Include="fmodex\fmod_output.h">
-      <Filter>Headers\FMOD Ex</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioManager.h">
-      <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -413,17 +407,11 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{c1d6f6cc-72b6-4b79-a147-3aaa6ae4fe9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Test">
-      <UniqueIdentifier>{e280dec0-0464-47f0-ae60-e833c875f5d4}</UniqueIdentifier>
+    <Filter Include="Headers\fmodex">
+      <UniqueIdentifier>{700a23ec-e670-4d07-86df-faf7d5ab980a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headers\FMOD Ex">
-      <UniqueIdentifier>{74bae4e8-0dff-4926-aa6d-e37b3faa0bc5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio">
-      <UniqueIdentifier>{df5afead-d837-4d4b-95fd-e86ff9855343}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Projectiles">
-      <UniqueIdentifier>{2b49bc61-52ec-4b6d-9ef2-115b165168ef}</UniqueIdentifier>
+    <Filter Include="audio">
+      <UniqueIdentifier>{88150b41-08b7-4648-a70d-c01a681ed7f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
