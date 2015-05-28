@@ -7,6 +7,7 @@ MyOctree::MyOctree()
 {
 }
 
+
 void MyOctree::handle_collisions()
 {
 	for (auto it = collision_pairs.begin(); it != collision_pairs.end(); ++it)
@@ -15,7 +16,6 @@ void MyOctree::handle_collisions()
 		it->second->collision(it->first);
 	}
 }
-
 
 MyOctree::MyOctree(Voxel vox, vector<shared_ptr<GameEntity>> objects_in_section) {
 	vector<shared_ptr<GameEntity>> objs;
