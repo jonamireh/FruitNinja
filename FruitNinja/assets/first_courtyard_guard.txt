@@ -1,40 +1,40 @@
 _______________________________________
-| XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|
-| XlOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOlX|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                    1             X|
-| X                                  X|
-| X                                  X|
-| X         2               0        X|
-| X                                  X|
-| X                                  X|
-| X                           4      X|
-| X                  G               X|
-| X                                  X|
-| X                                  X|
-| X              3                   X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| X                                  X|
-| XlCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCClX|
-| XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX|
+|                                      |
+|                                      |
+|     l                                |
+|        C      C      C      C        |
+|                                      |
+|                                      |
+|                                      |
+|      X                               |
+|               O                      |
+|                                      |
+|       l                              |
+|                          O           |
+|               X                      |
+|         O                            |
+|                                      |
+|                                      |
+|                                      |
+|             C           O            |
+|                                      |
+|      X     G                         |
+|                 O              l     |
+|                                      |
+|                         X            |
+|      l     0                         |
+|                                6     |
+|                   X                  |
+|                                   l  |
+|                                      |
+|      X     1                          |
+|                             O        |
+|                                      |
+|                                 5    |
+|            2      X                  |
+|      O                               |
+|                             O        |
+|          O      l                    |
+|                                      |
+|            3                    4    |
 _______________________________________

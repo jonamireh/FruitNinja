@@ -24,6 +24,7 @@
 #include "ParticleShader.h"
 #include "CinematicCamera.h"
 #include "MyOctree.h"
+#include "AudioManager.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
 
@@ -104,13 +105,12 @@ void World::init()
 	camera = cinematic_camera;
 	cinematic_camera->in_use = true;
 
+	entities.push_back(chewy);
+	entities.push_back(tower);
 
     setup_level(assetPath + "first_courtyard.txt");
     setup_guard(assetPath + "first_courtyard_guard.txt");
     setup_guard(assetPath + "first_courtyard_second_guard.txt");
-
-	entities.push_back(chewy);
-    entities.push_back(tower);
 
 	hud = HUD(chewy);
 
@@ -126,6 +126,8 @@ void World::init()
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+
+	AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
 }
 
 void World::setup_level(string file_path)
@@ -159,6 +161,7 @@ void World::setup_guard(string file_path)
 
     vec3 control_points[10];
     vec3 starting_position;
+	bool linear = false;
 
     while (!level_file.eof()) // runs through every line
     {
@@ -167,12 +170,15 @@ void World::setup_guard(string file_path)
         for (int i = 0; i < current_line.length(); i++)
         {
             glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, 0, current_row);
-
             switch (current_line.at(i))
             {
             case 'G':
                 starting_position = world_position;
                 break;
+			case 'g':
+				starting_position = world_position;
+				linear = true;
+				break;
             case '0':
                 control_points[0] = world_position;
                 break;
@@ -218,7 +224,7 @@ void World::setup_guard(string file_path)
             break;
     }
 
-    entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(starting_position, meshes.at("guard"), spline_points, 15.f)));
+    entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(starting_position, meshes.at("guard"), spline_points, 10.f, linear)));
     level_file.close();
 }
 
@@ -231,6 +237,7 @@ void World::setup_token(char obj_to_place, glm::vec3 file_index)
     case 'X':
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("box"))));
         entities.back()->setScale(3.f);
+		entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'O':
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("openBarrel"))));
@@ -240,9 +247,10 @@ void World::setup_token(char obj_to_place, glm::vec3 file_index)
     case 'C':
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
         entities.back()->setScale(3.f);
+		entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'l': // Lantern Pole with Lantern
-        entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 7.f, 1.2f), meshes.at("lantern"), 500.f, meshes.at("unit_sphere"))));
+        entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 7.f, 1.2f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
 		vec3 rots = entities.back()->getRotations();
         rots.y = M_PI_2;
 		entities.back()->setRotations(rots);
@@ -518,6 +526,8 @@ void World::update()
 	delete world_oct_tree;
     update_key_callbacks();
 	_skybox->update();
+
+	AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
 }
 
 void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)

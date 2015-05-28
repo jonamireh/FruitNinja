@@ -19,13 +19,13 @@
 #define SCREEN_HEIGHT 720
 #define GRAVITY 33
 #define PLAYER_FOV 45.f
-#define GUARD_FOV 60.f
+#define GUARD_FOV 45.f
 #define PLAYER_NEAR 0.1f
 #define PLAYER_FAR 1000.f
 #define GUARD_NEAR 0.1f
 #define GUARD_FAR 30.f
-#define PLAYER_DIST (PLAYER_FAR - PLAYER_NEAR)
-#define GUARD_DIST (GUARD_FAR - GUARD_NEAR)
+//#define PLAYER_DIST (PLAYER_FAR - PLAYER_NEAR)
+//#define GUARD_DIST (GUARD_FAR - GUARD_NEAR)
 
 class ArcheryCamera;
 const string assetPath = "assets/";

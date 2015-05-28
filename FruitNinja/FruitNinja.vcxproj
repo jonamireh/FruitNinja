@@ -43,6 +43,9 @@
   <PropertyGroup>
     <NuGetPackageImportStamp>05f0e6b7</NuGetPackageImportStamp>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -52,8 +55,12 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;fmodex_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Libs;</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y “$(SolutionDir)\Dlls\fmodex.dll” “$(OutputPath)”</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -92,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="BasicAnimationComponent.cpp" />
     <ClCompile Include="ChewyAnimationComponent.cpp" />
@@ -144,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h" />
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="BasicAnimationComponent.h" />
     <ClInclude Include="ChewyAnimationComponent.h" />
@@ -153,6 +162,13 @@
     <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DeferredShader.h" />
     <ClInclude Include="DirLightShader.h" />
+    <ClInclude Include="fmodex\fmod.h" />
+    <ClInclude Include="fmodex\fmod.hpp" />
+    <ClInclude Include="fmodex\fmod_codec.h" />
+    <ClInclude Include="fmodex\fmod_dsp.h" />
+    <ClInclude Include="fmodex\fmod_errors.h" />
+    <ClInclude Include="fmodex\fmod_memoryinfo.h" />
+    <ClInclude Include="fmodex\fmod_output.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="MyOctree.h" />
     <ClInclude Include="ParticleShader.h" />

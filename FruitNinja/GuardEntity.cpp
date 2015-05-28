@@ -27,23 +27,6 @@ void GuardEntity::update()
 	GameEntity::update();
 }
 
-void GuardEntity::collision(shared_ptr<GameEntity> entity)
-{
-	shared_ptr<ChewyEntity> chewy = dynamic_pointer_cast<ChewyEntity>(entity);
-	if (chewy != nullptr)
-	{
-		if (glm::distance(entity->getCenter(), this->getCenter()) < DETECTION_INNER_RADIUS)
-		{
-			chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
-		}
-		else if (glm::distance(entity->getCenter(), this->getCenter()) < DETECTION_OUTER_RADIUS
-			&& degrees(acos(dot(normalize(entity->getCenter() - this->getCenter()), normalize(move_component.direction)))) < COS_ANGLE)
-		{
-			chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
-		}
-	}
-}
-
 float GuardEntity::getRadius()
 {
 	return DETECTION_OUTER_RADIUS;
@@ -115,7 +98,7 @@ void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
 	{
 		entities_in_view = get_objects_in_view(entities, view, true);
 		shared_ptr<BoundingBox> chewy_bb = chewy->getTransformedOuterBoundingBox();
-		
+
 		chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
 		bool hidden = false;
 		for (int i = 0; i < entities_in_view.size(); i++)

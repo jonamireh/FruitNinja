@@ -10,7 +10,7 @@ uniform vec3 uEye;
 out vec4 FragColor;
 
 #define AMBIENT_INTENSITY 0.3
-#define DIFFUSE_INTENSITY 1.0
+#define DIFFUSE_INTENSITY 0.5
 #define SPEC_INTENSITY 1.0
 #define SHINY 20
 
