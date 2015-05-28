@@ -1,6 +1,7 @@
 #include "World.h"
 #include "DeferredShader.h"
 #include "SimpleTextureShader.h"
+#include "GuardEntity.h"
 
 using namespace glm;
 using namespace std;
@@ -38,9 +39,9 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 		glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
 		glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(projection));
 
-		for (int i = 0; i < meshes.size(); i++)
+		for (int j = 0; j < meshes.size(); j++)
 		{
-			Mesh* mesh = meshes.at(i);
+			Mesh* mesh = meshes[j];
 			glBindVertexArray(mesh->VAO);
 
 			if (mesh->textures.size() > 0) {
@@ -53,6 +54,7 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 
 				glUniform1i(getUniformHandle("Uflag"), 0);
 			}
+			
 			if (mesh->bones.size() > 0)
 			{
 				glUniform1i(getUniformHandle("uBoneFlag"), 1);
@@ -62,7 +64,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 			{
 				glUniform1i(getUniformHandle("uBoneFlag"), 0);
 			}
-
 
 			Material material = mesh->mat;
 			glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));

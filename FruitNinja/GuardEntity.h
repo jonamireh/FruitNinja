@@ -2,6 +2,7 @@
 
 #include "GameEntity.h"
 #include "GuardMovementComponent.h"
+#include "GuardAnimationComponent.h"
 #include "FrustrumCulling.h"
 
 class GuardEntity : public GameEntity
@@ -14,4 +15,5 @@ public:
 	glm::vec3 front;
 	GuardMovementComponent move_component;
 private:
+	GuardAnimationComponent animComponent;
 };

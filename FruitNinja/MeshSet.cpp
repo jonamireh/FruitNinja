@@ -120,38 +120,6 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene, GLuint texInterpol
 	meshes.push_back(new Mesh(&verts, &normals, &indices, mat, &textures, &texCoords, &bones, &boneIds, &boneWeights, &animations));
 }
 
-//This function was copied from off the internet, shouldn't be turned in
-GLuint MeshSet::loadTexture(const char* filename, int width, int height) {
-
-	GLuint texture = 0;
-	/*unsigned char *data;
-	FILE *file;
-		// open texture data
-	file = fopen(filename, "rb");
-	if (file == NULL) return 0;
-
-	data = (unsigned char*)malloc(width * height * 4);
-
-	fread(data, width * height * 4, 1, file);
-	fclose(file);
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_DECAL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_DECAL);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	gluBuild2DMipmaps(GL_TEXTURE_2D, 4, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-	
-	free(data);*/
-	return texture;
-}
 
 MeshSet::MeshSet(std::string filename, GLuint texInterpolation, GLuint texWrap) {
 	const aiScene* scene = aiImportFile(filename.c_str(), aiProcess_GenNormals | aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_FlipUVs /*| aiProcess_LimitBoneWeights*/ | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace);
