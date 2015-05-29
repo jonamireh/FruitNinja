@@ -1,5 +1,6 @@
 #include "Emitter.h"
 #define NUM_FRAMES 36
+#define FRAME_TIME 0.015
 
 Emitter::Emitter() {
 	//need one to draw, I know this is stupid
@@ -36,8 +37,13 @@ Emitter::~Emitter() {
 
 void Emitter::update(double deltaTime, std::vector<Light*> lights) {
 	static int prev_size = 0;
-	for (int i = 0; i < particles.frame.size(); i++) {
-		particles.frame[i] = (particles.frame[i] + 1) % NUM_FRAMES;
+	static double time_to_frame = FRAME_TIME;
+	time_to_frame -= seconds_passed;
+	if (time_to_frame < 0.0) {
+		time_to_frame += FRAME_TIME;
+		for (int i = 0; i < particles.frame.size(); i++) {
+			particles.frame[i] = (particles.frame[i] + 1) % NUM_FRAMES;
+		}
 	}
 
 	//if the size of the lights vector changed reset particles
