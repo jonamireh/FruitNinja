@@ -43,4 +43,6 @@ void ParticleShader::draw(std::shared_ptr<Camera> camera, Emitter& emitter, std:
 	glDrawArrays(GL_POINTS, 0, emitter.getNumParticles());
 	check_gl_error("After particle draw");
 
+	glDisable(GL_BLEND);
+
 }
