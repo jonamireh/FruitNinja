@@ -143,7 +143,7 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
-      <Filter>audio</Filter>
+      <Filter>Audio</Filter>
     </ClCompile>
     <ClCompile Include="CinematicCamera.cpp">
       <Filter>Source</Filter>
@@ -319,7 +319,7 @@
       <Filter>Headers\fmodex</Filter>
     </ClInclude>
     <ClInclude Include="AudioManager.h">
-      <Filter>audio</Filter>
+      <Filter>Audio</Filter>
     </ClInclude>
     <ClInclude Include="CinematicCamera.h">
       <Filter>Headers</Filter>
@@ -416,7 +416,7 @@
     <Filter Include="Headers\fmodex">
       <UniqueIdentifier>{700a23ec-e670-4d07-86df-faf7d5ab980a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="audio">
+    <Filter Include="Audio">
       <UniqueIdentifier>{88150b41-08b7-4648-a70d-c01a681ed7f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

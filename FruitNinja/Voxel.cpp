@@ -50,6 +50,7 @@ shared_ptr<vector<pair<vec3, vec3>>> Voxel::get_line_segments()
 std::vector<Voxel> Voxel::split()
 {
     std::vector<Voxel> boxes;
+	boxes.reserve(8);
 
     //    X     Y    Z
     // front face

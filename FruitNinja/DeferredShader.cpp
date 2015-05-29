@@ -32,12 +32,21 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
+	GLint uViewMatrixHandle = getUniformHandle("uViewMatrix");
+	GLint uModelMatrixHandle = getUniformHandle("uModelMatrix");
+	GLint uProjMatrixHandle = getUniformHandle("uProjMatrix");
+	GLint UtexHandle = getUniformHandle("Utex");
+	GLint UflagHandle = getUniformHandle("Uflag");
+	GLint uBoneFlagHandle = getUniformHandle("uBoneFlag");
+	GLint uBonesHandle = getUniformHandle("uBones[0]");
+	GLint UdColorHandle = getUniformHandle("UdColor");
+
 	for (int i = 0; i < ents.size(); i++) {
 		std::vector<Mesh*> meshes = ents[i]->mesh->getMeshes();
 
-		glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(view_mat));
-		glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
-		glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(projection));
+		glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
+		glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
+		glUniformMatrix4fv(uProjMatrixHandle, 1, GL_FALSE, value_ptr(projection));
 
 		for (int j = 0; j < meshes.size(); j++)
 		{
@@ -47,30 +56,30 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 			if (mesh->textures.size() > 0) {
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
-				glUniform1i(getUniformHandle("Utex"), 0);
-				glUniform1i(getUniformHandle("Uflag"), 1);
+				glUniform1i(UtexHandle, 0);
+				glUniform1i(UflagHandle, 1);
 			}
 			else {
 
-				glUniform1i(getUniformHandle("Uflag"), 0);
+				glUniform1i(UflagHandle, 0);
 			}
 			
 			if (mesh->bones.size() > 0)
 			{
-				glUniform1i(getUniformHandle("uBoneFlag"), 1);
-				glUniformMatrix4fv(getUniformHandle("uBones[0]"), mesh->boneTransformations.size(), GL_FALSE, value_ptr(mesh->boneTransformations[0]));
+				glUniform1i(uBoneFlagHandle, 1);
+				glUniformMatrix4fv(uBonesHandle, mesh->boneTransformations.size(), GL_FALSE, value_ptr(mesh->boneTransformations[0]));
 			}
 			else
 			{
-				glUniform1i(getUniformHandle("uBoneFlag"), 0);
+				glUniform1i(uBoneFlagHandle, 0);
 			}
 
 			Material material = mesh->mat;
-			glUniform3fv(getUniformHandle("UdColor"), 1, value_ptr(material.diffuse));
+			glUniform3fv(UdColorHandle, 1, value_ptr(material.diffuse));
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
 
-			check_gl_error("Mesh.draw before texture");
+			//check_gl_error("Mesh.draw before texture");
 
 			glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
