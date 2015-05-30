@@ -4,7 +4,7 @@
 
 GuardAnimationComponent::GuardAnimationComponent(GameEntity* guard) : basicAnimation(guard)
 {
-	//basicAnimation.changeToLoopingAnimation(WALKIN_START, WALKIN_START + WALKIN_DURATION);
+	basicAnimation.changeToLoopingAnimation(WALKIN_START, WALKIN_START + WALKIN_DURATION);
 	currentAnimtion = WALKIN;
 	this->guard = guard;
 }

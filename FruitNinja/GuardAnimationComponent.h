@@ -2,7 +2,7 @@
 #include "Component.h"
 #include "BasicAnimationComponent.h"
 
-#define WALKIN_START 1.0 / FRAMES_PER_SEC
+#define WALKIN_START 30.0 / FRAMES_PER_SEC
 #define WALKIN_DURATION 200.0 / FRAMES_PER_SEC
 
 
