@@ -5,48 +5,76 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.74.0 commit date:2015-03-31, commit time:13:39, hash:000dfc0</authoring_tool>
     </contributor>
-    <created>2015-05-30T15:44:29</created>
-    <modified>2015-05-30T15:44:29</modified>
+    <created>2015-05-30T16:32:21</created>
+    <modified>2015-05-30T16:32:21</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_images/>
-  <library_effects/>
+  <library_effects>
+    <effect id="Material-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.1572333 0.1678607 0.2190647 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="Material-material" name="Material">
+      <instance_effect url="#Material-effect"/>
+    </material>
+  </library_materials>
   <library_geometries>
-    <geometry id="Cube_038-mesh" name="Cube.038">
+    <geometry id="Cube_042-mesh" name="Cube.042">
       <mesh>
-        <source id="Cube_038-mesh-positions">
-          <float_array id="Cube_038-mesh-positions-array" count="33">-8.303799 -0.1411957 -8.244858 -8.303799 1.275315 -8.244858 0.3120222 -0.1411957 -8.244858 0.3120222 1.275315 -8.244858 -8.303799 1.275315 -8.244858 0.3120222 -0.1411957 -8.244858 0.3120222 1.275315 -8.244858 -7.995889 1.275315 -7.997262 0.004114151 1.275315 -7.997262 -7.995889 0.006984233 -7.997262 0.004114151 0.006984233 -7.997262</float_array>
+        <source id="Cube_042-mesh-positions">
+          <float_array id="Cube_042-mesh-positions-array" count="24">-8.307912 -0.1491569 -8.2476 -8.307912 1.267354 -8.2476 0.307909 -0.1491569 -8.2476 0.307909 1.267354 -8.2476 -8.000002 1.267354 -8.000003 9.53674e-7 1.267354 -8.000003 -8.000002 -9.76912e-4 -8.000003 9.53674e-7 -9.76912e-4 -8.000003</float_array>
           <technique_common>
-            <accessor source="#Cube_038-mesh-positions-array" count="11" stride="3">
+            <accessor source="#Cube_042-mesh-positions-array" count="8" stride="3">
               <param name="X" type="float"/>
               <param name="Y" type="float"/>
               <param name="Z" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <source id="Cube_038-mesh-normals">
-          <float_array id="Cube_038-mesh-normals-array" count="18">0 0 -1 0 1 0 0 0 1 0 0 -1 0 1 0 0 0 1</float_array>
+        <source id="Cube_042-mesh-normals">
+          <float_array id="Cube_042-mesh-normals-array" count="18">0 0 -1 0 1 0 0 0 1 0 0 -1 0 1 0 0 0 1</float_array>
           <technique_common>
-            <accessor source="#Cube_038-mesh-normals-array" count="6" stride="3">
+            <accessor source="#Cube_042-mesh-normals-array" count="6" stride="3">
               <param name="X" type="float"/>
               <param name="Y" type="float"/>
               <param name="Z" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <vertices id="Cube_038-mesh-vertices">
-          <input semantic="POSITION" source="#Cube_038-mesh-positions"/>
+        <vertices id="Cube_042-mesh-vertices">
+          <input semantic="POSITION" source="#Cube_042-mesh-positions"/>
         </vertices>
-        <lines count="1">
-          <input semantic="VERTEX" source="#Cube_038-mesh-vertices" offset="0"/>
-          <p>5 6</p>
-        </lines>
-        <polylist count="6">
-          <input semantic="VERTEX" source="#Cube_038-mesh-vertices" offset="0"/>
-          <input semantic="NORMAL" source="#Cube_038-mesh-normals" offset="1"/>
+        <polylist material="Material-material" count="6">
+          <input semantic="VERTEX" source="#Cube_042-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cube_042-mesh-normals" offset="1"/>
           <vcount>3 3 3 3 3 3 </vcount>
-          <p>3 0 2 0 0 0 6 1 4 1 7 1 7 2 9 2 10 2 1 3 3 3 0 3 8 4 6 4 7 4 8 5 7 5 10 5</p>
+          <p>3 0 2 0 0 0 3 1 1 1 4 1 4 2 6 2 7 2 1 3 3 3 0 3 5 4 3 4 4 4 5 5 4 5 7 5</p>
         </polylist>
       </mesh>
     </geometry>
@@ -54,9 +82,15 @@
   <library_controllers/>
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
-      <node id="Cube_036" name="Cube_036" type="NODE">
+      <node id="Cube_032" name="Cube_032" type="NODE">
         <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
-        <instance_geometry url="#Cube_038-mesh"/>
+        <instance_geometry url="#Cube_042-mesh">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Material-material" target="#Material-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
       </node>
     </visual_scene>
   </library_visual_scenes>
