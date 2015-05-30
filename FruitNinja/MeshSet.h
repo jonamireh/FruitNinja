@@ -39,4 +39,5 @@ private:
 	std::vector<aiAnimation> animations;
 	//to avoid a memory leak 
 	std::vector<tdogl::Texture*> texturesToDel;
+	static std::map<std::string, GLuint> savedTextures;
 };

@@ -80,6 +80,8 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
     //meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("flowerPlanter", shared_ptr<MeshSet>(new MeshSet(assetPath + "flowerPlanter.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", shared_ptr<MeshSet>(new MeshSet(assetPath + "statue.dae"))));
     
     chewy = std::make_shared<ChewyEntity>(vec3(60.0, 0.0, 60.0), meshes.at("chewy"), player_camera, archery_camera);
     // chewy bounding box mesh
@@ -224,7 +226,7 @@ void World::setup_guard(string file_path)
             break;
     }
 
-    entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(starting_position, meshes.at("guard"), spline_points, 10.f, linear)));
+    entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(starting_position, meshes.at("guard"), spline_points, 1.f, linear)));
     level_file.close();
 }
 

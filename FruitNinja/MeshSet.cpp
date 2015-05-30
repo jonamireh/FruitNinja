@@ -10,6 +10,8 @@
 #include "World.h"
 #include <fstream>
 
+std::map<string, GLuint> MeshSet::savedTextures = std::map<string, GLuint>();
+
 void MeshSet::recursiveProcess(aiNode *node, const aiScene *scene, GLuint texInterpolation, GLuint texWrap) {
 	//process
 	for (int i = 0; i < node->mNumMeshes; i++) {
@@ -71,11 +73,17 @@ void MeshSet::processMesh(aiMesh *mesh, const aiScene *scene, GLuint texInterpol
 			//---------------------------
 			std::string tempStr(assetPath);
 			tempStr += str.C_Str();
-			printf("Using texture %s...\n", str.C_Str());
-			tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(tempStr);
-			tdogl::Texture* tex = new tdogl::Texture(bmp, texInterpolation, texWrap);
-			tmp.id = tex->object();
-			texturesToDel.push_back(tex);
+			if (savedTextures.find(tempStr) == savedTextures.end())
+			{
+				printf("Using texture %s...\n", str.C_Str());
+				tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(tempStr);
+				tdogl::Texture* tex = new tdogl::Texture(bmp, texInterpolation, texWrap);
+				tmp.id = tex->object();
+				texturesToDel.push_back(tex);
+				savedTextures[tempStr] = tex->object();
+			}
+			else
+				tmp.id = savedTextures[tempStr];
 			//-------------------------------------
 			tmp.type = 0;
 			textures.push_back(tmp);
