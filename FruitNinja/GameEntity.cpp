@@ -118,10 +118,16 @@ void GameEntity::setup_entity_box(std::shared_ptr<MeshSet> mesh)
         upper_bound.y = greater.y ? m_upper_bound.y : upper_bound.y;
         upper_bound.z = greater.z ? m_upper_bound.z : upper_bound.z;
     }
+
+    // correct for previous bounding box center
+    bounding_box.center.y -= bounding_box.half_height;
+
     bounding_box.half_width = glm::distance(lower_bound.x, upper_bound.x) / 2.f;
     bounding_box.half_height = glm::distance(lower_bound.y, upper_bound.y) / 2.f;
     bounding_box.half_depth = glm::distance(lower_bound.z, upper_bound.z) / 2.f;
-    bounding_box.center.y = bounding_box.half_height;
+
+    // new center
+    bounding_box.center.y += bounding_box.half_height;
 }
 
 void GameEntity::collision(std::shared_ptr<GameEntity> entity)

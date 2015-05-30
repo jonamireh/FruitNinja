@@ -66,6 +66,11 @@ void World::init()
 	cinematic_camera = shared_ptr<CinematicCamera>(new CinematicCamera());
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_right", make_shared<MeshSet>(assetPath + "wall_right.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_left", make_shared<MeshSet>(assetPath + "wall_left.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_front", make_shared<MeshSet>(assetPath + "wall_front.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_back", make_shared<MeshSet>(assetPath + "wall_back.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("ground", make_shared<MeshSet>(assetPath + "ground.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final3.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai3.dae"))));
@@ -79,12 +84,10 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
-    //meshes.insert(pair<string, shared_ptr<MeshSet>>("testsphere", shared_ptr<MeshSet>(new MeshSet(assetPath + "testsphere.dae"))));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("flowerPlanter", shared_ptr<MeshSet>(new MeshSet(assetPath + "flowerPlanter.dae"))));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", shared_ptr<MeshSet>(new MeshSet(assetPath + "statue.dae"))));
     
-    chewy = std::make_shared<ChewyEntity>(vec3(60.0, 0.0, 60.0), meshes.at("chewy"), player_camera, archery_camera);
-    // chewy bounding box mesh
+    chewy = std::make_shared<ChewyEntity>(vec3(0.f), meshes.at("chewy"), player_camera, archery_camera);
     chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);
 
@@ -98,9 +101,20 @@ void World::init()
 	_skybox->setScale(750.f);
 	_skybox->list = UNSET_OCTTREE((_skybox->list));
 
-    shared_ptr <GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
+    shared_ptr<GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
     tower->setScale(30.0f);
     tower->list = UNSET_OCTTREE((tower->list));
+
+    shared_ptr<GameEntity> wall_left(new ObstacleEntity(vec3(0.f), meshes.at("wall_left")));
+    wall_left->setScale(30.f);
+    shared_ptr<GameEntity> wall_right(new ObstacleEntity(vec3(0.f), meshes.at("wall_right")));
+    wall_right->setScale(30.f);
+    shared_ptr<GameEntity> wall_front(new ObstacleEntity(vec3(0.f), meshes.at("wall_front")));
+    wall_front->setScale(30.f);
+    shared_ptr<GameEntity> wall_back(new ObstacleEntity(vec3(0.f), meshes.at("wall_back")));
+    wall_back->setScale(30.f);
+    shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(0.f), meshes.at("ground")));
+    ground->setScale(30.f);
 
     /*camera = player_camera;
     player_camera->in_use = true;*/
@@ -109,6 +123,11 @@ void World::init()
 
 	entities.push_back(chewy);
 	entities.push_back(tower);
+    entities.push_back(wall_left);
+    entities.push_back(wall_right);
+    entities.push_back(wall_front);
+    entities.push_back(wall_back);
+    entities.push_back(ground);
 
     setup_level(assetPath + "first_courtyard.txt");
     setup_guard(assetPath + "first_courtyard_guard.txt");
@@ -242,14 +261,12 @@ void World::setup_token(char obj_to_place, glm::vec3 file_index)
 		entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'O':
-        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("openBarrel"))));
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'C':
-        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
-        entities.back()->setScale(3.f);
-		entities.back()->list = SET_HIDE((entities.back()->list));
+        chewy->setPosition(vec3(placement_position.x, placement_position.y + 5.f, placement_position.z));
         break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 7.f, 1.2f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
