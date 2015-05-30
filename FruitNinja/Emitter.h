@@ -12,12 +12,15 @@ struct Particles {
 };
 
 class Emitter {
+protected:
 	glm::vec3 center;
 	Particles particles;
 	GLuint pos_VBO;
 	GLuint frame_VBO;
+	int num_frames;
+	double frame_time;
 public:
-	Emitter();
+	Emitter(string filename, int nframes, double tframe);
 	virtual ~Emitter();
 
 	virtual void update(double deltaTime, std::vector<Light*> lights);

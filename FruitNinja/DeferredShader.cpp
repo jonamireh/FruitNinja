@@ -130,7 +130,7 @@ void DeferredShader::particlePass(std::shared_ptr<Camera> camera, std::vector<Li
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	fireShader.draw(camera, em, lights);
+	fireShader.draw(camera, flem, lights);
 }
 
 void DeferredShader::skyboxPass(std::shared_ptr<Camera> camera)
