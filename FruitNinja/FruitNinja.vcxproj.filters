@@ -154,6 +154,9 @@
     <ClCompile Include="GuardAnimationComponent.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="FlameEmitter.cpp">
+      <Filter>Fire</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -329,6 +332,9 @@
     </ClInclude>
     <ClInclude Include="GuardAnimationComponent.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FlameEmitter.h">
+      <Filter>Fire</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

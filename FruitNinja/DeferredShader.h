@@ -4,6 +4,7 @@
 #include "DeferredRenderer.h"
 #include "SimpleTextureShader.h"
 #include "ParticleShader.h"
+#include "FlameEmitter.h"
 
 //#include <glm/gtc/type_ptr.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
@@ -33,7 +34,7 @@ private:
 	std::shared_ptr<Skybox> skybox;
 	SimpleTextureShader skyShader;
 	ParticleShader fireShader;
-	Emitter em;
+	FlameEmitter flem;
 
 	DeferredRenderer renderer;
 	DisplayMode disp_mode;
