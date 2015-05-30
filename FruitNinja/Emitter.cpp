@@ -32,7 +32,7 @@ Emitter::~Emitter() {
 	delete texture;
 }
 
-void Emitter::update(double deltaTime, std::vector<Light*> lights) {
+void Emitter::update(double deltaTime) {
 	static double prev_frame_time = 0.0;
 	prev_frame_time += deltaTime;
 	if (prev_frame_time > frame_time) {

@@ -31,5 +31,5 @@ void FlameEmitter::update(double deltaTime, std::vector<Light*> lights) {
 	//glBindBuffer(GL_ARRAY_BUFFER, pos_VBO);
 	//glBufferData(GL_ARRAY_BUFFER, particles.midpt.size() * sizeof(glm::vec3), &particles.midpt[0], GL_DYNAMIC_DRAW);
 
-	Emitter::update(deltaTime, lights);
+	Emitter::update(deltaTime);
 }

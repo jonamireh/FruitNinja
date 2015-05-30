@@ -1,4 +1,5 @@
 #include "ParticleShader.h"
+#include "FlameEmitter.h"
 
 #define PI 3.14159
 
@@ -37,7 +38,13 @@ void ParticleShader::draw(std::shared_ptr<Camera> camera, Emitter& emitter, std:
 	glUniform3fv(getUniformHandle("uEyePos"), 1, glm::value_ptr(camera->cameraPosition));
 
 	glBindVertexArray(emitter.VAO);
-	emitter.update(seconds_passed, lights);
+	FlameEmitter* flem;
+	if ((flem = dynamic_cast<FlameEmitter*>(&emitter)) != nullptr) {
+		flem->update(seconds_passed, lights);
+	}
+	else {
+		printf("Unrecognized emitter type\n");
+	}
 	
 	check_gl_error("Before particle draw");
 	glDrawArrays(GL_POINTS, 0, emitter.getNumParticles());

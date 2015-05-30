@@ -23,7 +23,7 @@ public:
 	Emitter(string filename, int nframes, double tframe);
 	virtual ~Emitter();
 
-	virtual void update(double deltaTime, std::vector<Light*> lights);
+	virtual void update(double deltaTime);
 	int getNumParticles();
 	tdogl::Texture* texture;
 
