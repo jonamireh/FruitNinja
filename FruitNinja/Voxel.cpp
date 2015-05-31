@@ -13,6 +13,7 @@ Voxel::Voxel(vec3 lower, vec3 upper)
     lower_bound = lower;
     upper_bound = upper;
     voxel_center = vec3(0.5f * (lower_bound.x + upper_bound.x), 0.5f * (lower_bound.y + upper_bound.y), 0.5f * (lower_bound.z + upper_bound.z));
+    voxel_entity_box = EntityBox(voxel_center, fabs(upper_bound.x - lower_bound.x), fabs(upper_bound.y - lower_bound.y), fabs(upper_bound.z - lower_bound.z));
 }
 
 shared_ptr<vector<pair<vec3, vec3>>> Voxel::get_line_segments()
@@ -86,6 +87,5 @@ std::vector<Voxel> Voxel::split()
 
 bool Voxel::contains(shared_ptr<GameEntity> entity)
 {
-    EntityBox voxel_entity_box = EntityBox(voxel_center, fabs(upper_bound.x - lower_bound.x), fabs(upper_bound.y - lower_bound.y), fabs(upper_bound.z - lower_bound.z));
     return (voxel_entity_box.box_collision(entity->bounding_box));
 }

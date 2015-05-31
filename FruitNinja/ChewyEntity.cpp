@@ -46,6 +46,22 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
         return;
 
     vec3 pos = getPosition();
+
+
+    setPosition(vec3(last_position.x, pos.y, pos.z));
+
+    if (!entity->bounding_box.box_collision(bounding_box))
+    {
+        return;
+    }
+
+    setPosition(vec3(pos.x, pos.y, last_position.z));
+
+    if (!entity->bounding_box.box_collision(bounding_box))
+    {
+        return;
+    }
+
     setPosition(vec3(pos.x, last_position.y, pos.z));
 
     if (!entity->bounding_box.box_collision(bounding_box))
@@ -57,12 +73,7 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
         return;
     }
 
-    setPosition(vec3(last_position.x, pos.y, pos.z));
 
-    if (!entity->bounding_box.box_collision(bounding_box))
-    {
-        return;
-    }
 
     setPosition(vec3(pos.x, pos.y, last_position.z));
 }

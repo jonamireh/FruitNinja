@@ -140,8 +140,8 @@ void World::init()
     entities.push_back(ground);
 
     setup_level(assetPath + "first_courtyard.txt");
-    setup_guard(assetPath + "first_courtyard_guard.txt");
-    setup_guard(assetPath + "first_courtyard_second_guard.txt");
+    //setup_guard(assetPath + "first_courtyard_guard.txt");
+    //setup_guard(assetPath + "first_courtyard_second_guard.txt");
 
 	hud = HUD(chewy);
 
@@ -168,7 +168,7 @@ void World::setup_level(string file_path)
 
     string current_line;
     int current_row = 0;
-    int height_level = 0;
+    int height_level = -1;
 
     while (!level_file.eof()) // runs through every line
     {

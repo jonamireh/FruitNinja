@@ -11,6 +11,7 @@ public:
     glm::vec3 lower_bound;
     glm::vec3 upper_bound;
     glm::vec3 voxel_center;
+    EntityBox voxel_entity_box;
 
     Voxel();
     Voxel(glm::vec3, glm::vec3);
