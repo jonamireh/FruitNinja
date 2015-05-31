@@ -13,9 +13,20 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, s
 	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred),
 	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl")
 {
+	emitters.push_back(new FlameEmitter);
+	emitters.push_back(new FireEmitter);
 	gbuffer.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 	glBindAttribLocation(getProgramID(), 1, "aNormal");
+
+	uViewMatrixHandle = getUniformHandle("uViewMatrix");
+	uModelMatrixHandle = getUniformHandle("uModelMatrix");
+	uProjMatrixHandle = getUniformHandle("uProjMatrix");
+	UtexHandle = getUniformHandle("Utex");
+	UflagHandle = getUniformHandle("Uflag");
+	uBoneFlagHandle = getUniformHandle("uBoneFlag");
+	uBonesHandle = getUniformHandle("uBones[0]");
+	UdColorHandle = getUniformHandle("UdColor");
 }
 
 void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEntity>> ents)
@@ -31,15 +42,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-
-	GLint uViewMatrixHandle = getUniformHandle("uViewMatrix");
-	GLint uModelMatrixHandle = getUniformHandle("uModelMatrix");
-	GLint uProjMatrixHandle = getUniformHandle("uProjMatrix");
-	GLint UtexHandle = getUniformHandle("Utex");
-	GLint UflagHandle = getUniformHandle("Uflag");
-	GLint uBoneFlagHandle = getUniformHandle("uBoneFlag");
-	GLint uBonesHandle = getUniformHandle("uBones[0]");
-	GLint UdColorHandle = getUniformHandle("UdColor");
 
 	for (int i = 0; i < ents.size(); i++) {
 		std::vector<Mesh*> meshes = ents[i]->mesh->getMeshes();
@@ -130,7 +132,7 @@ void DeferredShader::particlePass(std::shared_ptr<Camera> camera, std::vector<Li
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	fireShader.draw(camera, flem, lights);
+	fireShader.draw(camera, emitters, lights);
 }
 
 void DeferredShader::skyboxPass(std::shared_ptr<Camera> camera)

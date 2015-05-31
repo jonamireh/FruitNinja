@@ -113,6 +113,7 @@
     <ClCompile Include="DeferredShader.cpp" />
     <ClCompile Include="DirLightShader.cpp" />
     <ClCompile Include="EntityBox.cpp" />
+    <ClCompile Include="FireEmitter.cpp" />
     <ClCompile Include="FlameEmitter.cpp" />
     <ClCompile Include="GuardAnimationComponent.cpp" />
     <ClCompile Include="HUD.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="DeferredShader.h" />
     <ClInclude Include="DirLightShader.h" />
     <ClInclude Include="EntityBox.h" />
+    <ClInclude Include="FireEmitter.h" />
     <ClInclude Include="FlameEmitter.h" />
     <ClInclude Include="fmodex\fmod.h" />
     <ClInclude Include="fmodex\fmod.hpp" />

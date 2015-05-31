@@ -20,12 +20,16 @@ protected:
 	int num_frames;
 	double frame_time;
 public:
-	Emitter(string filename, int nframes, double tframe);
+	Emitter(string filename, int nframes, double tframe, int width, int height, float size);
 	virtual ~Emitter();
 
 	virtual void update(double deltaTime);
 	int getNumParticles();
 	tdogl::Texture* texture;
+
+	int atlas_height;
+	int atlas_width;
+	float particle_size;
 
 	GLuint VAO;
 };

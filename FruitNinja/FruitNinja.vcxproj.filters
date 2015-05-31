@@ -157,6 +157,9 @@
     <ClCompile Include="FlameEmitter.cpp">
       <Filter>Fire</Filter>
     </ClCompile>
+    <ClCompile Include="FireEmitter.cpp">
+      <Filter>Fire</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -334,6 +337,9 @@
       <Filter>Guard</Filter>
     </ClInclude>
     <ClInclude Include="FlameEmitter.h">
+      <Filter>Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="FireEmitter.h">
       <Filter>Fire</Filter>
     </ClInclude>
   </ItemGroup>
