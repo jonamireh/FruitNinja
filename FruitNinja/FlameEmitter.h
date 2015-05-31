@@ -10,5 +10,5 @@ public:
 	FlameEmitter();
 	~FlameEmitter();
 
-	void update(double deltaTime, std::vector<Light*> lights) override;
+	void update(double deltaTime, std::vector<Light*> lights);
 };

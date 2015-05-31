@@ -1,6 +1,6 @@
 #include "FlameEmitter.h"
 
-FlameEmitter::FlameEmitter() : Emitter("nice_fire.png", 36, .03) {
+FlameEmitter::FlameEmitter() : Emitter("nice_fire.png", 36, .03, 6, 6, 5.0) {
 
 }
 
@@ -20,7 +20,7 @@ void FlameEmitter::update(double deltaTime, std::vector<Light*> lights) {
 			particles.frame.push_back(0);
 		}
 		for (int i = 0; i < lights.size(); i++) {
-			particles.position.push_back(lights[i]->pos + glm::vec3(0.0, -1.4, 0.0));
+			particles.position.push_back(lights[i]->pos + glm::vec3(0.0, 0.0, 0.0));
 			particles.frame.push_back(rand() % num_frames);
 		}
 		glBindBuffer(GL_ARRAY_BUFFER, pos_VBO);
@@ -31,5 +31,5 @@ void FlameEmitter::update(double deltaTime, std::vector<Light*> lights) {
 	//glBindBuffer(GL_ARRAY_BUFFER, pos_VBO);
 	//glBufferData(GL_ARRAY_BUFFER, particles.midpt.size() * sizeof(glm::vec3), &particles.midpt[0], GL_DYNAMIC_DRAW);
 
-	Emitter::update(deltaTime, lights);
+	Emitter::update(deltaTime);
 }

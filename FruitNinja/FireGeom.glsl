@@ -1,14 +1,13 @@
 #version 330
 
-#define HEIGHT 6.0
-#define WIDTH 6.0
-#define SIZE 5.0
-
 layout(points) in;
 layout(triangle_strip, max_vertices = 4) out;
 
 uniform mat4 uViewProjMatrix;
 uniform vec3 uEyePos;
+uniform int uWidth;
+uniform int uHeight;
+uniform float uSize;
 
 in vec2 cellPos[1];
 
@@ -24,27 +23,27 @@ void main() {
 
 
 	//lower left
-	pos -= (right * 0.5 * SIZE);
-	texCoord = vec2(cellPos[0].x, 1.0 / HEIGHT + cellPos[0].y);
+	pos -= (right * 0.5 * uSize);
+	texCoord = vec2(cellPos[0].x, 1.0 / float(uHeight) + cellPos[0].y);
     gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 
 	//upper left
-	pos.y += 1.0 * SIZE;
+	pos.y += 1.0 * uSize;
 	texCoord = vec2(cellPos[0].x, cellPos[0].y);
 	gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 
 	//lower right
-	pos.y -= 1.0 * SIZE;
-    pos += right * SIZE;
-	texCoord = vec2(1.0 / WIDTH + cellPos[0].x, 1.0 / HEIGHT + cellPos[0].y);
+	pos.y -= 1.0 * uSize;
+    pos += right * uSize;
+	texCoord = vec2(1.0 / float(uWidth) + cellPos[0].x, 1.0 / float(uHeight) + cellPos[0].y);
 	gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 
 	//upper right
-	pos.y += 1.0 * SIZE;
-	texCoord = vec2(1.0 / WIDTH + cellPos[0].x, cellPos[0].y);
+	pos.y += 1.0 * uSize;
+	texCoord = vec2(1.0 / float(uWidth) + cellPos[0].x, cellPos[0].y);
 	gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 

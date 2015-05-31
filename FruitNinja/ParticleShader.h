@@ -16,5 +16,13 @@ public:
 
 	void draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity);
 
-	void draw(std::shared_ptr<Camera> camera, Emitter& emitter, std::vector<Light*> lights);
+	void draw(std::shared_ptr<Camera> camera, std::vector<Emitter*> emitters, std::vector<Light*> lights);
+
+private:
+	GLuint width_handle;
+	GLuint height_handle;
+	GLuint size_handle;
+	GLuint vp_handle;
+	GLuint eye_handle;
+	GLuint texture_handle;
 };

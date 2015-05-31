@@ -1,6 +1,7 @@
 #include "Emitter.h"
 
-Emitter::Emitter(string filename, int nframes, double tframe) : num_frames(nframes), frame_time(tframe){
+Emitter::Emitter(string filename, int nframes, double tframe, int width, int height, float size) 
+	: num_frames(nframes), frame_time(tframe), atlas_width(width), atlas_height(height), particle_size(size) {
 	//need one to bind, I know this is stupid
 	particles.position.push_back(glm::vec3(-200, -200, -200));
 	particles.frame.push_back(0);
@@ -32,7 +33,7 @@ Emitter::~Emitter() {
 	delete texture;
 }
 
-void Emitter::update(double deltaTime, std::vector<Light*> lights) {
+void Emitter::update(double deltaTime) {
 	static double prev_frame_time = 0.0;
 	prev_frame_time += deltaTime;
 	if (prev_frame_time > frame_time) {
