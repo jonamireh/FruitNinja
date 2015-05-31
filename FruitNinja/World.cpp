@@ -81,11 +81,11 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole_boundingbox", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole_boundingbox.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
+    //meshes.insert(pair<string, shared_ptr<MeshSet>>("openBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "openBarrel.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("flowerPlanter", shared_ptr<MeshSet>(new MeshSet(assetPath + "flowerPlanter.dae"))));
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", shared_ptr<MeshSet>(new MeshSet(assetPath + "statue.dae"))));
+	//meshes.insert(pair<string, shared_ptr<MeshSet>>("flowerPlanter", shared_ptr<MeshSet>(new MeshSet(assetPath + "flowerPlanter.dae"))));
+	//meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", shared_ptr<MeshSet>(new MeshSet(assetPath + "statue.dae"))));
     
     chewy = std::make_shared<ChewyEntity>(vec3(0.f), meshes.at("chewy"), player_camera, archery_camera);
     chewy->setup_entity_box(meshes.at("chewy_bb"));
@@ -158,18 +158,52 @@ void World::setup_level(string file_path)
 
     string current_line;
     int current_row = 0;
+    int height_level = 1;
 
     while (!level_file.eof()) // runs through every line
     {
         getline(level_file, current_line);
-
+        if (current_line == "________________________________________")
+        {
+            current_row = 0;
+            height_level++;
+        }
         for (int i = 0; i < current_line.length(); i++)
         {
-            setup_token(current_line.at(i), vec3(i, 0, current_row));
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level * 20.f, current_row);
+            setup_token(current_line.at(i), world_position);
         }
         current_row++;
     }
     level_file.close();
+}
+
+void World::setup_token(char obj_to_place, glm::vec3 placement_position)
+{
+    switch (obj_to_place)
+    {
+    case 'X':
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("box"))));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        break;
+    case 'O':
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        break;
+    case 'C':
+        chewy->setPosition(placement_position);
+        break;
+    case 'l': // Lantern Pole with Lantern
+        entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 5.9f, 0.9f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
+        vec3 rots = entities.back()->getRotations();
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("lanternPole"))));
+        entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
+        break;
+    }
 }
 
 void World::setup_guard(string file_path)
@@ -190,7 +224,7 @@ void World::setup_guard(string file_path)
 
         for (int i = 0; i < current_line.length(); i++)
         {
-            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, 0, current_row);
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, 0.f, current_row);
             switch (current_line.at(i))
             {
             case 'G':
@@ -249,35 +283,7 @@ void World::setup_guard(string file_path)
     level_file.close();
 }
 
-void World::setup_token(char obj_to_place, glm::vec3 file_index)
-{
-    glm::vec3 placement_position = FILE_TO_WORLD_SCALE * file_index;
 
-    switch (obj_to_place)
-    {
-    case 'X':
-        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("box"))));
-        entities.back()->setScale(3.f);
-		entities.back()->list = SET_HIDE((entities.back()->list));
-        break;
-    case 'O':
-        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
-        entities.back()->setScale(3.f);
-        entities.back()->list = SET_HIDE((entities.back()->list));
-        break;
-    case 'C':
-        chewy->setPosition(vec3(placement_position.x, placement_position.y + 15.f, placement_position.z));
-        break;
-    case 'l': // Lantern Pole with Lantern
-        entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 7.f, 1.2f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
-		vec3 rots = entities.back()->getRotations();
-        rots.y = M_PI_2;
-		entities.back()->setRotations(rots);
-        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("lanternPole"))));
-        entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
-        break;
-    }
-}
 
 void World::shootArrows()
 {

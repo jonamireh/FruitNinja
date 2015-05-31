@@ -132,7 +132,7 @@ void GameEntity::setup_entity_box(std::shared_ptr<MeshSet> mesh)
 
 void GameEntity::collision(std::shared_ptr<GameEntity> entity)
 {
-    //cout << "generic object collided!" << endl;
+    
 }
 
 glm::mat4 GameEntity::getModelMat()

@@ -42,16 +42,16 @@ void ChewyEntity::set_material(Material material)
 void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
 {
     // if no collision then stop.
-    if (!entity->bounding_box.box_collision(this->bounding_box))
+    if (!entity->bounding_box.box_collision(bounding_box))
         return;
 
     vec3 pos = getPosition();
     setPosition(vec3(pos.x, last_position.y, pos.z));
 
-    if (!entity->bounding_box.box_collision(this->bounding_box))
+    if (!entity->bounding_box.box_collision(bounding_box))
     {
-        if (entity->bounding_box.center.y > this->bounding_box.center.y)
-            this->velocity.y = 0.f;
+        if (entity->bounding_box.center.y > bounding_box.center.y)
+            velocity.y = 0.f;
         else
             _falling = false;
         return;
@@ -59,7 +59,7 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
 
     setPosition(vec3(last_position.x, pos.y, pos.z));
 
-    if (!entity->bounding_box.box_collision(this->bounding_box))
+    if (!entity->bounding_box.box_collision(bounding_box))
     {
         return;
     }
