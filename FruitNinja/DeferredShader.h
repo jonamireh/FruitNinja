@@ -5,6 +5,7 @@
 #include "SimpleTextureShader.h"
 #include "ParticleShader.h"
 #include "FlameEmitter.h"
+#include "FireEmitter.h"
 
 //#include <glm/gtc/type_ptr.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
@@ -34,9 +35,18 @@ private:
 	std::shared_ptr<Skybox> skybox;
 	SimpleTextureShader skyShader;
 	ParticleShader fireShader;
-	FlameEmitter flem;
+	vector<Emitter*> emitters;
 
 	DeferredRenderer renderer;
 	DisplayMode disp_mode;
+
+	GLint uViewMatrixHandle;
+	GLint uModelMatrixHandle;
+	GLint uProjMatrixHandle;
+	GLint UtexHandle;
+	GLint UflagHandle;
+	GLint uBoneFlagHandle;
+	GLint uBonesHandle;
+	GLint UdColorHandle;
 
 };
