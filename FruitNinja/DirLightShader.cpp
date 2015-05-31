@@ -30,6 +30,15 @@ DirLightShader::DirLightShader(GBuffer* gbuffer) : Shader("lightVert.glsl", "dir
 	glBindVertexArray(0);
 
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
+
+	model_handle = getUniformHandle("uModelMatrix");
+	view_handle = getUniformHandle("uViewMatrix");
+	proj_handle = getUniformHandle("uProjMatrix");
+	pos_map_handle = getUniformHandle("posMap");
+	color_map_handle = getUniformHandle("colMap");
+	normal_map_handle = getUniformHandle("norMap");
+	eye_handle = getUniformHandle("uEye");
+	size_handle = getUniformHandle("uSize");
 }
 
 DirLightShader::~DirLightShader() {}
@@ -61,20 +70,18 @@ void DirLightShader::pass(std::shared_ptr<Camera> camera)
 
 	glBindVertexArray(VAO);
 
-	glUniform1i(getUniformHandle("posMap"), GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
-	glUniform1i(getUniformHandle("colMap"), GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
-	glUniform1i(getUniformHandle("norMap"), GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+	glUniform1i(pos_map_handle, GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
+	glUniform1i(color_map_handle, GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
+	glUniform1i(normal_map_handle, GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
 
 	glm::vec3 eye = camera->cameraPosition;
 
-	glUniform3f(getUniformHandle("uEye"), eye.x, eye.y, eye.z);
-	glUniform2f(getUniformHandle("uSize"), (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+	glUniform3f(eye_handle, eye.x, eye.y, eye.z);
+	glUniform2f(size_handle, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 
-	glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
-	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
-	glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
-
-	GLuint pos = getAttributeHandle("aPosition");
+	glUniformMatrix4fv(model_handle, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+	glUniformMatrix4fv(view_handle, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+	glUniformMatrix4fv(proj_handle, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IND);
 	check_gl_error("rend before");
