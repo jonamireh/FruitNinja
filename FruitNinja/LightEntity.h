@@ -25,6 +25,5 @@ public:
 		AudioManager::instance()->play3DLoop("assets/flame.wav", light.pos, true);
 	}
 	void update();
-    void collision(std::shared_ptr<GameEntity> entity) override;
 	Light light;
 };
