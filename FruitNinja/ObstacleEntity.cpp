@@ -23,6 +23,8 @@ void ObstacleEntity::update()
 
 void ObstacleEntity::collision(std::shared_ptr<GameEntity> entity)
 {
+    if (collision_response)
+        return;
     // if no collision then stop.
     if (!entity->bounding_box.box_collision(bounding_box))
         return;

@@ -7,8 +7,9 @@
 class LightEntity : public GameEntity
 {
 public:
-	LightEntity() : light(glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), 0.0, NULL)
+    LightEntity() : light(glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), 0.0, NULL)
 	{
+        collision_response = true;
 		AudioManager::instance()->play3DLoop("assets/flame.wav", light.pos, true);
 	}
 	//color will default to white, probably use this
@@ -24,5 +25,6 @@ public:
 		AudioManager::instance()->play3DLoop("assets/flame.wav", light.pos, true);
 	}
 	void update();
+    void collision(std::shared_ptr<GameEntity> entity) override;
 	Light light;
 };

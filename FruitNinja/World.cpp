@@ -109,7 +109,7 @@ void World::init()
     shared_ptr<GameEntity> wall_left(new ObstacleEntity(vec3(120.f, -0.15f * 30.f, 240.f), meshes.at("wall_left")));
     wall_left->setScale(30.f);
     wall_left->collision_response = false;
-    shared_ptr<GameEntity> wall_right(new ObstacleEntity(vec3(120.f, -0.15f * 30.f, 0.f), meshes.at("wall_right")));
+    shared_ptr<GameEntity> wall_right(new ObstacleEntity(vec3(120.f, -0.15f * 30.f, 1.f), meshes.at("wall_right")));
     wall_right->setScale(30.f);
     wall_right->collision_response = false;
     shared_ptr<GameEntity> wall_front(new ObstacleEntity(vec3(0.f, -0.15f * 30.f, 120.f), meshes.at("wall_front")));
@@ -176,7 +176,7 @@ void World::setup_level(string file_path)
         }
         for (int i = 0; i < current_line.length(); i++)
         {
-            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level * 20.f, current_row); // TODO
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level * 10.f, current_row); // TODO
             setup_token(current_line.at(i), world_position);
         }
         current_row++;
@@ -190,12 +190,12 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     {
     case 'X':
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("box"))));
-        entities.back()->setScale(3.f);
+        entities.back()->setScale(2.99f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'O':
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
-        entities.back()->setScale(3.f);
+        entities.back()->setScale(2.99f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'C':
