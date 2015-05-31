@@ -5,6 +5,9 @@ StencilShader::StencilShader(std::string vertShader, std::string fragShader)
 	: Shader(vertShader, fragShader)
 {
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
+	model_handle = getUniformHandle("uModelMatrix");
+	view_handle = getUniformHandle("uViewMatrix");
+	proj_handle = getUniformHandle("uProjMatrix");
 }
 
 void StencilShader::stencilPass(std::shared_ptr<Camera> camera, GBuffer* gbuffer, Light* light)
@@ -29,9 +32,9 @@ void StencilShader::stencilPass(std::shared_ptr<Camera> camera, GBuffer* gbuffer
 	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
 	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
 
-	glUniformMatrix4fv(getUniformHandle("uModelMatrix"), 1, GL_FALSE, glm::value_ptr(light->transform()));
-	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, glm::value_ptr(camera->getViewMatrix()));
-	glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, glm::value_ptr(projection));
+	glUniformMatrix4fv(model_handle, 1, GL_FALSE, glm::value_ptr(light->transform()));
+	glUniformMatrix4fv(view_handle, 1, GL_FALSE, glm::value_ptr(camera->getViewMatrix()));
+	glUniformMatrix4fv(proj_handle, 1, GL_FALSE, glm::value_ptr(projection));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, light->IND());
 	check_gl_error("stencil before");

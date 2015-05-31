@@ -17,4 +17,15 @@ private:
 	GLuint VAO;
 	GLuint VBO;
 	GLuint IND;
+
+	GLuint model_handle;
+	GLuint view_handle;
+	GLuint proj_handle;
+
+	GLuint pos_map_handle;
+	GLuint color_map_handle;
+	GLuint normal_map_handle;
+
+	GLuint eye_handle;
+	GLuint size_handle;
 };

@@ -16,4 +16,17 @@ private:
 	GBuffer* gbuffer;
 	StencilShader stencilShader;
 	DirLightShader dirLightShader;
+
+	GLuint model_handle;
+	GLuint view_handle;
+	GLuint proj_handle;
+
+	GLuint pos_map_handle;
+	GLuint color_map_handle;
+	GLuint normal_map_handle;
+
+	GLuint eye_handle;
+	GLuint size_handle;
+	GLuint position_handle;
+	GLuint light_pos_handle;
 };
