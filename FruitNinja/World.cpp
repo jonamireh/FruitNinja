@@ -266,7 +266,7 @@ void World::setup_token(char obj_to_place, glm::vec3 file_index)
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'C':
-        chewy->setPosition(vec3(placement_position.x, placement_position.y + 5.f, placement_position.z));
+        chewy->setPosition(vec3(placement_position.x, placement_position.y + 15.f, placement_position.z));
         break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 7.f, 1.2f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
