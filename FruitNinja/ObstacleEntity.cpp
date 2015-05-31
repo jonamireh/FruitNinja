@@ -4,20 +4,21 @@
 
 ObstacleEntity::ObstacleEntity()
 {
-    collision_response = true;
-    GameEntity::update();
 }
 
 
 ObstacleEntity::ObstacleEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh) : GameEntity(position, mesh)
 {
-
+    collision_response = true;
 }
 
 void ObstacleEntity::update()
 {
     if (collision_response == true)
-        setPosition(getPosition() - 1.f * seconds_passed);
+    {
+        last_position = getPosition();
+        setPosition(getPosition() - glm::vec3(0.f, 10.f * seconds_passed, 0.f));
+    }
 }
 
 void ObstacleEntity::collision(std::shared_ptr<GameEntity> entity)
@@ -31,10 +32,6 @@ void ObstacleEntity::collision(std::shared_ptr<GameEntity> entity)
 
     if (!entity->bounding_box.box_collision(this->bounding_box))
     {
-        if (entity->bounding_box.center.y > this->bounding_box.center.y)
-            this->velocity.y = 0.f;
-        else
-            collision_response = false;
-        return;
+        collision_response = false;
     }
 }

@@ -45,11 +45,11 @@ float GameEntity::getScale()
 void GameEntity::setScale(float entScale)
 {
     scale = entScale;
-
+    float y_offset = bounding_box.center.y - bounding_box.half_height;
     bounding_box.half_width *= scale;
     bounding_box.half_height *= scale;
     bounding_box.half_depth *= scale;
-    bounding_box.center.y = bounding_box.half_height;
+    bounding_box.center.y = bounding_box.half_height + y_offset;
 }
 
 glm::vec3 GameEntity::getRotations()

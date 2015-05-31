@@ -66,10 +66,10 @@ void World::init()
 	cinematic_camera = shared_ptr<CinematicCamera>(new CinematicCamera());
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_left", make_shared<MeshSet>(assetPath + "wall_left.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_right", make_shared<MeshSet>(assetPath + "wall_right.dae")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_left", make_shared<MeshSet>(assetPath + "wall_left.dae"))); // OKAY
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_front", make_shared<MeshSet>(assetPath + "wall_front.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_back", make_shared<MeshSet>(assetPath + "wall_back.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("wall_front", make_shared<MeshSet>(assetPath + "wall_front.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("ground", make_shared<MeshSet>(assetPath + "ground.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final3.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
@@ -104,17 +104,23 @@ void World::init()
     shared_ptr<GameEntity> tower(new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower")));
     tower->setScale(30.0f);
     tower->list = UNSET_OCTTREE((tower->list));
+    tower->collision_response = false;
 
-    shared_ptr<GameEntity> wall_left(new ObstacleEntity(vec3(0.f), meshes.at("wall_left")));
+    shared_ptr<GameEntity> wall_left(new ObstacleEntity(vec3(120.f, -0.15f * 30.f, 240.f), meshes.at("wall_left")));
     wall_left->setScale(30.f);
-    shared_ptr<GameEntity> wall_right(new ObstacleEntity(vec3(0.f), meshes.at("wall_right")));
+    wall_left->collision_response = false;
+    shared_ptr<GameEntity> wall_right(new ObstacleEntity(vec3(120.f, -0.15f * 30.f, 0.f), meshes.at("wall_right")));
     wall_right->setScale(30.f);
-    shared_ptr<GameEntity> wall_front(new ObstacleEntity(vec3(0.f), meshes.at("wall_front")));
+    wall_right->collision_response = false;
+    shared_ptr<GameEntity> wall_front(new ObstacleEntity(vec3(0.f, -0.15f * 30.f, 120.f), meshes.at("wall_front")));
     wall_front->setScale(30.f);
-    shared_ptr<GameEntity> wall_back(new ObstacleEntity(vec3(0.f), meshes.at("wall_back")));
+    wall_front->collision_response = false;
+    shared_ptr<GameEntity> wall_back(new ObstacleEntity(vec3(240.f, -0.15f * 30.f, 120.f), meshes.at("wall_back")));
     wall_back->setScale(30.f);
-    shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(0.f), meshes.at("ground")));
+    wall_back->collision_response = false;
+    shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(120.f, 0.0f, 120.f), meshes.at("ground")));
     ground->setScale(30.f);
+    ground->collision_response = false;
 
     /*camera = player_camera;
     player_camera->in_use = true;*/
@@ -158,7 +164,7 @@ void World::setup_level(string file_path)
 
     string current_line;
     int current_row = 0;
-    int height_level = 1;
+    int height_level = 0;
 
     while (!level_file.eof()) // runs through every line
     {
@@ -170,7 +176,7 @@ void World::setup_level(string file_path)
         }
         for (int i = 0; i < current_line.length(); i++)
         {
-            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level * 20.f, current_row);
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level * 20.f, current_row); // TODO
             setup_token(current_line.at(i), world_position);
         }
         current_row++;
@@ -193,7 +199,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'C':
-        chewy->setPosition(placement_position);
+        chewy->setPosition(placement_position + vec3(5));
         break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 5.9f, 0.9f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
