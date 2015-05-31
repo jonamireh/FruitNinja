@@ -91,11 +91,15 @@ void World::init()
     chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);
 
-	x_offset = -30.0f;
+	//x_offset = -30.0f;
 	player_camera->movement(chewy);
-	cinematic_camera->init(player_camera->lookAtPoint, vec3(110.f, 10.f, 150.f), { player_camera->cameraPosition, /*vec3(0.0, 30.0, 10.0),*/
-		vec3(10.0, 30.0, 115.0), vec3(10.0, 30.0, 230.0), vec3(85.0, 30.0, 230.0), vec3(210.0, 30.0, 230.0), vec3(230.0, 30.0, 140.0), vec3(220.0, 30.0, 30.0), 
-		vec3(100.0, 30.0, 10.0), /*vec3(0.0, 30.0, 10.0),*/ player_camera->cameraPosition }, 40.f);
+	/*cinematic_camera->init({ player_camera->cameraPosition, vec3(-5.0, 32.0, 140.0), vec3(23.f,32.f, 215.f), vec3(110.f, 32.f, 230.f), 
+			vec3(217.f, 32.f, 215.f), vec3(235.f, 32.f, 117.f), vec3(227.f, 32.f, 15.f), vec3(120.f, 32.f, 2.f), player_camera->cameraPosition }, 
+		{ player_camera->lookAtPoint, vec3(0.f, 32.0f, 140.f), vec3(27.f, 32.f, 215.f), vec3(110.f, 32.f, 223.f), vec3(213.f, 32.f, 213.f), vec3(230.f, 32.f, 117.f),
+			vec3(223.f, 32.f, 18.f), vec3(120.f, 32.f, 7.f), player_camera->lookAtPoint },
+		40.f);*/
+	cinematic_camera->init({ player_camera->cameraPosition, player_camera->cameraPosition, player_camera->cameraPosition, player_camera->cameraPosition},
+	{ player_camera->lookAtPoint, player_camera->lookAtPoint, player_camera->lookAtPoint, player_camera->lookAtPoint, }, 10.f);
 
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->setScale(750.f);

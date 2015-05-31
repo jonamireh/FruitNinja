@@ -1,6 +1,7 @@
 #include "PlayerCamera.h"
 #include "World.h"
 #include "ChewyEntity.h"
+#include <glm/gtx/string_cast.inl>
 
 using namespace glm;
 
@@ -72,6 +73,8 @@ void PlayerCamera::movement(std::shared_ptr<GameEntity> chewy)
 
 mat4 PlayerCamera::getViewMatrix()
 {
+	//cout << "pos: " << glm::to_string(cameraPosition) << endl;
+	//cout << glm::to_string(lookAtPoint) << endl;
 	return lookAt(cameraPosition, lookAtPoint, cameraUp);
 }
 

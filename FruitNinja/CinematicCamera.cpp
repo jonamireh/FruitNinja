@@ -22,21 +22,11 @@ CinematicCamera::~CinematicCamera()
 
 }
 
-static void update_lookAt(void* reference, float direction, float time_elapsed)
-{
-	CinematicCamera *cin_camera = (CinematicCamera *) reference;
-	assert(time_elapsed <= 1.f);
-	cin_camera->lookAtPoint += direction * time_elapsed * cin_camera->change;
-}
-
-void CinematicCamera::init(vec3 startLookAt, vec3 center, vector<vec3> control_points, float move_speed)
-{
-	this->startLookAt = startLookAt;
-	this->center = center;
-	this->lookAtPoint = startLookAt;
-	cameraPosition = control_points.at(0);
-	pathing = CinematicPathingComponent(control_points, move_speed, this, update_lookAt);
-	this->change = center - startLookAt;
+void CinematicCamera::init(vector<vec3> position_points, vector<vec3> lookAt_points, float move_speed)
+{	
+	cameraPosition = position_points.at(0);
+	lookAtPoint = lookAt_points.at(0);
+	pathing = CinematicPathingComponent(position_points, lookAt_points, move_speed);
 }
 /*
 Call the glfwSetCursorPosCallback to the window and this function.
@@ -51,8 +41,10 @@ Call this at the end of the draw loop to update for strafing.
 */
 void CinematicCamera::movement(shared_ptr<GameEntity> chewy)
 {
-	vec3 direction = pathing.get_direction();
-	cameraPosition += seconds_passed * pathing.get_move_speed() * direction;
+	pair<vec3, vec3> direction = pathing.get_direction();
+	float move_speed = pathing.get_move_speed();
+	cameraPosition += seconds_passed * move_speed * direction.first;
+	lookAtPoint += seconds_passed * pathing.get_lookat_speed() * direction.second;
 }
 
 mat4 CinematicCamera::getViewMatrix()
