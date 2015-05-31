@@ -107,7 +107,7 @@ void ChewyMovementComponent::update()
 
             position += pos_offset;
 		}
-        if ((position.y - entity.bounding_box.half_height <= 0 || !dynamic_cast<ChewyEntity&>(entity)._falling) && keys[GLFW_KEY_SPACE])
+        if (!dynamic_cast<ChewyEntity&>(entity)._falling && keys[GLFW_KEY_SPACE])
 		{
 			entity.velocity.y += 30;
 		} 
@@ -117,11 +117,6 @@ void ChewyMovementComponent::update()
 	}
 
 	position += entity.velocity * seconds_passed;
-	if (position.y - entity.bounding_box.half_height < 0)
-	{
-		position.y = entity.bounding_box.half_height;
-		entity.velocity.y = 0;
-	}
 	dynamic_cast<ChewyEntity&>(entity)._falling = true;
 
 	entity.setPosition(position);

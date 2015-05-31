@@ -50,7 +50,10 @@ void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
 
     if (!entity->bounding_box.box_collision(this->bounding_box))
     {
-        _falling = false;
+        if (entity->bounding_box.center.y > this->bounding_box.center.y)
+            this->velocity.y = 0.f;
+        else
+            _falling = false;
         return;
     }
 
