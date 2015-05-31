@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.74.0 commit date:2015-03-31, commit time:13:39, hash:000dfc0</authoring_tool>
     </contributor>
-    <created>2015-05-30T16:32:15</created>
-    <modified>2015-05-30T16:32:15</modified>
+    <created>2015-05-30T18:20:57</created>
+    <modified>2015-05-30T18:20:57</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -48,7 +48,7 @@
     <geometry id="Cube_041-mesh" name="Cube.041">
       <mesh>
         <source id="Cube_041-mesh-positions">
-          <float_array id="Cube_041-mesh-positions-array" count="36">-8.307912 -0.1491569 -8.2476 -8.307912 1.267354 -8.2476 -8.000002 1.267354 -8.000003 -8.000002 -9.76912e-4 -8.000003 -8.307912 -0.1491565 0.2475967 -8.307912 1.267354 0.2475966 -8.307912 1.267354 -4.000001 -8.307912 -0.1491567 -4.000001 -8.000004 1.267354 4.21439e-7 -8.000003 1.267354 -4.000001 -8.000004 -9.76562e-4 4.7688e-7 -8.000003 -9.76737e-4 -4.000001</float_array>
+          <float_array id="Cube_041-mesh-positions-array" count="36">-0.1539549 -0.7082556 -4.247598 -0.1539549 0.7082552 -4.247598 0.1539549 0.7082552 -4.000001 0.1539549 -0.5600756 -4.000001 -0.1539549 -0.7082552 4.247598 -0.1539549 0.7082556 4.247598 -0.1539549 0.7082555 0 -0.1539549 -0.7082554 0 0.153953 0.7082556 4.000001 0.153954 0.7082555 0 0.153953 -0.5600752 4.000002 0.153954 -0.5600754 0</float_array>
           <technique_common>
             <accessor source="#Cube_041-mesh-positions-array" count="12" stride="3">
               <param name="X" type="float"/>
@@ -74,7 +74,7 @@
           <input semantic="VERTEX" source="#Cube_041-mesh-vertices" offset="0"/>
           <input semantic="NORMAL" source="#Cube_041-mesh-normals" offset="1"/>
           <vcount>3 3 3 3 3 3 3 3 3 3 3 3 </vcount>
-          <p>1 0 0 0 7 0 6 1 9 1 2 1 2 2 9 2 11 2 6 3 7 3 4 3 8 4 9 4 6 4 10 5 11 5 9 5 6 6 1 6 7 6 1 7 6 7 2 7 3 8 2 8 11 8 5 9 6 9 4 9 5 10 8 10 6 10 8 11 10 11 9 11</p>
+          <p>1 0 0 0 7 0 6 1 9 1 2 1 2 2 9 2 11 2 6 3 7 3 4 3 8 4 9 4 6 4 8 5 10 5 11 5 6 6 1 6 7 6 1 7 6 7 2 7 3 8 2 8 11 8 5 9 6 9 4 9 5 10 8 10 6 10 9 11 8 11 11 11</p>
         </polylist>
       </mesh>
     </geometry>
