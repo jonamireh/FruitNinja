@@ -147,8 +147,8 @@ void World::init()
 	entities.push_back(guard2);
 
     //entities.push_back(lantern);
-	//entities.push_back(lantern2);
-	entities.push_back(lantern3);
+	entities.push_back(lantern2);
+	//entities.push_back(lantern3);
 	//entities.push_back(lantern4);
 	//entities.push_back(lantern5);
 

@@ -15,7 +15,7 @@ CameraDirection gCameraDirections[6] =
 {
 	{ GL_TEXTURE_CUBE_MAP_POSITIVE_X, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f) },
 	{ GL_TEXTURE_CUBE_MAP_NEGATIVE_X, glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f) },
-	{ GL_TEXTURE_CUBE_MAP_POSITIVE_Y, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f) },
+	{ GL_TEXTURE_CUBE_MAP_POSITIVE_Y, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) },
 	{ GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f) },
 	{ GL_TEXTURE_CUBE_MAP_POSITIVE_Z, glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f) },
 	{ GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f) }
@@ -34,7 +34,7 @@ void ShadowMapShader::shadowMapPass(Light* light, std::vector<std::shared_ptr<Ga
 	glCullFace(GL_FRONT);
 	glClearColor(FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX);
 
-	mat4 proj = perspective((float)radians(90.0f), 1.0f, 0.01f, 100.0f);
+	mat4 proj = perspective((float)radians(90.0f), 1.0f, 0.5f, 20.0f);
 
 	for (int i = 0; i < 6; i++) {
 		shadowMapBuffer->bind_for_writing(gCameraDirections[i].cubemap_face);
@@ -77,7 +77,7 @@ void ShadowMapShader::shadowMapPass(Light* light, std::vector<std::shared_ptr<Ga
 	glCullFace(GL_BACK);
 	glDepthMask(GL_FALSE);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glClearColor(0, 0, 0, 0);
+	glClearColor(0.f, 0.f, 0.f, 1.0f);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

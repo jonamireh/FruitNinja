@@ -74,15 +74,14 @@ void DeferredRenderer::draw(std::shared_ptr<Camera> camera, std::vector<std::sha
 	
 	for (int i = 0; i < lights.size(); i++) {
 		shadowMapShader.shadowMapPass(lights[i], ents);
-		shadowMapBuffer->dump_to_screen();
-		/*gbuffer->BindForWriting();
+		gbuffer->BindForWriting();
 		glEnable(GL_STENCIL_TEST);
 		stencilShader.stencilPass(camera, gbuffer, lights[i]);
 		pointLightPass(camera, lights[i]);
-		glDisable(GL_STENCIL_TEST);*/
+		glDisable(GL_STENCIL_TEST);
 	}
 
-	//dirLightShader.pass(camera);
+	dirLightShader.pass(camera);
 }
 void DeferredRenderer::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)
 {

@@ -91,13 +91,14 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 	geomPass(camera->getViewMatrix(), ents);
 
 	if (disp_mode == four_screen) {
-		lightPass();
+		//lightPass();
+		shadowMapBuffer.dump_to_screen();
 	}
 	else {
 		//startLightPasses();
 		renderer.draw(camera, ents, lights);
-		//skyboxPass(camera);
-		//finalPass();
+		skyboxPass(camera);
+		finalPass();
 	}
 		
 	if (keys[GLFW_KEY_4])
