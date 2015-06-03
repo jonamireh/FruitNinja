@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.74.0 commit date:2015-03-31, commit time:13:39, hash:000dfc0</authoring_tool>
     </contributor>
-    <created>2015-05-30T19:22:14</created>
-    <modified>2015-05-30T19:22:14</modified>
+    <created>2015-06-03T00:49:32</created>
+    <modified>2015-06-03T00:49:32</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -48,7 +48,7 @@
     <geometry id="Cube_004-mesh" name="Cube.004">
       <mesh>
         <source id="Cube_004-mesh-positions">
-          <float_array id="Cube_004-mesh-positions-array" count="24">-4.307909 2.44617e-4 0.1237983 -4.307909 1.268335 0.1237983 4.307909 2.44617e-4 0.1237983 4.307909 1.268335 0.1237983 -4.000001 1.268335 -0.1237983 4.000003 1.268335 -0.1237974 -4.000001 4.61936e-6 -0.1237974 4.000003 4.61936e-6 -0.1237974</float_array>
+          <float_array id="Cube_004-mesh-positions-array" count="24">-4.307909 2.44617e-4 0.2 -4.307909 1.268335 0.2 4.307909 2.44617e-4 0.2 4.307909 1.268335 0.2 -4.000001 1.268335 -0.2 4.000003 1.268335 -0.1999984 -4.000001 4.61936e-6 -0.1999984 4.000003 4.61936e-6 -0.1999984</float_array>
           <technique_common>
             <accessor source="#Cube_004-mesh-positions-array" count="8" stride="3">
               <param name="X" type="float"/>
@@ -58,7 +58,7 @@
           </technique_common>
         </source>
         <source id="Cube_004-mesh-normals">
-          <float_array id="Cube_004-mesh-normals-array" count="18">0 0 1 0 1 0 0 -7.51913e-7 -1 0 0 1 0 1 0 0 0 -1</float_array>
+          <float_array id="Cube_004-mesh-normals-array" count="18">0 0 1 0 1 0 0 -1.22186e-6 -1 0 0 1 0 1 0 1.93715e-7 0 -1</float_array>
           <technique_common>
             <accessor source="#Cube_004-mesh-normals-array" count="6" stride="3">
               <param name="X" type="float"/>
