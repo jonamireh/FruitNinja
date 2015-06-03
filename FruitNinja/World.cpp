@@ -140,8 +140,8 @@ void World::init()
     entities.push_back(ground);
 
     setup_level(assetPath + "first_courtyard.txt");
-    //setup_guard(assetPath + "first_courtyard_guard.txt");
-    //setup_guard(assetPath + "first_courtyard_second_guard.txt");
+    setup_guard(assetPath + "first_courtyard_guard.txt");
+    setup_guard(assetPath + "first_courtyard_second_guard.txt");
 
 	hud = HUD(chewy);
 
@@ -180,7 +180,7 @@ void World::setup_level(string file_path)
         }
         for (int i = 0; i < current_line.length(); i++)
         {
-            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level * 10.f, current_row); // TODO
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row); // TODO
             setup_token(current_line.at(i), world_position);
         }
         current_row++;
@@ -203,10 +203,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'C':
-        chewy->setPosition(placement_position + vec3(5));
+        chewy->setPosition(placement_position + vec3(0.f, 10.f, 0.f));
         break;
     case 'l': // Lantern Pole with Lantern
-        entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 5.9f, 0.9f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
+        entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 5.9f, 0.0f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
         vec3 rots = entities.back()->getRotations();
         rots.y = M_PI_2;
         entities.back()->setRotations(rots);
