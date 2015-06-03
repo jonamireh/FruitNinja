@@ -17,7 +17,7 @@ GameEntity::GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool c
 collision_response(collision_response)
 {
     setup_entity_box();
-    setPosition(position + vec3(bounding_box.half_width, bounding_box.half_height, bounding_box.half_depth));
+    setPosition(position + vec3(0.f, bounding_box.half_height, 0.f));
     list = SET_DRAW(list);
     list = SET_OCTTREE(list);
 };
