@@ -6,33 +6,33 @@ ________________________________________
 |                                      |
 |                                      |
 |                                      |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
+|        WWW   WWWWWWWWWW   WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
 |                                      |
 |                                      |
 |                                      |
-|        XXX                XXX        |
-|        XXX       l        XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX       F        XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX       l        XXX        |
-|        XXX                XXX        |
+|        WWW                WWW        |
+|        WWW       l        WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW       F        WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW       l        WWW        |
+|        WWW                WWW        |
 |                                      |
 |                                      |
 |                                      |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
+|        WWW   WWWWWWWWWW   WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
 |                                      |
 |                                      |
 |                                      |
@@ -41,78 +41,9 @@ ________________________________________
 |OO                                 XXX|
 |O                                   XX|
 |                                     X|
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|                                      |
-|                                      |
-|                                      |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|                                      |
-|                                      |
-|                                      |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
+
 ________________________________________
 |O                                   XX|
 |                                     X|
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|                                      |
-|                                      |
-|                                      |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|        XXX                XXX        |
-|                                      |
-|                                      |
-|                                      |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|        XXX   XXXXXXXXXX   XXX        |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
 ________________________________________
+|                                     l|

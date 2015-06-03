@@ -51,6 +51,7 @@ public:
 
     void setup_entity_box();
     void setup_entity_box(std::shared_ptr<MeshSet> mesh);
+    void swap_bounding_box_width_depth();
 
 	virtual void update();
     virtual void collision(std::shared_ptr<GameEntity> entity);
