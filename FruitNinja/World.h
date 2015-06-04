@@ -87,7 +87,7 @@ private:
     void shootArrows();
     std::shared_ptr<ChewyEntity> chewy;
 
-	bool cinematic_runthrough = true;
+	bool cinematic_runthrough = false;
 
 	GameState state;
 };

@@ -8,7 +8,7 @@ ________________________________________
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
-|                  ss                  |
+|                                      |
 |                                      |
 |                                      |
 |       wWWWe 0            wWWWe       |
@@ -18,7 +18,7 @@ ________________________________________
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
-|e       WWWe      F       wWWW       w|
+|e       WWW       F        WWW       w|
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
@@ -28,7 +28,7 @@ ________________________________________
 |       wWWWe g            wWWWe       |
 |                                      |
 |                                      |
-|                  nn                  |
+|                                      |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
