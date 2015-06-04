@@ -123,11 +123,12 @@ void World::init()
     shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(120.f, 0.0f, 120.f), meshes.at("ground")));
     ground->setScale(30.f);
 
-    /*camera = player_camera;
-    player_camera->in_use = true;*/
 	camera = cinematic_camera;
 	cinematic_camera->in_use = true;
 
+    // Add these into a persistent entities list?
+    // or you can just remove everything after their index since
+    // they're pushed first (for swapping levels)
 	entities.push_back(chewy);
 	entities.push_back(tower);
     entities.push_back(wall_left);
@@ -136,9 +137,7 @@ void World::init()
     entities.push_back(wall_back);
     entities.push_back(ground);
 
-    setup_level(assetPath + "first_courtyard.txt");
-    setup_guard(assetPath + "first_courtyard_guard.txt");
-    setup_guard(assetPath + "first_courtyard_second_guard.txt");
+    setup_courtyard(1);
 
 	hud = HUD(chewy);
 
@@ -156,6 +155,27 @@ void World::init()
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 
 	AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
+}
+
+void World::setup_courtyard(int courtyard)
+{
+    // remove all non-persistent entities
+    switch (courtyard)
+    {
+    case 1:
+        setup_level(assetPath + "first_courtyard.txt");
+        setup_guard(assetPath + "first_courtyard_guard.txt");
+        setup_guard(assetPath + "first_courtyard_second_guard.txt");
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    }
 }
 
 void World::setup_level(string file_path)
