@@ -234,7 +234,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     case 'C': // set chewy's position
         chewy->setPosition(placement_position + vec3(0.f, 10.f, 0.f));
         break;
-    case 'D':
+    case 'D': // door
         if (placement_position.z < 120.f)
             placement_position.z -= 2.65f;
         else
@@ -259,15 +259,24 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(6.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
-    case 'G':
+    case 'n': // static guard facing north
+        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f))));
+        break;
+    case 's': // static guard facing south
+        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f))));
+        break;
+    case 'e': // static guard facing east
         entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f))));
+        break;
+    case 'w': // static guard facing west
+        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f))));
         break;
     case 'O': // barrel
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
-    case 'W':
+    case 'W': // interior wall
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("interior_wall"))));
         entities.back()->setScale(3.f);
         // this will rotate alternating so that the textures line up correctly
