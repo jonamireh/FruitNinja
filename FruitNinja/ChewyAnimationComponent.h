@@ -17,7 +17,7 @@
 #define BOWPULL_START LANDING_START + LANDING_DURATION + 1.0 / FRAMES_PER_SEC
 #define BOWPULL_DURATION 10.0 / FRAMES_PER_SEC
 #define CAUGHT_START BOWPULL_START + BOWPULL_DURATION + 1.0 / FRAMES_PER_SEC
-#define CAUGHT_DURATION 25.0 / FRAMES_PER_SEC
+#define CAUGHT_DURATION 22.0 / FRAMES_PER_SEC
 
 enum AnimationState
 {
@@ -35,7 +35,6 @@ class ChewyAnimationComponent : public Component
 {
 public:
 	void update() override;
-private:
 	BasicAnimationComponent basicAnimation;
 	AnimationState currentAnimtion;
 	GameEntity *chewy;

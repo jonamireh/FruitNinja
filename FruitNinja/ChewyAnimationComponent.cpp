@@ -21,7 +21,7 @@ void ChewyAnimationComponent::update()
 		basicAnimation.changeToSingleAnimation(BOWPULL_START + bow_strength * BOWPULL_DURATION, BOWPULL_START + BOWPULL_DURATION);
 		currentAnimtion = bowpull;
 	}
-	if (basicAnimation.animationComplete)
+	if (basicAnimation.animationComplete && currentAnimtion != caught)
 	{
 		
 		/*if (chewy->velocity.y < 15 && currentAnimtion == jumping && currentAnimtion)
@@ -29,7 +29,11 @@ void ChewyAnimationComponent::update()
 			basicAnimation.changeToSingleAnimation(FALLING_START, FALLING_START + FALLING_DURATION);
 			currentAnimtion = falling;
 		}
-		else */if (chewy->velocity.y > 0 && currentAnimtion != jumping && currentAnimtion != falling)
+		else */if (static_cast<ChewyEntity*>(chewy)->isCaught && currentAnimtion != caught) {
+			basicAnimation.changeToSingleAnimation(CAUGHT_START, CAUGHT_START + CAUGHT_DURATION);
+			currentAnimtion = caught;
+		}
+		else if (chewy->velocity.y > 0 && currentAnimtion != jumping && currentAnimtion != falling)
 		{
 			basicAnimation.changeToSingleAnimation(JUMPING_START, JUMPING_START + JUMPING_DURATION);
 			currentAnimtion = jumping;

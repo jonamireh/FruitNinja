@@ -16,4 +16,5 @@ public:
     bool _falling;
 	ChewyMovementComponent moveComponent;
 	ChewyAnimationComponent animComponent;
+	bool isCaught;
 };

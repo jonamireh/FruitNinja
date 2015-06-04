@@ -103,7 +103,7 @@ bool GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
         vec3 chewy_lower_bound = chewy_bb.get_lower_bound();
         vec3 chewy_upper_bound = chewy_bb.get_upper_bound();
 
-		chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
+		//chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
 		bool hidden = false;
 		for (int i = 0; i < entities_in_view.size(); i++)
 		{
@@ -127,7 +127,7 @@ bool GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
 		//seen
 		if (!hidden)
 		{
-			chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
+			//chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
 			return true;
 		}
 	}

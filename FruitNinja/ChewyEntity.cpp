@@ -6,12 +6,14 @@
 
 using namespace glm;
 
-ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera()), std::shared_ptr<Camera>(new PlayerCamera())), animComponent(this)
+ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera()),
+	std::shared_ptr<Camera>(new PlayerCamera())), animComponent(this), isCaught(false)
 {
 	
 }
 
-ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> player_cam, std::shared_ptr<Camera> archery_cam) : GameEntity(position, mesh, true), moveComponent(*this, player_cam, archery_cam), animComponent(this)
+ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> player_cam, std::shared_ptr<Camera> archery_cam)
+	: GameEntity(position, mesh, true), moveComponent(*this, player_cam, archery_cam), animComponent(this), isCaught(false)
 {
 	current_animation = &mesh->getAnimations()[0];
 }

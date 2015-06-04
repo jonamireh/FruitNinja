@@ -97,17 +97,6 @@ void World::init()
     chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);
 
-	
-
-	//x_offset = -30.0f;
-	
-	/*cinematic_camera->init({ player_camera->cameraPosition, vec3(-5.0, 32.0, 140.0), vec3(23.f,32.f, 215.f), vec3(110.f, 32.f, 230.f), 
-			vec3(217.f, 32.f, 215.f), vec3(235.f, 32.f, 117.f), vec3(227.f, 32.f, 15.f), vec3(120.f, 32.f, 2.f), player_camera->cameraPosition }, 
-		{ player_camera->lookAtPoint, vec3(0.f, 32.0f, 140.f), vec3(27.f, 32.f, 215.f), vec3(110.f, 32.f, 223.f), vec3(213.f, 32.f, 213.f), vec3(230.f, 32.f, 117.f),
-			vec3(223.f, 32.f, 18.f), vec3(120.f, 32.f, 7.f), player_camera->lookAtPoint },
-		40.f);*/
-	//cinematic_camera->init({ player_camera->cameraPosition, player_camera->cameraPosition, player_camera->cameraPosition, player_camera->cameraPosition},
-	//{ player_camera->lookAtPoint, player_camera->lookAtPoint, player_camera->lookAtPoint, player_camera->lookAtPoint, }, 10.f);
 
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->setScale(750.f);
@@ -656,7 +645,7 @@ void World::update_key_callbacks()
 			player_camera->in_use = true;
 		}
 	}
-	else
+	else if (state != SPOTTED)
 	{
 		change_camera();
 		enable_debugging();
@@ -680,14 +669,36 @@ void World::update()
 
 	shootArrows();
 
+	if (state == SPOTTED && cinematic_camera->pathing.done) {
+		current_courtyard = 1;
+		setup_next_courtyard();
+		camera->in_use = false;
+		camera = player_camera;
+		camera->in_use = true;
+		chewy->isCaught = false;
+		chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
+		chewy->animComponent.currentAnimtion = standing;
+		state = LEVEL1;
+	}
 	for (int i = 0; i < entities.size(); i++)
 	{
 		entities[i]->update();
 		shared_ptr<GuardEntity> guard_temp = dynamic_pointer_cast<GuardEntity>(entities[i]);
 		if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
-			//AudioManager::instance()->playAmbient(assetPath + "jons_breakthrough_performance.wav", 3.0f);
+			//AudioManager::instance()->playAmbient(assetPath + "jons_breakthrough_performance.wav", 5.0f);
 			AudioManager::instance()->play3DLoop(assetPath + "jons_breakthrough_performance.wav", guard_temp->getPosition(), false);
 			state = SPOTTED;
+			
+			vec3 p_pos = player_camera->cameraPosition;
+			vec3 look = player_camera->lookAtPoint;
+			vec3 g_dir = guard_temp->getPosition() - player_camera->lookAtPoint;
+			cinematic_camera->init({ p_pos, p_pos + vec3(0.0, 5.0, 0.0), look + vec3(0.0, 5.0, 0.0) + g_dir * .25f,
+				look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f},
+				{ look, look + g_dir * .5f, look + g_dir * .75f, guard_temp->getPosition(), guard_temp->getPosition(), guard_temp->getPosition()}, 10.f);
+			camera->in_use = false;
+			camera = cinematic_camera;
+			camera->in_use = true;
+			chewy->isCaught = true;
 		}
 	}
 	if (!time_stopped)
