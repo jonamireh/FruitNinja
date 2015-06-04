@@ -486,15 +486,6 @@ void World::draw()
 	}
 
 	shared_ptr<DebugCamera> d_test = dynamic_pointer_cast<DebugCamera>(camera);
-	vector<shared_ptr<GameEntity>> in_view = entities;
-    /*if (d_test != nullptr)
-    {
-        in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
-	}
-	else
-	{
-		in_view = get_objects_in_view(entities, camera->getViewMatrix());
-	}*/
 
 	shared_ptr<PlayerCamera> p_test = dynamic_pointer_cast<PlayerCamera>(camera);
 	if (p_test != nullptr)
@@ -503,12 +494,11 @@ void World::draw()
 	}
 	glUseProgram(0);
 
-
 	if (usePhong) {
 		glUseProgram(shaders.at("phongShader")->getProgramID());
 		glViewport(0, 0, screen_width, screen_height);
-		for (int i = 0; i < in_view.size(); i++)
-			shaders.at("phongShader")->draw(camera->getViewMatrix(), in_view.at(i));
+		for (int i = 0; i < entities.size(); i++)
+			shaders.at("phongShader")->draw(camera->getViewMatrix(), entities.at(i));
 	}
 	//otherwise deferred rendering
 	else {
@@ -529,10 +519,10 @@ void World::draw()
 				i--;
 			}
 		}
-		for (int i = 0; i < in_view.size(); i++)
+		for (int i = 0; i < entities.size(); i++)
 		{
-			if (!SHOULD_DRAW(in_view[i]->list)) {
-				in_view.erase(in_view.begin() + i);
+			if (!SHOULD_DRAW(entities[i]->list)) {
+				entities.erase(entities.begin() + i);
 				i--;
 			}
 		}
@@ -540,16 +530,16 @@ void World::draw()
 
 		glUseProgram(shaders.at("defShader")->getProgramID());
 		glViewport(0, 0, screen_width, screen_height);
-		shaders.at("defShader")->draw(camera, in_view, lights);
+		shaders.at("defShader")->draw(camera, entities, lights);
 	}
 
     glUseProgram(0);
 	if (debug_enabled)
 	{
 		glUseProgram(debugShader->getProgramID());
-		for (int i = 0; i < in_view.size(); i++)
+		for (int i = 0; i < entities.size(); i++)
 		{
-			EntityBox box = in_view.at(i)->bounding_box;
+			EntityBox box = entities.at(i)->bounding_box;
 			shared_ptr<vector<pair<vec3, vec3>>> points = box.get_line_segments();
 			for (int j = 0; j < points->size(); j++)
 			{

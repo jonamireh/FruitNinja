@@ -107,8 +107,9 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 
 void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights)
 {
+	std::vector<std::shared_ptr<GameEntity>> entsInView = get_objects_in_view(ents, camera->getViewMatrix());
 	gbuffer.StartFrame();
-	geomPass(camera->getViewMatrix(), ents);
+	geomPass(camera->getViewMatrix(), entsInView);
 
 	if (disp_mode == four_screen) {
 		lightPass();

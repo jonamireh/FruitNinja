@@ -2,6 +2,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "DirShadowMapShader.h"
 #include "World.h"
+#include "FrustrumCulling.h"
 
 using namespace std;
 using namespace glm;
@@ -34,6 +35,7 @@ DirShadowMapShader::~DirShadowMapShader()
 
 void DirShadowMapShader::draw(vector<shared_ptr<GameEntity>> ents)
 {
+	std::vector<std::shared_ptr<GameEntity>> entsInView = get_objects_in_view(ents, view_mat);
 	glUseProgram(getProgramID());
 
 	glEnable(GL_DEPTH_TEST);
@@ -45,11 +47,11 @@ void DirShadowMapShader::draw(vector<shared_ptr<GameEntity>> ents)
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	for (int i = 0; i < ents.size(); i++) {
-		std::vector<Mesh*> meshes = ents[i]->mesh->getMeshes();
+	for (int i = 0; i < entsInView.size(); i++) {
+		std::vector<Mesh*> meshes = entsInView[i]->mesh->getMeshes();
 
 		glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
-		glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
+		glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entsInView[i]->getModelMat()));
 		glUniformMatrix4fv(uProjMatrixHandle, 1, GL_FALSE, value_ptr(projection_mat));
 
 		for (int j = 0; j < meshes.size(); j++)
