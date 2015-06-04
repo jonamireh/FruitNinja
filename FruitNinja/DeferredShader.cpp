@@ -2,6 +2,7 @@
 #include "DeferredShader.h"
 #include "SimpleTextureShader.h"
 #include "GuardEntity.h"
+#include "ArcheryCamera.h"
 
 using namespace glm;
 using namespace std;
@@ -11,7 +12,7 @@ using namespace std;
 DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox)
 	: Shader(vertShader, fragShader), skybox(skybox), gbuffer(), skyShader("simpleVert.glsl", "simpleFrag.glsl"),
 	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred),
-	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl")
+	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl"), arcShader("arcVertex.glsl", "arcFrag.glsl")
 {
 	emitters.push_back(new FlameEmitter);
 	//emitters.push_back(new FireEmitter);
@@ -116,6 +117,7 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 		
 		skyboxPass(camera);
 		particlePass(camera, lights);
+		archeryArcPass(camera);
 		finalPass();
 	}
 		
@@ -132,6 +134,22 @@ void DeferredShader::particlePass(std::shared_ptr<Camera> camera, std::vector<Li
 	glDisable(GL_CULL_FACE);
 
 	fireShader.draw(camera, emitters, lights);
+}
+
+void DeferredShader::archeryArcPass(std::shared_ptr<Camera> camera) {
+	shared_ptr<ArcheryCamera> a_test = dynamic_pointer_cast<ArcheryCamera>(camera);
+	if (a_test != nullptr)
+	{
+		glUseProgram(arcShader.getProgramID());
+
+		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_CULL_FACE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		arcShader.draw(a_test);
+		glDisable(GL_BLEND);
+	}
 }
 
 void DeferredShader::skyboxPass(std::shared_ptr<Camera> camera)

@@ -62,10 +62,11 @@ World::World()
 
 void World::init()
 {
-	debug_camera = make_shared<DebugCamera>();
+    debug_camera = make_shared<DebugCamera>();
 	player_camera = make_shared<PlayerCamera>();
 	archery_camera = make_shared<ArcheryCamera>();
 	cinematic_camera = make_shared<CinematicCamera>();
+
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall", make_shared<MeshSet>(assetPath + "wall.dae")));
@@ -90,6 +91,8 @@ void World::init()
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("bushes_boundingbox", shared_ptr<MeshSet>(new MeshSet(assetPath + "bushes_boundingbox.dae"))));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", shared_ptr<MeshSet>(new MeshSet(assetPath + "statue.dae"))));
     
+	archery_camera = std::make_shared<ArcheryCamera>(meshes.at("unit_sphere")->getMeshes().at(0));
+
     chewy = std::make_shared<ChewyEntity>(vec3(0.f), meshes.at("chewy"), player_camera, archery_camera);
     chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);
@@ -529,9 +532,9 @@ void World::draw()
 				lights.push_back(&le->light);
 			}
 			//if there's an arrow have archery camera follow it and make game slow-mo
-			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
+			/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
 				archery_camera->cameraPosition = entities[i]->bounding_box.center - archery_camera->cameraFront * 4.0f;
-			}
+			}*/
 
 			if (!SHOULD_DRAW(entities[i]->list)) {
 				entities.erase(entities.begin() + i);

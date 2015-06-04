@@ -30,7 +30,7 @@ ________________________________________
 |  n      W              W   X    lX   |
 |  W      s    W             X     X X |
 |                    W       X     X   |
-|      eWw           s       X     X   |
+|      wWe           s       X     X   |
 |                  W         X     X   |
 | Ww                         X     X   |
 |          wW            n   Xl    X   |
