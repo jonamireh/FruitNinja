@@ -6,6 +6,8 @@
 
 using namespace glm;
 
+#define MAX_VERTICAL_ANGLE 20.0f
+
 /*
 Default constructor.
 */
@@ -32,10 +34,10 @@ void ArcheryCamera::mouse_update()
     theta += x_offset * sensitivity;
     phi += y_offset * sensitivity;
 
-    if (phi > MaxVerticalAngle)
-        phi = MaxVerticalAngle;
-    if (phi < -MaxVerticalAngle)
-        phi = -MaxVerticalAngle;
+	if (phi > MAX_VERTICAL_ANGLE)
+		phi = MAX_VERTICAL_ANGLE;
+	if (phi < -MAX_VERTICAL_ANGLE)
+		phi = -MAX_VERTICAL_ANGLE;
 
     vec3 front;
     front.x = cos(radians(theta)) * cos(radians(phi));
