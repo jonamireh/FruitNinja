@@ -5,8 +5,8 @@ ________________________________________
 |                                     X|
 |                                      |
 |                                      |
-|        WWW   WWWWWWWWWW G WWW        |
-|        WWW   WWWWWWWWWW 1 WWW        |
+|        WWW   WWWWWWWWWW g WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |                                      |
 |                                      |
@@ -30,7 +30,7 @@ ________________________________________
 |                                      |
 |                                      |
 |        WWW   WWWWWWWWWW   WWW        |
-|        WWW   WWWWWWWWWW 2 WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW 0 WWW        |
 |                                      |
 |                                      |

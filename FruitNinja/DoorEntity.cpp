@@ -23,6 +23,9 @@ void DoorEntity::collision(std::shared_ptr<GameEntity> entity)
     shared_ptr<ChewyEntity> chewy_check = dynamic_pointer_cast<ChewyEntity>(entity);
     if (chewy_check != nullptr && open)
     {
-        world->setup_next_courtyard();
+        EntityBox box = bounding_box;
+        box.half_depth += 0.5f;
+        if (box.box_collision(entity->bounding_box))
+            world->setup_next_courtyard();
     }
 }

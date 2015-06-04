@@ -27,7 +27,7 @@ ________________________________________
 |        WWW       l        WWW        |
 |        WWW                WWW        |
 |1                                     |
-|G                                     |
+|g                                     |
 |                                      |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
