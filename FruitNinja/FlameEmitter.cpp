@@ -20,7 +20,7 @@ void FlameEmitter::update(double deltaTime, std::vector<Light*> lights) {
 			particles.frame.push_back(0);
 		}
 		for (int i = 0; i < lights.size(); i++) {
-			particles.position.push_back(lights[i]->pos + glm::vec3(0.0, 0.0, 0.0));
+			particles.position.push_back(lights[i]->pos + glm::vec3(0.0, -2.2, 0.0));
 			particles.frame.push_back(rand() % num_frames);
 		}
 		glBindBuffer(GL_ARRAY_BUFFER, pos_VBO);

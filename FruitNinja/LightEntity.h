@@ -14,7 +14,7 @@ public:
 	}
 	//color will default to white, probably use this
 	LightEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, float intensity, std::shared_ptr<MeshSet> unit_sphere)
-		: GameEntity(position, mesh), light(position, glm::vec3(1.0, 1.0, 1.0), intensity, unit_sphere)
+		: GameEntity(position, mesh), light(getPosition(), glm::vec3(1.0, 1.0, 1.0), intensity, unit_sphere)
 	{
 		AudioManager::instance()->play3DLoop("assets/flame.wav", light.pos, true);
 	}

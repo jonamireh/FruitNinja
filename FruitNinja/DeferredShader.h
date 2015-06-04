@@ -20,6 +20,7 @@ class DeferredShader : public Shader
 {
 public:
 	DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox);
+	~DeferredShader();
 	virtual void draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights);
 	void draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity);
 

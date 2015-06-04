@@ -63,6 +63,8 @@ public:
 	static void draw_point(glm::vec3 p, glm::vec3 color, float radius);
 	static void draw_sphere(glm::vec3 center, float radius, glm::vec3 color, float delta);
 	static void draw_box(std::shared_ptr<EntityBox> box, glm::vec3 color);
+
+    void setup_next_courtyard();
 private:
     std::shared_ptr<DebugCamera> debug_camera;
     std::shared_ptr<ArcheryCamera> archery_camera;
@@ -71,7 +73,7 @@ private:
 	std::shared_ptr<Skybox> _skybox;
 	HUD hud;
 	void init();
-    void setup_courtyard(int courtyard);
+    int current_courtyard = 1;
     void setup_level(string file_path);
     void setup_token(char obj_to_place, glm::vec3 file_index);
     void setup_guard(string file_path);

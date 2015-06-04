@@ -18,6 +18,7 @@
 #include <functional>
 #include <queue>
 #include "LightEntity.h"
+#include "DoorEntity.h"
 #include "FrustrumCulling.h"
 #include <iostream>
 #include <fstream>
@@ -52,7 +53,7 @@ float bow_strength = .5f;
 
 World::World()
 {
-    debugShader = shared_ptr<DebugShader>(new DebugShader("debugVert.glsl", "debugFrag.glsl"));
+    debugShader = make_shared<DebugShader>("debugVert.glsl", "debugFrag.glsl");
 	init();
     x_offset = 0;
     y_offset = 0;
@@ -60,19 +61,20 @@ World::World()
 
 void World::init()
 {
-	debug_camera = shared_ptr<DebugCamera>(new DebugCamera());
-    player_camera = shared_ptr<PlayerCamera>(new PlayerCamera());
-    archery_camera = shared_ptr<ArcheryCamera>(new ArcheryCamera());
-	cinematic_camera = shared_ptr<CinematicCamera>(new CinematicCamera());
+	debug_camera = make_shared<DebugCamera>();
+	player_camera = make_shared<PlayerCamera>();
+	archery_camera = make_shared<ArcheryCamera>();
+	cinematic_camera = make_shared<CinematicCamera>();
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall", make_shared<MeshSet>(assetPath + "wall.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("interior_wall", make_shared<MeshSet>(assetPath + "interiorWall.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("door", make_shared<MeshSet>(assetPath + "door.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("ground", make_shared<MeshSet>(assetPath + "ground.dae")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final3.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai3.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", make_shared<MeshSet>(assetPath + "ninja_final3.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", make_shared<MeshSet>(assetPath + "ninja_boundingbox.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", make_shared<MeshSet>(assetPath + "samurai2.dae")));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard_bb", make_shared<MeshSet>(assetPath + "samurai_bbox.obj")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow_bb", make_shared<MeshSet>(assetPath + "arrow_boundingbox.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
@@ -90,6 +92,8 @@ void World::init()
     chewy = std::make_shared<ChewyEntity>(vec3(0.f), meshes.at("chewy"), player_camera, archery_camera);
     chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);
+
+	
 
 	//x_offset = -30.0f;
 	player_camera->movement(chewy);
@@ -144,19 +148,17 @@ void World::init()
     entities.push_back(wall_back);
     entities.push_back(ground);
 
-    setup_courtyard(1);
+    setup_next_courtyard();
 
 	hud = HUD(chewy);
 
-	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
-	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
-	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
-	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
+	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", make_shared<PhongShader>("phongVert.glsl", "phongFrag.glsl")));
+
+	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", make_shared<DeferredShader>("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox)));
 
 	shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
 
-	shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
-	shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
+	shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", make_shared<SimpleTextureShader>("simpleVert.glsl", "simpleFrag.glsl")));
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
@@ -164,12 +166,16 @@ void World::init()
 	AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
 }
 
-void World::setup_courtyard(int courtyard)
+void World::setup_next_courtyard()
 {
     // remove all non-persistent entities
     entities.erase(entities.begin() + 7, entities.end());
+    
+    // JUST FOR DEMO
+    if (current_courtyard == 3)
+        current_courtyard = 1;
 
-    switch (courtyard)
+    switch (current_courtyard)
     {
     case 1:
         setup_level(assetPath + "first_courtyard.txt");
@@ -188,6 +194,8 @@ void World::setup_courtyard(int courtyard)
     case 5:
         break;
     }
+
+    current_courtyard++;
 }
 
 void World::setup_level(string file_path)
@@ -219,10 +227,25 @@ void World::setup_level(string file_path)
 
 void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 {
+    vec3 rots = vec3(0.f);
+    bool flag = false;
     switch (obj_to_place)
     {
     case 'C': // set chewy's position
         chewy->setPosition(placement_position + vec3(0.f, 10.f, 0.f));
+        break;
+    case 'D':
+        if (placement_position.z < 120.f)
+            placement_position.z -= 2.5f;
+        else
+        {
+            placement_position.z += 2.5f;
+            rots = vec3(0.f, M_PI, 0.f);
+            flag = true;
+        }
+        entities.push_back(std::make_shared<DoorEntity>(DoorEntity(placement_position, meshes.at("door"), flag, this)));
+        entities.back()->setScale(3.f);
+        entities.back()->setRotations(rots);
         break;
     case 'F': // statue and flower bed
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("flowerPlanter"))));
@@ -262,7 +285,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("lanternPole"))));
         entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
         entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
-        vec3 rots = entities.back()->getRotations();
+        rots = entities.back()->getRotations();
         rots.y = M_PI_2;
         entities.back()->setRotations(rots);
         break;
@@ -341,12 +364,11 @@ void World::setup_guard(string file_path)
         else
             break;
     }
-
-    //entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(starting_position, meshes.at("guard"), spline_points, 1.f, linear)));
+	shared_ptr<GuardEntity> guard_ent = make_shared<GuardEntity>(starting_position, meshes["guard"], spline_points, 4.f, linear);
+	guard_ent->setup_entity_box(meshes["guard_bb"]);
+	entities.push_back(guard_ent);
     level_file.close();
 }
-
-
 
 void World::shootArrows()
 {
@@ -380,7 +402,7 @@ void World::draw()
 	if (keys[GLFW_KEY_6])
 	{
 		//usePhong = true;
-        setup_courtyard(2);
+        setup_next_courtyard();
 	}
 	if (keys[GLFW_KEY_7])
 	{
@@ -604,7 +626,8 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f)), entities);
+	Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
+	OctTree* world_oct_tree = new OctTree(vox, entities);
 	world_oct_tree->handle_collisions();
 	delete world_oct_tree;
     update_key_callbacks();

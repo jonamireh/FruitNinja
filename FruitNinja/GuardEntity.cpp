@@ -21,10 +21,16 @@ GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std:
 	current_animation = &mesh->getAnimations()[0];
 }
 
+GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, glm::vec3 dir) : GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), animComponent(this), move_component(*this, dir)
+{
+	current_animation = &mesh->getAnimations()[0];
+	static_movement = true;
+}
+
 void GuardEntity::update()
 {
 	GameEntity::update();
-	move_component.update();
+	move_component.update(static_movement);
 	GameEntity::update();
 	animComponent.update();
 }

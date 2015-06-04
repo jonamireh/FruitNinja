@@ -14,7 +14,7 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, s
 	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl")
 {
 	emitters.push_back(new FlameEmitter);
-	emitters.push_back(new FireEmitter);
+	//emitters.push_back(new FireEmitter);
 	gbuffer.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 	glBindAttribLocation(getProgramID(), 1, "aNormal");
@@ -112,7 +112,6 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 		lightPass();
 	}
 	else {
-		//startLightPasses();
 		renderer.draw(camera, ents, lights);
 		
 		skyboxPass(camera);
@@ -195,4 +194,10 @@ void DeferredShader::lightPass()
 	/*gbuffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
 	glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
 		HalfWidth, 0, SCREEN_WIDTH, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);*/
+}
+
+DeferredShader::~DeferredShader() {
+	for (int i = 0; i < emitters.size(); i++) {
+		delete emitters[i];
+	}
 }

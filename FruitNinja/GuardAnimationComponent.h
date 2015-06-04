@@ -2,8 +2,8 @@
 #include "Component.h"
 #include "BasicAnimationComponent.h"
 
-#define WALKIN_START 30.0 / FRAMES_PER_SEC
-#define WALKIN_DURATION 200.0 / FRAMES_PER_SEC
+#define WALKIN_START 20.0 / FRAMES_PER_SEC
+#define WALKIN_DURATION 31.0 / FRAMES_PER_SEC
 
 
 enum GAnimationState

@@ -39,8 +39,9 @@ void ParticleShader::draw(std::shared_ptr<Camera> camera, vector<Emitter*> emitt
 	check_gl_error("Particle beginning of draw function");
 
 	glEnable(GL_BLEND);
-	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	//glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
 	for (int i = 0; i < emitters.size(); i++) {
 		glActiveTexture(GL_TEXTURE0);
@@ -61,7 +62,7 @@ void ParticleShader::draw(std::shared_ptr<Camera> camera, vector<Emitter*> emitt
 			flem->update(seconds_passed, lights);
 		}
 		else {
-			emitters[i]->update(seconds_passed);
+			//emitters[i]->update(seconds_passed);
 		}
 
 		check_gl_error("Before particle draw");
