@@ -1,40 +1,40 @@
 ________________________________________
 |OOO    l     l         l     l    X   |
 |OO                                 X  |
-|O                                   X |
+|O                 C                 X |
 |                                     X|
 |                                      |
 |                                      |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
+|                  ss                  |
 |                                      |
 |                                      |
-|                                      |
-|        WWW                WWW        |
+|       wWWWe              wWWWe       |
 |        WWW       l        WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
-|        WWW       F        WWW        |
-|0       WWW                WWW        |
-|2       WWW                WWW        |
+|        WWW                WWW        |
+|e       WWWe      F       wWWW       w|
+|        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW       l        WWW        |
-|        WWW                WWW        |
-|1                                     |
-|g                                     |
+|       wWWWe              wWWWe       |
 |                                      |
+|         0                  g         |
+|                  nn                  |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |                                      |
 |                                      |
-|                  C                   |
+|                                      |
 |                                     O|
-|X             l        l            OO|
+|X             ln      nl            OO|
 ________________________________________

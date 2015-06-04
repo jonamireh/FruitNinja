@@ -41,6 +41,12 @@ extern glm::mat4 guard_projection;
 extern float game_speed;
 extern float bow_strength;
 
+enum GameState{
+	LEVEL1,
+	SPOTTED,
+	GAMEOVER
+};
+
 class World
 {
 public:
@@ -81,5 +87,7 @@ private:
     std::shared_ptr<ChewyEntity> chewy;
 
 	bool cinematic_runthrough = false;
+
+	GameState state;
 };
 

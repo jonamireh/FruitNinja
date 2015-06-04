@@ -57,6 +57,7 @@ World::World()
 	init();
     x_offset = 0;
     y_offset = 0;
+	state = LEVEL1;
 }
 
 void World::init()
@@ -163,7 +164,7 @@ void World::init()
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 
-	AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
+	//AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
 }
 
 void World::setup_next_courtyard()
@@ -228,7 +229,7 @@ void World::setup_level(string file_path)
 void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 {
     vec3 rots = vec3(0.f);
-    bool flag = false;
+    bool flag = false; // used for door orientation and accessability
     switch (obj_to_place)
     {
     case 'C': // set chewy's position
@@ -258,12 +259,13 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("statue"))));
         entities.back()->setScale(6.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
+        entities.back()->setRotations(vec3(0.f, M_PI, 0.f));
         break;
     case 'n': // static guard facing north
-        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f))));
+        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f))));
         break;
     case 's': // static guard facing south
-        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f))));
+        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f))));
         break;
     case 'e': // static guard facing east
         entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f))));
@@ -621,9 +623,10 @@ void World::update()
 	{
 		entities[i]->update();
 		shared_ptr<GuardEntity> guard_temp = dynamic_pointer_cast<GuardEntity>(entities[i]);
-		if (guard_temp != nullptr)
-		{
-			guard_temp->check_view(chewy, entities);
+		if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
+			//AudioManager::instance()->playAmbient(assetPath + "jons_breakthrough_performance.wav", 3.0f);
+			AudioManager::instance()->play3DLoop(assetPath + "jons_breakthrough_performance.wav", guard_temp->getPosition(), false);
+			state = SPOTTED;
 		}
 	}
 	if (!time_stopped)
