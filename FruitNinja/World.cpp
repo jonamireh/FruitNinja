@@ -78,14 +78,16 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow_bb", make_shared<MeshSet>(assetPath + "arrow_boundingbox.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", make_shared<MeshSet>(assetPath + "lantern.dae")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", make_shared<MeshSet>(assetPath + "lanternPole.dae")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole_boundingbox", make_shared<MeshSet>(assetPath + "lanternPole_boundingbox.dae")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", make_shared<MeshSet>(assetPath + "closedBarrel.dae")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("box", make_shared<MeshSet>(assetPath + "Box.dae")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", make_shared<MeshSet>(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE)));
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("flowerPlanter", make_shared<MeshSet>(assetPath + "flowerPlanter.dae")));
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", make_shared<MeshSet>(assetPath + "statue.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole_boundingbox", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole_boundingbox.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("flowerPlanter", shared_ptr<MeshSet>(new MeshSet(assetPath + "flowerPlanter.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("bushes", shared_ptr<MeshSet>(new MeshSet(assetPath + "bushes.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("bushes_boundingbox", shared_ptr<MeshSet>(new MeshSet(assetPath + "bushes_boundingbox.dae"))));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", shared_ptr<MeshSet>(new MeshSet(assetPath + "statue.dae"))));
     
     chewy = std::make_shared<ChewyEntity>(vec3(0.f), meshes.at("chewy"), player_camera, archery_camera);
     chewy->setup_entity_box(meshes.at("chewy_bb"));
@@ -249,6 +251,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("flowerPlanter"))));
         entities.back()->setScale(6.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
+		entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position + vec3(0.f, .94483f * 6.f, 0.f), meshes.at("bushes"))));
+		entities.back()->setup_entity_box(meshes.at("bushes_boundingbox"));
+		entities.back()->setScale(6.f);
+		entities.back()->list = SET_HIDE((entities.back()->list));
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("statue"))));
         entities.back()->setScale(6.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
