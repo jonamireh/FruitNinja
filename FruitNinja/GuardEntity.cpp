@@ -29,10 +29,8 @@ GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, glm:
 
 void GuardEntity::update()
 {
-	GameEntity::update();
 	move_component.update(static_movement);
-	GameEntity::update();
-	animComponent.update();
+    animComponent.update();
 }
 
 pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)

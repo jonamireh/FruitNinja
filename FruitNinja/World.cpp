@@ -186,6 +186,9 @@ void World::setup_next_courtyard()
         break;
     case 2:
         setup_level(assetPath + "second_courtyard.txt");
+        setup_guard(assetPath + "second_courtyard_first_guard.txt");
+        setup_guard(assetPath + "second_courtyard_second_guard.txt");
+        setup_guard(assetPath + "second_courtyard_third_guard.txt");
         break;
     case 3:
         break;

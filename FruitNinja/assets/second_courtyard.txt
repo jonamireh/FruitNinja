@@ -3,13 +3,13 @@ ________________________________________
 |O               X C X                 |
 |            X   X   X   XXXXXXXXXXX   |
 |            X   XX XX   X         X   |
-|            X           X l       X   |
-|     l      X           X         X   |
-|            X           X         X   |
-|            X           X         X   |
-|  G        OX           X         X   |
+|            X           X e       X   |
+|  s  l      X           X    l    X   |
+|  n         X           X         X   |
+|       ew   X           XO        X   |
+|  e w      OX           XOO       X X |
 |          OOXWWWWWWWWWWWXXXXXXX   X   |
-|XXXXXXXXXXXXXWWWWWWWWWWWXXXXXXX G X   |
+|XXXXXXXXXXXXXWWWWWWWWWWWXXXXXXX s X   |
 |XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
 |                                  X   |
 |                                  X   |
@@ -17,25 +17,25 @@ ________________________________________
 |X                                 X   |
 |XX                                X   |
 |WWWWWWWWWWWWWWWWWWWWWWWWWWWWW     X   |
-|WWWWWWXWWWWWXWWWWW WWWWWXWWWW     X   |
-|WWWWWWWWWWWWWWWWWW WWWWWWWWWW     X   |
+|WWWWWWXWWWWWXWWWWW WWWWWXWWWWe    X   |
+|WWWWWWWWWWWWWWWWWW WWWWWWWWWW     X X |
 |                            X     X   |
 |                            X     X   |
-|      W                     X     X   |
+|      We                    X     X   |
 |                W           X     X   |
-|   W                        X     X   |
-|           W          W     X     X   |
+|  wW       n                X     X   |
+|           W         wW     X     X   |
 |                            X     X   |
 |                      W     X     X   |
-|         W              W   X     X   |
-|  W           W             X     X   |
+|  n      W              W   X     X   |
+|  W      s    W             X     X X |
 |                    W       X     X   |
-|       W                    X     X   |
+|      eWw           s       X     X   |
 |                  W         X     X   |
-| W                          X     X   |
-|           W                X     X   |
+| Ww                         X     X   |
+|          wW            n   X     X   |
 |                        W   X         |
-|     W         W            X         |
+|     We        Wn   n   s   X         |
 |                l D l       XOOOOOOOOO|
 ________________________________________
 |O               X   X                 |

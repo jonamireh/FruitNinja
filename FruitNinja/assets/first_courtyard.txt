@@ -1,5 +1,5 @@
 ________________________________________
-|OOO    l     l         l     l    X   |
+|OOO    l     l    D    l     l    X   |
 |OO                                 X  |
 |O                 C                 X |
 |                                     X|
@@ -8,10 +8,10 @@ ________________________________________
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
-|              s        s              |
 |                                      |
 |                                      |
-|l      wWWW                WWWe      l|
+|                                      |
+|l       WWW                WWW       l|
 |        WWW       l        WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
@@ -25,10 +25,10 @@ ________________________________________
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW       l        WWW        |
-|l      wWWWe               WWWe      l|
+|l       WWW                WWW       l|
 |                                      |
 |                                      |
-|              n        n              |
+|                                      |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
@@ -36,7 +36,7 @@ ________________________________________
 |                                      |
 |                                      |
 |                                     O|
-|X             ln      nl            OO|
+|X            ln   D   nl            OO|
 ________________________________________
 |OO                                 X  |
 |O                                   X |
