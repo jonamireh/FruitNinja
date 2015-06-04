@@ -18,6 +18,7 @@
 #include <functional>
 #include <queue>
 #include "LightEntity.h"
+#include "DoorEntity.h"
 #include "FrustrumCulling.h"
 #include <iostream>
 #include <fstream>
@@ -142,7 +143,7 @@ void World::init()
     entities.push_back(wall_back);
     entities.push_back(ground);
 
-    setup_courtyard(1);
+    setup_next_courtyard();
 
 	hud = HUD(chewy);
 
@@ -162,12 +163,16 @@ void World::init()
 	AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
 }
 
-void World::setup_courtyard(int courtyard)
+void World::setup_next_courtyard()
 {
     // remove all non-persistent entities
     entities.erase(entities.begin() + 7, entities.end());
+    
+    // JUST FOR DEMO
+    if (current_courtyard == 3)
+        current_courtyard = 1;
 
-    switch (courtyard)
+    switch (current_courtyard)
     {
     case 1:
         setup_level(assetPath + "first_courtyard.txt");
@@ -186,6 +191,8 @@ void World::setup_courtyard(int courtyard)
     case 5:
         break;
     }
+
+    current_courtyard++;
 }
 
 void World::setup_level(string file_path)
@@ -217,10 +224,25 @@ void World::setup_level(string file_path)
 
 void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 {
+    vec3 rots = vec3(0.f);
+    bool flag = false;
     switch (obj_to_place)
     {
     case 'C': // set chewy's position
         chewy->setPosition(placement_position + vec3(0.f, 10.f, 0.f));
+        break;
+    case 'D':
+        if (placement_position.z < 120.f)
+            placement_position.z -= 2.5f;
+        else
+        {
+            placement_position.z += 2.5f;
+            rots = vec3(0.f, M_PI, 0.f);
+            flag = true;
+        }
+        entities.push_back(std::make_shared<DoorEntity>(DoorEntity(placement_position, meshes.at("door"), flag, this)));
+        entities.back()->setScale(3.f);
+        entities.back()->setRotations(rots);
         break;
     case 'F': // statue and flower bed
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("flowerPlanter"))));
@@ -256,7 +278,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("lanternPole"))));
         entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
         entities.push_back(std::make_shared<LightEntity>(LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"))));
-        vec3 rots = entities.back()->getRotations();
+        rots = entities.back()->getRotations();
         rots.y = M_PI_2;
         entities.back()->setRotations(rots);
         break;
@@ -374,7 +396,7 @@ void World::draw()
 	if (keys[GLFW_KEY_6])
 	{
 		//usePhong = true;
-        setup_courtyard(2);
+        setup_next_courtyard();
 	}
 	if (keys[GLFW_KEY_7])
 	{

@@ -1,6 +1,4 @@
 #include "ObstacleEntity.h"
-#include "PlayerCamera.h"
-#include "World.h"
 
 ObstacleEntity::ObstacleEntity()
 {
@@ -14,11 +12,6 @@ ObstacleEntity::ObstacleEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh
 
 void ObstacleEntity::update()
 {
-    //if (collision_response)
-    //{
-    //    last_position = getPosition();
-    //    setPosition(getPosition() - glm::vec3(0.f, 10.f * seconds_passed, 0.f));
-    //}
 }
 
 void ObstacleEntity::collision(std::shared_ptr<GameEntity> entity)

@@ -175,6 +175,7 @@
     <ClCompile Include="DeferredRenderer.cpp" />
     <ClCompile Include="DeferredShader.cpp" />
     <ClCompile Include="DirLightShader.cpp" />
+    <ClCompile Include="DoorEntity.cpp" />
     <ClCompile Include="EntityBox.cpp" />
     <ClCompile Include="FireEmitter.cpp" />
     <ClCompile Include="FlameEmitter.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DeferredShader.h" />
     <ClInclude Include="DirLightShader.h" />
+    <ClInclude Include="DoorEntity.h" />
     <ClInclude Include="EntityBox.h" />
     <ClInclude Include="FireEmitter.h" />
     <ClInclude Include="FlameEmitter.h" />
