@@ -24,7 +24,7 @@ DirShadowMapShader::DirShadowMapShader(std::string vertShader, std::string fragS
 	vec3 cameraPoint = vec3(115.0f, 0.0f, 115.0f) - normalize(lightDirection) * 100.0f;
 
 	view_mat = lookAt(cameraPoint, cameraPoint + lightDirection, vec3(0.0f, 0.0f, 1.0f));
-	projection_mat = ortho(-200.0f, 200.0f, -200.0f, 200.0f, 1.0f, 150.0f);
+	projection_mat = ortho(-200.0f, 200.0f, -200.0f, 200.0f, 1.0f, 175.0f);
 	mat4 VP = projection_mat * view_mat;
 }
 
