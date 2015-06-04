@@ -57,6 +57,7 @@ World::World()
 	init();
     x_offset = 0;
     y_offset = 0;
+	state = LEVEL1;
 }
 
 void World::init()
@@ -131,7 +132,7 @@ void World::init()
     wall_back->setRotations(vec3(0.f, M_PI_2, 0.f));
     wall_back->swap_bounding_box_width_depth();
     wall_back->bounding_box.half_height = wall_back->bounding_box.half_height + 12.f;
-    shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(120.f, 0.0f, 120.f), meshes.at("ground")));
+    shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(120.f, -12.0f, 120.f), meshes.at("ground")));
     ground->setScale(30.f);
 
 	camera = cinematic_camera;
@@ -163,7 +164,7 @@ void World::init()
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 
-	AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
+	//AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
 }
 
 void World::setup_next_courtyard()
@@ -625,9 +626,10 @@ void World::update()
 	{
 		entities[i]->update();
 		shared_ptr<GuardEntity> guard_temp = dynamic_pointer_cast<GuardEntity>(entities[i]);
-		if (guard_temp != nullptr)
-		{
-			guard_temp->check_view(chewy, entities);
+		if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
+			//AudioManager::instance()->playAmbient(assetPath + "jons_breakthrough_performance.wav", 3.0f);
+			AudioManager::instance()->play3DLoop(assetPath + "jons_breakthrough_performance.wav", guard_temp->getPosition(), false);
+			state = SPOTTED;
 		}
 	}
 	if (!time_stopped)
