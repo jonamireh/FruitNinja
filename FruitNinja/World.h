@@ -71,6 +71,7 @@ public:
 	static void draw_box(std::shared_ptr<EntityBox> box, glm::vec3 color);
 
     void setup_next_courtyard();
+    void setup_cinematic_camera(string file_path);
 private:
     std::shared_ptr<DebugCamera> debug_camera;
     std::shared_ptr<ArcheryCamera> archery_camera;

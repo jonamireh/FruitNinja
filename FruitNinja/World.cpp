@@ -97,14 +97,14 @@ void World::init()
 	
 
 	//x_offset = -30.0f;
-	player_camera->movement(chewy);
+	
 	/*cinematic_camera->init({ player_camera->cameraPosition, vec3(-5.0, 32.0, 140.0), vec3(23.f,32.f, 215.f), vec3(110.f, 32.f, 230.f), 
 			vec3(217.f, 32.f, 215.f), vec3(235.f, 32.f, 117.f), vec3(227.f, 32.f, 15.f), vec3(120.f, 32.f, 2.f), player_camera->cameraPosition }, 
 		{ player_camera->lookAtPoint, vec3(0.f, 32.0f, 140.f), vec3(27.f, 32.f, 215.f), vec3(110.f, 32.f, 223.f), vec3(213.f, 32.f, 213.f), vec3(230.f, 32.f, 117.f),
 			vec3(223.f, 32.f, 18.f), vec3(120.f, 32.f, 7.f), player_camera->lookAtPoint },
 		40.f);*/
-	cinematic_camera->init({ player_camera->cameraPosition, player_camera->cameraPosition, player_camera->cameraPosition, player_camera->cameraPosition},
-	{ player_camera->lookAtPoint, player_camera->lookAtPoint, player_camera->lookAtPoint, player_camera->lookAtPoint, }, 10.f);
+	//cinematic_camera->init({ player_camera->cameraPosition, player_camera->cameraPosition, player_camera->cameraPosition, player_camera->cameraPosition},
+	//{ player_camera->lookAtPoint, player_camera->lookAtPoint, player_camera->lookAtPoint, player_camera->lookAtPoint, }, 10.f);
 
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->setScale(750.f);
@@ -135,8 +135,8 @@ void World::init()
     shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(120.f, -12.0f, 120.f), meshes.at("ground")));
     ground->setScale(30.f);
 
-	camera = cinematic_camera;
-	cinematic_camera->in_use = true;
+	//camera = cinematic_camera;
+	//cinematic_camera->in_use = true;
 
     // Add these into a persistent entities list?
     // or you can just remove everything after their index since
@@ -184,12 +184,15 @@ void World::setup_next_courtyard()
         setup_guard(assetPath + "first_courtyard_second_guard.txt");
         setup_guard(assetPath + "first_courtyard_third_guard.txt");
         setup_guard(assetPath + "first_courtyard_fourth_guard.txt");
+        player_camera->movement(chewy);
+        setup_cinematic_camera(assetPath + "first_courtyard_cinematic.txt");
         break;
     case 2:
         setup_level(assetPath + "second_courtyard.txt");
         setup_guard(assetPath + "second_courtyard_first_guard.txt");
         setup_guard(assetPath + "second_courtyard_second_guard.txt");
         setup_guard(assetPath + "second_courtyard_third_guard.txt");
+        player_camera->movement(chewy);
         break;
     case 3:
         break;
@@ -200,6 +203,58 @@ void World::setup_next_courtyard()
     }
 
     current_courtyard++;
+}
+
+void World::setup_cinematic_camera(string file_path)
+{
+    ifstream level_file;
+    level_file.open(file_path);
+
+    string current_line;
+    int current_row = 0;
+    int height_level = -1;
+    vec3 camera_pos_array[10];
+    vec3 look_at_array[10];
+    vector<vec3> camera_positions;
+    vector<vec3> look_at_positions;
+    camera_positions.push_back(player_camera->cameraPosition);
+    look_at_positions.push_back(player_camera->lookAtPoint);
+
+
+    while (!level_file.eof()) // runs through every line
+    {
+        getline(level_file, current_line);
+        if (current_line == "________________________________________")
+        {
+            current_row = 0;
+            height_level++;
+        }
+        for (int i = 0; i < current_line.length(); i++)
+        {
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
+            if (isalpha(current_line.at(i)))
+                camera_pos_array[current_line.at(i) - 'a'] = world_position;
+            else if (isdigit(current_line.at(i)))
+                look_at_array[current_line.at(i) - '0'] = world_position;
+        }
+        current_row++;
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        if (camera_pos_array[i] != vec3(0))
+            camera_positions.push_back(glm::vec3(camera_pos_array[i]));
+        if (look_at_array[i] != vec3(0))
+            look_at_positions.push_back(glm::vec3(look_at_array[i]));
+    }
+    camera_positions.push_back(player_camera->cameraPosition);
+    look_at_positions.push_back(player_camera->lookAtPoint);
+
+    cinematic_camera->init(camera_positions, look_at_positions, 40.f);
+    camera = cinematic_camera;
+    cinematic_camera->in_use = true;
+
+    level_file.close();
 }
 
 void World::setup_level(string file_path)
@@ -236,7 +291,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     switch (obj_to_place)
     {
     case 'C': // set chewy's position
-        chewy->setPosition(placement_position + vec3(0.f, 10.f, 0.f));
+        chewy->setPosition(placement_position + vec3(0.f, 3.f, 0.f));
         break;
     case 'D': // door
         if (placement_position.z < 120.f)
