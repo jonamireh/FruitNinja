@@ -5,18 +5,18 @@ ________________________________________
 |                                     X|
 |                                      |
 |                                      |
-|        WWW   WWWWWWWWWW G WWW        |
-|        WWW   WWWWWWWWWW 1 WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
-|                                      |
+|        WWW   WWWWWWWWWW   WWW        |
+|G       WWW   WWWWWWWWWW   WWW        |
+|1                                     |
 |                                      |
 |                                      |
 |        WWW                WWW        |
 |        WWW       l        WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
-|        WWW                WWW        |
-|        WWW                WWW        |
+|2       WWW                WWW        |
+|0       WWW                WWW        |
 |        WWW       F        WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
@@ -30,8 +30,8 @@ ________________________________________
 |                                      |
 |                                      |
 |        WWW   WWWWWWWWWW   WWW        |
-|        WWW   WWWWWWWWWW 2 WWW        |
-|        WWW   WWWWWWWWWW 0 WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
 |                                      |
 |                                      |
 |                  C                   |

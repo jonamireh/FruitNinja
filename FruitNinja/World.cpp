@@ -68,6 +68,7 @@ void World::init()
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall", make_shared<MeshSet>(assetPath + "wall.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("interior_wall", make_shared<MeshSet>(assetPath + "interiorWall.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("door", make_shared<MeshSet>(assetPath + "door.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("ground", make_shared<MeshSet>(assetPath + "ground.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final3.dae"))));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
@@ -110,16 +111,20 @@ void World::init()
     float wall_scale = 30.f;
     shared_ptr<GameEntity> wall_left(new ObstacleEntity(vec3(120.f, 0.f, 240.f), meshes.at("wall")));
     wall_left->setScale(wall_scale);
+    wall_left->bounding_box.half_height = wall_left->bounding_box.half_height + 12.f;
     shared_ptr<GameEntity> wall_right(new ObstacleEntity(vec3(120.f, 0.f, 0.f), meshes.at("wall")));
     wall_right->setScale(wall_scale);
+    wall_right->bounding_box.half_height = wall_right->bounding_box.half_height + 12.f;
     shared_ptr<GameEntity> wall_front(new ObstacleEntity(vec3(0.f, 0.f, 120.f), meshes.at("wall")));
     wall_front->setScale(wall_scale);
     wall_front->setRotations(vec3(0.f, M_PI_2, 0.f));
     wall_front->swap_bounding_box_width_depth();
+    wall_front->bounding_box.half_height = wall_front->bounding_box.half_height + 12.f;
     shared_ptr<GameEntity> wall_back(new ObstacleEntity(vec3(240.f, 0.f, 120.f), meshes.at("wall")));
     wall_back->setScale(wall_scale);
     wall_back->setRotations(vec3(0.f, M_PI_2, 0.f));
     wall_back->swap_bounding_box_width_depth();
+    wall_back->bounding_box.half_height = wall_back->bounding_box.half_height + 12.f;
     shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(120.f, 0.0f, 120.f), meshes.at("ground")));
     ground->setScale(30.f);
 
@@ -160,14 +165,19 @@ void World::init()
 void World::setup_courtyard(int courtyard)
 {
     // remove all non-persistent entities
+    entities.erase(entities.begin() + 7, entities.end());
+
     switch (courtyard)
     {
     case 1:
         setup_level(assetPath + "first_courtyard.txt");
         setup_guard(assetPath + "first_courtyard_guard.txt");
         setup_guard(assetPath + "first_courtyard_second_guard.txt");
+        setup_guard(assetPath + "first_courtyard_third_guard.txt");
+        setup_guard(assetPath + "first_courtyard_fourth_guard.txt");
         break;
     case 2:
+        setup_level(assetPath + "second_courtyard.txt");
         break;
     case 3:
         break;
@@ -197,7 +207,7 @@ void World::setup_level(string file_path)
         }
         for (int i = 0; i < current_line.length(); i++)
         {
-            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f); // TODO
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
             setup_token(current_line.at(i), world_position);
         }
         current_row++;
@@ -209,15 +219,8 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 {
     switch (obj_to_place)
     {
-    case 'X': // crate
-        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("box"))));
-        entities.back()->setScale(3.f);
-        entities.back()->list = SET_HIDE((entities.back()->list));
-        break;
-    case 'O': // barrel
-        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
-        entities.back()->setScale(3.f);
-        entities.back()->list = SET_HIDE((entities.back()->list));
+    case 'C': // set chewy's position
+        chewy->setPosition(placement_position + vec3(0.f, 10.f, 0.f));
         break;
     case 'F': // statue and flower bed
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("flowerPlanter"))));
@@ -227,15 +230,27 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(6.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
+    case 'G':
+        //entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), spline_points, 1.f, linear)))
+        break;
+    case 'O': // barrel
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        break;
     case 'W':
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("interior_wall"))));
         entities.back()->setScale(3.f);
-        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) || 
+        // this will rotate alternating so that the textures line up correctly
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
             (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
             entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        entities.back()->list = SET_HIDE((entities.back()->list));
         break;
-    case 'C': // set chewy's position
-        chewy->setPosition(placement_position + vec3(0.f, 10.f, 0.f));
+    case 'X': // crate
+        entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("box"))));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("lanternPole"))));
@@ -266,7 +281,7 @@ void World::setup_guard(string file_path)
 
         for (int i = 0; i < current_line.length(); i++)
         {
-            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, 0.f, current_row);
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, 0.f, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
             switch (current_line.at(i))
             {
             case 'G':
@@ -358,7 +373,8 @@ void World::draw()
 
 	if (keys[GLFW_KEY_6])
 	{
-		usePhong = true;
+		//usePhong = true;
+        setup_courtyard(2);
 	}
 	if (keys[GLFW_KEY_7])
 	{
@@ -451,12 +467,6 @@ void World::draw()
 			{
 				draw_line(points->at(j).first, points->at(j).second, vec3(1.f, 0.f, 0.f));
 			}
-			//vector<pair<glm::vec3, glm::vec3>> planes = box->getPlanes();
-			//for (int k = 0; k < planes.size(); k++)
-			//{
-			//	draw_line(planes.at(k).first, planes.at(k).first + box->getMaxWidth(5.0f) * planes.at(k).second, vec3(0, 1.f, 0));
-			//}
-			//draw_sphere(in_view.at(i)->getCenter(), in_view.at(i)->getRadius(), vec3(1.f, 1.f, 0.f), 3.f);
 		}
 		glUseProgram(0);
 	}
