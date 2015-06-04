@@ -80,6 +80,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="arcFrag.glsl" />
+    <None Include="arcVertex.glsl" />
     <None Include="debugFrag.glsl" />
     <None Include="debugVert.glsl" />
     <None Include="DeferredFragShader.glsl" />
@@ -102,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArcheryCamera.cpp" />
+    <ClCompile Include="ArcShader.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BasicAnimationComponent.cpp" />
     <ClCompile Include="ChewyAnimationComponent.cpp" />
@@ -157,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArcheryCamera.h" />
+    <ClInclude Include="ArcShader.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BasicAnimationComponent.h" />
     <ClInclude Include="ChewyAnimationComponent.h" />

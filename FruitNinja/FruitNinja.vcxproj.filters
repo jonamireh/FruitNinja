@@ -160,6 +160,9 @@
     <ClCompile Include="FireEmitter.cpp">
       <Filter>Fire</Filter>
     </ClCompile>
+    <ClCompile Include="ArcShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -342,6 +345,9 @@
     <ClInclude Include="FireEmitter.h">
       <Filter>Fire</Filter>
     </ClInclude>
+    <ClInclude Include="ArcShader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -398,6 +404,12 @@
     </None>
     <None Include="FireGeom.glsl">
       <Filter>Fire</Filter>
+    </None>
+    <None Include="arcVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="arcFrag.glsl">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

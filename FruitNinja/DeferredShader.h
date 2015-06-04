@@ -6,6 +6,7 @@
 #include "ParticleShader.h"
 #include "FlameEmitter.h"
 #include "FireEmitter.h"
+#include "ArcShader.h"
 
 //#include <glm/gtc/type_ptr.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
@@ -36,6 +37,9 @@ private:
 	SimpleTextureShader skyShader;
 	ParticleShader fireShader;
 	vector<Emitter*> emitters;
+
+	ArcShader arcShader;
+	void archeryArcPass(std::shared_ptr<Camera> camera);
 
 	DeferredRenderer renderer;
 	DisplayMode disp_mode;

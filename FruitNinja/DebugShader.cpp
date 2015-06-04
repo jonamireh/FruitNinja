@@ -28,6 +28,7 @@ void DebugShader::drawLine(vec3 p1, vec3 p2, vec3 color, mat4& view_mat)
 	int currentId;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &currentId);
 	assert(currentId == getProgramID());
+
 	glBindVertexArray(LINE_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, LINE_VBO);
 	GLfloat g_vertex_buffer_data[] = {

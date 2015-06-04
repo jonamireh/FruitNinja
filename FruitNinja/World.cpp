@@ -62,7 +62,7 @@ void World::init()
 {
 	debug_camera = shared_ptr<DebugCamera>(new DebugCamera());
     player_camera = shared_ptr<PlayerCamera>(new PlayerCamera());
-    archery_camera = shared_ptr<ArcheryCamera>(new ArcheryCamera());
+    
 	cinematic_camera = shared_ptr<CinematicCamera>(new CinematicCamera());
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
@@ -87,6 +87,8 @@ void World::init()
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("flowerPlanter", shared_ptr<MeshSet>(new MeshSet(assetPath + "flowerPlanter.dae"))));
 	meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", shared_ptr<MeshSet>(new MeshSet(assetPath + "statue.dae"))));
     
+	archery_camera = std::make_shared<ArcheryCamera>(meshes.at("unit_sphere")->getMeshes().at(0));
+
     chewy = std::make_shared<ChewyEntity>(vec3(0.f), meshes.at("chewy"), player_camera, archery_camera);
     chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);

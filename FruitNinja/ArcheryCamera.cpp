@@ -9,10 +9,16 @@ using namespace glm;
 /*
 Default constructor.
 */
-ArcheryCamera::ArcheryCamera()
+ArcheryCamera::ArcheryCamera(Mesh* particle) : particle(particle)
 {
 
 }
+
+ArcheryCamera::ArcheryCamera()
+{
+	
+}
+
 
 /*
 Destructor.
