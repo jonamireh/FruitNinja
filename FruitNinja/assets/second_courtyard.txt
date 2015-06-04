@@ -8,7 +8,7 @@ ________________________________________
 |  n         X           X         X   |
 |       ew   X           XO        X   |
 |  e w      OX           XOO       X X |
-|          OOXWWWWWWWWWWWXXXXXXX   X   |
+|O         OOXWWWWWWWWWWWXXXXXXX   X   |
 |XXXXXXXXXXXXXWWWWWWWWWWWXXXXXXX s X   |
 |XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
 |                                  X   |
@@ -17,7 +17,7 @@ ________________________________________
 |X                                 X   |
 |XX                                X   |
 |WWWWWWWWWWWWWWWWWWWWWWWWWWWWW     X   |
-|WWWWWWXWWWWWXWWWWW WWWWWXWWWWe    X   |
+|WWWWWWXWWWWWXWWWWW WWWWWXWWWWl    X   |
 |WWWWWWWWWWWWWWWWWW WWWWWWWWWW     X X |
 |                            X     X   |
 |                            X     X   |
@@ -27,13 +27,13 @@ ________________________________________
 |           W         wW     X     X   |
 |                            X     X   |
 |                      W     X     X   |
-|  n      W              W   X     X   |
+|  n      W              W   X    lX   |
 |  W      s    W             X     X X |
 |                    W       X     X   |
 |      eWw           s       X     X   |
 |                  W         X     X   |
 | Ww                         X     X   |
-|          wW            n   X     X   |
+|          wW            n   Xl    X   |
 |                        W   X         |
 |     We        Wn   n   s   X         |
 |                l D l       XOOOOOOOOO|
