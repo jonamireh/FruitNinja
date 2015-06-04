@@ -17,8 +17,14 @@ out vec4 FragColor;
 #define SPEC_INTENSITY 1.0
 #define SHINY 20
 
+vec2 poissonDisk[4] = vec2[](
+  vec2( -0.94201624, -0.39906216 ),
+  vec2( 0.94558609, -0.76890725 ),
+  vec2( -0.094184101, -0.92938870 ),
+  vec2( 0.34495938, 0.29387760 )
+);
 
-vec2 poissonDisk[12] = vec2[](
+/*vec2 poissonDisk[12] = vec2[](
 	vec2(-0.5560945f, -0.1039571f),
 	vec2(-0.03921358f, 0.2479071f),
 	vec2(0.3701732f, -0.06092868f),
@@ -31,7 +37,7 @@ vec2 poissonDisk[12] = vec2[](
 	vec2(0.9375908f, 0.003824265f),
 	vec2(-0.06717162f, -0.3103488f),
 	vec2(-0.750717f, -0.5788005f)
-);
+);*/
 
 float random(vec3 pos, int i)
 {
@@ -50,10 +56,14 @@ float calcShadowFactor(vec3 pos)
 	float z = 0.5 * projCoords.z + 0.5;
 	
 	float visibility = 1.0;
-	for (int i = 0; i < 12; i++) {
-		int index = int(12.0 * random(pos, i)) % 12;
-		visibility -= (1.0 / 5.0) * (1.0 - texture(shadowMap, uvCoords + poissonDisk[index] / 700.0).x);
+	for (int i = 0; i < 4; i++) {
+		int index = int(4.0 * random(pos, i)) % 4;
+		visibility -= 0.4 * (1.0 - texture(shadowMap, uvCoords + poissonDisk[index] / 700.0).x);
 		visibility = max(0, visibility);
+
+		/*int index = int(12.0 * random(pos, i)) % 12;
+		visibility -= (1.0 / 5.0) * (1.0 - texture(shadowMap, uvCoords + poissonDisk[index] / 700.0).x);
+		visibility = max(0, visibility);*/
 
 		/*float depth = texture(shadowMap, uvCoords + poissonDisk[i] / 1000.0).x;
 		if (depth < (z + 0.00001)) {
