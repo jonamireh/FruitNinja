@@ -394,9 +394,9 @@ void World::draw()
 				lights.push_back(&le->light);
 			}
 			//if there's an arrow have archery camera follow it and make game slow-mo
-			if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
+			/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
 				archery_camera->cameraPosition = entities[i]->bounding_box.center - archery_camera->cameraFront * 4.0f;
-			}
+			}*/
 
 			if (!SHOULD_DRAW(entities[i]->list)) {
 				entities.erase(entities.begin() + i);
