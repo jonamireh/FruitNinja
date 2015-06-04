@@ -53,7 +53,7 @@ float bow_strength = .5f;
 
 World::World()
 {
-    debugShader = shared_ptr<DebugShader>(new DebugShader("debugVert.glsl", "debugFrag.glsl"));
+    debugShader = make_shared<DebugShader>("debugVert.glsl", "debugFrag.glsl");
 	init();
     x_offset = 0;
     y_offset = 0;
@@ -61,34 +61,37 @@ World::World()
 
 void World::init()
 {
-	debug_camera = shared_ptr<DebugCamera>(new DebugCamera());
-    player_camera = shared_ptr<PlayerCamera>(new PlayerCamera());
-    archery_camera = shared_ptr<ArcheryCamera>(new ArcheryCamera());
-	cinematic_camera = shared_ptr<CinematicCamera>(new CinematicCamera());
+	debug_camera = make_shared<DebugCamera>();
+	player_camera = make_shared<PlayerCamera>();
+	archery_camera = make_shared<ArcheryCamera>();
+	cinematic_camera = make_shared<CinematicCamera>();
 
     meshes.insert(pair<string, shared_ptr<MeshSet>>("tower", make_shared<MeshSet>(assetPath + "tower.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("wall", make_shared<MeshSet>(assetPath + "wall.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("interior_wall", make_shared<MeshSet>(assetPath + "interiorWall.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("door", make_shared<MeshSet>(assetPath + "door.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("ground", make_shared<MeshSet>(assetPath + "ground.dae")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_final3.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", shared_ptr<MeshSet>(new MeshSet(assetPath + "ninja_boundingbox.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", shared_ptr<MeshSet>(new MeshSet(assetPath + "samurai3.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy", make_shared<MeshSet>(assetPath + "ninja_final3.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("chewy_bb", make_shared<MeshSet>(assetPath + "ninja_boundingbox.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("guard", make_shared<MeshSet>(assetPath + "samurai2.dae")));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("guard_bb", make_shared<MeshSet>(assetPath + "samurai_bbox.obj")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow", make_shared<MeshSet>(assetPath + "arrow.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("arrow_bb", make_shared<MeshSet>(assetPath + "arrow_boundingbox.dae")));
     meshes.insert(pair<string, shared_ptr<MeshSet>>("unit_sphere", make_shared<MeshSet>(assetPath + "UnitSphere.obj")));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", shared_ptr<MeshSet>(new MeshSet(assetPath + "lantern.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole_boundingbox", shared_ptr<MeshSet>(new MeshSet(assetPath + "lanternPole_boundingbox.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", shared_ptr<MeshSet>(new MeshSet(assetPath + "closedBarrel.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("box", shared_ptr<MeshSet>(new MeshSet(assetPath + "Box.dae"))));
-    meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", shared_ptr<MeshSet>(new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE))));
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("flowerPlanter", shared_ptr<MeshSet>(new MeshSet(assetPath + "flowerPlanter.dae"))));
-	meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", shared_ptr<MeshSet>(new MeshSet(assetPath + "statue.dae"))));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lantern", make_shared<MeshSet>(assetPath + "lantern.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole", make_shared<MeshSet>(assetPath + "lanternPole.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("lanternPole_boundingbox", make_shared<MeshSet>(assetPath + "lanternPole_boundingbox.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("closedBarrel", make_shared<MeshSet>(assetPath + "closedBarrel.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("box", make_shared<MeshSet>(assetPath + "Box.dae")));
+    meshes.insert(pair<string, shared_ptr<MeshSet>>("skybox", make_shared<MeshSet>(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE)));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("flowerPlanter", make_shared<MeshSet>(assetPath + "flowerPlanter.dae")));
+	meshes.insert(pair<string, shared_ptr<MeshSet>>("statue", make_shared<MeshSet>(assetPath + "statue.dae")));
     
     chewy = std::make_shared<ChewyEntity>(vec3(0.f), meshes.at("chewy"), player_camera, archery_camera);
     chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);
+
+	
 
 	//x_offset = -30.0f;
 	player_camera->movement(chewy);
@@ -147,15 +150,13 @@ void World::init()
 
 	hud = HUD(chewy);
 
-	shared_ptr<Shader> phongShader(new PhongShader("phongVert.glsl", "phongFrag.glsl"));
-	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", phongShader));
-	shared_ptr<Shader> defShader(new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox));
-	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", defShader));
+	shaders.insert(pair<string, shared_ptr<Shader>>("phongShader", make_shared<PhongShader>("phongVert.glsl", "phongFrag.glsl")));
+
+	shaders.insert(pair<string, shared_ptr<Shader>>("defShader", make_shared<DeferredShader>("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox)));
 
 	shaders.insert(pair<string, shared_ptr<Shader>>("debugShader", debugShader));
 
-	shared_ptr<Shader> simpleShader(new SimpleTextureShader("simpleVert.glsl", "simpleFrag.glsl"));
-	shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", simpleShader));
+	shaders.insert(pair<string, shared_ptr<Shader>>("simpleShader", make_shared<SimpleTextureShader>("simpleVert.glsl", "simpleFrag.glsl")));
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
@@ -357,12 +358,11 @@ void World::setup_guard(string file_path)
         else
             break;
     }
-
-    entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(starting_position, meshes.at("guard"), spline_points, 1.f, linear)));
+	shared_ptr<GuardEntity> guard_ent = make_shared<GuardEntity>(starting_position, meshes["guard"], spline_points, 4.f, linear);
+	guard_ent->setup_entity_box(meshes["guard_bb"]);
+	entities.push_back(guard_ent);
     level_file.close();
 }
-
-
 
 void World::shootArrows()
 {
@@ -620,7 +620,8 @@ void World::update()
 		seconds_passed = 0.f;
 	}
 	start_time = glfwGetTime();
-	OctTree* world_oct_tree = new OctTree(Voxel(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f)), entities);
+	Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
+	OctTree* world_oct_tree = new OctTree(vox, entities);
 	world_oct_tree->handle_collisions();
 	delete world_oct_tree;
     update_key_callbacks();

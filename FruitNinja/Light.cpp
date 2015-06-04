@@ -4,6 +4,9 @@
 #define CONSTANT_AT 0.0
 #define LINEAR_AT 0.5
 #define EXP_AT 0.3
+/*#define CONSTANT_AT 0.0
+#define LINEAR_AT 0.0
+#define EXP_AT 0.0075*/
 
 
 GLuint Light::IND()

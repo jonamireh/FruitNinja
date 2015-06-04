@@ -10,7 +10,7 @@ out vec2 cellPos;
 
 void main()
 {
-	cellPos = vec2(aFrame % uWidth / float(uWidth), aFrame / uHeight / float(uHeight));
+	cellPos = vec2(aFrame % uWidth / float(uWidth), aFrame / uHeight / float(uWidth));
 
 	gl_Position = vec4(aPosition, 1.0);
 }
