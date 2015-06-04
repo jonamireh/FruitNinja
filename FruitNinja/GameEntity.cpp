@@ -62,6 +62,13 @@ void GameEntity::setRotations(glm::vec3 rots)
     rotations = rots;
 }
 
+void GameEntity::swap_bounding_box_width_depth()
+{
+    float save_width = bounding_box.half_width;
+    bounding_box.half_width = bounding_box.half_depth;
+    bounding_box.half_depth = save_width;
+}
+
 glm::vec3 GameEntity::getPosition()
 {
     return bounding_box.center;

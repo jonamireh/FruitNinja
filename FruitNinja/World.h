@@ -71,6 +71,7 @@ private:
 	std::shared_ptr<Skybox> _skybox;
 	HUD hud;
 	void init();
+    void setup_courtyard(int courtyard);
     void setup_level(string file_path);
     void setup_token(char obj_to_place, glm::vec3 file_index);
     void setup_guard(string file_path);
