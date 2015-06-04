@@ -1,5 +1,5 @@
 ________________________________________
-|OOO    l     l    D    l     l    X   |
+|OOO    l     l         l     l    X   |
 |OO                                 X  |
 |O                 C                 X |
 |                                     X|
@@ -8,35 +8,35 @@ ________________________________________
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
+|              s        s              |
 |                                      |
 |                                      |
-|                                      |
-|        WWW                WWW        |
+|l      wWWW                WWWe      l|
 |        WWW       l        WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
-|e       WWW       F        WWW        |
 |        WWW                WWW        |
+|e      lWWWe      F       wWWWl      w|
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW       l        WWW        |
-|        WWW                WWW        |
+|l      wWWWe               WWWe      l|
 |                                      |
 |                                      |
-|                   G                  |
+|              n        n              |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |                                      |
 |                                      |
 |                                      |
-|              n        n             O|
-|X             l    D   l            OO|
+|                                     O|
+|X             ln      nl            OO|
 ________________________________________
 |OO                                 X  |
 |O                                   X |

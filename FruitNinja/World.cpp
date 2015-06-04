@@ -228,7 +228,7 @@ void World::setup_level(string file_path)
 void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 {
     vec3 rots = vec3(0.f);
-    bool flag = false;
+    bool flag = false; // used for door orientation and accessability
     switch (obj_to_place)
     {
     case 'C': // set chewy's position
@@ -258,12 +258,13 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("statue"))));
         entities.back()->setScale(6.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
+        entities.back()->setRotations(vec3(0.f, M_PI, 0.f));
         break;
     case 'n': // static guard facing north
-        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f))));
+        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f))));
         break;
     case 's': // static guard facing south
-        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f))));
+        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f))));
         break;
     case 'e': // static guard facing east
         entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f))));
