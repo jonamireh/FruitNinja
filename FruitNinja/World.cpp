@@ -131,7 +131,7 @@ void World::init()
     wall_back->setRotations(vec3(0.f, M_PI_2, 0.f));
     wall_back->swap_bounding_box_width_depth();
     wall_back->bounding_box.half_height = wall_back->bounding_box.half_height + 12.f;
-    shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(120.f, 0.0f, 120.f), meshes.at("ground")));
+    shared_ptr<GameEntity> ground(new ObstacleEntity(vec3(120.f, -12.0f, 120.f), meshes.at("ground")));
     ground->setScale(30.f);
 
 	camera = cinematic_camera;
