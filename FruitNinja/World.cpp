@@ -97,10 +97,6 @@ void World::init()
     chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 	_skybox = std::make_shared<Skybox>(Skybox(&camera, meshes.at("skybox")));
 	_skybox->setScale(750.f);
 	_skybox->list = UNSET_OCTTREE((_skybox->list));
