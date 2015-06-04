@@ -31,7 +31,7 @@ ________________________________________
 |                                      |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW 1 WWWWWWWWWW   WWW        |
-|        WWW G WWWWWWWWWW   WWW        |
+|        WWW g WWWWWWWWWW   WWW        |
 |                                      |
 |                                      |
 |                  C                   |

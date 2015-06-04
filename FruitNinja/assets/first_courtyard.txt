@@ -17,7 +17,7 @@ ________________________________________
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
-|        WWW       F        WWW        |
+|G       WWW       F        WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
@@ -28,14 +28,14 @@ ________________________________________
 |        WWW                WWW        |
 |                                      |
 |                                      |
-|                                      |
+|                   G                  |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |        WWW   WWWWWWWWWW   WWW        |
 |                                      |
 |                                      |
 |                                      |
-|                                     O|
+|              G        G             O|
 |X             l    D   l            OO|
 ________________________________________
 |OO                                 X  |

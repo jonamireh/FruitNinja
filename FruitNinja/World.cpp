@@ -260,7 +260,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'G':
-        //entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), spline_points, 1.f, linear)))
+        entities.push_back(std::shared_ptr<GuardEntity>(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f))));
         break;
     case 'O': // barrel
         entities.push_back(std::make_shared<ObstacleEntity>(ObstacleEntity(placement_position, meshes.at("closedBarrel"))));
