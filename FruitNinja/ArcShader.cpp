@@ -31,7 +31,7 @@ void ArcShader::draw(shared_ptr<ArcheryCamera> a_camera)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, a_camera->particle->IND);
 
 	vec3 velocity = a_camera->cameraFront * ARROW_SPEED * bow_strength;
-	vec3 base_transformation = a_camera->cameraPosition + 1.f * a_camera->cameraFront;
+	vec3 base_transformation = a_camera->cameraPosition + 2.f * a_camera->cameraFront;
 	vec3 left = glm::normalize(glm::cross(vec3(0.f, 1.f, 0.f), a_camera->cameraFront));
 	vec3 offset = 0.2f * left;
 	vec3 incremental_offset = offset / (float)NUM_INSTANCES;
@@ -52,8 +52,6 @@ void ArcShader::draw(shared_ptr<ArcheryCamera> a_camera)
 		displacement.z = velocity.z * instance_time;
 		final_translate += displacement;
 		final_translate -= incremental_offset * (float) i;
-		if (i == NUM_INSTANCES - 1)
-			cout << "break here" << endl; 
 		translations.push_back(glm::translate(mat4(1.f), final_translate));
 	}
 
