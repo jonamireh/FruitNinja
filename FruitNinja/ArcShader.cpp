@@ -4,7 +4,7 @@
 using namespace glm;
 using namespace std;
 
-#define NUM_INSTANCES 1
+#define NUM_INSTANCES 2
 
 ArcShader::ArcShader(std::string vertShader, std::string fragShader) : Shader(vertShader, fragShader)
 {
@@ -29,13 +29,12 @@ void ArcShader::draw(shared_ptr<ArcheryCamera> a_camera)
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, a_camera->particle->IND);
 
-	/*glm::vec3 left = glm::cross(a_camera->cameraFront, vec3(0.f, 1.f, 0.f));
-	left.y = 0.f;*/
+	glm::vec3 left = glm::cross(a_camera->cameraFront, vec3(0.f, 1.f, 0.f));
+	left.y = 0.f;
 
 	for (int i = 0; i < NUM_INSTANCES; i++)
 	{
-		translations.push_back(glm::translate(mat4(1.f), vec3(a_camera->cameraPosition + 2.f * glm::normalize(a_camera->cameraFront))));
-		// +((float)i) * glm::normalize(left));
+		translations.push_back(glm::translate(mat4(1.f), vec3(a_camera->cameraPosition + 2.f * glm::normalize(a_camera->cameraFront) + ((float)i) * glm::normalize(left))));
 	}
 
 	glBindAttribLocation(getProgramID(), 1, "aTransMat");
