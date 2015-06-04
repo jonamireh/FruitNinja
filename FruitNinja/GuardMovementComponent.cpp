@@ -4,9 +4,10 @@
 using namespace glm;
 using namespace std;
 
-void GuardMovementComponent::update()
+void GuardMovementComponent::update(bool static_movement)
 {
-	direction = pathing.get_direction();
+	if (!static_movement)
+		direction = pathing.get_direction();
 	float toAngle = entity.turnAngle(direction).y;
 	vec3 rotations = entity.getRotations();
 	float fromAngle = rotations.y;
@@ -30,6 +31,7 @@ void GuardMovementComponent::update()
 
 	//vec3 pos_offset = direction * GUARD_MOVE_SPEED * seconds_passed;
 	//entity.position += pos_offset;
-	entity.setPosition(entity.getPosition() + seconds_passed * move_speed * direction);
+	if (!static_movement)
+		entity.setPosition(entity.getPosition() + seconds_passed * move_speed * direction);
 	entity.setRotations(rotations);
 }

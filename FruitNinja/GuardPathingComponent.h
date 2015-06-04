@@ -9,7 +9,7 @@ public:
 	std::vector<glm::vec3> control_points;
 
 	GuardPathingComponent(std::vector<glm::vec3> control_points, float move_speed, bool linear_curve);
-
+	GuardPathingComponent() {}
 	glm::vec3 get_direction();
 
 	void reverse();
