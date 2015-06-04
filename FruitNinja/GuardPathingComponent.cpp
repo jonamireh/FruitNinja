@@ -38,7 +38,7 @@ glm::vec3 GuardPathingComponent::get_direction()
 
 glm::vec3 GuardPathingComponent::get_linear_direction()
 {
-	return control_points.at(current_curve + 1) - control_points.at(current_curve);
+	return normalize(control_points.at(current_curve + 1) - control_points.at(current_curve));
 }
 
 glm::vec3 GuardPathingComponent::get_rom_catmull_direction()
