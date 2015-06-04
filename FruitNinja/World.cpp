@@ -486,15 +486,15 @@ void World::draw()
 	}
 
 	shared_ptr<DebugCamera> d_test = dynamic_pointer_cast<DebugCamera>(camera);
-	vector<shared_ptr<GameEntity>> in_view;
-    if (d_test != nullptr)
+	vector<shared_ptr<GameEntity>> in_view = entities;
+    /*if (d_test != nullptr)
     {
         in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
 	}
 	else
 	{
 		in_view = get_objects_in_view(entities, camera->getViewMatrix());
-	}
+	}*/
 
 	shared_ptr<PlayerCamera> p_test = dynamic_pointer_cast<PlayerCamera>(camera);
 	if (p_test != nullptr)

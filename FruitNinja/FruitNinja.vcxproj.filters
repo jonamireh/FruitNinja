@@ -166,6 +166,15 @@
     <ClCompile Include="ArcShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="DirShadowMapBuffer.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirShadowMapShader.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowBufferShader.cpp">
+      <Filter>DeferredShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -354,6 +363,18 @@
     <ClInclude Include="ArcShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="DirShadowMapBuffer.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirShadowMapShader.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowBufferShader.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowBufferShader.h">
+      <Filter>DeferredShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -415,6 +436,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="arcVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ShadowBufferVertShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ShadowBufferFragShader.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

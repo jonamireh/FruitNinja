@@ -11,12 +11,13 @@ using namespace std;
 
 DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox)
 	: Shader(vertShader, fragShader), skybox(skybox), gbuffer(), skyShader("simpleVert.glsl", "simpleFrag.glsl"),
-	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred),
-	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl"), arcShader("arcVertex.glsl", "arcFrag.glsl")
+	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer, &dirShadowMapBuffer), disp_mode(deferred),
+	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl"), arcShader("arcVertex.glsl", "arcFrag.glsl"), shadowBufferShader(&dirShadowMapBuffer)
 {
 	emitters.push_back(new FlameEmitter);
 	//emitters.push_back(new FireEmitter);
 	gbuffer.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
+	dirShadowMapBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 	glBindAttribLocation(getProgramID(), 1, "aNormal");
 
@@ -119,6 +120,7 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 		particlePass(camera, lights);
 		archeryArcPass(camera);
 		finalPass();
+		//shadowBufferShader.draw();
 	}
 		
 	if (keys[GLFW_KEY_4])
