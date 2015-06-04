@@ -1,0 +1,157 @@
+________________________________________
+|OO              X   X                l|
+|O               X C X                 |
+|            X   X   X   XXXXXXXXXXX   |
+|            X   XX XX   X         X   |
+|            X           X l       X   |
+|     l      X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|  G        OX           X         X   |
+|          OOXWWWWWWWWWWWXXXXXXX   X   |
+|XXXXXXXXXXXXXWWWWWWWWWWWXXXXXXX G X   |
+|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
+|                                  X   |
+|                                  X   |
+|     l          l          l      X   |
+|X                                 X   |
+|XX                                X   |
+|WWWWWWWWWWWWWWWWWWWWWWWWWWWWW     X   |
+|WWWWWWXWWWWWXWWWWW WWWWWXWWWW     X   |
+|WWWWWWWWWWWWWWWWWW WWWWWWWWWW     X   |
+|                            X     X   |
+|                            X     X   |
+|      W                     X     X   |
+|                W           X     X   |
+|   W                        X     X   |
+|           W          W     X     X   |
+|                            X     X   |
+|                      W     X     X   |
+|         W              W   X     X   |
+|  W           W             X     X   |
+|                    W       X     X   |
+|       W                    X     X   |
+|                  W         X     X   |
+| W                          X     X   |
+|           W                X     X   |
+|                        W   X         |
+|     W         W            X         |
+|                l   l       XOOOOOOOOO|
+________________________________________
+|O               X   X                 |
+|                X   X                 |
+|            X   X   X   XXXXXXXXXXX   |
+|            X   XX XX   X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           XXXXXXX   X   |
+|XXXXXXXXXXXXX           XXXXXXX   X   |
+|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|X                                 X   |
+|                                  X   |
+|                                  X   |
+|                  X               X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X         |
+|                            X         |
+|                            X         |
+________________________________________
+|                X   X                 |
+|                X   X                 |
+|            X   X   X   XXXXXXXXXXX   |
+|            X   XX XX   X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           XXXXXXX   X   |
+|XXXXXXXXXXXXX           XXXXXXX   X   |
+|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                  X               X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X         |
+|                            X         |
+|                            X         |
+________________________________________
+|                                      |
+|                                      |
+|            X           XXXXXXXXXXX   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           X         X   |
+|            X           XXXXXXX   X   |
+|XXXXXXXXXXXXX           XXXXXXX   X   |
+|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                                  X   |
+|                            X     X   |
+|                            X     X   |
+|      l                     X     X   |
+|                            X     X   |
+|                            X     X   |
+|           l          l     X     X   |
+|                            X     X   |
+|                            X     X   |
+|                        l   X     X   |
+|              l             X     X   |
+|                            X     X   |
+|       l                    X     X   |
+|                  l         X     X   |
+|                            X     X   |
+|                            X     X   |
+|                            X         |
+|     l         l            X         |
+|                            X         |
+________________________________________
