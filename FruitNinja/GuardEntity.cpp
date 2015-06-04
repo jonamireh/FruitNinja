@@ -87,7 +87,7 @@ pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 		return pair<bool, float>(false, tMax);
 }
 
-void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::shared_ptr<GameEntity>> entities)
+bool GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::shared_ptr<GameEntity>> entities)
 {
 	vec3 lookAt = bounding_box.center + 2.f * move_component.direction;
     mat4 view = glm::lookAt(bounding_box.center + move_component.direction, lookAt, vec3(0.f, 1.f, 0.f));
@@ -130,6 +130,8 @@ void GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::sha
 		if (!hidden)
 		{
 			chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
+			return true;
 		}
 	}
+	return false;
 }
