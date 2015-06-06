@@ -107,7 +107,7 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 
 void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights)
 {
-	std::vector<std::shared_ptr<GameEntity>> entsInView = get_objects_in_view(ents, camera->getViewMatrix());
+	std::vector<GameEntity*> entsInView = get_objects_in_view(ents, camera->getViewMatrix());
 	gbuffer.StartFrame();
 	geomPass(camera->getViewMatrix(), entsInView);
 

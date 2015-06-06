@@ -33,9 +33,9 @@ DirShadowMapShader::~DirShadowMapShader()
 {
 }
 
-void DirShadowMapShader::draw(vector<shared_ptr<GameEntity>> ents)
+void DirShadowMapShader::draw(vector<GameEntity*> ents)
 {
-	std::vector<std::shared_ptr<GameEntity>> entsInView = ents;//get_objects_in_view(ents, view_mat);
+	std::vector<GameEntity*> entsInView = ents;//get_objects_in_view(ents, view_mat);
 	glUseProgram(getProgramID());
 
 	glEnable(GL_DEPTH_TEST);
