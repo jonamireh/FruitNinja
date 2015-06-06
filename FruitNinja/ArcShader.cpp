@@ -83,6 +83,6 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 	glDrawElementsInstanced(GL_TRIANGLES, a_camera->particle->indices.size(), GL_UNSIGNED_INT, 0, NUM_INSTANCES);
 	
 	translations.clear();
-	glDisableVertexAttribArray(0);
+	//glDisableVertexAttribArray(0);
 	glBindVertexArray(0);
 }
