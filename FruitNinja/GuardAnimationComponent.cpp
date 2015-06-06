@@ -2,10 +2,14 @@
 #include "GameEntity.h"
 #include "GuardEntity.h"
 
-GuardAnimationComponent::GuardAnimationComponent(GameEntity* guard) : basicAnimation(guard)
+GuardAnimationComponent::GuardAnimationComponent(GameEntity* guard, GAnimationState state) : basicAnimation(guard)
 {
-	basicAnimation.changeToLoopingAnimation(WALKIN_START, WALKIN_START + WALKIN_DURATION);
-	currentAnimtion = WALKIN;
+	currentAnimtion = state;
+	if (currentAnimtion == WALKIN) {
+		basicAnimation.changeToLoopingAnimation(WALKIN_START, WALKIN_START + WALKIN_DURATION);
+	} else {
+		basicAnimation.changeToLoopingAnimation(IDLE_START, IDLE_START + IDLE_DURATION);
+	}
 	this->guard = guard;
 }
 

@@ -16,12 +16,15 @@ GuardEntity::GuardEntity() : move_component(*this, vector<vec3>(), 0.f, false), 
 }
 
 
-GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve) : GameEntity(position, mesh, true), move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(this)
+GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points,
+	float move_speed, bool linear_curve) : GameEntity(position, mesh, true),
+	move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(this, WALKIN)
 {
 	current_animation = mesh->getAnimations()[0];
 }
 
-GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir) : GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), animComponent(this), move_component(*this, dir)
+GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir)
+	: GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), animComponent(this, IDLE), move_component(*this, dir)
 {
 	current_animation = mesh->getAnimations()[0];
 	static_movement = true;
