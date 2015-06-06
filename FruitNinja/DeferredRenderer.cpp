@@ -21,6 +21,7 @@ DeferredRenderer::DeferredRenderer(std::string vertShader, std::string fragShade
 	size_handle = getUniformHandle("uSize");
 	position_handle = getAttributeHandle("aPosition");
 	light_pos_handle = getUniformHandle("uLightPos");
+	light_color_handle = getUniformHandle("uLightColor");
 }
 
 //failed attempt
@@ -53,8 +54,10 @@ void DeferredRenderer::pointLightPass(Camera* camera, Light* light)
 
 	vec3 eye = camera->cameraPosition;
 	vec3 light_pos = light->pos;
+	vec3 light_color = light->color;
 	glUniform3f(eye_handle, eye.x, eye.y, eye.z);
 	glUniform3f(light_pos_handle, light_pos.x, light_pos.y, light_pos.z);
+	glUniform3f(light_color_handle, light_color.x, light_color.y, light_color.z);
 	glUniform2f(size_handle, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 
 	glUniformMatrix4fv(model_handle, 1, GL_FALSE, value_ptr(light->transform()));

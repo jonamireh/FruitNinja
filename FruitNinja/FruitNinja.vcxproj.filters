@@ -172,6 +172,9 @@
     <ClCompile Include="ShadowBufferShader.cpp">
       <Filter>DeferredShader</Filter>
     </ClCompile>
+    <ClCompile Include="ButtonEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -371,6 +374,9 @@
     </ClInclude>
     <ClInclude Include="ShadowBufferShader.h">
       <Filter>DeferredShader</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonEntity.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

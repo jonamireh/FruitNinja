@@ -73,6 +73,7 @@ public:
 
     void setup_next_courtyard();
     void setup_cinematic_camera(string file_path);
+    void setup_level(string file_path);
 private:
     DebugCamera* debug_camera;
     ArcheryCamera* archery_camera;
@@ -82,7 +83,7 @@ private:
 	HUD* hud;
 	void init();
     int current_courtyard = 1;
-    void setup_level(string file_path);
+    
     void setup_token(char obj_to_place, glm::vec3 file_index);
     void setup_guard(string file_path);
     void shootArrows();
