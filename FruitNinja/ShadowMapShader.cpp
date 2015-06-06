@@ -28,13 +28,16 @@ ShadowMapShader::ShadowMapShader(std::string vertShader, std::string fragShader,
 
 void ShadowMapShader::shadowMapPass(Light* light, std::vector<std::shared_ptr<GameEntity>> ents)
 {
+	glViewport(0, 0, shadowMapBuffer->shadow_map_size, shadowMapBuffer->shadow_map_size);
 	glUseProgram(getProgramID());
 
+	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
+	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 	glClearColor(FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX);
 
-	mat4 proj = perspective((float)radians(90.0f), 1.0f, 0.5f, 20.0f);
+	mat4 proj = perspective((float)radians(90.0f), 1.0f, 0.1f, 40.0f);
 
 	for (int i = 0; i < 6; i++) {
 		shadowMapBuffer->bind_for_writing(gCameraDirections[i].cubemap_face);
@@ -83,6 +86,7 @@ void ShadowMapShader::shadowMapPass(Light* light, std::vector<std::shared_ptr<Ga
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glUseProgram(0);
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void ShadowMapShader::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents)

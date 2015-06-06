@@ -53,11 +53,11 @@ vec4 calcPointLight(vec3 worldPos, vec3 normal)
 
 	float sampledDistance = texture(shadowMap, lightDir).r;
 
-	/*if (distance - .005 > sampledDistance) {
+	if (sampledDistance < distance + .00001) {
 		return vec4(0.0, 0.0, 0.0, 1.0);
-	}*/
+	}
 
-    vec4 color = vec4(vec3(sampledDistance), 1.0) + calcLightInternal(lightDir, worldPos, normal) * 0.000001;
+    vec4 color = calcLightInternal(lightDir, worldPos, normal);
 
     float attenuation =  CONSTANT + LINEAR * distance + EXPONENTIAL * distance * distance;
 

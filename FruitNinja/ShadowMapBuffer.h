@@ -11,6 +11,8 @@ public:
 	void bind_for_reading_fb(GLenum cube_face);
 	void dump_to_screen();
 
+	const int shadow_map_size = 512;
+
 private:
 	GLuint m_fbo;
 	GLuint m_shadowMap;
