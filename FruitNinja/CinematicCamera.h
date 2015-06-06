@@ -10,7 +10,7 @@ public:
 	~CinematicCamera();
 	void init(std::vector<glm::vec3> position_points, std::vector<glm::vec3> lookAt_points, float move_speed);
 	void mouse_update();
-	void movement(std::shared_ptr<GameEntity> chewy);
+	void movement(GameEntity* chewy) override;
 	glm::mat4 getViewMatrix();
 
 	CinematicPathingComponent pathing;

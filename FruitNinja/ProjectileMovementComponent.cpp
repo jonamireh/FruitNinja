@@ -5,8 +5,7 @@
 //#include <GLFW/glfw3.h>
 
 void ProjectileMovementComponent::update()
-{
-	
+{	
 	if (!entity.shot) {
 		entity.setPosition(camera->cameraPosition);
 		velocity = camera->cameraFront * ARROW_SPEED * bow_strength;

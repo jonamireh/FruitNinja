@@ -10,6 +10,6 @@ public:
 	ArcheryCamera();
 	~ArcheryCamera();
     void mouse_update();
-    void movement(std::shared_ptr<GameEntity> chewy);
+    void movement(GameEntity* chewy) override;
 	Mesh* particle;
 };

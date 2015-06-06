@@ -17,7 +17,7 @@ ArcShader::ArcShader(std::string vertShader, std::string fragShader) : Shader(ve
 }
 
 
-void ArcShader::draw(shared_ptr<ArcheryCamera> a_camera)
+void ArcShader::draw(ArcheryCamera* a_camera)
 {
 	int currentId;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &currentId);

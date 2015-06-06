@@ -44,7 +44,7 @@ void DebugCamera::mouse_update()
 /**
 Call this at the end of the draw loop to update for strafing.
 */
-void DebugCamera::movement(shared_ptr<GameEntity> chewy)
+void DebugCamera::movement(GameEntity* chewy)
 {
     float cameraSpeed = 1.;
 

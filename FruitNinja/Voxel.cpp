@@ -16,33 +16,33 @@ Voxel::Voxel(vec3 lower, vec3 upper)
     voxel_entity_box = EntityBox(voxel_center, fabs(upper_bound.x - lower_bound.x), fabs(upper_bound.y - lower_bound.y), fabs(upper_bound.z - lower_bound.z));
 }
 
-shared_ptr<vector<pair<vec3, vec3>>> Voxel::get_line_segments()
+vector<pair<vec3, vec3>> Voxel::get_line_segments()
 {
-    shared_ptr<vector<pair<vec3, vec3>>> toReturn(new vector<pair<vec3, vec3>>());
+    vector<pair<vec3, vec3>> toReturn;
 
     vec3 current_point = lower_bound;
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, upper_bound.z)));
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, upper_bound.y, current_point.z)));
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(upper_bound.x, current_point.y, current_point.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, upper_bound.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, upper_bound.y, current_point.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(upper_bound.x, current_point.y, current_point.z)));
 
     current_point = vec3(lower_bound.x, lower_bound.y, upper_bound.z);
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, upper_bound.y, current_point.z)));
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(upper_bound.x, current_point.y, current_point.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, upper_bound.y, current_point.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(upper_bound.x, current_point.y, current_point.z)));
 
     current_point = vec3(lower_bound.x, upper_bound.y, lower_bound.z);
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, upper_bound.z)));
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(upper_bound.x, current_point.y, current_point.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, upper_bound.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(upper_bound.x, current_point.y, current_point.z)));
 
     current_point = upper_bound;
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, lower_bound.z)));
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, lower_bound.y, current_point.z)));
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(lower_bound.x, current_point.y, current_point.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, lower_bound.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, lower_bound.y, current_point.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(lower_bound.x, current_point.y, current_point.z)));
 
     current_point = vec3(upper_bound.x, upper_bound.y, lower_bound.z);
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, lower_bound.y, current_point.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, lower_bound.y, current_point.z)));
 
     current_point = vec3(upper_bound.x, lower_bound.y, upper_bound.z);
-    toReturn->push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, lower_bound.z)));
+    toReturn.push_back(pair<vec3, vec3>(current_point, vec3(current_point.x, current_point.y, lower_bound.z)));
 
     return toReturn;
 }
@@ -85,7 +85,7 @@ std::vector<Voxel> Voxel::split()
     return boxes;
 }
 
-bool Voxel::contains(shared_ptr<GameEntity> entity)
+bool Voxel::contains(GameEntity* entity)
 {
     return (voxel_entity_box.box_collision(entity->bounding_box));
 }

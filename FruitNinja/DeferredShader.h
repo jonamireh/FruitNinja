@@ -20,27 +20,27 @@ enum DisplayMode
 class DeferredShader : public Shader
 {
 public:
-	DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox);
+	DeferredShader(std::string vertShader, std::string fragShader, Skybox* skybox);
 	~DeferredShader();
-	virtual void draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights);
-	void draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity);
+	virtual void draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights) override;
+	void draw(glm::mat4& view_mat, GameEntity* entity);
 
 
 private:
-	void geomPass(glm::mat4& view_mat, std::vector<std::shared_ptr<GameEntity>> ents);
+	void geomPass(glm::mat4& view_mat, std::vector<GameEntity*> ents);
 	void lightPass();
 	GBuffer gbuffer;
 	void startLightPasses();
 	void finalPass();
-	void skyboxPass(std::shared_ptr<Camera> camera);
-	void particlePass(std::shared_ptr<Camera> camera, std::vector<Light*> lights);
-	std::shared_ptr<Skybox> skybox;
+	void skyboxPass(Camera* camera);
+	void particlePass(Camera* camera, std::vector<Light*> lights);
+	Skybox* skybox;
 	SimpleTextureShader skyShader;
 	ParticleShader fireShader;
 	vector<Emitter*> emitters;
 
 	ArcShader arcShader;
-	void archeryArcPass(std::shared_ptr<Camera> camera);
+	void archeryArcPass(Camera* camera);
 
 	DeferredRenderer renderer;
 	DisplayMode disp_mode;

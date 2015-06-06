@@ -55,7 +55,7 @@ void ArcheryCamera::mouse_update()
 /**
 Call this at the end of the draw loop to update for strafing.
 */
-void ArcheryCamera::movement(shared_ptr<GameEntity> chewy) {
+void ArcheryCamera::movement(GameEntity* chewy) {
     mouse_update();
 
     // Should set the Archery Camera to be at chewy but slightly to the right?

@@ -31,7 +31,7 @@ TextureDebugShader::~TextureDebugShader()
 {
 }
 
-void TextureDebugShader::draw(glm::mat4 & view_mat, std::shared_ptr<GameEntity> entity)
+void TextureDebugShader::draw(glm::mat4 & view_mat, GameEntity* entity)
 {	
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
@@ -65,17 +65,20 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	glUseProgram(getProgramID());
 	
 	glViewport(xloc, yloc, width, height);
-
+	check_gl_error("TextureDebugShader error part");
 	glBindVertexArray(VAO);
-
+	check_gl_error("TextureDebugShader error part 2");
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
+	check_gl_error("TextureDebugShader error part 2.5555");
 	glBindTexture(GL_TEXTURE_2D, textureId);
+	check_gl_error("TextureDebugShader error part 3");
 	// Set our "renderedTexture" sampler to user Texture Unit 0
 	glUniform1i(getUniformHandle("uTexture"), 0);
 
 	glUniform1f(getUniformHandle("percent"), percent);
 
+	check_gl_error("TextureDebugShader error before");
 	// Draw the triangles !
 	// You have to disable GL_COMPARE_R_TO_TEXTURE above in order to see anything !
 	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
@@ -84,7 +87,7 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	glBindVertexArray(0);
 	glUseProgram(0);
 
-	check_gl_error("TextureDebugShader error");
+	check_gl_error("TextureDebugShader error after");
 }
 
 void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height)

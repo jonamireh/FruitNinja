@@ -7,22 +7,22 @@
 using namespace glm;
 using namespace std;
 
-vec3 forwardDirection(std::shared_ptr<Camera> camera)
+vec3 forwardDirection(Camera* camera)
 {
 	return normalize(camera->cameraFront);
 }
 
-vec3 backDirection(std::shared_ptr<Camera> camera)
+vec3 backDirection(Camera* camera)
 {
 	return normalize(camera->cameraFront) * -1.0f;
 }
 
-vec3 rightDirection(std::shared_ptr<Camera> camera)
+vec3 rightDirection(Camera* camera)
 {
 	return normalize(cross(camera->cameraFront, vec3(0.0, 1.0, 0.0)));
 }
 
-vec3 leftDirection(std::shared_ptr<Camera> camera)
+vec3 leftDirection(Camera* camera)
 {
 	return normalize(cross(camera->cameraFront, vec3(0.0, 1.0, 0.0))) * -1.0f;
 }

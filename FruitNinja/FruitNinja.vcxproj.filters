@@ -127,9 +127,6 @@
     <ClCompile Include="PlayerCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionHandler.h">
-      <Filter>Headers</Filter>
-    </ClCompile>
     <ClCompile Include="EntityBox.cpp">
       <Filter>Source</Filter>
     </ClCompile>

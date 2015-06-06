@@ -231,12 +231,12 @@ bool Shader::check_gl_error(std::string msg) {
 	return false;
 }
 
-void Shader::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)
+void Shader::draw(glm::mat4& view_mat, GameEntity* entity)
 {
 	std::cout << "I'm not drawing" << std::endl;
 }
 
-void Shader::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights)
+void Shader::draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights)
 {
 	std::cout << "I'm sorry :(" << std::endl;
 }

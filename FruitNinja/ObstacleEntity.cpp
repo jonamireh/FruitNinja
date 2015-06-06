@@ -5,7 +5,7 @@ ObstacleEntity::ObstacleEntity()
 }
 
 
-ObstacleEntity::ObstacleEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh) : GameEntity(position, mesh)
+ObstacleEntity::ObstacleEntity(glm::vec3 position, MeshSet* mesh) : GameEntity(position, mesh)
 {
     //collision_response = true;
 }
@@ -14,7 +14,7 @@ void ObstacleEntity::update()
 {
 }
 
-void ObstacleEntity::collision(std::shared_ptr<GameEntity> entity)
+void ObstacleEntity::collision(GameEntity* entity)
 {
     //if (!collision_response)
     //    return;

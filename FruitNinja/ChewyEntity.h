@@ -9,9 +9,9 @@ class ChewyEntity : public GameEntity
 {
 public:
 	ChewyEntity();
-	ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> player_cam, std::shared_ptr<Camera> archery_cam);
+	ChewyEntity(glm::vec3 position, MeshSet* mesh, Camera* player_cam, Camera* archery_cam);
 	void update();
-	void collision(std::shared_ptr<GameEntity> entity);
+	void collision(GameEntity* entity) override;
 	void set_material(Material material);
     bool _falling;
 	ChewyMovementComponent moveComponent;

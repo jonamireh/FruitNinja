@@ -11,7 +11,7 @@ PhongShader::PhongShader(std::string vertShader, std::string fragShader) : Shade
 }
 
 
-void PhongShader::draw(mat4& view_mat, shared_ptr<GameEntity> entity)
+void PhongShader::draw(mat4& view_mat, GameEntity* entity)
 {
 	//int texture = getAttributeHandle("aTextCoord");
 	

@@ -8,5 +8,5 @@ class SimpleTextureShader : public Shader
 {
 public:
 	SimpleTextureShader(std::string vertShader, std::string fragShader);
-	void draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity) override;
+	void draw(glm::mat4& view_mat, GameEntity* entity) override;
 };

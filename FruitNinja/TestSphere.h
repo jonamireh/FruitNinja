@@ -8,7 +8,7 @@ class TestSphere :
 	BasicAnimationComponent animComponent;
 public:
 	void update() override;
-	TestSphere(std::shared_ptr<MeshSet> mesh);
+	TestSphere(MeshSet* mesh);
 	~TestSphere();
 };
 

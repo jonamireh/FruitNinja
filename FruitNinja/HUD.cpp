@@ -4,24 +4,27 @@
 
 HUD::HUD() {}
 
-HUD::HUD(std::shared_ptr<ChewyEntity> chewy)
+HUD::HUD(ChewyEntity* chewy)
 {
 	this->chewy = chewy;
 	shader = TextureDebugShader();
 	tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(assetPath + "arrowHUD.png");
 	bmp.flipVertically();
-	arrow_hud = std::shared_ptr<tdogl::Texture>(new tdogl::Texture(bmp, GL_LINEAR, GL_CLAMP_TO_EDGE));
+	arrow_hud = new tdogl::Texture(bmp, GL_LINEAR, GL_CLAMP_TO_EDGE);
 	bmp = tdogl::Bitmap::bitmapFromFile(assetPath + "powerBarFrame.png");
 	bmp.flipVertically();
-	power_bar_frame = std::shared_ptr<tdogl::Texture>(new tdogl::Texture(bmp, GL_LINEAR, GL_CLAMP_TO_EDGE));
+	power_bar_frame = new tdogl::Texture(bmp, GL_LINEAR, GL_CLAMP_TO_EDGE);
 	bmp = tdogl::Bitmap::bitmapFromFile(assetPath + "powerBarBar.png");
 	bmp.flipVertically();
-	power_bar_bar = std::shared_ptr<tdogl::Texture>(new tdogl::Texture(bmp, GL_LINEAR, GL_CLAMP_TO_EDGE));
+	power_bar_bar = new tdogl::Texture(bmp, GL_LINEAR, GL_CLAMP_TO_EDGE);
 }
 
 
 HUD::~HUD()
 {
+	delete arrow_hud;
+	delete power_bar_frame;
+	delete power_bar_bar;
 }
 
 void HUD::draw()

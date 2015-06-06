@@ -37,7 +37,8 @@ void BasicAnimationComponent::update()
 		for (int j = 0; j < entityMeshses[i]->bones.size(); j++)
 		{
 			string boneName = entityMeshses[i]->bones[j].mName.C_Str();
-			entityMeshses[i]->boneTransformations.push_back(convertAiMatrix4x4ToMat4(entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));
+			entityMeshses[i]->boneTransformations.push_back(convertAiMatrix4x4ToMat4(
+				entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));
 		}
 	}
 }
@@ -222,7 +223,7 @@ BasicAnimationComponent::BasicAnimationComponent(GameEntity *entity)
 {
 	this->entity = entity;
 	starting_frame_time = 1.0 / FRAMES_PER_SEC;
-	end_frame_time = entity->mesh->getAnimations().at(0).mDuration;
+	end_frame_time = entity->mesh->getAnimations().at(0)->mDuration;
 	looping = true;
 }
 

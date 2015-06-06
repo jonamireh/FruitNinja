@@ -7,7 +7,7 @@
 
 class Light {
 public:
-	Light(glm::vec3 pos, glm::vec3 color, float intensity, std::shared_ptr<MeshSet> mesh) : pos(pos), color(color), intensity(intensity),
+	Light(glm::vec3 pos, glm::vec3 color, float intensity, MeshSet* mesh) : pos(pos), color(color), intensity(intensity),
 		mesh(mesh), scale(calc_scale_mat()){}
 	glm::vec3 pos;
 	glm::vec3 color;

@@ -32,8 +32,8 @@ public:
 	GLint getUniformBlockHandle(std::string name);
 	GLuint getProgramID();
 
-	virtual void draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity);
-	virtual void draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights);
+	virtual void draw(glm::mat4& view_mat, GameEntity* entity);
+	virtual void draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights);
 
 
 	bool check_gl_error(std::string msg);

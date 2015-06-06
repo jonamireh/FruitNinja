@@ -11,11 +11,11 @@ class ProjectileEntity : public GameEntity
 public:
 	ProjectileEntity();
 	virtual ~ProjectileEntity();
-	ProjectileEntity(std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> camera);
+	ProjectileEntity(MeshSet* mesh, Camera* camera);
 	void update() override;
-	std::shared_ptr<GameEntity> owner;
+	GameEntity* owner;
 	virtual glm::mat4 getModelMat() override;
-	void collision(std::shared_ptr<GameEntity> bb) override;
+	void collision(GameEntity* bb) override;
 	bool shot;
 	glm::mat4 rot;
 	float timeLeft;

@@ -173,7 +173,6 @@
     <ClCompile Include="ChewyAnimationComponent.cpp" />
     <ClCompile Include="CinematicCamera.cpp" />
     <ClCompile Include="CinematicPathingComponent.cpp" />
-    <ClCompile Include="CollisionHandler.h" />
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="DeferredRenderer.cpp" />
     <ClCompile Include="DeferredShader.cpp" />

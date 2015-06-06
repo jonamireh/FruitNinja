@@ -9,7 +9,7 @@ using namespace std;
 
 
 
-DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, std::shared_ptr<Skybox> skybox)
+DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, Skybox* skybox)
 	: Shader(vertShader, fragShader), skybox(skybox), gbuffer(), skyShader("simpleVert.glsl", "simpleFrag.glsl"),
 	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred),
 	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl"), arcShader("arcVertex.glsl", "arcFrag.glsl")
@@ -30,7 +30,7 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, s
 	UdColorHandle = getUniformHandle("UdColor");
 }
 
-void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEntity>> ents)
+void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 {
 	check_gl_error("Before geom pass");
 
@@ -104,7 +104,7 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<std::shared_ptr<GameEn
 
 
 
-void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights)
+void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights)
 {
 	gbuffer.StartFrame();
 	geomPass(camera->getViewMatrix(), ents);
@@ -127,7 +127,7 @@ void DeferredShader::draw(std::shared_ptr<Camera> camera, std::vector<std::share
 		disp_mode = four_screen;
 }
 
-void DeferredShader::particlePass(std::shared_ptr<Camera> camera, std::vector<Light*> lights) {
+void DeferredShader::particlePass(Camera* camera, std::vector<Light*> lights) {
 	glUseProgram(fireShader.getProgramID());
 
 	glEnable(GL_DEPTH_TEST);
@@ -136,8 +136,8 @@ void DeferredShader::particlePass(std::shared_ptr<Camera> camera, std::vector<Li
 	fireShader.draw(camera, emitters, lights);
 }
 
-void DeferredShader::archeryArcPass(std::shared_ptr<Camera> camera) {
-	shared_ptr<ArcheryCamera> a_test = dynamic_pointer_cast<ArcheryCamera>(camera);
+void DeferredShader::archeryArcPass(Camera* camera) {
+	ArcheryCamera* a_test = dynamic_cast<ArcheryCamera*>(camera);
 	if (a_test != nullptr)
 	{
 		glUseProgram(arcShader.getProgramID());
@@ -152,7 +152,7 @@ void DeferredShader::archeryArcPass(std::shared_ptr<Camera> camera) {
 	}
 }
 
-void DeferredShader::skyboxPass(std::shared_ptr<Camera> camera)
+void DeferredShader::skyboxPass(Camera* camera)
 {
 	glUseProgram(skyShader.getProgramID());
 
@@ -181,7 +181,7 @@ void DeferredShader::startLightPasses()
 }
 
 
-void DeferredShader::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)
+void DeferredShader::draw(glm::mat4& view_mat, GameEntity* entity)
 {
 	std::cout << "Fuck you\n";
 }

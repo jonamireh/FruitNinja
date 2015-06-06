@@ -4,10 +4,10 @@
 
 class Skybox : public GameEntity
 {
-	std::shared_ptr<Camera>* _camera;
+	Camera** _camera;
 public:
 	void update() override;
-	Skybox(std::shared_ptr<Camera>* camera, std::shared_ptr<MeshSet> mesh);
+	Skybox(Camera** camera, MeshSet* mesh);
 	~Skybox();
 };
 

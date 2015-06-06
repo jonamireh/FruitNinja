@@ -12,10 +12,10 @@
 class ChewyMovementComponent : public Component
 {
 public:
-	ChewyMovementComponent(GameEntity& entity, std::shared_ptr<Camera> player_cam, std::shared_ptr<Camera> archery_cam) : entity(entity), player_cam(player_cam), archery_cam(archery_cam) {}
+	ChewyMovementComponent(GameEntity& entity, Camera* player_cam, Camera* archery_cam) : entity(entity), player_cam(player_cam), archery_cam(archery_cam) {}
 	void update();
 	glm::vec3 direction;
 	GameEntity& entity;
-	std::shared_ptr<Camera> player_cam;
-	std::shared_ptr<Camera> archery_cam;
+	Camera* player_cam;
+	Camera* archery_cam;
 };

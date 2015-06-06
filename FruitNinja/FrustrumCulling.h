@@ -30,10 +30,10 @@ static int PlaneAABBIntersect(EntityBox bb, glm::vec4& p)
 	return 2;
 }
 
-static std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<std::shared_ptr<GameEntity>> entities, glm::mat4& view_mat, bool chewy_check = false)
+static std::vector<GameEntity*> get_objects_in_view(std::vector<GameEntity*> entities, glm::mat4& view_mat, bool chewy_check = false)
 {
 	glm::vec4 p_planes[6];
-	std::vector<std::shared_ptr<GameEntity>> toReturn;
+	std::vector<GameEntity*> toReturn;
 	glm::mat4 combo_mat;
 	if (chewy_check)
 		combo_mat = guard_projection * view_mat;
@@ -76,7 +76,7 @@ static std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<
 	for (int i = 0; i < entities.size(); i++)
 	{
 		bool in_frustrum = true;
-		shared_ptr<GameEntity> entity = entities.at(i);
+		GameEntity* entity = entities.at(i);
 		if ((chewy_check && HIDE_BEHIND(entity->list)) || !chewy_check)
 		{
 			for (int j = 0; j < 6; j++)
@@ -93,7 +93,7 @@ static std::vector<std::shared_ptr<GameEntity>> get_objects_in_view(std::vector<
 			}
 			else
 			{
-				shared_ptr<ChewyEntity> chewy = dynamic_pointer_cast<ChewyEntity>(entity);
+				ChewyEntity* chewy = dynamic_cast<ChewyEntity*>(entity);
 				if (chewy != nullptr)
 				{
 					chewy_not_found = true;

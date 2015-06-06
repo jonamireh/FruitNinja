@@ -13,7 +13,7 @@
 using namespace glm;
 using namespace std;
 
-GameEntity::GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response) : mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f)),
+GameEntity::GameEntity(glm::vec3 position, MeshSet* mesh, bool collision_response) : mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f)),
 collision_response(collision_response)
 {
     setup_entity_box();
@@ -105,7 +105,7 @@ void GameEntity::setup_entity_box()
     bounding_box.half_depth = glm::distance(lower_bound.z, upper_bound.z) / 2.f;
 }
 
-void GameEntity::setup_entity_box(std::shared_ptr<MeshSet> mesh)
+void GameEntity::setup_entity_box(MeshSet* mesh)
 {
     vector<Mesh*> meshes = mesh->getMeshes();
     vec3 lower_bound(FLT_MAX, FLT_MAX, FLT_MAX);
@@ -137,7 +137,7 @@ void GameEntity::setup_entity_box(std::shared_ptr<MeshSet> mesh)
     bounding_box.center.y += bounding_box.half_height;
 }
 
-void GameEntity::collision(std::shared_ptr<GameEntity> entity)
+void GameEntity::collision(GameEntity* entity)
 {
     
 }

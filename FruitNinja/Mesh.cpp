@@ -23,7 +23,7 @@ bool Mesh::checkError(std::string msg)
 Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalData, std::vector<GLuint>* indexData, aiMaterial* material,
 	std::vector<TextureData>* textureData, std::vector<glm::vec2>* textureCoordinates, std::vector<aiBone>* boneData,
 	std::vector<glm::ivec4>* boneIdData1, std::vector<glm::vec4>* boneWeightData1,
-	std::vector<aiAnimation> *animationData)
+	std::vector<aiAnimation*> *animationData)
 {
 	verts = *vertexData;
 	normals = *normalData;
@@ -42,7 +42,7 @@ Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalDat
 	if (textureCoordinates)
 		texCoords = *textureCoordinates;
 	if (animationData)
-		animations = *animationData;
+		animations = animationData;
 
 	aiColor4D color(0.f, 0.f, 0.f, 0.f);
 	aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &color);

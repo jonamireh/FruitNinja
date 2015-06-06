@@ -6,16 +6,16 @@
 
 using namespace glm;
 
-ChewyEntity::ChewyEntity() : moveComponent(*this, std::shared_ptr<Camera>(new PlayerCamera()),
-	std::shared_ptr<Camera>(new PlayerCamera())), animComponent(this), isCaught(false)
+ChewyEntity::ChewyEntity() : moveComponent(*this, new PlayerCamera(),
+	new PlayerCamera()), animComponent(this), isCaught(false)
 {
 	
 }
 
-ChewyEntity::ChewyEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::shared_ptr<Camera> player_cam, std::shared_ptr<Camera> archery_cam)
+ChewyEntity::ChewyEntity(glm::vec3 position, MeshSet* mesh, Camera* player_cam, Camera* archery_cam)
 	: GameEntity(position, mesh, true), moveComponent(*this, player_cam, archery_cam), animComponent(this), isCaught(false)
 {
-	current_animation = &mesh->getAnimations()[0];
+	current_animation = mesh->getAnimations()[0];
 }
 
 void ChewyEntity::update()
@@ -41,7 +41,7 @@ void ChewyEntity::set_material(Material material)
 	}
 }
 
-void ChewyEntity::collision(std::shared_ptr<GameEntity> entity)
+void ChewyEntity::collision(GameEntity* entity)
 {
     // if no collision then stop.
     if (!entity->bounding_box.box_collision(bounding_box))

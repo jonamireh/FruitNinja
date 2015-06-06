@@ -27,7 +27,7 @@ public:
 	void processAnimations();
 	~MeshSet();
 	std::vector<Mesh*>& getMeshes();
-	std::vector<aiAnimation>& getAnimations();
+	std::vector<aiAnimation*>& getAnimations();
 	std::map<std::string, BoneInfo*> boneInfo;
 	aiNode *bone_tree;
 	aiMatrix4x4 inverseMat;
@@ -36,7 +36,7 @@ private:
 	void processMesh(aiMesh* mesh, const aiScene* scene, GLuint texInterpolation, GLuint texWrap);
 	unsigned int loadTexture(const char* filename, int width, int height);
 	std::vector<Mesh*> meshes;
-	std::vector<aiAnimation> animations;
+	std::vector<aiAnimation*> animations;
 	//to avoid a memory leak 
 	std::vector<tdogl::Texture*> texturesToDel;
 	static std::map<std::string, GLuint> savedTextures;

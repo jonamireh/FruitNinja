@@ -9,7 +9,7 @@ class DoorEntity : public GameEntity
 public:
     bool open;
     DoorEntity();
-    DoorEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool open, World* world);
+    DoorEntity(glm::vec3 position, MeshSet* mesh, bool open, World* world);
     void update();
-    void collision(std::shared_ptr<GameEntity> entity) override;
+    void collision(GameEntity* entity) override;
 };

@@ -6,7 +6,7 @@ class ObstacleEntity : public GameEntity
 {
 public:
     ObstacleEntity();
-    ObstacleEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh);
+    ObstacleEntity(glm::vec3 position, MeshSet* mesh);
     void update();
-    void collision(std::shared_ptr<GameEntity> entity) override;
+    void collision(GameEntity* entity) override;
 };

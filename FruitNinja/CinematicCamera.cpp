@@ -39,7 +39,7 @@ void CinematicCamera::mouse_update()
 /**
 Call this at the end of the draw loop to update for strafing.
 */
-void CinematicCamera::movement(shared_ptr<GameEntity> chewy)
+void CinematicCamera::movement(GameEntity* chewy)
 {
 	pair<vec3, vec3> direction = pathing.get_direction();
 	float move_speed = pathing.get_move_speed();

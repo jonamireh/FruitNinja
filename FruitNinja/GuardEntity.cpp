@@ -16,14 +16,14 @@ GuardEntity::GuardEntity() : move_component(*this, vector<vec3>(), 0.f, false), 
 }
 
 
-GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve) : GameEntity(position, mesh, true), move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(this)
+GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve) : GameEntity(position, mesh, true), move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(this)
 {
-	current_animation = &mesh->getAnimations()[0];
+	current_animation = mesh->getAnimations()[0];
 }
 
-GuardEntity::GuardEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, glm::vec3 dir) : GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), animComponent(this), move_component(*this, dir)
+GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir) : GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), animComponent(this), move_component(*this, dir)
 {
-	current_animation = &mesh->getAnimations()[0];
+	current_animation = mesh->getAnimations()[0];
 	static_movement = true;
 }
 
@@ -85,15 +85,15 @@ pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 		return pair<bool, float>(false, tMax);
 }
 
-bool GuardEntity::check_view(shared_ptr<ChewyEntity> chewy, std::vector<std::shared_ptr<GameEntity>> entities)
+bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entities)
 {
 	vec3 lookAt = bounding_box.center + 2.f * move_component.direction;
     mat4 view = glm::lookAt(bounding_box.center + move_component.direction, lookAt, vec3(0.f, 1.f, 0.f));
 
-	vector<shared_ptr<GameEntity>> just_chewy;
+	vector<GameEntity*> just_chewy;
 	just_chewy.push_back(chewy);
 
-	vector<shared_ptr<GameEntity>> entities_in_view = get_objects_in_view(just_chewy, view, true);
+	vector<GameEntity*> entities_in_view = get_objects_in_view(just_chewy, view, true);
 
 	if (entities_in_view.size() > 0)
 	{

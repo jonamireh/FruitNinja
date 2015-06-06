@@ -9,7 +9,7 @@ class ArcShader : public Shader
 {
 public:
 	ArcShader(std::string vertShader, std::string fragShader);
-	void draw(std::shared_ptr<ArcheryCamera> a_camera);
+	void draw(ArcheryCamera* a_camera);
 	GLuint VBO;
 	std::vector<glm::mat4> translations;
 };

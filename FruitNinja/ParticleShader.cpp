@@ -26,15 +26,15 @@ ParticleShader::ParticleShader(std::string vertShader, std::string geomShader, s
 	texture_handle = getUniformHandle("Utex");
 }
 
-void ParticleShader::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights) {
+void ParticleShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights) {
 	printf("Don't call this\n");
 }
 
-void ParticleShader::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity) {
+void ParticleShader::draw(glm::mat4& view_mat, GameEntity* entity) {
 	printf("Don't call this either\n");
 }
 
-void ParticleShader::draw(std::shared_ptr<Camera> camera, vector<Emitter*> emitters, std::vector<Light*> lights) {
+void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector<Light*> lights) {
 
 	check_gl_error("Particle beginning of draw function");
 

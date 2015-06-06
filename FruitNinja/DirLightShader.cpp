@@ -43,16 +43,16 @@ DirLightShader::DirLightShader(GBuffer* gbuffer) : Shader("lightVert.glsl", "dir
 
 DirLightShader::~DirLightShader() {}
 
-void DirLightShader::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights)
+void DirLightShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights)
 {
 	
 }
-void DirLightShader::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)
+void DirLightShader::draw(glm::mat4& view_mat, GameEntity* entity)
 {
 	
 }
 
-void DirLightShader::pass(std::shared_ptr<Camera> camera)
+void DirLightShader::pass(Camera* camera)
 {
 	gbuffer->BindForLightPass();
 

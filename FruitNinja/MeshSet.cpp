@@ -137,7 +137,7 @@ MeshSet::MeshSet(std::string filename, GLuint texInterpolation, GLuint texWrap) 
 	}
 	for (int i = 0; i < scene->mNumAnimations; i++)
 	{
-		animations.push_back(*scene->mAnimations[i]);
+		animations.push_back(scene->mAnimations[i]);
 	}
 	bone_tree = scene->mRootNode;
 	inverseMat = scene->mRootNode->mTransformation;
@@ -160,10 +160,10 @@ void MeshSet::processAnimations()
 {
 	for (int i = 0; i < animations.size(); i++)
 	{
-		for (int j = 0; j < animations[i].mNumChannels; j++)
+		for (int j = 0; j < animations[i]->mNumChannels; j++)
 		{
-			BoneInfo *info = boneInfo.at(animations[i].mChannels[j]->mNodeName.C_Str());
-			info->bone_anim->insert(std::pair<aiAnimation*, aiNodeAnim*>(&animations[i], animations[i].mChannels[j]));
+			BoneInfo *info = boneInfo.at(animations[i]->mChannels[j]->mNodeName.C_Str());
+			info->bone_anim->insert(std::pair<aiAnimation*, aiNodeAnim*>(animations[i], animations[i]->mChannels[j]));
 		}
 	}
 }
@@ -179,7 +179,7 @@ std::vector<Mesh*>& MeshSet::getMeshes() {
 	return meshes;
 }
 
-std::vector<aiAnimation>& MeshSet::getAnimations()
+std::vector<aiAnimation*>& MeshSet::getAnimations()
 {
 	return animations;
 }

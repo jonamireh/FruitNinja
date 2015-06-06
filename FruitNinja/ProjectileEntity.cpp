@@ -8,7 +8,7 @@
 #define SHOOT_TIME_SPEED 0.5
 
 
-ProjectileEntity::ProjectileEntity() : movement(*this, std::make_shared<ArcheryCamera>()), shot(false), timeLeft(5.0f)
+ProjectileEntity::ProjectileEntity() : movement(*this, new ArcheryCamera()), shot(false), timeLeft(5.0f)
 {
 }
 
@@ -20,8 +20,8 @@ ProjectileEntity::~ProjectileEntity()
 
 
 
-ProjectileEntity::ProjectileEntity(std::shared_ptr<MeshSet> mesh,
-	std::shared_ptr<Camera> camera) : GameEntity(glm::vec3(0, 0, 0), mesh, true), movement(*this, camera), shot(false), timeLeft(ARROW_LIFE_SPAN)
+ProjectileEntity::ProjectileEntity(MeshSet* mesh, Camera* camera)
+	: GameEntity(glm::vec3(0, 0, 0), mesh, true), movement(*this, camera), shot(false), timeLeft(ARROW_LIFE_SPAN)
 {
 	game_speed = SHOOT_TIME_SPEED;
 }
@@ -47,7 +47,7 @@ glm::mat4 ProjectileEntity::getModelMat()
 
 	return model_trans * rot * model_scale;
 }
-void ProjectileEntity::collision(std::shared_ptr<GameEntity> entity)
+void ProjectileEntity::collision(GameEntity* entity)
 {
 	if (entity->bounding_box.box_collision(bounding_box)) {
 		if (typeid(*entity) == typeid(LightEntity) || typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity)) {

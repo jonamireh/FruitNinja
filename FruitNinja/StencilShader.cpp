@@ -10,7 +10,7 @@ StencilShader::StencilShader(std::string vertShader, std::string fragShader)
 	proj_handle = getUniformHandle("uProjMatrix");
 }
 
-void StencilShader::stencilPass(std::shared_ptr<Camera> camera, GBuffer* gbuffer, Light* light)
+void StencilShader::stencilPass(Camera* camera, GBuffer* gbuffer, Light* light)
 {
 	glUseProgram(getProgramID());
 
@@ -46,12 +46,12 @@ void StencilShader::stencilPass(std::shared_ptr<Camera> camera, GBuffer* gbuffer
 	glUseProgram(0);
 }
 
-void StencilShader::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents)
+void StencilShader::draw(Camera* camera, std::vector<GameEntity*> ents)
 {
 	std::cout << "I won't draw either!";
 }
 
-void StencilShader::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)
+void StencilShader::draw(glm::mat4& view_mat, GameEntity* entity)
 {
 	std::cout << "I won't draw!";
 }

@@ -19,13 +19,13 @@ void OctTree::handle_collisions()
     }
 }
 
-OctTree::OctTree(Voxel vox, vector<shared_ptr<GameEntity>> objects_in_section)
+OctTree::OctTree(Voxel vox, vector<GameEntity*> objects_in_section)
 {
-    vector<shared_ptr<GameEntity>> objs;
+    vector<GameEntity*> objs;
     for (int i = 0; i < objects_in_section.size(); i++)
     {
         if (IN_OCTTREE(objects_in_section[i]->list))
-            objs.push_back(shared_ptr<GameEntity>(objects_in_section[i]));
+            objs.push_back(objects_in_section[i]);
     }
     queue<MyNode*> q;
     q.push(new MyNode(objs, vox));
@@ -46,7 +46,7 @@ OctTree::OctTree(Voxel vox, vector<shared_ptr<GameEntity>> objects_in_section)
             for (int i = 0; i < cur->objects.size() - 1; i++)
             {
                 for (int j = i + 1; j < cur->objects.size(); j++)
-                    collision_pairs.insert(pair<shared_ptr<GameEntity>, shared_ptr<GameEntity>>(cur->objects.at(i), cur->objects.at(j)));
+                    collision_pairs.insert(pair<GameEntity*, GameEntity*>(cur->objects.at(i), cur->objects.at(j)));
             }
         }
         else
@@ -56,7 +56,7 @@ OctTree::OctTree(Voxel vox, vector<shared_ptr<GameEntity>> objects_in_section)
             for (int i = 0; i < 8; i++)
             {
                 bool has_collision_response = false;
-                vector<shared_ptr<GameEntity>> subset_objects;
+                vector<GameEntity*> subset_objects;
                 for (int j = 0; j < cur->objects.size(); j++)
                 {
                     if (subset_voxels[i].contains(cur->objects[j]))

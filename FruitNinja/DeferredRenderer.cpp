@@ -26,7 +26,7 @@ DeferredRenderer::~DeferredRenderer()
 	
 }
 
-void DeferredRenderer::pointLightPass(std::shared_ptr<Camera> camera, Light* light)
+void DeferredRenderer::pointLightPass(Camera* camera, Light* light)
 {
 	gbuffer->BindForLightPass();
 
@@ -75,7 +75,7 @@ void DeferredRenderer::pointLightPass(std::shared_ptr<Camera> camera, Light* lig
 }
 
 
-void DeferredRenderer::draw(std::shared_ptr<Camera> camera, std::vector<std::shared_ptr<GameEntity>> ents, std::vector<Light*> lights)
+void DeferredRenderer::draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights)
 {
 	glEnable(GL_STENCIL_TEST);
 	for (int i = 0; i < lights.size(); i++) {
@@ -87,7 +87,7 @@ void DeferredRenderer::draw(std::shared_ptr<Camera> camera, std::vector<std::sha
 
 	dirLightShader.pass(camera);
 }
-void DeferredRenderer::draw(glm::mat4& view_mat, std::shared_ptr<GameEntity> entity)
+void DeferredRenderer::draw(glm::mat4& view_mat, GameEntity* entity)
 {
 	std::cout << "I won't draw!";
 }

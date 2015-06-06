@@ -63,7 +63,7 @@ void PlayerCamera::mouse_update()
 /**
 Call this at the end of the draw loop to update for strafing.
 */
-void PlayerCamera::movement(std::shared_ptr<GameEntity> chewy)
+void PlayerCamera::movement(GameEntity* chewy)
 {
     mouse_update();
 
@@ -141,7 +141,7 @@ pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
         return pair<bool, float>(false, tMax);
 }
 
-void PlayerCamera::reorient(vector<shared_ptr<GameEntity>> entities, shared_ptr<ChewyEntity> chewy)
+void PlayerCamera::reorient(vector<GameEntity*> entities, ChewyEntity* chewy)
 {
 	cameraPosition = handle_collision_zoom(5.f, get_near_plane_corners(), entities, chewy);
 }
@@ -173,13 +173,13 @@ glm::vec3* PlayerCamera::get_near_plane_corners()
 }
 
 
-float static cast_ray(vec3 ray_start, vec3 ray_end, vector<shared_ptr<GameEntity>> entities, float qualifying_distance)
+float static cast_ray(vec3 ray_start, vec3 ray_end, vector<GameEntity*> entities, float qualifying_distance)
 {
 	float dist = -1.0f;
 	float ray_dist = glm::distance(ray_start, ray_end);
 	for (int i = 0; i < entities.size(); i++)
 	{
-		shared_ptr<ChewyEntity> c_test = dynamic_pointer_cast<ChewyEntity>(entities.at(i));
+		ChewyEntity* c_test = dynamic_cast<ChewyEntity*>(entities.at(i));
 		if (c_test == nullptr && IN_OCTTREE(entities.at(i)->list))
 		{
 			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->bounding_box);
@@ -200,7 +200,7 @@ float static cast_ray(vec3 ray_start, vec3 ray_end, vector<shared_ptr<GameEntity
 }
 
 
-vec3 PlayerCamera::handle_collision_zoom(float minOffsetDist, vec3* frustumNearCorners, vector<shared_ptr<GameEntity>> entities, shared_ptr<ChewyEntity> chewy)
+vec3 PlayerCamera::handle_collision_zoom(float minOffsetDist, vec3* frustumNearCorners, vector<GameEntity*> entities, ChewyEntity* chewy)
 {
 	float offsetDist = glm::length(lookAtPoint - cameraPosition);
 	float qualifying_distance = glm::distance(cameraPosition, lookAtPoint);

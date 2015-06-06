@@ -34,7 +34,7 @@ class GameEntity
 	glm::vec3 rotations;
 public:
     EntityBox bounding_box;
-    std::shared_ptr<MeshSet> mesh;
+    MeshSet* mesh;
     glm::vec3 last_position;
     glm::vec3 velocity = glm::vec3(0);
     aiAnimation *current_animation;
@@ -47,14 +47,14 @@ public:
     void setPosition(glm::vec3 position);
 
     GameEntity() {}
-	GameEntity(glm::vec3 position, std::shared_ptr<MeshSet> mesh, bool collision_response = false);
+	GameEntity(glm::vec3 position, MeshSet* mesh, bool collision_response = false);
 
     void setup_entity_box();
-    void setup_entity_box(std::shared_ptr<MeshSet> mesh);
+    void setup_entity_box(MeshSet* mesh);
     void swap_bounding_box_width_depth();
 
 	virtual void update();
-    virtual void collision(std::shared_ptr<GameEntity> entity);
+    virtual void collision(GameEntity* entity);
     glm::vec3 turnAngle(glm::vec3 cartesian);
     virtual glm::mat4 getModelMat();
     glm::mat4 getAlignedModelMat();

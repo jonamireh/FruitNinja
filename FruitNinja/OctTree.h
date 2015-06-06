@@ -9,10 +9,10 @@
 //decided to not have children because we don't reuse the same tree twice
 struct MyNode
 {
-    std::vector<std::shared_ptr<GameEntity>> objects;
+    std::vector<GameEntity*> objects;
     Voxel voxel;
 
-    MyNode(std::vector<std::shared_ptr<GameEntity>> objs, Voxel vox)
+    MyNode(std::vector<GameEntity*> objs, Voxel vox)
     {
         objects = objs;
         voxel = vox;
@@ -22,11 +22,11 @@ struct MyNode
 class OctTree
 {
 public:
-    std::set<std::pair<std::shared_ptr<GameEntity>, std::shared_ptr<GameEntity>>> collision_pairs;
+    std::set<std::pair<GameEntity*, GameEntity*>> collision_pairs;
     void handle_collisions();
     float min_radius;
 
     OctTree();
     ~OctTree();
-    OctTree(Voxel param_box, std::vector<std::shared_ptr<GameEntity>> objects_in_section);
+    OctTree(Voxel param_box, std::vector<GameEntity*> objects_in_section);
 };

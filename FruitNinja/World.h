@@ -56,36 +56,36 @@ public:
 	void update_key_callbacks();
 	void update();
     static void scroll_callback(GLFWwindow* window, double x_pos, double y_pos);
-    std::map<std::string, std::shared_ptr<Shader>> shaders;
-	std::vector<std::shared_ptr<GameEntity>> entities;
+    std::map<std::string, Shader*> shaders;
+	std::vector<GameEntity*> entities;
 	void draw();
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
     static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
     void change_camera();
-    std::map<std::string, std::shared_ptr<MeshSet>> meshes;
+    std::map<std::string, MeshSet*> meshes;
 	void enable_debugging();
 	void cancel_cinematic();
     static void draw_line(glm::vec3 p1, glm::vec3 p2, glm::vec3 color);
 	static void draw_point(glm::vec3 p, glm::vec3 color, float radius);
 	static void draw_sphere(glm::vec3 center, float radius, glm::vec3 color, float delta);
-	static void draw_box(std::shared_ptr<EntityBox> box, glm::vec3 color);
+	static void draw_box(EntityBox* box, glm::vec3 color);
 
     void setup_next_courtyard();
     void setup_cinematic_camera(string file_path);
 private:
-    std::shared_ptr<DebugCamera> debug_camera;
-    std::shared_ptr<ArcheryCamera> archery_camera;
-    std::shared_ptr<PlayerCamera> player_camera;
-	std::shared_ptr<CinematicCamera> cinematic_camera;
-	std::shared_ptr<Skybox> _skybox;
-	HUD hud;
+    DebugCamera* debug_camera;
+    ArcheryCamera* archery_camera;
+    PlayerCamera* player_camera;
+	CinematicCamera* cinematic_camera;
+	Skybox* _skybox;
+	HUD* hud;
 	void init();
     int current_courtyard = 1;
     void setup_level(string file_path);
     void setup_token(char obj_to_place, glm::vec3 file_index);
     void setup_guard(string file_path);
     void shootArrows();
-    std::shared_ptr<ChewyEntity> chewy;
+    ChewyEntity* chewy;
 
 	bool cinematic_runthrough = false;
 
