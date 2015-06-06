@@ -167,7 +167,7 @@ void World::setup_next_courtyard()
     entities.erase(entities.begin() + NUM_PERSISTENT, entities.end());
     
     // JUST FOR DEMO
-    if (current_courtyard == 3)
+    if (current_courtyard == 4)
         current_courtyard = 1;
 
     switch (current_courtyard)
@@ -186,9 +186,12 @@ void World::setup_next_courtyard()
         setup_guard(assetPath + "second_courtyard_first_guard.txt");
         setup_guard(assetPath + "second_courtyard_second_guard.txt");
         setup_guard(assetPath + "second_courtyard_third_guard.txt");
+        setup_guard(assetPath + "second_courtyard_fourth_guard.txt");
         player_camera->movement(chewy);
         break;
     case 3:
+        setup_level(assetPath + "third_courtyard.txt");
+        player_camera->movement(chewy);
         break;
     case 4:
         break;
@@ -344,6 +347,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
+    case '^': // spikes
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("spike")));
+        entities.back()->setScale(3.f);
+        break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
         entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
@@ -466,12 +473,7 @@ void World::draw()
 
 	if (keys[GLFW_KEY_6])
 	{
-		//usePhong = true;
         setup_next_courtyard();
-	}
-	if (keys[GLFW_KEY_7])
-	{
-		//usePhong = false;
 	}
 
 	DebugCamera* d_test = dynamic_cast<DebugCamera*>(camera);
@@ -490,7 +492,7 @@ void World::draw()
 		//even if lantern culled still need light from it
 		if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list)) {
 			LightEntity* le = dynamic_cast<LightEntity*>(entities[i]);
-			lights.push_back(&le->light);
+			if (le->light) lights.push_back(le->light);
 		}
 		//if there's an arrow have archery camera follow it and make game slow-mo
 		/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
