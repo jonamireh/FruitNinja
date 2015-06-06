@@ -74,6 +74,7 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
     meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
+    meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
     meshes.insert(pair<string, MeshSet*>("ground", new MeshSet(assetPath + "ground.dae")));
     meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
     meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
@@ -347,8 +348,8 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
-    case '^': // spikes
-        entities.push_back(new ObstacleEntity(placement_position, meshes.at("spike")));
+    case 'V': // spikes
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("spikes")));
         entities.back()->setScale(3.f);
         break;
     case 'l': // Lantern Pole with Lantern
