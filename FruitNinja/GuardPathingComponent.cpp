@@ -7,6 +7,7 @@ using namespace glm;
 
 #define MIN_NUM_CONTROL_POINTS 4
 
+// precondition: if it isn't linear provide at least 4 control points
 GuardPathingComponent::GuardPathingComponent(vector<vec3> control_points, float move_speed, bool linear_curve) : control_points(control_points), move_speed(move_speed), linear_curve(linear_curve)
 {
 	//assert(control_points.size() >= MIN_NUM_CONTROL_POINTS);
