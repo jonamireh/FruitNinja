@@ -700,9 +700,8 @@ void World::update()
 	}
 	start_time = glfwGetTime();
 	Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
-	OctTree* world_oct_tree = new OctTree(vox, entities);
-	world_oct_tree->handle_collisions();
-	delete world_oct_tree;
+	OctTree world_oct_tree(vox, entities);
+	world_oct_tree.handle_collisions();
     update_key_callbacks();
 	_skybox->update();
 

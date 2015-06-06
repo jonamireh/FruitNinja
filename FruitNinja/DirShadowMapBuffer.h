@@ -12,5 +12,5 @@ public:
 	void bindForWriting();
 	void bindForReading(GLenum textureUnit);
 
-	const int shadowMapSize = 2048;
+	const int shadowMapSize = 1024;
 };
