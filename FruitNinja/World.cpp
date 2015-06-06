@@ -10,6 +10,7 @@
 #include "OctTree.h"
 #include "DeferredShader.h"
 //#include "CollisionHandler.h"
+#include "ButtonEntity.h"
 #include "DebugShader.h"
 #include <glm/gtx/rotate_vector.hpp>
 #include "Skybox.h"
@@ -288,6 +289,9 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     bool flag = false; // used for door orientation and accessability
     switch (obj_to_place)
     {
+    case 'B': // level button
+        entities.push_back(new ButtonEntity(placement_position, meshes.at("box"), this));
+        break;
     case 'C': // set chewy's position
         chewy->setPosition(placement_position + vec3(0.f, 20.f, 0.f));
         break;
@@ -474,6 +478,7 @@ void World::draw()
 
 	if (keys[GLFW_KEY_6])
 	{
+        current_courtyard = 3;
         setup_next_courtyard();
 	}
 

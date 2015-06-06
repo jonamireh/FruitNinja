@@ -1,87 +1,45 @@
 ________________________________________
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
-|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|            W       W                 |
+|         W                       WWWWW|
+|                          W           |
+|            W    W                   W|
+|                   W                  |
+|          W   W                  WWWWW|
+|                    W                 |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
 ________________________________________
 ________________________________________
-|                XXXXX                 |
-|                XXXXX                 |
-|                XXXXX                 |
-|                XXXXX                 |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                XXXXX                 |
-|                XXXXX                 |
-|                XXXXX                 |
 ________________________________________
-|                l D l                 |
-|                                      |
-|                  C B                 |
-|                l   l                 |
 |                                      |
 |                                      |
 |                                      |
@@ -90,11 +48,13 @@ ________________________________________
 |                                      |
 |                                      |
 |                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
+|            W       W                 |
+|         W                       WWWWW|
+|                          W           |
+|            W    W                   W|
+|                   W                  |
+|          W   W                  WWWWW|
+|                    W                 |
 |                                      |
 |                                      |
 |                                      |
@@ -113,7 +73,9 @@ ________________________________________
 |                                      |
 |                                      |
 |                                      |
-|                l   l                 |
 |                                      |
-|                l D l                 |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
 ________________________________________
