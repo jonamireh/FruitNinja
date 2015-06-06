@@ -27,6 +27,7 @@
 #include "AudioManager.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
+#define NUM_PERSISTENT 7
 
 using namespace std;
 using namespace glm;
@@ -159,10 +160,10 @@ void World::init()
 void World::setup_next_courtyard()
 {
     // remove all non-persistent entities
-	for (int i = 7; i < entities.size(); i++) {
-		delete entities[i];
+	for (int i = NUM_PERSISTENT; i < entities.size(); i++) {
+		should_del.push_back(entities[i]);
 	}
-    entities.erase(entities.begin() + 7, entities.end());
+    entities.erase(entities.begin() + NUM_PERSISTENT, entities.end());
     
     // JUST FOR DEMO
     if (current_courtyard == 3)
@@ -691,6 +692,10 @@ void World::update()
 	OctTree* world_oct_tree = new OctTree(vox, entities);
 	world_oct_tree->handle_collisions();
 	delete world_oct_tree;
+	for (int i = 0; i < should_del.size(); i++) {
+		delete should_del[i];
+	}
+	should_del.clear();
     update_key_callbacks();
 	_skybox->update();
 

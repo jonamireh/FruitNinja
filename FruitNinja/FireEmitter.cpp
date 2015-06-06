@@ -36,6 +36,7 @@ void FireEmitter::update(double deltaTime) {
 			if (particles.frame[i] >= num_frames) {
 				particles.position.erase(particles.position.begin() + i);
 				particles.frame.erase(particles.frame.begin() + i);
+				i--;
 			}
 		}
 		if (fuck > 2.0) {

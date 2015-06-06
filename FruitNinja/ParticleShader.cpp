@@ -62,7 +62,7 @@ void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector
 			flem->update(seconds_passed, lights);
 		}
 		else {
-			//emitters[i]->update(seconds_passed);
+			emitters[i]->update(seconds_passed);
 		}
 
 		check_gl_error("Before particle draw");

@@ -90,5 +90,6 @@ private:
 	bool cinematic_runthrough = false;
 
 	GameState state;
+	vector<GameEntity*> should_del;
 };
 
