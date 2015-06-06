@@ -13,7 +13,7 @@ ArcShader::ArcShader(std::string vertShader, std::string fragShader) : Shader(ve
 	//glBindAttribLocation(getProgramID(), 1, "aNormal");
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, NUM_INSTANCES * sizeof(mat4), glm::value_ptr(mat4(1.0)), GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, NUM_INSTANCES * sizeof(mat4), glm::value_ptr(mat4(1.0)), GL_STATIC_DRAW);
 }
 
 

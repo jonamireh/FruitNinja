@@ -289,7 +289,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     switch (obj_to_place)
     {
     case 'C': // set chewy's position
-        chewy->setPosition(placement_position + vec3(0.f, 3.f, 0.f));
+        chewy->setPosition(placement_position + vec3(0.f, 20.f, 0.f));
         break;
     case 'D': // door
         if (placement_position.z < 120.f)
