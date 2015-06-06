@@ -4,6 +4,7 @@
 #include "TestSphere.h"
 
 #include "GuardEntity.h"
+#include "LightEntity.h"
 
 #define SHOOT_TIME_SPEED 0.5
 
@@ -50,9 +51,12 @@ glm::mat4 ProjectileEntity::getModelMat()
 void ProjectileEntity::collision(GameEntity* entity)
 {
 	if (entity->bounding_box.box_collision(bounding_box)) {
-		if (typeid(*entity) == typeid(LightEntity) || typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity)) {
+		if (typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity)) {
 			//get rid of hit entity
 			entity->list = UNSET_DRAW(entity->list);
+		} else if (typeid(*entity) == typeid(LightEntity)) {
+			LightEntity* le = dynamic_cast<LightEntity*>(entity);
+			le->light = NULL;
 		}
 		//get rid of arrow
 		if (!(typeid(*entity) == typeid(ChewyEntity))) {
