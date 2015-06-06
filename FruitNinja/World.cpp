@@ -490,7 +490,7 @@ void World::draw()
 		//even if lantern culled still need light from it
 		if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list)) {
 			LightEntity* le = dynamic_cast<LightEntity*>(entities[i]);
-			lights.push_back(&le->light);
+			if (le->light) lights.push_back(le->light);
 		}
 		//if there's an arrow have archery camera follow it and make game slow-mo
 		/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
