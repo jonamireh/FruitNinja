@@ -473,14 +473,6 @@ void World::draw()
 
 	DebugCamera* d_test = dynamic_cast<DebugCamera*>(camera);
 	vector<GameEntity*> in_view;
-    if (d_test != nullptr)
-    {
-        in_view = get_objects_in_view(entities, player_camera->getViewMatrix());
-	}
-	else
-	{
-		in_view = get_objects_in_view(entities, camera->getViewMatrix());
-	}
 
 	PlayerCamera* p_test = dynamic_cast<PlayerCamera*>(camera);
 	if (p_test != nullptr)
@@ -488,7 +480,6 @@ void World::draw()
 		p_test->reorient(entities, chewy);
 	}
 	glUseProgram(0);
-
 
 	//otherwise deferred rendering
 	vector<Light*> lights;
@@ -509,10 +500,10 @@ void World::draw()
 			i--;
 		}
 	}
-	for (int i = 0; i < in_view.size(); i++)
+		for (int i = 0; i < entities.size(); i++)
 	{
-		if (!SHOULD_DRAW(in_view[i]->list)) {
-			in_view.erase(in_view.begin() + i);
+			if (!SHOULD_DRAW(entities[i]->list)) {
+				entities.erase(entities.begin() + i);
 			i--;
 		}
 	}
@@ -520,15 +511,15 @@ void World::draw()
 
 	glUseProgram(shaders.at("defShader")->getProgramID());
 	glViewport(0, 0, screen_width, screen_height);
-	shaders.at("defShader")->draw(camera, in_view, lights);
+		shaders.at("defShader")->draw(camera, entities, lights);
 
     glUseProgram(0);
 	if (debug_enabled)
 	{
 		glUseProgram(debugShader->getProgramID());
-		for (int i = 0; i < in_view.size(); i++)
+		for (int i = 0; i < entities.size(); i++)
 		{
-			EntityBox box = in_view.at(i)->bounding_box;
+			EntityBox box = entities.at(i)->bounding_box;
 			vector<pair<vec3, vec3>> points = box.get_line_segments();
 			for (int j = 0; j < points.size(); j++)
 			{
@@ -689,9 +680,8 @@ void World::update()
 	}
 	start_time = glfwGetTime();
 	Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
-	OctTree* world_oct_tree = new OctTree(vox, entities);
-	world_oct_tree->handle_collisions();
-	delete world_oct_tree;
+	OctTree world_oct_tree(vox, entities);
+	world_oct_tree.handle_collisions();
 	for (int i = 0; i < should_del.size(); i++) {
 		delete should_del[i];
 	}

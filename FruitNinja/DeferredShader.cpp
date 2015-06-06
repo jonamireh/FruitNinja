@@ -11,12 +11,13 @@ using namespace std;
 
 DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, Skybox* skybox)
 	: Shader(vertShader, fragShader), skybox(skybox), gbuffer(), skyShader("simpleVert.glsl", "simpleFrag.glsl"),
-	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer), disp_mode(deferred),
-	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl"), arcShader("arcVertex.glsl", "arcFrag.glsl")
+	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer, &dirShadowMapBuffer), disp_mode(deferred),
+	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl"), arcShader("arcVertex.glsl", "arcFrag.glsl"), shadowBufferShader(&dirShadowMapBuffer)
 {
 	emitters.push_back(new FlameEmitter);
 	//emitters.push_back(new FireEmitter);
 	gbuffer.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
+	dirShadowMapBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 	glBindAttribLocation(getProgramID(), 1, "aNormal");
 
@@ -106,8 +107,9 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 
 void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights)
 {
+	std::vector<std::shared_ptr<GameEntity>> entsInView = get_objects_in_view(ents, camera->getViewMatrix());
 	gbuffer.StartFrame();
-	geomPass(camera->getViewMatrix(), ents);
+	geomPass(camera->getViewMatrix(), entsInView);
 
 	if (disp_mode == four_screen) {
 		lightPass();
@@ -119,6 +121,7 @@ void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::ve
 		particlePass(camera, lights);
 		archeryArcPass(camera);
 		finalPass();
+		//shadowBufferShader.draw();
 	}
 		
 	if (keys[GLFW_KEY_4])

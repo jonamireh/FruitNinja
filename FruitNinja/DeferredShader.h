@@ -7,6 +7,9 @@
 #include "FlameEmitter.h"
 #include "FireEmitter.h"
 #include "ArcShader.h"
+#include "DirShadowMapBuffer.h"
+#include "ShadowBufferShader.h"
+
 
 //#include <glm/gtc/type_ptr.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
@@ -30,6 +33,7 @@ private:
 	void geomPass(glm::mat4& view_mat, std::vector<GameEntity*> ents);
 	void lightPass();
 	GBuffer gbuffer;
+	DirShadowMapBuffer dirShadowMapBuffer;
 	void startLightPasses();
 	void finalPass();
 	void skyboxPass(Camera* camera);
@@ -39,6 +43,7 @@ private:
 	ParticleShader fireShader;
 	vector<Emitter*> emitters;
 
+	ShadowBufferShader shadowBufferShader;
 	ArcShader arcShader;
 	void archeryArcPass(Camera* camera);
 

@@ -110,6 +110,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -158,6 +159,8 @@
     <None Include="phongFrag.glsl" />
     <None Include="phongVert.glsl" />
     <None Include="pointLightFrag.glsl" />
+    <None Include="ShadowBufferFragShader.glsl" />
+    <None Include="ShadowBufferVertShader.glsl" />
     <None Include="simpleFrag.glsl" />
     <None Include="simpleVert.glsl" />
     <None Include="StencilFrag.glsl" />
@@ -177,7 +180,9 @@
     <ClCompile Include="DeferredRenderer.cpp" />
     <ClCompile Include="DeferredShader.cpp" />
     <ClCompile Include="DirLightShader.cpp" />
+    <ClCompile Include="DirShadowMapBuffer.cpp" />
     <ClCompile Include="DoorEntity.cpp" />
+    <ClCompile Include="DirShadowMapShader.cpp" />
     <ClCompile Include="EntityBox.cpp" />
     <ClCompile Include="FireEmitter.cpp" />
     <ClCompile Include="FlameEmitter.cpp" />
@@ -191,6 +196,7 @@
     <ClCompile Include="LightEntity.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Emitter.cpp" />
+    <ClCompile Include="ShadowBufferShader.cpp" />
     <ClCompile Include="SimpleTextureShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="TestSphere.cpp" />
@@ -233,7 +239,9 @@
     <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DeferredShader.h" />
     <ClInclude Include="DirLightShader.h" />
+    <ClInclude Include="DirShadowMapBuffer.h" />
     <ClInclude Include="DoorEntity.h" />
+    <ClInclude Include="DirShadowMapShader.h" />
     <ClInclude Include="EntityBox.h" />
     <ClInclude Include="FireEmitter.h" />
     <ClInclude Include="FlameEmitter.h" />
@@ -255,6 +263,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightEntity.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="ShadowBufferShader.h" />
     <ClInclude Include="SimpleTextureShader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="TestSphere.h" />
