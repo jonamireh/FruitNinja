@@ -33,6 +33,7 @@ using namespace std;
 using namespace glm;
 
 bool keys[1024];
+bool mouse_buttons_pressed[8];
 float seconds_passed = 0;
 float x_offset;
 float y_offset;
@@ -442,16 +443,18 @@ void World::shootArrows()
 			shot = true;
 		}
 	}
-	if (keys[GLFW_KEY_E] && archery_camera->in_use && !held && !shot)
+	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot)
 	{
 		held = true;
 	}
-	if (held && !keys[GLFW_KEY_E])
+	if (held && !(keys[GLFW_KEY_E] || mouse_buttons_pressed[0]))
 	{
 		entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
         entities.back()->setup_entity_box(meshes.at("arrow_bb"));
 		held = false;
 	}
+
+	mouse_buttons_pressed[0] = false;
 }
 
 void World::draw()
@@ -559,6 +562,12 @@ void World::mouse_callback(GLFWwindow* window, double x_position, double y_posit
     glfwSetCursorPos(window, 0, 0);
 }
 
+void World::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (action == GLFW_PRESS)
+		mouse_buttons_pressed[button] = true;
+}
+
 void World::change_camera()
 {
     if (keys[GLFW_KEY_1])
@@ -569,20 +578,22 @@ void World::change_camera()
         archery_camera->in_use = false;
 
     }
-    if (keys[GLFW_KEY_2])
-    {
+	else if (keys[GLFW_KEY_2] || (mouse_buttons_pressed[1] && !player_camera->in_use))
+	{
         camera = player_camera;
         debug_camera->in_use = false;
         player_camera->in_use = true;
         archery_camera->in_use = false;
     }
-    if (keys[GLFW_KEY_3])
+	else if (keys[GLFW_KEY_3] || (mouse_buttons_pressed[1] && player_camera->in_use))
     {
         camera = archery_camera;
         debug_camera->in_use = false;
         player_camera->in_use = false;
         archery_camera->in_use = true;
     }
+
+	mouse_buttons_pressed[1] = false;
 }
 
 void World::enable_debugging()

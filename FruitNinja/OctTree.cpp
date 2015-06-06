@@ -59,7 +59,7 @@ OctTree::OctTree(Voxel vox, vector<GameEntity*> objects_in_section)
             {
                 bool has_collision_response = false;
 				subset_objects.clear();
-                for (int j = 0; j < cur->objects.size(); j++)
+				for (int j = 0; j < cur->objects.size(); j++)
                 {
                     if (subset_voxels[i].contains(cur->objects[j]))
                     {

@@ -71,6 +71,8 @@ void AppMain()
 
     glfwSetScrollCallback(window, &World::scroll_callback);
 
+	glfwSetMouseButtonCallback(window, &World::mouse_button_callback);
+
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 

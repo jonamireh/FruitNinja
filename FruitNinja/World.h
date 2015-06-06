@@ -61,6 +61,7 @@ public:
 	void draw();
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
     static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
+	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     void change_camera();
     std::map<std::string, MeshSet*> meshes;
 	void enable_debugging();
