@@ -29,6 +29,8 @@ OctTree::OctTree(Voxel vox, vector<GameEntity*> objects_in_section)
     }
     queue<MyNode*> q;
     q.push(new MyNode(objs, vox));
+	vector<GameEntity*> subset_objects;
+	subset_objects.reserve(objects_in_section.size());
 
     while (!q.empty())
     {
@@ -56,7 +58,7 @@ OctTree::OctTree(Voxel vox, vector<GameEntity*> objects_in_section)
             for (int i = 0; i < 8; i++)
             {
                 bool has_collision_response = false;
-                vector<GameEntity*> subset_objects;
+				subset_objects.clear();
                 for (int j = 0; j < cur->objects.size(); j++)
                 {
                     if (subset_voxels[i].contains(cur->objects[j]))
