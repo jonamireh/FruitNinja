@@ -504,7 +504,7 @@ void World::draw()
 		}*/
 
 		if (!SHOULD_DRAW(entities[i]->list)) {
-			delete entities[i];
+			should_del.push_back(entities[i]);
 			entities.erase(entities.begin() + i);
 			i--;
 		}
