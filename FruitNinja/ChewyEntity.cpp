@@ -1,6 +1,7 @@
 #include "ChewyEntity.h"
 #include "PlayerCamera.h"
 #include "World.h"
+#include "SpikeEntity.h"
 #include <glm/gtx/string_cast.inl>
 #include <glm/gtx/intersect.hpp>
 
@@ -46,6 +47,14 @@ void ChewyEntity::collision(GameEntity* entity)
     // if no collision then stop.
     if (!entity->bounding_box.box_collision(bounding_box))
         return;
+
+    // If you hit a spiky entity... you lost
+    SpikeEntity* spike_check = dynamic_cast<SpikeEntity*>(entity);
+    if (spike_check != nullptr)
+    {
+        spike_check->world->lose_condition();
+        return;
+    }
 
     vec3 pos = getPosition();
 

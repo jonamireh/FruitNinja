@@ -200,7 +200,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 
         // kind of the best time based resolution
         // first button
-        entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(20, 4, 5) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
+        entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(19, 4, 5) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
             meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
         // second button
         entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(1, 4, 1) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
@@ -257,12 +257,12 @@ void World::setup_cinematic_camera(string file_path)
         current_row++;
     }
 
-	float temp = chewy->bounding_box.center.y;
+	/*float temp = chewy->bounding_box.center.y;
 
 	chewy->bounding_box.center.y = chewy->bounding_box.half_height + starting_platform_height;
 	player_camera->movement(chewy);
 	camera_positions.push_back(player_camera->cameraPosition);
-	look_at_positions.push_back(player_camera->lookAtPoint);
+	look_at_positions.push_back(player_camera->lookAtPoint);*/
 
 
     for (int i = 0; i < 10; i++)
@@ -279,7 +279,7 @@ void World::setup_cinematic_camera(string file_path)
     camera = cinematic_camera;
     cinematic_camera->in_use = true;
 
-	chewy->bounding_box.center.y = temp;
+	//chewy->bounding_box.center.y = temp;
 
     level_file.close();
 }
