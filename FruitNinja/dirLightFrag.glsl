@@ -3,7 +3,7 @@
 uniform sampler2D posMap;
 uniform sampler2D norMap;
 uniform sampler2D colMap;
-uniform sampler2D shadowMap;
+uniform sampler2DShadow shadowMap;
 
 uniform mat4 uShadowVP;
 uniform vec2 uSize;
@@ -75,14 +75,9 @@ float calcShadowFactor(vec3 pos, float cosTheta)
 	uvCoords.y = 0.5 * projCoords.y + 0.5;
 	float z = 0.5 * projCoords.z + 0.5;
 
-	float depth = texture(shadowMap, uvCoords).x;
 	float bias = 0.005 * tan(acos(cosTheta));
-	if (depth < (z - bias)) {
-		return 0.0;
-	}
-	else {
-		return 1.0;
-	}
+	z -= bias;
+	return texture(shadowMap, vec3(uvCoords, z));
 
 	/*
 	float visibility = 1.0;
