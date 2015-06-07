@@ -21,6 +21,7 @@
 #include <queue>
 #include "LightEntity.h"
 #include "DoorEntity.h"
+#include "SpikeEntity.h"
 #include "FrustrumCulling.h"
 #include <iostream>
 #include <fstream>
@@ -206,6 +207,12 @@ void World::setup_next_courtyard()
     current_courtyard++;
 }
 
+void World::lose_condition()
+{
+    current_courtyard--;
+    setup_next_courtyard();
+}
+
 void World::setup_cinematic_camera(string file_path)
 {
     ifstream level_file;
@@ -355,7 +362,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'V': // spikes
-        entities.push_back(new ObstacleEntity(placement_position, meshes.at("spikes")));
+        entities.push_back(new SpikeEntity(placement_position, meshes.at("spikes"), this));
         entities.back()->setScale(3.f);
         break;
     case 'l': // Lantern Pole with Lantern
@@ -738,8 +745,7 @@ void World::update()
 	shootArrows();
 
 	if (state == SPOTTED && cinematic_camera->pathing.done) {
-		current_courtyard = 1;
-		setup_next_courtyard();
+        lose_condition();
 		camera->in_use = false;
 		camera = player_camera;
 		camera->in_use = true;

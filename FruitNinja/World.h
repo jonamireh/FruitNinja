@@ -72,6 +72,7 @@ public:
 	static void draw_box(EntityBox* box, glm::vec3 color);
 
     void setup_next_courtyard();
+    void lose_condition();
     void setup_cinematic_camera(string file_path);
     void setup_level(string file_path);
 private:

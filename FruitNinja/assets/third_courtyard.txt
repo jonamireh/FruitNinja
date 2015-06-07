@@ -39,11 +39,11 @@ ________________________________________
 |VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
 ________________________________________
 ________________________________________
-|                XXXXX                 |
-|                XXXXX                 |
-|                XXXXX                 |
-|                XXXXX                 |
-|                                      |
+|XXXXX           XXXXX            XXXXX|
+|XXXXX           XXXXX            XXXXX|
+|XXXXX           XXXXX            XXXXX|
+|XXXXX           XXXXX            XXXXX|
+|XXXXX           XXXXX            XXXXX|
 |                                      |
 |                                      |
 |                                      |
@@ -80,7 +80,7 @@ ________________________________________
 ________________________________________
 |                l D l                 |
 |                                      |
-|                  C B                 |
+|  l               C B              l  |
 |                l   l                 |
 |                                      |
 |                                      |
