@@ -873,4 +873,6 @@ World::~World() {
 	for (auto it = meshes.begin(); it != meshes.end(); ++it) {
 		delete it->second;
 	}
+	delete walking_g;
+	delete idle_g;
 }
