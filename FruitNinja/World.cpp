@@ -196,6 +196,14 @@ void World::setup_next_courtyard()
         break;
     case 3:
         setup_level(level_path + "third_courtyard.txt");
+        // kind of the best time based resolution
+        // first button
+        entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(21, 3, 3) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
+            meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
+        // second button
+
+        entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(21, 3, 3) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
+            meshes.at("box"), level_path + "third_courtyard_button_two.txt", this));
         setup_moving_platform(level_path + "third_courtyard_platform_one.txt");
         //setup_moving_platform(level_path + "third_courtyard_platform_two.txt");
         player_camera->movement(chewy);
@@ -300,9 +308,6 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     bool flag = false; // used for door orientation and accessability
     switch (obj_to_place)
     {
-    case 'B': // level button
-        entities.push_back(new ButtonEntity(placement_position, meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
-        break;
     case 'C': // set chewy's position
         chewy->setPosition(placement_position + vec3(0.f, 20.f, 0.f));
         break;
