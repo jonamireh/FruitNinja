@@ -227,6 +227,11 @@ void World::setup_cinematic_camera(string file_path)
     vec3 look_at_array[10];
     vector<vec3> camera_positions;
     vector<vec3> look_at_positions;
+	
+	float temp = chewy->bounding_box.center.y;
+
+	chewy->bounding_box.center.y = chewy->bounding_box.half_height;
+	player_camera->movement(chewy);
     camera_positions.push_back(player_camera->cameraPosition);
     look_at_positions.push_back(player_camera->lookAtPoint);
 
@@ -263,6 +268,8 @@ void World::setup_cinematic_camera(string file_path)
     cinematic_camera->init(camera_positions, look_at_positions, 40.f);
     camera = cinematic_camera;
     cinematic_camera->in_use = true;
+
+	chewy->bounding_box.center.y = temp;
 
     level_file.close();
 }
@@ -304,7 +311,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(new ButtonEntity(placement_position, meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
         break;
     case 'C': // set chewy's position
-        chewy->setPosition(placement_position + vec3(0.f, 20.f, 0.f));
+		chewy->setPosition(placement_position + vec3(0.f, 5.f, 0.f));
         break;
     case 'D': // door
         if (placement_position.z < 120.f)
