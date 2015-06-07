@@ -33,13 +33,13 @@ void GuardEntity::update()
     animComponent.update();
 }
 
-pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)
+static pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 {
-    vec3 center = bb.center;
-    vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth); // IF VIEW FRUSTUM WAS OFF THIS IS OFF IN THE SAME WAY
+	vec3 center = bb.center;
+	vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth);
 
-	float tMin = FLT_MIN;
-	float tMax = FLT_MAX;
+	float tMin = std::numeric_limits<float>::min();
+	float tMax = std::numeric_limits<float>::max();
 	vec3 p = center - origin;
 	for (int i = 0; i < 3; i++)
 	{
@@ -54,7 +54,7 @@ pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 		float e = dot(ai, p);
 		float f = dot(ai, direction);
 
-		if (abs(f) > FLT_EPSILON)
+		if (abs(f) > 0.0001f)
 		{
 			float t1 = (e + h[i]) / f;
 			float t2 = (e - h[i]) / f;
@@ -62,21 +62,18 @@ pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 			if (t1 > t2)
 			{
 				//swap
-				float temp = t2;
-				t2 = t1;
-				t1 = temp;
+				float temp = t1;
+				t1 = t2;
+				t2 = temp;
 			}
 
-			if (t1 > tMin)
-				tMin = t1;
-			if (t2 < tMax)
-				tMax = t2;
-			if (tMin > tMax)
-				return pair<bool, float>(false, 0.f);
-			if (tMax < 0)
+			tMin = fmax(tMin, t1);
+			tMax = fmin(tMax, t2);
+			if (tMin > tMax || tMax < 0) {
 				return pair<bool, float>(false, 0);
- 		}
-		else if (-e - h[i] > 0 || -e + h[i] < 0)
+			}
+		}
+		else if (-1.0f * e - h[i] > 0 || h[i] - e < 0)
 			return pair<bool, float>(false, 0);
 	}
 	if (tMin > 0)
