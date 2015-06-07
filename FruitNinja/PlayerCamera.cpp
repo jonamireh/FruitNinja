@@ -145,7 +145,7 @@ float static cast_ray(vec3 ray_start, vec3 ray_end, vector<GameEntity*> entities
 	for (int i = 0; i < entities.size(); i++)
 	{
 		ChewyEntity* c_test = dynamic_cast<ChewyEntity*>(entities.at(i));
-		if (c_test == nullptr && IN_OCTTREE(entities.at(i)->list))
+		if (c_test == nullptr && IN_OCTTREE(entities.at(i)->list) && IS_WALL(entities.at(i)->list))
 		{
 			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->bounding_box);
 			if (result.first && result.second < ray_dist)

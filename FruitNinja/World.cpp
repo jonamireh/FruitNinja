@@ -361,6 +361,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     case 'l': // Lantern Pole with Lantern
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
         entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
+		entities.back()->list = UNSET_WALL(entities.back()->list);
         entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
         rots = entities.back()->getRotations();
         rots.y = M_PI_2;

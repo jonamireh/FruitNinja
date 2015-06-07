@@ -20,6 +20,7 @@ collision_response(collision_response)
     setPosition(position + vec3(0.f, bounding_box.half_height, 0.f));
     list = SET_DRAW(list);
     list = SET_OCTTREE(list);
+	list = SET_WALL(list);
 };
 
 
