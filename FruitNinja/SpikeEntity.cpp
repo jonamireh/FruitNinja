@@ -15,7 +15,7 @@ void SpikeEntity::collision(GameEntity* entity)
     if (chewy_check != nullptr)
     {
         EntityBox box = bounding_box;
-        box.half_height += 0.25f;
+        box.half_height += 0.35f;
         if (box.box_collision(entity->bounding_box))
         {
             world->lose_condition();
