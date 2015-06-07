@@ -12,9 +12,9 @@ uniform vec3 uPos;
 
 out vec4 FragColor;
 
-#define AMBIENT_INTENSITY 0.2
-#define DIFFUSE_INTENSITY 0.4
-#define SPEC_INTENSITY 0.8
+#define AMBIENT_INTENSITY 0.3
+#define DIFFUSE_INTENSITY 0.7
+#define SPEC_INTENSITY 0.85
 #define SHINY 20
 
 /*vec2 poissonDisk[4] = vec2[](
@@ -79,7 +79,7 @@ float calcShadowFactor(vec3 pos, float cosTheta)
 vec4 calcLightInternal(vec3 lightDir, vec3 worldPos, vec3 normal)
 {
 	//white light
-	vec3 color = vec3(0.15, 0.4, 1.0);
+	vec3 color = vec3(0.48, 0.53, 1.0);
     vec4 ambientColor = vec4(color, 1.0) * AMBIENT_INTENSITY;
     float diffuseFactor = dot(normal, -lightDir);
 
