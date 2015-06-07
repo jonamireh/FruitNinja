@@ -1,6 +1,4 @@
 #include "World.h"
-//#include "PhongShader.h"
-//#include "TextureDebugShader.h"
 #include "DebugCamera.h"
 #include "Global.h"
 #include "ArcheryCamera.h"
@@ -9,7 +7,6 @@
 #include "ObstacleEntity.h"
 #include "OctTree.h"
 #include "DeferredShader.h"
-//#include "CollisionHandler.h"
 #include "ButtonEntity.h"
 #include "PlatformEntity.h"
 #include "DebugShader.h"
@@ -177,25 +174,26 @@ void World::setup_next_courtyard()
     switch (current_courtyard)
     {
     case 1:
-        setup_level(assetPath + "first_courtyard.txt");
-        setup_guard(assetPath + "first_courtyard_guard.txt");
-        setup_guard(assetPath + "first_courtyard_second_guard.txt");
-        setup_guard(assetPath + "first_courtyard_third_guard.txt");
-        setup_guard(assetPath + "first_courtyard_fourth_guard.txt");
+        setup_level(level_path + "first_courtyard.txt");
+        setup_guard(level_path + "first_courtyard_guard.txt");
+        setup_guard(level_path + "first_courtyard_second_guard.txt");
+        setup_guard(level_path + "first_courtyard_third_guard.txt");
+        setup_guard(level_path + "first_courtyard_fourth_guard.txt");
         player_camera->movement(chewy);
-        setup_cinematic_camera(assetPath + "first_courtyard_cinematic.txt");
+        setup_cinematic_camera(level_path + "first_courtyard_cinematic.txt");
         break;
     case 2:
-        setup_level(assetPath + "second_courtyard.txt");
-        setup_guard(assetPath + "second_courtyard_first_guard.txt");
-        setup_guard(assetPath + "second_courtyard_second_guard.txt");
-        setup_guard(assetPath + "second_courtyard_third_guard.txt");
-        setup_guard(assetPath + "second_courtyard_fourth_guard.txt");
+        setup_level(level_path + "second_courtyard.txt");
+        setup_guard(level_path + "second_courtyard_first_guard.txt");
+        setup_guard(level_path + "second_courtyard_second_guard.txt");
+        setup_guard(level_path + "second_courtyard_third_guard.txt");
+        setup_guard(level_path + "second_courtyard_fourth_guard.txt");
         player_camera->movement(chewy);
         break;
     case 3:
-        setup_level(assetPath + "third_courtyard.txt");
-        setup_moving_platform(assetPath + "third_courtyard_platform_one.txt");
+        setup_level(level_path + "third_courtyard.txt");
+        setup_moving_platform(level_path + "third_courtyard_platform_one.txt");
+        //setup_moving_platform(level_path + "third_courtyard_platform_two.txt");
         player_camera->movement(chewy);
         break;
     case 4:
@@ -299,7 +297,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     switch (obj_to_place)
     {
     case 'B': // level button
-        entities.push_back(new ButtonEntity(placement_position, meshes.at("box"), assetPath + "third_courtyard_button_one.txt", this));
+        entities.push_back(new ButtonEntity(placement_position, meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
         break;
     case 'C': // set chewy's position
         chewy->setPosition(placement_position + vec3(0.f, 20.f, 0.f));

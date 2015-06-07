@@ -19,6 +19,8 @@ void PlatformEntity::collision(GameEntity* entity)
     if (chewy_check != nullptr)
     {
         EntityBox box = bounding_box;
+        box.half_depth += 0.1f;
+        box.half_width += 0.1f;
         box.half_height += 0.1f;
         if (box.box_collision(entity->bounding_box))
         {

@@ -29,6 +29,7 @@
 
 class ArcheryCamera;
 const string assetPath = "assets/";
+const string level_path = "levels/";
 extern bool keys[1024];
 extern float seconds_passed;
 extern float x_offset;

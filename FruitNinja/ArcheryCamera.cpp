@@ -37,8 +37,8 @@ void ArcheryCamera::mouse_update()
 {
     float sensitivity = 0.1;
 
-    theta -= x_offset * sensitivity;
-    phi -= y_offset * sensitivity;
+    theta += x_offset * sensitivity;
+    phi += y_offset * sensitivity;
 
 	if (phi > MAX_VERTICAL_ANGLE)
 		phi = MAX_VERTICAL_ANGLE;
