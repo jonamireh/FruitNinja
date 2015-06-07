@@ -132,7 +132,7 @@ void AudioManager::updateListener(glm::vec3 position, glm::vec3 forward, glm::ve
 	FMODErrorCheck(result);
 }
 
-FMOD::Channel *AudioManager::play3DLoop(string filename, glm::vec3 position, bool loop)
+FMOD::Channel *AudioManager::play3D(string filename, glm::vec3 position, float atten, bool loop)
 {
 	FMOD_RESULT result;
 	FMOD::Sound *sound;
@@ -156,6 +156,7 @@ FMOD::Channel *AudioManager::play3DLoop(string filename, glm::vec3 position, boo
 	FMODErrorCheck(result);
 
 	updateChannelPosition(channel, position);
+	channel->set3DMinMaxDistance(atten, 10000.0f);
 
 	result = channel->setPaused(false);
 	FMODErrorCheck(result);

@@ -28,7 +28,9 @@
 //#define GUARD_DIST (GUARD_FAR - GUARD_NEAR)
 
 class ArcheryCamera;
+class GuardEntity;
 const string assetPath = "assets/";
+const string level_path = "levels/";
 extern bool keys[1024];
 extern float seconds_passed;
 extern float x_offset;
@@ -42,7 +44,7 @@ extern float game_speed;
 extern float bow_strength;
 
 enum GameState{
-	LEVEL1,
+	HIDDEN,
 	SPOTTED,
 	GAMEOVER
 };
@@ -66,12 +68,14 @@ public:
     std::map<std::string, MeshSet*> meshes;
 	void enable_debugging();
 	void cancel_cinematic();
+	void skip_level();
     static void draw_line(glm::vec3 p1, glm::vec3 p2, glm::vec3 color);
 	static void draw_point(glm::vec3 p, glm::vec3 color, float radius);
 	static void draw_sphere(glm::vec3 center, float radius, glm::vec3 color, float delta);
 	static void draw_box(EntityBox* box, glm::vec3 color);
 
     void setup_next_courtyard();
+    void lose_condition();
     void setup_cinematic_camera(string file_path);
     void setup_level(string file_path);
 private:
@@ -94,5 +98,8 @@ private:
 
 	GameState state;
 	vector<GameEntity*> should_del;
+
+	GuardEntity* walking_g;
+	GuardEntity* idle_g;
 };
 

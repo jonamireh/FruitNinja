@@ -1,0 +1,40 @@
+________________________________________
+|OOO    l     l         l     l    X   |
+|OO                                 X  |
+|O                 C                 X |
+|                                     X|
+|                                      |
+|                                      |
+|        WWW   WWWWWWWWWW   WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
+|                                      |
+|                                      |
+|                                      |
+|       wWWWe 0            wWWWe       |
+|        WWW       l        WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|e       WWW       F        WWW       w|
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW                WWW        |
+|        WWW       l        WWW        |
+|       wWWWe g            wWWWe       |
+|                                      |
+|                                      |
+|                                      |
+|        WWW   WWWWWWWWWW   WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
+|        WWW   WWWWWWWWWW   WWW        |
+|                                      |
+|                                      |
+|                                      |
+|                                     O|
+|X             ln      nl            OO|
+________________________________________

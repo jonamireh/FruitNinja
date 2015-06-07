@@ -201,6 +201,7 @@
     <ClCompile Include="ShadowBufferShader.cpp" />
     <ClCompile Include="SimpleTextureShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="SpikeEntity.cpp" />
     <ClCompile Include="TestSphere.cpp" />
     <ClCompile Include="StencilShader.cpp" />
     <ClCompile Include="TextureDebugShader.cpp" />
@@ -270,6 +271,7 @@
     <ClInclude Include="ShadowBufferShader.h" />
     <ClInclude Include="SimpleTextureShader.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SpikeEntity.h" />
     <ClInclude Include="TestSphere.h" />
     <ClInclude Include="StencilShader.h" />
     <ClInclude Include="TextureDebugShader.h" />

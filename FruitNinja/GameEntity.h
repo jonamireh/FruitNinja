@@ -32,10 +32,13 @@ class GameEntity
 {
 	glm::mat4 modelMat;
 	glm::mat4 alignedModelMat;
+	glm::mat4 rotModelMat;
 	bool validModelMat = false;
 	bool validAlignedModelMat = false;
+	bool validRotModelMat = false;
 	float scale = 1.0f;
 	glm::vec3 rotations;
+	glm::mat4 getRotMat();
 public:
     EntityBox bounding_box;
     MeshSet* mesh;
@@ -68,4 +71,6 @@ public:
 
 	glm::vec3 getRotations();
 	void setRotations(glm::vec3 rots);
+
+	virtual std::vector<std::vector<glm::mat4>>* getBoneTrans();
 };
