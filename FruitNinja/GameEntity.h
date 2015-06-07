@@ -28,10 +28,13 @@ class GameEntity
 {
 	glm::mat4 modelMat;
 	glm::mat4 alignedModelMat;
+	glm::mat4 rotModelMat;
 	bool validModelMat = false;
 	bool validAlignedModelMat = false;
+	bool validRotModelMat = false;
 	float scale = 1.0f;
 	glm::vec3 rotations;
+	glm::mat4 getRotMat();
 public:
     EntityBox bounding_box;
     MeshSet* mesh;
