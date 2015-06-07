@@ -62,7 +62,8 @@ World::World()
 	init();
     x_offset = 0;
     y_offset = 0;
-	state = LEVEL1;
+	state = HIDDEN;
+
 }
 
 void World::init()
@@ -96,6 +97,9 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("bushes", new MeshSet(assetPath + "bushes.dae")));
 	meshes.insert(pair<string, MeshSet*>("bushes_boundingbox", new MeshSet(assetPath + "bushes_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("statue", new MeshSet(assetPath + "statue.dae")));
+
+	walking_g = new GuardEntity(meshes.at("guard"), WALKIN);
+	idle_g = new GuardEntity(meshes.at("guard"), IDLE);
     
 	archery_camera = new ArcheryCamera(meshes.at("unit_sphere")->getMeshes().at(0));
 
@@ -331,16 +335,16 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setRotations(vec3(0.f, M_PI, 0.f));
         break;
     case 'n': // static guard facing north
-        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f), idle_g->animComponent));
         break;
     case 's': // static guard facing south
-        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f), idle_g->animComponent));
         break;
     case 'e': // static guard facing east
-        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f), idle_g->animComponent));
         break;
     case 'w': // static guard facing west
-        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f), idle_g->animComponent));
         break;
     case 'O': // barrel
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
@@ -368,7 +372,8 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     case 'l': // Lantern Pole with Lantern
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
         entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
-        entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
+        entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f),
+			meshes.at("lantern"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
         rots = entities.back()->getRotations();
         rots.y = M_PI_2;
         entities.back()->setRotations(rots);
@@ -448,7 +453,9 @@ void World::setup_guard(string file_path)
         else
             break;
     }
-	GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
+	GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f,
+		walking_g->animComponent, linear);
+	//GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
 	guard_ent->setup_entity_box(meshes["guard_bb"]);
 	entities.push_back(guard_ent);
     level_file.close();
@@ -764,8 +771,10 @@ void World::update()
 		chewy->isCaught = false;
 		chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
 		chewy->animComponent.currentAnimtion = standing;
-		state = LEVEL1;
+		state = HIDDEN;
 	}
+	walking_g->animComponent->update();
+	idle_g->animComponent->update();
 	for (int i = 0; i < entities.size(); i++)
 	{
 		entities[i]->update();

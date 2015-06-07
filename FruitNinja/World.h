@@ -28,6 +28,7 @@
 //#define GUARD_DIST (GUARD_FAR - GUARD_NEAR)
 
 class ArcheryCamera;
+class GuardEntity;
 const string assetPath = "assets/";
 extern bool keys[1024];
 extern float seconds_passed;
@@ -42,7 +43,7 @@ extern float game_speed;
 extern float bow_strength;
 
 enum GameState{
-	LEVEL1,
+	HIDDEN,
 	SPOTTED,
 	GAMEOVER
 };
@@ -95,5 +96,8 @@ private:
 
 	GameState state;
 	vector<GameEntity*> should_del;
+
+	GuardEntity* walking_g;
+	GuardEntity* idle_g;
 };
 

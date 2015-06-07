@@ -18,8 +18,8 @@ class GuardAnimationComponent : public Component
 {
 public:
 	void update() override;
-private:
 	BasicAnimationComponent basicAnimation;
+private:
 	GAnimationState currentAnimtion;
 	GameEntity *guard;
 public:
