@@ -588,13 +588,25 @@ void World::change_camera()
     }
 	else if (keys[GLFW_KEY_2] || (mouse_buttons_pressed[1] && !player_camera->in_use))
 	{
-        camera = player_camera;
+		if (archery_camera->in_use)
+		{
+			player_camera->phi = archery_camera->phi;
+			player_camera->theta = archery_camera->theta;
+			player_camera->mouse_update();
+		}
+		camera = player_camera;
         debug_camera->in_use = false;
         player_camera->in_use = true;
         archery_camera->in_use = false;
     }
 	else if (keys[GLFW_KEY_3] || (mouse_buttons_pressed[1] && player_camera->in_use))
     {
+		if (player_camera->in_use)
+		{
+			archery_camera->phi = player_camera->phi;
+			archery_camera->theta = player_camera->theta;
+			archery_camera->mouse_update();
+		}
         camera = archery_camera;
         debug_camera->in_use = false;
         player_camera->in_use = false;

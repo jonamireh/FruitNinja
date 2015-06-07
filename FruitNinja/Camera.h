@@ -24,14 +24,14 @@ class Camera
 {
 protected:
 	// DebugCamera Angle
-	float theta, phi;
+
 	// DebugCamera Vectors for lookAt
 	
 public:
 	glm::vec3 cameraUp;
     glm::vec3 cameraFront;
     bool in_use;
-
+	float theta, phi;
 
 	Camera();
 	~Camera();

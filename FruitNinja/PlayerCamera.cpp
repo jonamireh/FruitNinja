@@ -55,9 +55,11 @@ void PlayerCamera::mouse_update()
         y_offset = 0;
     }
 
-    cameraFront = rotateY(cameraFront, radians(x_offset * sensitivity));
-    cameraFront = rotate(cameraFront, -radians(y_offset * sensitivity), cross(cameraFront, cameraUp));
-    cameraFront = normalize(cameraFront);
+	vec3 front;
+	front.x = cos(radians(theta)) * cos(radians(phi));
+	front.y = sin(radians(phi));
+	front.z = sin(radians(theta)) * cos(radians(phi));
+	cameraFront = front;//normalize(front); //not necessary, already normalized
 }
 
 /**
