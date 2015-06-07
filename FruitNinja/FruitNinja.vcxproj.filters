@@ -459,6 +459,12 @@
     <None Include="ShadowBufferFragShader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="DirShadowMapFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="DirShadowMapVert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

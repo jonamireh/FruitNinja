@@ -151,6 +151,8 @@
     <None Include="DeferredFragShader.glsl" />
     <None Include="DeferredVertShader.glsl" />
     <None Include="dirLightFrag.glsl" />
+    <None Include="DirShadowMapFrag.glsl" />
+    <None Include="DirShadowMapVert.glsl" />
     <None Include="FireFrag.glsl" />
     <None Include="FireGeom.glsl" />
     <None Include="FireVert.glsl" />
