@@ -10,6 +10,7 @@
 #include "OctTree.h"
 #include "DeferredShader.h"
 //#include "CollisionHandler.h"
+#include "ButtonEntity.h"
 #include "DebugShader.h"
 #include <glm/gtx/rotate_vector.hpp>
 #include "Skybox.h"
@@ -74,10 +75,11 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
     meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
+    meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
     meshes.insert(pair<string, MeshSet*>("ground", new MeshSet(assetPath + "ground.dae")));
     meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
     meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
-    meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai2.dae")));
+    meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai3.dae")));
 	meshes.insert(pair<string, MeshSet*>("guard_bb", new MeshSet(assetPath + "samurai_bbox.obj")));
     meshes.insert(pair<string, MeshSet*>("arrow", new MeshSet(assetPath + "arrow.dae")));
     meshes.insert(pair<string, MeshSet*>("arrow_bb", new MeshSet(assetPath + "arrow_boundingbox.dae")));
@@ -287,6 +289,9 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     bool flag = false; // used for door orientation and accessability
     switch (obj_to_place)
     {
+    case 'B': // level button
+        entities.push_back(new ButtonEntity(placement_position, meshes.at("box"), this));
+        break;
     case 'C': // set chewy's position
         chewy->setPosition(placement_position + vec3(0.f, 20.f, 0.f));
         break;
@@ -347,14 +352,14 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
-    case '^': // spikes
-        entities.push_back(new ObstacleEntity(placement_position, meshes.at("spike")));
+    case 'V': // spikes
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("spikes")));
         entities.back()->setScale(3.f);
         break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
         entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
-        entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere")));
+        entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f), meshes.at("lantern"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
         rots = entities.back()->getRotations();
         rots.y = M_PI_2;
         entities.back()->setRotations(rots);
@@ -473,6 +478,7 @@ void World::draw()
 
 	if (keys[GLFW_KEY_6])
 	{
+        current_courtyard = 3;
         setup_next_courtyard();
 	}
 

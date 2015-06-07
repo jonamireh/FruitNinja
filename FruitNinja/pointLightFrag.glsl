@@ -7,6 +7,7 @@ uniform sampler2D colMap;
 uniform vec2 uSize;
 uniform vec3 uEye;
 uniform vec3 uLightPos;
+uniform vec3 uLightColor;
 
 out vec4 FragColor;
 
@@ -21,7 +22,7 @@ out vec4 FragColor;
 vec4 calcLightInternal(vec3 lightDir, vec3 worldPos, vec3 normal)
 {
 	//white light
-	vec3 color = vec3(1.0, 1.0, 1.0);
+	vec3 color = uLightColor;
     vec4 ambientColor = vec4(color, 1.0) * AMBIENT_INTENSITY;
     float diffuseFactor = dot(normal, -lightDir);
 

@@ -7,7 +7,6 @@ ObstacleEntity::ObstacleEntity()
 
 ObstacleEntity::ObstacleEntity(glm::vec3 position, MeshSet* mesh) : GameEntity(position, mesh)
 {
-    //collision_response = true;
 }
 
 void ObstacleEntity::update()

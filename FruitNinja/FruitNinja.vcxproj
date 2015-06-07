@@ -173,6 +173,7 @@
     <ClCompile Include="ArcShader.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BasicAnimationComponent.cpp" />
+    <ClCompile Include="ButtonEntity.cpp" />
     <ClCompile Include="ChewyAnimationComponent.cpp" />
     <ClCompile Include="CinematicCamera.cpp" />
     <ClCompile Include="CinematicPathingComponent.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="ArcShader.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BasicAnimationComponent.h" />
+    <ClInclude Include="ButtonEntity.h" />
     <ClInclude Include="ChewyAnimationComponent.h" />
     <ClInclude Include="CinematicCamera.h" />
     <ClInclude Include="CinematicPathingComponent.h" />

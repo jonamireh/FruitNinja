@@ -37,4 +37,5 @@ private:
 	GLuint size_handle;
 	GLuint position_handle;
 	GLuint light_pos_handle;
+	GLuint light_color_handle;
 };

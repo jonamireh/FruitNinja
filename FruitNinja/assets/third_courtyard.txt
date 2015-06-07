@@ -1,10 +1,48 @@
 ________________________________________
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
+|VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV|
 ________________________________________
 ________________________________________
 |                XXXXX                 |
 |                XXXXX                 |
 |                XXXXX                 |
-|                                      |
+|                XXXXX                 |
 |                                      |
 |                                      |
 |                                      |
@@ -40,12 +78,10 @@ ________________________________________
 |                XXXXX                 |
 |                XXXXX                 |
 ________________________________________
-|                  D                   |
+|                l D l                 |
 |                                      |
-|                  C                   |
-|                                      |
-|                                      |
-|                                      |
+|                  C B                 |
+|                l   l                 |
 |                                      |
 |                                      |
 |                                      |
@@ -77,5 +113,7 @@ ________________________________________
 |                                      |
 |                                      |
 |                                      |
-|                  D                   |
+|                l   l                 |
+|                                      |
+|                l D l                 |
 ________________________________________
