@@ -47,6 +47,7 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 
 	for (int i = 0; i < ents.size(); i++) {
 		std::vector<Mesh*> meshes = ents[i]->mesh->getMeshes();
+		std::vector<std::vector<glm::mat4>>* boneTs = ents[i]->getBoneTrans();
 
 		glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
 		glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
@@ -71,7 +72,8 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 			if (mesh->bones.size() > 0)
 			{
 				glUniform1i(uBoneFlagHandle, 1);
-				glUniformMatrix4fv(uBonesHandle, mesh->boneTransformations.size(), GL_FALSE, value_ptr(mesh->boneTransformations[0]));
+				glUniformMatrix4fv(uBonesHandle, (*boneTs)[j].size(), GL_FALSE, value_ptr((*boneTs)[j][0]));
+					//mesh->boneTransformations[0]));
 			}
 			else
 			{

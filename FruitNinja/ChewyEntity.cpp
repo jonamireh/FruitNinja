@@ -79,3 +79,7 @@ void ChewyEntity::collision(GameEntity* entity)
 
     setPosition(vec3(pos.x, pos.y, last_position.z));
 }
+
+std::vector<std::vector<glm::mat4>>* ChewyEntity::getBoneTrans() {
+	return animComponent.basicAnimation.getBoneTransformations();
+}

@@ -165,3 +165,7 @@ glm::mat4 GameEntity::getAlignedModelMat()
 void GameEntity::update()
 {
 }
+
+std::vector<std::vector<glm::mat4>>* GameEntity::getBoneTrans() {
+	return NULL;
+}

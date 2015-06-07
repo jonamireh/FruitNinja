@@ -14,6 +14,7 @@ public:
 	void changeToSingleAnimation(float start, float end);
 	float frameTime;
 	bool animationComplete;
+	std::vector<std::vector<glm::mat4>>* getBoneTransformations();
 private:
 	void calculateAnimationTransforms(aiNode *node, aiMatrix4x4 parentTransform);
 	aiNodeAnim* FindAnimationNode(std::string boneName);
@@ -28,5 +29,6 @@ private:
 	float starting_frame_time;
 	float end_frame_time;
 	bool looping;
+	std::vector<std::vector<glm::mat4>> boneTransformations;
 };
 

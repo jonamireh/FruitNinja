@@ -39,11 +39,13 @@ public:
 	std::vector<glm::ivec4> boneIds;
 	std::vector<glm::vec4> boneWeights;
 	std::vector<aiAnimation*>* animations;
-	std::vector<glm::mat4> boneTransformations;
 
     std::pair<glm::vec3, glm::vec3> get_lower_and_upper_bounds();
 	Material mat;
 	Material bMat;
+
+	std::vector<glm::mat4> getBoneTransformations();
 private:
 	bool checkError(std::string msg);
+	std::vector<glm::mat4> boneTransformations;
 };

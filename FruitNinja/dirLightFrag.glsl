@@ -12,9 +12,9 @@ uniform vec3 uPos;
 
 out vec4 FragColor;
 
-#define AMBIENT_INTENSITY 0.3
-#define DIFFUSE_INTENSITY 0.5
-#define SPEC_INTENSITY 1.0
+#define AMBIENT_INTENSITY 0.2
+#define DIFFUSE_INTENSITY 0.4
+#define SPEC_INTENSITY 0.8
 #define SHINY 20
 
 /*vec2 poissonDisk[4] = vec2[](
