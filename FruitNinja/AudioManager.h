@@ -20,6 +20,6 @@ public:
 
 	void playAmbient(std::string filename, float volume);
 	void updateListener(glm::vec3 position, glm::vec3 forward, glm::vec3 up);
-	FMOD::Channel *play3DLoop(std::string filename, glm::vec3 position, bool loop);
+	FMOD::Channel *play3D(std::string filename, glm::vec3 position, float atten, bool loop);
 	void updateChannelPosition(FMOD::Channel *channel, glm::vec3 position);
 };

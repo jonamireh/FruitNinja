@@ -68,6 +68,7 @@ public:
     std::map<std::string, MeshSet*> meshes;
 	void enable_debugging();
 	void cancel_cinematic();
+	void skip_level();
     static void draw_line(glm::vec3 p1, glm::vec3 p2, glm::vec3 color);
 	static void draw_point(glm::vec3 p, glm::vec3 color, float radius);
 	static void draw_sphere(glm::vec3 center, float radius, glm::vec3 color, float delta);

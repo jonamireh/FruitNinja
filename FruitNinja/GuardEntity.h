@@ -4,6 +4,7 @@
 #include "GuardMovementComponent.h"
 #include "GuardAnimationComponent.h"
 #include "FrustrumCulling.h"
+#include "AudioManager.h"
 
 class GuardEntity : public GameEntity
 {
@@ -20,6 +21,7 @@ public:
 
 	void update();
 	bool check_view(ChewyEntity* chewy, std::vector<GameEntity*> entities);
+	void stopWalkSound();
 	glm::vec3 front;
 	GuardMovementComponent move_component;
 	std::vector<std::vector<glm::mat4>>* getBoneTrans() override;
@@ -27,4 +29,7 @@ public:
 	bool animCompOwner;
 private:
 	bool static_movement = false;
+	FMOD::Channel *walk_channel;
+
+	void playWalkSound();
 };

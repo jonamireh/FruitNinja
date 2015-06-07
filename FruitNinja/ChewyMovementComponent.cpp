@@ -2,6 +2,7 @@
 #include "ChewyEntity.h"
 #include <GLFW/glfw3.h>
 #include "World.h"
+#include "AudioManager.h"
 #include <iostream>
 
 using namespace glm;
@@ -37,6 +38,7 @@ float angleDiff(float angle_a, float angle_b)
 
 void ChewyMovementComponent::update()
 {
+	bool jumped = false;
 	entity.last_position = entity.getPosition();
 
 	vec3 position = entity.getPosition();
@@ -110,6 +112,7 @@ void ChewyMovementComponent::update()
         if (!dynamic_cast<ChewyEntity&>(entity)._falling && keys[GLFW_KEY_SPACE])
 		{
 			entity.velocity.y += 30;
+			jumped = true;
 		} 
 	}
 	else if(archery_cam->in_use) {
@@ -118,6 +121,10 @@ void ChewyMovementComponent::update()
 
 	position += entity.velocity * seconds_passed;
 	dynamic_cast<ChewyEntity&>(entity)._falling = true;
+
+	if (jumped) {
+		AudioManager::instance()->play3D(assetPath + "jump.wav", position, 5.0f, false);
+	}
 
 	entity.setPosition(position);
 	entity.setRotations(rotations);
