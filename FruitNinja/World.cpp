@@ -691,7 +691,7 @@ void World::change_camera()
 	{
 		if (archery_camera->in_use)
 		{
-			player_camera->phi = archery_camera->phi;
+			//player_camera->phi = archery_camera->phi;
 			player_camera->theta = archery_camera->theta;
 			player_camera->mouse_update();
 		}
@@ -704,7 +704,7 @@ void World::change_camera()
     {
 		if (player_camera->in_use)
 		{
-			archery_camera->phi = player_camera->phi;
+			archery_camera->phi = 0.f;
 			archery_camera->theta = player_camera->theta;
 			archery_camera->mouse_update();
 		}
