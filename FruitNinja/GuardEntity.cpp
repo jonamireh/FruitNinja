@@ -2,6 +2,7 @@
 #include "World.h"
 #include <glm/geometric.hpp>
 #include "GameEntity.h"
+#include "AudioManager.h"
 
 using namespace glm;
 using namespace std;
@@ -52,10 +53,21 @@ GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir, Guard
 	static_movement = true;
 }
 
+void GuardEntity::playWalkSound()
+{
+	walk_channel = AudioManager::instance()->play3D(assetPath + "footstep.wav", getPosition(), 10.0f, true);
+}
+
+void GuardEntity::stopWalkSound()
+{
+	if (walk_channel) walk_channel->stop();
+}
+
 void GuardEntity::update()
 {
 	move_component.update(static_movement);
 	if (animCompOwner) animComponent->update();
+	if (walk_channel) AudioManager::instance()->updateChannelPosition(walk_channel, getPosition());
 }
 
 static pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
@@ -162,4 +174,5 @@ std::vector<std::vector<glm::mat4>>* GuardEntity::getBoneTrans() {
 
 GuardEntity::~GuardEntity() {
 	if (animCompOwner) delete animComponent;
+	stopWalkSound();
 }
