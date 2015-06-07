@@ -86,6 +86,7 @@ private:
     
     void setup_token(char obj_to_place, glm::vec3 file_index);
     void setup_guard(string file_path);
+    void setup_moving_platform(string file_path);
     void shootArrows();
     ChewyEntity* chewy;
 

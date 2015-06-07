@@ -197,6 +197,7 @@
     <ClCompile Include="LightEntity.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Emitter.cpp" />
+    <ClCompile Include="PlatformEntity.cpp" />
     <ClCompile Include="ShadowBufferShader.cpp" />
     <ClCompile Include="SimpleTextureShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightEntity.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="PlatformEntity.h" />
     <ClInclude Include="ShadowBufferShader.h" />
     <ClInclude Include="SimpleTextureShader.h" />
     <ClInclude Include="Skybox.h" />

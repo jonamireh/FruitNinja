@@ -6,10 +6,11 @@
 class ButtonEntity : public GameEntity
 {
     World* world;
+    string load_path;
 public:
     bool pressed;
     ButtonEntity();
-    ButtonEntity(glm::vec3 position, MeshSet* mesh, World* world);
+    ButtonEntity(glm::vec3 position, MeshSet* mesh, string load_path, World* world);
     void update();
     void collision(GameEntity* entity) override;
 };
