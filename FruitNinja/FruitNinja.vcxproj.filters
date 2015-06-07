@@ -175,6 +175,9 @@
     <ClCompile Include="ButtonEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="PlatformEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -376,6 +379,9 @@
       <Filter>DeferredShader</Filter>
     </ClInclude>
     <ClInclude Include="ButtonEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformEntity.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,6 +11,7 @@
 #include "DeferredShader.h"
 //#include "CollisionHandler.h"
 #include "ButtonEntity.h"
+#include "PlatformEntity.h"
 #include "DebugShader.h"
 #include <glm/gtx/rotate_vector.hpp>
 #include "Skybox.h"
@@ -193,6 +194,7 @@ void World::setup_next_courtyard()
         break;
     case 3:
         setup_level(assetPath + "third_courtyard.txt");
+        setup_moving_platform(assetPath + "third_courtyard_platform_one.txt");
         player_camera->movement(chewy);
         break;
     case 4:
@@ -290,7 +292,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     switch (obj_to_place)
     {
     case 'B': // level button
-        entities.push_back(new ButtonEntity(placement_position, meshes.at("box"), this));
+        entities.push_back(new ButtonEntity(placement_position, meshes.at("box"), assetPath + "third_courtyard_button_one.txt", this));
         break;
     case 'C': // set chewy's position
         chewy->setPosition(placement_position + vec3(0.f, 20.f, 0.f));
@@ -442,6 +444,84 @@ void World::setup_guard(string file_path)
 	GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
 	guard_ent->setup_entity_box(meshes["guard_bb"]);
 	entities.push_back(guard_ent);
+    level_file.close();
+}
+
+void World::setup_moving_platform(string file_path)
+{
+    ifstream level_file;
+    level_file.open(file_path);
+
+    string current_line;
+    int current_row = 0;
+    int height_level = 1;
+
+    vec3 control_points[10];
+    vec3 starting_position;
+
+    while (!level_file.eof()) // runs through every line
+    {
+        getline(level_file, current_line);
+        if (current_line == "________________________________________")
+        {
+            current_row = 0;
+            height_level++;
+        }
+        for (int i = 0; i < current_line.length(); i++)
+        {
+            glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
+            switch (current_line.at(i))
+            {
+            case 'P':
+                starting_position = world_position;
+                break;
+            case '0':
+                control_points[0] = world_position;
+                break;
+            case '1':
+                control_points[1] = world_position;
+                break;
+            case '2':
+                control_points[2] = world_position;
+                break;
+            case '3':
+                control_points[3] = world_position;
+                break;
+            case '4':
+                control_points[4] = world_position;
+                break;
+            case '5':
+                control_points[5] = world_position;
+                break;
+            case '6':
+                control_points[6] = world_position;
+                break;
+            case '7':
+                control_points[7] = world_position;
+                break;
+            case '8':
+                control_points[8] = world_position;
+                break;
+            case '9':
+                control_points[9] = world_position;
+                break;
+            }
+        }
+        current_row++;
+    }
+
+    vector<vec3> spline_points;
+    spline_points.push_back(starting_position);
+    for (int i = 0; i < 10; i++)
+    {
+        if (control_points[i] != vec3(0))
+            spline_points.push_back(glm::vec3(control_points[i]));
+        else
+            break;
+    }
+    PlatformEntity* platform = new PlatformEntity(starting_position, meshes["box"], spline_points, 4.f);
+    platform->setScale(3.f);
+    entities.push_back(platform);
     level_file.close();
 }
 
