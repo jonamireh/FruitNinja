@@ -163,9 +163,10 @@ void World::init()
 	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
 
-void World::setup_next_courtyard()
+void World::setup_next_courtyard(bool setup_cin_cam)
 {
-    // remove all non-persistent entities
+	run_cinematic_camera = setup_cin_cam;
+	// remove all non-persistent entities
 	for (int i = NUM_PERSISTENT; i < entities.size(); i++) {
 		should_del.push_back(entities[i]);
 	}
@@ -221,7 +222,7 @@ void World::setup_next_courtyard()
 void World::lose_condition()
 {
     current_courtyard--;
-    setup_next_courtyard();
+    setup_next_courtyard(false);
 }
 
 void World::setup_cinematic_camera(string file_path)
@@ -236,9 +237,6 @@ void World::setup_cinematic_camera(string file_path)
     vec3 look_at_array[10];
     vector<vec3> camera_positions;
     vector<vec3> look_at_positions;
-    camera_positions.push_back(player_camera->cameraPosition);
-    look_at_positions.push_back(player_camera->lookAtPoint);
-
 
     while (!level_file.eof()) // runs through every line
     {
@@ -259,6 +257,14 @@ void World::setup_cinematic_camera(string file_path)
         current_row++;
     }
 
+	float temp = chewy->bounding_box.center.y;
+
+	chewy->bounding_box.center.y = chewy->bounding_box.half_height + starting_platform_height;
+	player_camera->movement(chewy);
+	camera_positions.push_back(player_camera->cameraPosition);
+	look_at_positions.push_back(player_camera->lookAtPoint);
+
+
     for (int i = 0; i < 10; i++)
     {
         if (camera_pos_array[i] != vec3(0))
@@ -272,6 +278,8 @@ void World::setup_cinematic_camera(string file_path)
     cinematic_camera->init(camera_positions, look_at_positions, 40.f);
     camera = cinematic_camera;
     cinematic_camera->in_use = true;
+
+	chewy->bounding_box.center.y = temp;
 
     level_file.close();
 }
@@ -300,6 +308,7 @@ void World::setup_level(string file_path)
         }
         current_row++;
     }
+	num_doors = 0;
     level_file.close();
 }
 
@@ -310,7 +319,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     switch (obj_to_place)
     {
     case 'C': // set chewy's position
-        chewy->setPosition(placement_position + vec3(0.f, 20.f, 0.f));
+		chewy->setPosition(placement_position + vec3(0.f, 5.f, 0.f));
         break;
     case 'D': // door
         if (placement_position.z < 120.f)
@@ -322,6 +331,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
             flag = true;
         }
         entities.push_back(new DoorEntity(placement_position, meshes.at("door"), flag, this));
+		if (num_doors == 0)
+		{
+			starting_platform_height = placement_position.y;
+			num_doors++;
+		}
         entities.back()->setScale(3.f);
         entities.back()->setRotations(rots);
         break;
@@ -690,7 +704,7 @@ void World::change_camera()
 	{
 		if (archery_camera->in_use)
 		{
-			player_camera->phi = archery_camera->phi;
+			//player_camera->phi = archery_camera->phi;
 			player_camera->theta = archery_camera->theta;
 			player_camera->mouse_update();
 		}
@@ -703,7 +717,7 @@ void World::change_camera()
     {
 		if (player_camera->in_use)
 		{
-			archery_camera->phi = player_camera->phi;
+			archery_camera->phi = 0.f;
 			archery_camera->theta = player_camera->theta;
 			archery_camera->mouse_update();
 		}
@@ -736,7 +750,7 @@ void World::cancel_cinematic()
 {
 	if (keys[GLFW_KEY_0])
 	{
-		cinematic_runthrough = true;
+		run_cinematic_camera = false;
 		camera = player_camera;
 		player_camera->in_use = true;
 	}
@@ -744,12 +758,12 @@ void World::cancel_cinematic()
 void World::update_key_callbacks()
 {
     camera->movement(chewy);
-	if (!cinematic_runthrough)
+	if (run_cinematic_camera)
 	{
 		cancel_cinematic();
 		if (cinematic_camera->pathing.done)
 		{
-			cinematic_runthrough = true;
+			run_cinematic_camera = false;
 			camera = player_camera;
 			player_camera->in_use = true;
 		}

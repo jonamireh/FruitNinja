@@ -11,9 +11,6 @@ ArcShader::ArcShader(std::string vertShader, std::string fragShader) : Shader(ve
 {
 	//glBindAttribLocation(getProgramID(), 0, "aPosition");
 	//glBindAttribLocation(getProgramID(), 1, "aNormal");
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, NUM_INSTANCES * sizeof(mat4), glm::value_ptr(mat4(1.0)), GL_STATIC_DRAW);
 }
 
 
@@ -25,6 +22,13 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 	assert(translations.size() == 0);
 
 	glBindVertexArray(a_camera->particle->VAO);
+	if (!draw_at_least_once)
+	{
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, NUM_INSTANCES * 4 * sizeof(vec4), glm::value_ptr(mat4(1.0)), GL_STATIC_DRAW);
+		draw_at_least_once = true;
+	}
 
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 	glEnableVertexAttribArray(0);
@@ -63,7 +67,7 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 	glEnableVertexAttribArray(3);
 	glEnableVertexAttribArray(4);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, NUM_INSTANCES * sizeof(mat4), glm::value_ptr(translations[0]));
+	glBufferSubData(GL_ARRAY_BUFFER, 0, NUM_INSTANCES * 4 * sizeof(vec4), glm::value_ptr(translations[0]));
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 4 * 4, (void*)(0));
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 4 * 4, (void*)(sizeof(float) * 4));
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 4 * 4, (void*)(sizeof(float) * 8));

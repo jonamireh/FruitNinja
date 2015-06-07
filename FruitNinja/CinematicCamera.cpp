@@ -3,6 +3,8 @@
 #include "Global.h"
 #include "World.h"
 #include "ChewyEntity.h"
+#include <glm/gtx/string_cast.hpp>
+
 
 using namespace glm;
 

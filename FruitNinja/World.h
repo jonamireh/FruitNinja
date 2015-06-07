@@ -74,7 +74,7 @@ public:
 	static void draw_sphere(glm::vec3 center, float radius, glm::vec3 color, float delta);
 	static void draw_box(EntityBox* box, glm::vec3 color);
 
-    void setup_next_courtyard();
+	void setup_next_courtyard(bool setup_cin_cam = true);
     void lose_condition();
     void setup_cinematic_camera(string file_path);
     void setup_level(string file_path);
@@ -94,12 +94,15 @@ private:
     void shootArrows();
     ChewyEntity* chewy;
 
-	bool cinematic_runthrough = false;
+	bool run_cinematic_camera = true;
 
 	GameState state;
 	vector<GameEntity*> should_del;
 
 	GuardEntity* walking_g;
 	GuardEntity* idle_g;
+
+	float starting_platform_height;
+	int num_doors = 0;
 };
 

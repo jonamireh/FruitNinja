@@ -16,11 +16,11 @@ DirShadowMapShader::DirShadowMapShader(std::string vertShader, std::string fragS
 	uViewMatrixHandle = getUniformHandle("uViewMatrix");
 	uModelMatrixHandle = getUniformHandle("uModelMatrix");
 	uProjMatrixHandle = getUniformHandle("uProjMatrix");
-	UtexHandle = getUniformHandle("Utex");
-	UflagHandle = getUniformHandle("Uflag");
+	//UtexHandle = getUniformHandle("Utex");
+	//UflagHandle = getUniformHandle("Uflag");
 	uBoneFlagHandle = getUniformHandle("uBoneFlag");
 	uBonesHandle = getUniformHandle("uBones[0]");
-	UdColorHandle = getUniformHandle("UdColor");
+	//UdColorHandle = getUniformHandle("UdColor");
 
 	vec3 cameraPoint = vec3(115.0f, 0.0f, 115.0f) - normalize(lightDirection) * 100.0f;
 
@@ -60,7 +60,7 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 			Mesh* mesh = meshes[j];
 			glBindVertexArray(mesh->VAO);
 
-			if (mesh->textures.size() > 0) {
+			/*if (mesh->textures.size() > 0) {
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
 				glUniform1i(UtexHandle, 0);
@@ -69,7 +69,7 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 			else {
 
 				glUniform1i(UflagHandle, 0);
-			}
+			}*/
 
 			if (mesh->bones.size() > 0)
 			{
@@ -81,8 +81,8 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 				glUniform1i(uBoneFlagHandle, 0);
 			}
 
-			Material material = mesh->mat;
-			glUniform3fv(UdColorHandle, 1, value_ptr(material.diffuse));
+			//Material material = mesh->mat;
+			//glUniform3fv(UdColorHandle, 1, value_ptr(material.diffuse));
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
 
@@ -92,9 +92,9 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 
 			//check_gl_error("Mesh.draw after texture");
 
-			if (mesh->textures.size() > 0) {
+			/*if (mesh->textures.size() > 0) {
 				glBindTexture(GL_TEXTURE_2D, 0);
-			}
+			}*/
 
 		}
 	}

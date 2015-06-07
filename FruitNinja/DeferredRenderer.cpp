@@ -6,7 +6,7 @@ using namespace glm;
 DeferredRenderer::DeferredRenderer(std::string vertShader, std::string fragShader, GBuffer* gbuffer, DirShadowMapBuffer* dirShadowMapBuf)
 	: Shader(vertShader, fragShader), gbuffer(gbuffer), stencilShader("StencilVert.glsl", "StencilFrag.glsl"),
 	lightDir(vec3(0.2f, -1.0f, 0.2f)), dirShadowMapBuffer(dirShadowMapBuf),
-	dirShadowMapShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", dirShadowMapBuffer, lightDir),
+	dirShadowMapShader("DirShadowMapVert.glsl", "DirShadowMapFrag.glsl", dirShadowMapBuffer, lightDir),
 	dirLightShader(gbuffer, dirShadowMapBuffer, lightDir, glm::mat4(dirShadowMapShader.projection_mat * dirShadowMapShader.view_mat))
 	{
 	glBindAttribLocation(getProgramID(), 0, "aPosition");

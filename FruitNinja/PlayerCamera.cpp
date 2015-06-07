@@ -15,6 +15,7 @@ PlayerCamera::PlayerCamera()
 {
 	lookAtPoint = vec3(0);
     radius = 17.0f;
+	theta = -90.f;
 }
 
 /*
