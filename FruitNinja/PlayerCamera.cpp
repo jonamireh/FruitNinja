@@ -73,8 +73,6 @@ void PlayerCamera::movement(GameEntity* chewy)
 
 mat4 PlayerCamera::getViewMatrix()
 {
-	//cout << "pos: " << glm::to_string(cameraPosition) << endl;
-	//cout << glm::to_string(lookAtPoint) << endl;
 	return lookAt(cameraPosition, lookAtPoint, cameraUp);
 }
 
@@ -92,10 +90,10 @@ void PlayerCamera::update_radius(float delta)
 pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 {
     vec3 center = bb.center;
-    vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth); // IF VIEW FRUSTUM WAS OFF THIS IS OFF IN THE SAME WAY
+    vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth);
 
-    float tMin = FLT_MIN;
-    float tMax = FLT_MAX;
+	float tMin = std::numeric_limits<float>::min();
+	float tMax = std::numeric_limits<float>::max();
     vec3 p = center - origin;
     for (int i = 0; i < 3; i++)
     {
@@ -110,7 +108,7 @@ pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
         float e = dot(ai, p);
         float f = dot(ai, direction);
 
-        if (abs(f) > FLT_EPSILON)
+		if (abs(f) > 0.0001f)
         {
             float t1 = (e + h[i]) / f;
             float t2 = (e - h[i]) / f;
@@ -118,21 +116,18 @@ pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
             if (t1 > t2)
             {
                 //swap
-                float temp = t2;
-                t2 = t1;
-                t1 = temp;
+				float temp = t1;
+				t1 = t2;
+				t2 = temp;
             }
 
-            if (t1 > tMin)
-                tMin = t1;
-            if (t2 < tMax)
-                tMax = t2;
-            if (tMin > tMax)
-                return pair<bool, float>(false, 0.f);
-            if (tMax < 0)
-                return pair<bool, float>(false, 0);
+			tMin = fmax(tMin, t1);
+			tMax = fmin(tMax, t2);
+			if (tMin > tMax || tMax < 0) {
+				return pair<bool, float>(false, 0);
+			}
         }
-        else if (-e - h[i] > 0 || -e + h[i] < 0)
+		else if (-1.0f * e - h[i] > 0 || h[i] - e < 0)
             return pair<bool, float>(false, 0);
     }
     if (tMin > 0)
@@ -141,9 +136,47 @@ pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
         return pair<bool, float>(false, tMax);
 }
 
+float static cast_ray(vec3 ray_start, vec3 ray_end, vector<GameEntity*> entities)
+{
+	float dist = 1.0f;
+	float ray_dist = glm::distance(ray_start, ray_end);
+	for (int i = 0; i < entities.size(); i++)
+	{
+		ChewyEntity* c_test = dynamic_cast<ChewyEntity*>(entities.at(i));
+		if (c_test == nullptr && IN_OCTTREE(entities.at(i)->list))
+		{
+			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->bounding_box);
+			if (result.first && result.second < ray_dist)
+			{
+				if (result.second / ray_dist < dist)
+				{
+					dist = result.second / ray_dist;
+				}
+			}
+		}
+	}
+	assert(dist > 0.f && dist <= 1.0f);
+	return dist;
+}
+
 void PlayerCamera::reorient(vector<GameEntity*> entities, ChewyEntity* chewy)
 {
-	cameraPosition = handle_collision_zoom(5.f, get_near_plane_corners(), entities, chewy);
+	vec3* wNear = get_near_plane_corners();
+	float radius = glm::distance(cameraPosition, lookAtPoint);
+	vec3 wzNear[5];
+	for (int i = 0; i < 5; i++)
+	{
+		wzNear[i] = wNear[i] + radius * glm::normalize(lookAtPoint - cameraPosition);
+	}
+
+	vector<float> distances;
+	for (int i = 0; i < 5; i++)
+	{
+		distances.push_back(cast_ray(wzNear[i], wNear[i], entities));
+	}
+	float min_zoom = distances.at(std::distance(distances.begin(), min_element(distances.begin(), distances.end()))) * radius;
+	cameraPosition = chewy->bounding_box.center + vec3(0.f, chewy->bounding_box.half_height, 0.f) - min_zoom * cameraFront;
+	delete[] wNear;
 }
 
 glm::vec3* PlayerCamera::get_near_plane_corners()
@@ -155,83 +188,16 @@ glm::vec3* PlayerCamera::get_near_plane_corners()
 	vec3 w = glm::cross(v, up);
 	vec3 Cnear = cameraPosition + v * PLAYER_NEAR;
 
-	//shared_ptr<vec3[]> near_plane_corners = shared_ptr<vec3[]>(new vec3[4]);
-	vec3* sp = new vec3[4];
+	vec3* sp = new vec3[5];
 	//top left
 	sp[0] = Cnear + (up * (Hnear / 2)) - (w * (Wnear / 2));
-	World::draw_point(sp[0], vec3(1.0f, 0.f, 0.f), 10.f);
 	//top right
 	sp[1] = Cnear + (up * (Hnear / 2)) + (w * (Wnear / 2));
-	World::draw_point(sp[1], vec3(1.0f, 0.f, 0.f), 10.f);
 	//bottom left
-	sp[2] = Cnear - (up * (Hnear / 2)) - (w * (Wnear / 2));
-	World::draw_point(sp[2], vec3(1.0f, 0.f, 0.f), 10.f);
+	sp[2] = Cnear - (up * (Hnear / 2)) + (w * (Wnear / 2));
 	//bottom right
-	sp[3] = Cnear - (up * (Hnear / 2)) + (w * (Wnear / 2));
-	World::draw_point(sp[3], vec3(1.0f, 0.f, 0.f), 10.f);
+	sp[3] = Cnear - (up * (Hnear / 2)) - (w * (Wnear / 2));
+	//center
+	sp[4] = (sp[0] + sp[1] + sp[2] + sp[3]) / 4.f;
 	return sp;
-}
-
-
-float static cast_ray(vec3 ray_start, vec3 ray_end, vector<GameEntity*> entities, float qualifying_distance)
-{
-	float dist = -1.0f;
-	float ray_dist = glm::distance(ray_start, ray_end);
-	for (int i = 0; i < entities.size(); i++)
-	{
-		ChewyEntity* c_test = dynamic_cast<ChewyEntity*>(entities.at(i));
-		if (c_test == nullptr && IN_OCTTREE(entities.at(i)->list))
-		{
-			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->bounding_box);
-			if (result.first && result.second < ray_dist)
-			{
-				//cout << "camera hit made" << endl;
-				if (result.second / ray_dist > dist)
-				{
-					dist = result.second / ray_dist;
-				}
-			}
-		}
-	}
-	if (dist < 0.f)
-		dist = 1.f;
-	assert(dist > 0.f);
-	return dist;
-}
-
-
-vec3 PlayerCamera::handle_collision_zoom(float minOffsetDist, vec3* frustumNearCorners, vector<GameEntity*> entities, ChewyEntity* chewy)
-{
-	float offsetDist = glm::length(lookAtPoint - cameraPosition);
-	float qualifying_distance = glm::distance(cameraPosition, lookAtPoint);
-	float raycastLength = offsetDist - minOffsetDist;
-	if (raycastLength < 0.f)
-	{
-		// camera is already too near the lookat target
-		return cameraPosition;
-	}
-
-	vec3 camOut = glm::normalize(lookAtPoint - cameraPosition);
-	vec3 nearestCamPos = lookAtPoint - camOut * minOffsetDist;
-	float minHitFraction = 1.f;
-
-	for (int i = 0; i < 4; i++)
-	{
-		const vec3& corner = frustumNearCorners[i];
-		vec3 offsetToCorner = corner - cameraPosition;
-		vec3 rayStart = nearestCamPos + offsetToCorner;
-		vec3 rayEnd = corner;
-		// a result between 0 and 1 indicates a hit along the ray segment
-		float hitFraction = cast_ray(rayStart, rayEnd, entities, qualifying_distance);
-		minHitFraction = glm::min(hitFraction, minHitFraction);
-	}
-
-	if (minHitFraction < 1.f)
-	{
-		return nearestCamPos - camOut * (raycastLength * minHitFraction);
-	}
-	else
-	{
-		return cameraPosition;
-	}
 }
