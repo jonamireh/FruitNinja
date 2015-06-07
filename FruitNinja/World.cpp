@@ -160,7 +160,7 @@ void World::init()
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 
-	//AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
+	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
 
 void World::setup_next_courtyard()
