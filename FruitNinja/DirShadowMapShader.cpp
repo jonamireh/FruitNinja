@@ -92,9 +92,9 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 
 			//check_gl_error("Mesh.draw after texture");
 
-			if (mesh->textures.size() > 0) {
+			/*if (mesh->textures.size() > 0) {
 				glBindTexture(GL_TEXTURE_2D, 0);
-			}
+			}*/
 
 		}
 	}
