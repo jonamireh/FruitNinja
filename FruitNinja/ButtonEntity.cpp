@@ -1,5 +1,7 @@
 #include "ButtonEntity.h"
 #include "ProjectileEntity.h"
+#include "AudioManager.h"
+#include "World.h"
 
 ButtonEntity::ButtonEntity() {}
 
@@ -26,6 +28,7 @@ void ButtonEntity::collision(GameEntity* entity)
                 world->setup_level(load_path);
                 setPosition(getPosition() - glm::vec3(0.f, bounding_box.half_height, 0.f));
                 pressed = true;
+				playPressedSound();
                 return;
             }
         }
@@ -40,7 +43,13 @@ void ButtonEntity::collision(GameEntity* entity)
                 world->setup_level(load_path);
                 //setPosition(getPosition() - glm::vec3(0.f, 0.f, 0.f));
                 pressed = true;
+				playPressedSound();
             }
         }
     }
+}
+
+void ButtonEntity::playPressedSound()
+{
+	AudioManager::instance()->play3D(assetPath + "button.wav", getPosition(), 10.0f, false);
 }

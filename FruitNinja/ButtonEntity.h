@@ -7,6 +7,8 @@ class ButtonEntity : public GameEntity
 {
     World* world;
     string load_path;
+
+	void playPressedSound();
 public:
     bool pressed;
     ButtonEntity();

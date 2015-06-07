@@ -54,14 +54,20 @@ void ProjectileEntity::collision(GameEntity* entity)
 		if (typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity)) {
 			//get rid of hit entity
 			entity->list = UNSET_DRAW(entity->list);
+			GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
+			if (ge != nullptr) {
+				ge->stopWalkSound();
+			}
 		} else if (typeid(*entity) == typeid(LightEntity)) {
 			LightEntity* le = dynamic_cast<LightEntity*>(entity);
 			le->light = NULL;
+			le->disableFlameSound();
 		}
 		//get rid of arrow
 		if (!(typeid(*entity) == typeid(ChewyEntity))) {
 			list = UNSET_DRAW(list);
 			game_speed = 1.0;
+			AudioManager::instance()->play3D(assetPath + "arrow_hit.wav", getPosition(), 10.0f, false);
 		}
 	}
 }

@@ -160,7 +160,7 @@ void World::init()
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 
-	//AudioManager::instance()->playAmbient(assetPath + "ninjatune.mp3", 0.5f);
+	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
 
 void World::setup_next_courtyard()
@@ -375,6 +375,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     case 'l': // Lantern Pole with Lantern
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
         entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
+		entities.back()->list = UNSET_WALL(entities.back()->list);
         entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f),
 			meshes.at("lantern"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
         rots = entities.back()->getRotations();
@@ -561,6 +562,7 @@ void World::shootArrows()
 		entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
         entities.back()->setup_entity_box(meshes.at("arrow_bb"));
 		held = false;
+		AudioManager::instance()->play3D(assetPath + "bow_better.wav", chewy->getPosition(), 3.0f, false);
 	}
 
 	mouse_buttons_pressed[0] = false;
@@ -720,6 +722,15 @@ void World::enable_debugging()
 	if (keys[GLFW_KEY_X])
 		debug_enabled = false;
 }
+
+void World::skip_level()
+{
+	if (mouse_buttons_pressed[2]) {
+		setup_next_courtyard();
+	}
+
+	mouse_buttons_pressed[2] = false;
+}
 void World::cancel_cinematic()
 {
 	if (keys[GLFW_KEY_0])
@@ -746,6 +757,7 @@ void World::update_key_callbacks()
 	{
 		change_camera();
 		enable_debugging();
+		skip_level();
 		stop_time();
 	}
     x_offset = 0;
@@ -784,7 +796,7 @@ void World::update()
 		GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
 		if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
 			//AudioManager::instance()->playAmbient(assetPath + "jons_breakthrough_performance.wav", 5.0f);
-			AudioManager::instance()->play3DLoop(assetPath + "jons_breakthrough_performance.wav", guard_temp->getPosition(), false);
+			AudioManager::instance()->play3D(assetPath + "jons_breakthrough_performance.wav", guard_temp->getPosition(), 10.0f, false);
 			state = SPOTTED;
 			
 			vec3 p_pos = player_camera->cameraPosition;

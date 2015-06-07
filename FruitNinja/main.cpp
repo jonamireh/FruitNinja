@@ -26,7 +26,14 @@ void AppMain()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Fruit Ninja", NULL, NULL);
+
+	GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Fruit Ninja", NULL, NULL);
+	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	glfwSetWindowPos(window, mode->width / 2.f - screen_width / 2.f, mode->height / 2.f - screen_height / 2.f);
+	
+	//if you want full-screen, uncomment the following line and comment the previous three
+	//GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Fruit Ninja", glfwGetPrimaryMonitor(), NULL);
+
     if (!window)
         throw std::runtime_error("glfwCreateWindow failed. Can your hardware handle OpenGL 3.2?");
 
