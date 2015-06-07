@@ -61,7 +61,6 @@ void ProjectileEntity::collision(GameEntity* entity)
 		} else if (typeid(*entity) == typeid(LightEntity)) {
 			LightEntity* le = dynamic_cast<LightEntity*>(entity);
 			le->light = NULL;
-			le->disableFlameSound();
 		}
 		//get rid of arrow
 		if (!(typeid(*entity) == typeid(ChewyEntity))) {
