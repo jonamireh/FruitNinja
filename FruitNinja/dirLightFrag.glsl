@@ -65,8 +65,9 @@ float random(vec3 pos, int i)
     return fract(sin(dot_product) * 43758.5453);
 }
 
-float calcShadowFactor(vec3 pos)
+float calcShadowFactor(vec3 pos, float cosTheta)
 {
+	cosTheta = clamp(cosTheta, 0.0, 1.0);
 	vec4 lightPos = uShadowVP * vec4(pos, 1.0);
 	vec3 projCoords = lightPos.xyz / lightPos.w;
 	vec2 uvCoords;
@@ -75,7 +76,8 @@ float calcShadowFactor(vec3 pos)
 	float z = 0.5 * projCoords.z + 0.5;
 
 	float depth = texture(shadowMap, uvCoords).x;
-	if (depth < (z + 0.00001)) {
+	float bias = 0.005 * tan(acos(cosTheta));
+	if (depth < (z - bias)) {
 		return 0.0;
 	}
 	else {
@@ -86,8 +88,8 @@ float calcShadowFactor(vec3 pos)
 	float visibility = 1.0;
 	for (int i = 0; i < 4; i++) {
 		//int index = int(16.0 * random(pos, i)) % 16;
-		//float depth = texture(shadowMap, uvCoords + poissonDisk[index] / 700.0).x;
-		//if (depth < (z + 0.00001)) {
+		//float depth = texture(shadowMap, uvCoords + poissonDisk[index] / 2000.0).x;
+		//if (depth < (z - bias)) {
 		//	visibility -= (1.0 / 5.0);
 		//}
 
@@ -108,7 +110,7 @@ float calcShadowFactor(vec3 pos)
 	return visibility;*/
 }
 
-vec4 calcLightInternal(vec3 lightDir, vec3 worldPos, vec3 normal, float shadowFactor)
+vec4 calcLightInternal(vec3 lightDir, vec3 worldPos, vec3 normal)
 {
 	//white light
 	vec3 color = vec3(1.0, 1.0, 1.0);
@@ -130,6 +132,8 @@ vec4 calcLightInternal(vec3 lightDir, vec3 worldPos, vec3 normal, float shadowFa
         }
     }
 
+	float shadowFactor = calcShadowFactor(worldPos, diffuseFactor);
+
     return (ambientColor + shadowFactor * (diffuseColor + specularColor));
 }
 
@@ -137,9 +141,8 @@ vec4 calcDirLight(vec3 worldPos, vec3 normal)
 {
     vec3 lightDir = uPos;
     lightDir = normalize(lightDir);
-	float shadowFactor = calcShadowFactor(worldPos);
 
-    vec4 color = calcLightInternal(lightDir, worldPos, normal, shadowFactor);
+    vec4 color = calcLightInternal(lightDir, worldPos, normal);
 
     return color;
 }
