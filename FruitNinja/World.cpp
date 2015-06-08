@@ -257,12 +257,12 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
         current_row++;
     }
 
-	/*float temp = chewy->bounding_box.center.y;
+	float temp = chewy->bounding_box.center.y;
 
 	chewy->bounding_box.center.y = chewy->bounding_box.half_height + starting_platform_height;
 	player_camera->movement(chewy);
 	camera_positions.push_back(player_camera->cameraPosition);
-	look_at_positions.push_back(player_camera->lookAtPoint);*/
+	look_at_positions.push_back(player_camera->lookAtPoint);
 
 
     for (int i = 0; i < 10; i++)
@@ -279,7 +279,7 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
     camera = cinematic_camera;
     cinematic_camera->in_use = true;
 
-	//chewy->bounding_box.center.y = temp;
+	chewy->bounding_box.center.y = temp;
 
     level_file.close();
 }
