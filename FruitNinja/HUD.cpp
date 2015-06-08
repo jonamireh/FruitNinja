@@ -29,7 +29,7 @@ void HUD::draw()
 {
 	glEnable(GL_BLEND);
 	shader.drawTexture(arrow_hud->object(), screen_width - arrow_hud->originalWidth() * .5 - 20, screen_height - arrow_hud->originalHeight() * .5 - 20, arrow_hud->originalWidth() * .5, arrow_hud->originalHeight() * .5, glm::vec4(1));
-	_bonzai84.draw_text_centered(std::to_string(arrow_count), glm::vec2(screen_width - arrow_hud->originalWidth() * .5 - 10, screen_height - arrow_hud->originalHeight() * .5 - 20), arrow_count > 0 ? glm::vec3(1) : glm::vec3(1, 0, 0));
+	_bonzai84.draw_text_centered(std::to_string(arrow_count), glm::vec2(screen_width - arrow_hud->originalWidth() * .5 + 5, screen_height - arrow_hud->originalHeight() * .5 - 15), arrow_count > 0 ? glm::vec3(1) : glm::vec3(1, 0, 0));
 	if (chewy->moveComponent.archery_cam->in_use)
 	{
 		shader.drawTexture(power_bar_frame->object(), screen_width - power_bar_frame->originalWidth() - 20, screen_height - 40 - arrow_hud->originalHeight() * .5 - power_bar_frame->originalHeight(), power_bar_frame->originalWidth(), power_bar_frame->originalHeight(), glm::vec4(1));
