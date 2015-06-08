@@ -18,6 +18,7 @@
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define GRAVITY 33
+#define MAX_TIME_STEP (1.0f / 25.0f)
 #define PLAYER_FOV 45.f
 #define GUARD_FOV 45.f
 #define PLAYER_NEAR 0.1f
@@ -32,6 +33,7 @@ class GuardEntity;
 const string assetPath = "assets/";
 const string level_path = "levels/";
 extern bool keys[1024];
+extern float actual_seconds_passed;
 extern float seconds_passed;
 extern float x_offset;
 extern float y_offset;

@@ -7,7 +7,6 @@
 #define IDLE_START 60.0 / FRAMES_PER_SEC
 #define IDLE_DURATION 50.0 / FRAMES_PER_SEC
 
-
 enum GAnimationState
 {
 	WALKIN,

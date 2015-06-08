@@ -13,4 +13,5 @@ public:
 	GLuint VBO;
 	std::vector<float> translations;
 	bool draw_at_least_once = false;
+	bool enabled = true;
 };

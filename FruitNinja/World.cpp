@@ -36,6 +36,7 @@ using namespace glm;
 
 bool keys[1024];
 bool mouse_buttons_pressed[8];
+float actual_seconds_passed = 0;
 float seconds_passed = 0;
 float x_offset;
 float y_offset;
@@ -78,6 +79,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
 	meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
+	meshes.insert(pair<string, MeshSet*>("spikes_floor", new MeshSet(assetPath + "spikes_floor.dae")));
 	meshes.insert(pair<string, MeshSet*>("ground", new MeshSet(assetPath + "ground.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
@@ -581,6 +583,8 @@ void World::shootArrows()
 			shot = true;
 		}
 	}
+	dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = !shot;
+
 	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot)
 	{
 		held = true;
@@ -838,9 +842,12 @@ void World::update()
 			chewy->isCaught = true;
 		}
 	}
+
+	actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
+
 	if (!time_stopped)
 	{
-		seconds_passed = (glfwGetTime() - start_time) * game_speed;
+		seconds_passed = std::min(actual_seconds_passed, MAX_TIME_STEP);
 	}
 	else
 	{

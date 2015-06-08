@@ -4,10 +4,17 @@
 
 //#include <GLFW/glfw3.h>
 
+using namespace glm;
+
 void ProjectileMovementComponent::update()
 {	
 	if (!entity.shot) {
-		entity.setPosition(camera->cameraPosition);
+		vec3 pos = camera->cameraPosition + 6.f * camera->cameraFront;
+		vec3 left = glm::normalize(glm::cross(vec3(0.f, 1.f, 0.f), camera->cameraFront));
+		vec3 offset = 0.45f * left;
+		offset.y -= 0.5f;
+		pos += offset;
+		entity.setPosition(pos);
 		velocity = camera->cameraFront * ARROW_SPEED * bow_strength;
 
 		entity.list = SET_DRAW(entity.list);
