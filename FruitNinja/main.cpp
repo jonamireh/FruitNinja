@@ -85,6 +85,7 @@ void AppMain()
 
 	glfwSetTime(0.f);
 	int i = 0;
+	float frameTime = 0.0f;
     while (!glfwWindowShouldClose(window))
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -95,8 +96,10 @@ void AppMain()
 
 		if (!(i % 50))
 		{
-			cout << "Frame Rate: " << game_speed / seconds_passed << endl;
+			cout << "Frame Rate: " << frameTime << endl;
+			frameTime = 0.0f;
 		}
+		frameTime += game_speed / seconds_passed / 50.0f;
 		i++;
 
         glfwSwapBuffers(window);

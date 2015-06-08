@@ -11,6 +11,6 @@ public:
 	ArcShader(std::string vertShader, std::string fragShader);
 	void draw(ArcheryCamera* a_camera);
 	GLuint VBO;
-	std::vector<glm::mat4> translations;
+	std::vector<float> translations;
 	bool draw_at_least_once = false;
 };
