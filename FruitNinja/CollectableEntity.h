@@ -11,10 +11,11 @@ class CollectableEntity : public GameEntity
 public:
 	CollectableEntity();
 	virtual ~CollectableEntity();
-	CollectableEntity(glm::vec3 position, MeshSet* mesh);
+	CollectableEntity(glm::vec3 position, MeshSet* mesh, int numArrows = 1);
 	void update() override;
 	void collision(GameEntity* entity) override;
 private:
 	glm::vec3 center;
 	double total_secs = 0.0;
+	int number;
 };

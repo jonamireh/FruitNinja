@@ -11,8 +11,9 @@ CollectableEntity::~CollectableEntity() {
 
 }
 
-CollectableEntity::CollectableEntity(glm::vec3 position, MeshSet* mesh) : GameEntity(position, mesh) {
+CollectableEntity::CollectableEntity(glm::vec3 position, MeshSet* mesh, int numArrows) : GameEntity(position, mesh) {
 	center = getPosition();
+	number = numArrows;
 }
 
 void CollectableEntity::update() {
@@ -23,8 +24,8 @@ void CollectableEntity::update() {
 
 void CollectableEntity::collision(GameEntity* entity) {
 	if (typeid(*entity) == typeid(ChewyEntity)) {
-		AudioManager::instance()->play3D(assetPath + "jons_breakthrough_performance.wav", center, 10.0f, false);
-		arrow_count++;
+		AudioManager::instance()->play3D(assetPath + "Get_Item.wav", center, 10.0f, false);
+		arrow_count += number;
 		list = UNSET_DRAW(list);
 	}
 }
