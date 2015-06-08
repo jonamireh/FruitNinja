@@ -158,7 +158,7 @@ void GameEntity::collision(GameEntity* entity)
 glm::mat4 GameEntity::getModelMat()
 {
 	if (!validModelMat) {
-		modelMat = getAlignedModelMat() * getRotMat();
+        modelMat = getAlignedModelMat() * getRotMat();
 		validModelMat = true;
 	}
 

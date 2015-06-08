@@ -54,7 +54,6 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 		GameEntity *entity = entsInView[i];
 		std::vector<Mesh*> meshes = entity->mesh->getMeshes();
 
-		glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
 		glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entsInView[i]->getModelMat()));
 		
 		for (int j = 0; j < meshes.size(); j++)
