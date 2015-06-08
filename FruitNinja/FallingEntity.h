@@ -2,12 +2,13 @@
 
 #include "World.h"
 #include "GameEntity.h"
-
+#define TIME_TO_FALL 2.0f
 class FallingEntity : public GameEntity
 {
+    bool stepped_on;
+    float elapsed_time = 0.f;
 public:
-    bool pressed;
-    FallingEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed);
+    FallingEntity(glm::vec3 position, MeshSet* mesh);
     void update();
     void collision(GameEntity* entity) override;
 };

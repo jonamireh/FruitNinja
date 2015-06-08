@@ -17,6 +17,7 @@
 #include <functional>
 #include <queue>
 #include "LightEntity.h"
+#include "FallingEntity.h"
 #include "DoorEntity.h"
 #include "SpikeEntity.h"
 #include "FrustrumCulling.h"
@@ -338,6 +339,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		}
         entities.back()->setScale(3.f);
         entities.back()->setRotations(rots);
+        break;
+    case 'f': // falling box
+        entities.push_back(new FallingEntity(placement_position, meshes["box"]));
+        entities.back()->setScale(3.f);
         break;
     case 'F': // statue and flower bed
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("flowerPlanter")));
