@@ -6,8 +6,6 @@
 #include "GuardEntity.h"
 #include "LightEntity.h"
 
-#define SHOOT_TIME_SPEED 0.5
-
 
 ProjectileEntity::ProjectileEntity() : movement(*this, new ArcheryCamera()), shot(false), timeLeft(5.0f)
 {

@@ -26,6 +26,7 @@
 #include "ParticleShader.h"
 #include "CinematicCamera.h"
 #include "AudioManager.h"
+#include "CollectableEntity.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
 #define NUM_PERSISTENT 7
