@@ -16,26 +16,22 @@ void ButtonEntity::update() {}
 
 void ButtonEntity::collision(GameEntity* entity)
 {
-    if (typeid(ChewyEntity) == typeid(*entity))
+    if (!pressed)
     {
-        if (!pressed)
+        if (typeid(ChewyEntity) == typeid(*entity))
         {
             world->setup_level(load_path);
             pressed = true;
+            setPosition(getPosition() - glm::vec3(0.f, 2.f * bounding_box.half_height, 0.f));
             playPressedSound();
+            glm::vec3 dir_to_move = glm::vec3(getPosition().x, 0.f, getPosition().z) - glm::vec3(entity->getPosition().x, 0.f, entity->getPosition().z);
+            dir_to_move = glm::normalize(dir_to_move);
+            entity->setPosition(entity->getPosition() + glm::vec3(0.f, bounding_box.half_height, 0.f) + 0.5f * dir_to_move);
+            return;
         }
-        setPosition(getPosition() - glm::vec3(0.f, bounding_box.half_height, 0.f));
-        glm::vec3 dir_to_move = glm::vec3(getPosition().x, 0.f, getPosition().z) - glm::vec3(entity->getPosition().x, 0.f, entity->getPosition().z);
-        dir_to_move = glm::normalize(dir_to_move);
-        entity->setPosition(entity->getPosition() + glm::vec3(0.f, bounding_box.half_height, 0.f) + 0.5f * dir_to_move);
-        return;
-    }
-    if (!pressed)
-    {
         ProjectileEntity* arrow_check = dynamic_cast<ProjectileEntity*>(entity);
         if (arrow_check != nullptr)
         {
-
             world->setup_level(load_path);
             pressed = true;
             playPressedSound();
