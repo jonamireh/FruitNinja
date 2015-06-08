@@ -26,7 +26,7 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 	{
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, NUM_INSTANCES * 4 * sizeof(vec4), glm::value_ptr(vec3(1.0)), GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, NUM_INSTANCES * 4 * sizeof(vec4), glm::value_ptr(vec4(1.0)), GL_STATIC_DRAW);
 		draw_at_least_once = true;
 	}
 
@@ -38,7 +38,7 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 	vec3 base_transformation = a_camera->cameraPosition + 2.f * a_camera->cameraFront;
 	vec3 left = glm::normalize(glm::cross(vec3(0.f, 1.f, 0.f), a_camera->cameraFront));
 	vec3 offset = 0.2f * left;
-	vec3 incremental_offset = offset / (float)NUM_INSTANCES;
+	vec3 incremental_offset = offset / (float) NUM_INSTANCES;
 	base_transformation += offset;
 	float t1 = -(sqrt(pow(velocity.y, 2) - 2.f * -GRAVITY * base_transformation.y) + velocity.y) / -GRAVITY;
 	float t2 = (sqrt(pow(velocity.y, 2) - 2.f * -GRAVITY * base_transformation.y) - velocity.y) / -GRAVITY;
@@ -76,7 +76,6 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 	glVertexAttribDivisor(2, 1);
 	glVertexAttribDivisor(3, 1);
 	glVertexAttribDivisor(4, 1);
-	//check_gl_error("ArcShader.draw before actual draw");
 
 	glUniformMatrix4fv(getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(a_camera->getViewMatrix()));
 	glUniformMatrix4fv(getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(projection));
