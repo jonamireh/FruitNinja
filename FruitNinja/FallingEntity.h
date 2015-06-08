@@ -2,7 +2,7 @@
 
 #include "World.h"
 #include "GameEntity.h"
-#define TIME_TO_FALL 2.0f
+#define TIME_TO_FALL 1.0f
 class FallingEntity : public GameEntity
 {
     bool stepped_on;
