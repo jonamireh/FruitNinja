@@ -9,9 +9,9 @@ ________________________________________
 |                                      |
 | W          W       W                 |
 |         W                       WWWWW|
-|                          W           |
-|      W     W    W                   W|
-|                   W                  |
+|                          WWW        W|
+|      W     W    W        W          W|
+|                   W      WWW        W|
 |          W   W                  WWWWW|
 |W                   W                 |
 |                                      |
@@ -50,10 +50,10 @@ ________________________________________
 |                                      |
 | W          W       W                 |
 |         W                       WWWWW|
-|                          W           |
-|      W     W    W                   W|
-|                   W                  |
-|          W   W                  WWWWW|
+|                          WWW         |
+|      W     W    W        W           |
+|                   W      WWW         |
+|          W   W                  WWWW |
 |W                   W                 |
 |                                      |
 |                                      |
@@ -91,10 +91,10 @@ ________________________________________
 |                                      |
 | V          V       V                 |
 |         V                       VVVVV|
-|                          V           |
-|      V     V    V                   V|
-|                   V                  |
-|          V   V                  VVVVV|
+|                          VVV         |
+|      V     V    V        V           |
+|                   V      VVV         |
+|          V   V                  VVVV |
 |V                   V                 |
 |                                      |
 |                                      |

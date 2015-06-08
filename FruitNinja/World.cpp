@@ -200,7 +200,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(19, 4, 5) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
 			meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
 		// second button
-		entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(1, 4, 1) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
+		entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(28, 4, 13) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
 			meshes.at("box"), level_path + "third_courtyard_button_two.txt", this));
 
 		setup_moving_platform(level_path + "third_courtyard_platform_one.txt");
