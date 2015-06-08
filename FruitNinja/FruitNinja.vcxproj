@@ -346,6 +346,7 @@
     <ClInclude Include="freetype\tttables.h" />
     <ClInclude Include="freetype\tttags.h" />
     <ClInclude Include="freetype\ttunpat.h" />
+    <ClInclude Include="ft2build.h" />
     <ClInclude Include="GuardAnimationComponent.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="ParticleShader.h" />
