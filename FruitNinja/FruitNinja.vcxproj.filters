@@ -181,6 +181,9 @@
     <ClCompile Include="SpikeEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="FallingEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -388,6 +391,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="SpikeEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FallingEntity.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

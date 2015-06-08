@@ -11,7 +11,7 @@ DirShadowMapShader::DirShadowMapShader(std::string vertShader, std::string fragS
 	: Shader(vertShader, fragShader), shadowMapBuffer(buffer)
 {
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
-	glBindAttribLocation(getProgramID(), 1, "aNormal");
+	//glBindAttribLocation(getProgramID(), 1, "aNormal");
 
 	uViewMatrixHandle = getUniformHandle("uViewMatrix");
 	uModelMatrixHandle = getUniformHandle("uModelMatrix");
@@ -47,14 +47,15 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
+	glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
+	glUniformMatrix4fv(uProjMatrixHandle, 1, GL_FALSE, value_ptr(projection_mat));
+
 	for (int i = 0; i < entsInView.size(); i++) {
 		std::vector<Mesh*> meshes = entsInView[i]->mesh->getMeshes();
 		std::vector<std::vector<glm::mat4>>* boneTs = ents[i]->getBoneTrans();
-
-		glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
+		
 		glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entsInView[i]->getModelMat()));
-		glUniformMatrix4fv(uProjMatrixHandle, 1, GL_FALSE, value_ptr(projection_mat));
-
+		
 		for (int j = 0; j < meshes.size(); j++)
 		{
 			Mesh* mesh = meshes[j];

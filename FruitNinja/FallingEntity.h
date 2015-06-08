@@ -3,13 +3,11 @@
 #include "World.h"
 #include "GameEntity.h"
 
-class SpikeEntity : public GameEntity
+class FallingEntity : public GameEntity
 {
 public:
-    World* world;
     bool pressed;
-    SpikeEntity();
-    SpikeEntity(glm::vec3 position, MeshSet* mesh, World* world);
+    FallingEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed);
     void update();
     void collision(GameEntity* entity) override;
 };

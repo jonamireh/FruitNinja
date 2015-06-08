@@ -125,6 +125,9 @@ void ChewyMovementComponent::update()
 	if (jumped) {
 		AudioManager::instance()->play3D(assetPath + "jump.wav", position, 5.0f, false);
 	}
+    // a clamp that happens if you've already fallen through the floor
+    if (position.y - entity.bounding_box.half_height < -0.5f)
+        position.y = 0.5f;
 
 	entity.setPosition(position);
 	entity.setRotations(rotations);

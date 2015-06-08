@@ -196,8 +196,17 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         break;
     case 3:
         setup_level(level_path + "third_courtyard.txt");
+
+        // kind of the best time based resolution
+        // first button
+        entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(19, 4, 5) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
+            meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
+        // second button
+        entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(1, 4, 1) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
+            meshes.at("box"), level_path + "third_courtyard_button_two.txt", this));
+
         setup_moving_platform(level_path + "third_courtyard_platform_one.txt");
-        //setup_moving_platform(level_path + "third_courtyard_platform_two.txt");
+        setup_moving_platform(level_path + "third_courtyard_platform_two.txt");
         player_camera->movement(chewy);
         break;
     case 4:
@@ -248,12 +257,12 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
         current_row++;
     }
 
-	float temp = chewy->bounding_box.center.y;
+	/*float temp = chewy->bounding_box.center.y;
 
 	chewy->bounding_box.center.y = chewy->bounding_box.half_height + starting_platform_height;
 	player_camera->movement(chewy);
 	camera_positions.push_back(player_camera->cameraPosition);
-	look_at_positions.push_back(player_camera->lookAtPoint);
+	look_at_positions.push_back(player_camera->lookAtPoint);*/
 
 
     for (int i = 0; i < 10; i++)
@@ -270,7 +279,7 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
     camera = cinematic_camera;
     cinematic_camera->in_use = true;
 
-	chewy->bounding_box.center.y = temp;
+	//chewy->bounding_box.center.y = temp;
 
     level_file.close();
 }
@@ -309,9 +318,6 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     bool flag = false; // used for door orientation and accessability
     switch (obj_to_place)
     {
-    case 'B': // level button
-        entities.push_back(new ButtonEntity(placement_position, meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
-        break;
     case 'C': // set chewy's position
 		chewy->setPosition(placement_position + vec3(0.f, 5.f, 0.f));
         break;
@@ -546,7 +552,7 @@ void World::setup_moving_platform(string file_path)
         else
             break;
     }
-    PlatformEntity* platform = new PlatformEntity(starting_position, meshes["box"], spline_points, 4.f);
+    PlatformEntity* platform = new PlatformEntity(starting_position, meshes["box"], spline_points, 6.f);
     platform->setScale(3.f);
     entities.push_back(platform);
     level_file.close();
