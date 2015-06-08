@@ -12,6 +12,7 @@ public:
 	~BasicAnimationComponent();
 	void changeToLoopingAnimation(float start, float end);
 	void changeToSingleAnimation(float start, float end);
+	void changeToSingleInterruptibleAnimation(float start, float end);
 	float frameTime;
 	bool animationComplete;
 	std::vector<std::vector<glm::mat4>>* getBoneTransformations();
