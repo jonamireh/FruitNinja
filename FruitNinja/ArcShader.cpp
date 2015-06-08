@@ -5,7 +5,7 @@
 using namespace glm;
 using namespace std;
 
-#define NUM_INSTANCES 100
+#define NUM_INSTANCES 200
 
 ArcShader::ArcShader(std::string vertShader, std::string fragShader) : Shader(vertShader, fragShader)
 {
@@ -26,7 +26,7 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 	{
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, NUM_INSTANCES * 4 * sizeof(vec4), glm::value_ptr(mat4(1.0)), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, NUM_INSTANCES * 4 * sizeof(vec4), glm::value_ptr(vec3(1.0)), GL_DYNAMIC_DRAW);
 		draw_at_least_once = true;
 	}
 
