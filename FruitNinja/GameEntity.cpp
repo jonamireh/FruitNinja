@@ -20,6 +20,12 @@ collision_response(collision_response)
     setPosition(position + vec3(0.f, bounding_box.half_height, 0.f));
     list = SET_DRAW(list);
     list = SET_OCTTREE(list);
+
+	boneTransformations.resize(mesh->getMeshes().size());
+	for (int i = 0; i < boneTransformations.size(); i++)
+	{
+		boneTransformations[i].resize(mesh->getMeshes()[i]->boneWeights.size());
+	}
 	list = SET_WALL(list);
 };
 
@@ -188,8 +194,4 @@ glm::mat4 GameEntity::getRotMat()
 
 void GameEntity::update()
 {
-}
-
-std::vector<std::vector<glm::mat4>>* GameEntity::getBoneTrans() {
-	return NULL;
 }

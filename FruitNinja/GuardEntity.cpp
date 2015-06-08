@@ -11,43 +11,15 @@ using namespace std;
 #define DETECTION_INNER_RADIUS 7.f
 #define COS_ANGLE 60.f
 
-GuardEntity::GuardEntity() : move_component(*this, vector<vec3>(), 0.f, false), animComponent(NULL), animCompOwner(false)
-{
-
-}
-
-GuardEntity::GuardEntity(MeshSet* mesh, GAnimationState anim_st) : move_component(*this, glm::vec3(0.0f, 0.f, 1.f)),
-	animComponent(NULL), animCompOwner(true), GameEntity(glm::vec3(0.0, 0.0, 0.0), mesh, false)
-{
-	animComponent = new GuardAnimationComponent(this, anim_st);
-	current_animation = mesh->getAnimations()[0];
-}
-
-/*GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points,
+GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points,
 	float move_speed, bool linear_curve) : GameEntity(position, mesh, true),
-	move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animCompOwner(true)
+	move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(this, WALKIN)
 {
-	animComponent = new GuardAnimationComponent(this, WALKIN);
 	current_animation = mesh->getAnimations()[0];
 }
 
 GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir)
-	: GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), move_component(*this, dir), animCompOwner(true)
-{
-	animComponent = new GuardAnimationComponent(this, IDLE);
-	current_animation = mesh->getAnimations()[0];
-	static_movement = true;
-}*/
-
-GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points,
-	float move_speed, GuardAnimationComponent* animComp, bool linear_curve) : GameEntity(position, mesh, true),
-	move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(animComp), animCompOwner(false)
-{
-	current_animation = mesh->getAnimations()[0];
-}
-
-GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir, GuardAnimationComponent* animComp)
-	: GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), animComponent(animComp), move_component(*this, dir), animCompOwner(false)
+	: GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), move_component(*this, dir), animComponent(this, IDLE)
 {
 	current_animation = mesh->getAnimations()[0];
 	static_movement = true;
@@ -66,7 +38,7 @@ void GuardEntity::stopWalkSound()
 void GuardEntity::update()
 {
 	move_component.update(static_movement);
-	if (animCompOwner) animComponent->update();
+	animComponent.update();
 	if (walk_channel) AudioManager::instance()->updateChannelPosition(walk_channel, getPosition());
 }
 
@@ -168,11 +140,6 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 	return false;
 }
 
-std::vector<std::vector<glm::mat4>>* GuardEntity::getBoneTrans() {
-	return animComponent->basicAnimation.getBoneTransformations();
-}
-
 GuardEntity::~GuardEntity() {
-	if (animCompOwner) delete animComponent;
 	stopWalkSound();
 }

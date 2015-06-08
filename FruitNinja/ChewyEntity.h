@@ -17,6 +17,4 @@ public:
 	ChewyMovementComponent moveComponent;
 	ChewyAnimationComponent animComponent;
 	bool isCaught;
-
-	std::vector<std::vector<glm::mat4>>* getBoneTrans() override;
 };

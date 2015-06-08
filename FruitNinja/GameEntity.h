@@ -72,5 +72,5 @@ public:
 	glm::vec3 getRotations();
 	void setRotations(glm::vec3 rots);
 
-	virtual std::vector<std::vector<glm::mat4>>* getBoneTrans();
+	std::vector<std::vector<glm::mat4>> boneTransformations;
 };
