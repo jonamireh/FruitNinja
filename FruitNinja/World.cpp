@@ -570,6 +570,15 @@ void World::shootArrows()
 			shot = true;
 		}
 	}
+	if (!shot)
+	{
+		dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = true;
+	}
+	else
+	{
+		dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = false;
+	}
+
 	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot)
 	{
 		held = true;
