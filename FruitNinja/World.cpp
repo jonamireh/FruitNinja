@@ -87,6 +87,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("unit_sphere", new MeshSet(assetPath + "UnitSphere.obj")));
 	meshes.insert(pair<string, MeshSet*>("lantern", new MeshSet(assetPath + "lantern.dae")));
 	meshes.insert(pair<string, MeshSet*>("lanternPole", new MeshSet(assetPath + "lanternPole.dae")));
+	meshes.insert(pair<string, MeshSet*>("lantern_hook", new MeshSet(assetPath + "lantern_hook.dae")));
 	meshes.insert(pair<string, MeshSet*>("lanternPole_boundingbox", new MeshSet(assetPath + "lanternPole_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("closedBarrel", new MeshSet(assetPath + "closedBarrel.dae")));
 	meshes.insert(pair<string, MeshSet*>("box", new MeshSet(assetPath + "Box.dae")));
