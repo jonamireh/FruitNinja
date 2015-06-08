@@ -78,6 +78,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
+    meshes.insert(pair<string, MeshSet*>("door_closed", new MeshSet(assetPath + "door_closed.dae")));
 	meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
 	meshes.insert(pair<string, MeshSet*>("spikes_floor", new MeshSet(assetPath + "spikes_floor.dae")));
 	meshes.insert(pair<string, MeshSet*>("ground", new MeshSet(assetPath + "ground.dae")));
@@ -327,15 +328,19 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		chewy->setPosition(placement_position + vec3(0.f, 5.f, 0.f));
 		break;
 	case 'd': // door
-		if (placement_position.z < 120.f)
-			placement_position.z -= 2.65f;
+        if (placement_position.z < 120.f)
+        {
+            placement_position.z -= 2.65f;
+            entities.push_back(new DoorEntity(placement_position, meshes.at("door"), flag, this));
+        }
 		else
 		{
 			placement_position.z += 2.65f;
 			rots = vec3(0.f, M_PI, 0.f);
 			flag = true;
+            entities.push_back(new DoorEntity(placement_position, meshes.at("door"), flag, this));
 		}
-		entities.push_back(new DoorEntity(placement_position, meshes.at("door"), flag, this));
+		
 		if (num_doors == 0)
 		{
 			starting_platform_height = placement_position.y;
@@ -343,6 +348,16 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		}
         entities.back()->setScale(3.f);
         entities.back()->setRotations(rots);
+        break;
+    case 'D': // "down" or south facing lantern on wall
+        entities.push_back(new LightEntity(placement_position,
+            meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
+        rots = entities.back()->getRotations();
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        entities.back()->swap_bounding_box_width_depth();
+        entities.back()->setPosition(entities.back()->getPosition() - vec3(0.f, 0.f, 3.f - entities.back()->bounding_box.half_depth));
+        dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
     case 'e': // static guard facing east
         entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f)));
@@ -375,11 +390,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setRotations(rots);
         break;
     case 'L': // left facing lantern on wall
-        entities.push_back(new LightEntity(placement_position + vec3(0.f, 0.f, 1.f),
+        entities.push_back(new LightEntity(placement_position,
             meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
-       /* rots = entities.back()->getRotations();
-        rots.y = M_PI_2;
-        entities.back()->setRotations(rots);*/
+        entities.back()->setPosition(entities.back()->getPosition() + vec3(3.f - entities.back()->bounding_box.half_width, 0.f, 0.f));
+        dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 'n': // static guard facing north
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f)));
@@ -389,9 +403,32 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
+    case 'R': // right facing lantern on wall
+        entities.push_back(new LightEntity(placement_position,
+            meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
+        rots = entities.back()->getRotations();
+        rots.y = M_PI;
+        entities.back()->setRotations(rots);
+        entities.back()->setPosition(entities.back()->getPosition() - vec3(3.f - entities.back()->bounding_box.half_width, 0.f, 0.f));
+        dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
+        break;
 	case 's': // static guard facing south
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f)));
 		break;
+    case 'U': // "up" or north facing lantern on wall
+        entities.push_back(new LightEntity(placement_position,
+            meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
+        rots = entities.back()->getRotations();
+        rots.y = -M_PI_2;
+        entities.back()->setRotations(rots);
+        entities.back()->swap_bounding_box_width_depth();
+        entities.back()->setPosition(entities.back()->getPosition() + vec3(0.f, 0.f, 3.f - entities.back()->bounding_box.half_depth));
+        dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
+        break;
+    case 'v': // spikes on the floor
+        entities.push_back(new SpikeEntity(placement_position, meshes.at("spikes_floor"), this));
+        entities.back()->setScale(3.f);
+        break;
     case 'V': // spikes
         entities.push_back(new SpikeEntity(placement_position, meshes.at("spikes"), this));
         entities.back()->setScale(3.f);
