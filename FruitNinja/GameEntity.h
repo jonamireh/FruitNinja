@@ -30,6 +30,7 @@
 
 class GameEntity
 {
+protected:
 	glm::mat4 modelMat;
 	glm::mat4 alignedModelMat;
 	glm::mat4 rotModelMat;

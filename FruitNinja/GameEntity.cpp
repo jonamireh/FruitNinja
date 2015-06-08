@@ -185,7 +185,7 @@ glm::mat4 GameEntity::getRotMat()
 		mat4 model_rot_y = rotate(mat4(1.0f), rotations.y, vec3(0.f, 1.f, 0.f));
 		mat4 model_rot_z = rotate(mat4(1.0f), rotations.z, vec3(0.f, 0.f, 1.f));
 
-		rotModelMat = model_rot_z * model_rot_x * model_rot_y;
+		rotModelMat = model_rot_y * model_rot_z * model_rot_x;
 		validRotModelMat = true;
 	}
 

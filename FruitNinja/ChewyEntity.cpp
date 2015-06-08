@@ -22,24 +22,10 @@ ChewyEntity::ChewyEntity(glm::vec3 position, MeshSet* mesh, Camera* player_cam, 
 void ChewyEntity::update()
 {
 	GameEntity::update();
-	std::vector<Mesh*> meshes = mesh->getMeshes();
-	for (int i = 0; i < meshes.size(); i++)
-	{
-		meshes.at(i)->mat = meshes.at(i)->bMat;
-	}
 	moveComponent.update();
 	GameEntity::update();
 	animComponent.update();
 	GameEntity::update();
-}
-
-void ChewyEntity::set_material(Material material)
-{
-	std::vector<Mesh*> meshes = mesh->getMeshes();
-	for (int i = 0; i < meshes.size(); i++)
-	{
-		meshes.at(i)->mat = material;
-	}
 }
 
 void ChewyEntity::collision(GameEntity* entity)
