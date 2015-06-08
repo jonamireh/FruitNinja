@@ -16,4 +16,6 @@ public:
 	ChewyMovementComponent moveComponent;
 	ChewyAnimationComponent animComponent;
 	bool isCaught;
+	glm::mat4 getModelMat();
+
 };
