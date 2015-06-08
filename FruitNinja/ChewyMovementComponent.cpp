@@ -4,6 +4,8 @@
 #include "World.h"
 #include "AudioManager.h"
 #include <iostream>
+#include <glm/gtc/matrix_access.inl>
+#include <glm/gtx/rotate_vector.hpp>
 
 using namespace glm;
 using namespace std;
@@ -43,6 +45,7 @@ void ChewyMovementComponent::update()
 
 	vec3 position = entity.getPosition();
 	vec3 rotations = entity.getRotations();
+	rotations.x = 0.f;
 
 	if (dynamic_cast<ChewyEntity&>(entity)._falling)
 	{
@@ -117,6 +120,7 @@ void ChewyMovementComponent::update()
 	}
 	else if(archery_cam->in_use) {
 		rotations = entity.turnAngle(archery_cam->cameraFront);
+		rotations.x = -radians(archery_cam->phi);
 	}
 
 	position += entity.velocity * seconds_passed;
