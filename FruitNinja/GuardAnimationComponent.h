@@ -6,11 +6,14 @@
 #define WALKIN_DURATION 31.0 / FRAMES_PER_SEC
 #define IDLE_START 60.0 / FRAMES_PER_SEC
 #define IDLE_DURATION 50.0 / FRAMES_PER_SEC
+#define DYING_START 120.0 / FRAMES_PER_SEC
+#define DYING_DURATION 14.0 / FRAMES_PER_SEC
 
 enum GAnimationState
 {
 	WALKIN,
-	IDLE
+	IDLE,
+	DYING
 };
 
 class GuardAnimationComponent : public Component
@@ -24,5 +27,7 @@ private:
 public:
 	GuardAnimationComponent(GameEntity* guard, GAnimationState state = IDLE);
 	~GuardAnimationComponent();
+	bool areYouDoneYet();
+	void setCurrentAnimation(GAnimationState anim_st);
 };
 

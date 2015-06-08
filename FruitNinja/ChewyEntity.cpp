@@ -30,20 +30,7 @@ void ChewyEntity::update()
 
 void ChewyEntity::collision(GameEntity* entity)
 {
-	// if no collision then stop.
-	if (!entity->bounding_box.box_collision(bounding_box))
-		return;
-
-	// If you hit a spiky entity... you lost
-	SpikeEntity* spike_check = dynamic_cast<SpikeEntity*>(entity);
-	if (spike_check != nullptr)
-	{
-		spike_check->world->lose_condition();
-		return;
-	}
-
 	vec3 pos = getPosition();
-
 
 	setPosition(vec3(last_position.x, pos.y, pos.z));
 
@@ -69,7 +56,6 @@ void ChewyEntity::collision(GameEntity* entity)
 			_falling = false;
 		return;
 	}
-
 	setPosition(vec3(pos.x, pos.y, last_position.z));
 }
 

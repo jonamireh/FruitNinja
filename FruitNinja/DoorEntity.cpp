@@ -23,9 +23,6 @@ void DoorEntity::collision(GameEntity* entity)
     ChewyEntity* chewy_check = dynamic_cast<ChewyEntity*>(entity);
     if (chewy_check != nullptr && open)
     {
-        EntityBox box = bounding_box;
-        box.half_depth += 0.5f;
-        if (box.box_collision(entity->bounding_box))
-            world->setup_next_courtyard();
+        world->setup_next_courtyard();
     }
 }

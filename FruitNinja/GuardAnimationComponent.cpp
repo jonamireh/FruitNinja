@@ -26,3 +26,23 @@ void GuardAnimationComponent::update()
 	}
 	basicAnimation.update();
 }
+
+
+bool GuardAnimationComponent::areYouDoneYet() {
+	return basicAnimation.animationComplete;
+}
+
+void GuardAnimationComponent::setCurrentAnimation(GAnimationState anim_st) {
+	if (anim_st == DYING) {
+		currentAnimtion = DYING;
+		basicAnimation.changeToSingleAnimation(DYING_START, DYING_START + DYING_DURATION);
+	}
+	else if (anim_st == IDLE) {
+		currentAnimtion = IDLE;
+		basicAnimation.changeToLoopingAnimation(IDLE_START, IDLE_START + IDLE_DURATION);
+	}
+	else if (anim_st == WALKIN) {
+		currentAnimtion = WALKIN;
+		basicAnimation.changeToLoopingAnimation(WALKIN_START, WALKIN_START + WALKIN_DURATION);
+	}
+}

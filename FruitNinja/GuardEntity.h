@@ -20,11 +20,14 @@ public:
 	void update();
 	bool check_view(ChewyEntity* chewy, std::vector<GameEntity*> entities);
 	void stopWalkSound();
+	void goAheadAndKillYourself();
 	glm::vec3 front;
 	GuardMovementComponent move_component;
 	GuardAnimationComponent animComponent;
 private:
 	bool static_movement = false;
+	bool is_dying = false;
+
 	FMOD::Channel *walk_channel;
 
 	void playWalkSound();

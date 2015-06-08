@@ -49,21 +49,10 @@ void FallingEntity::update()
 
 void FallingEntity::collision(GameEntity* entity)
 {
-    ChewyEntity* chewy_check = dynamic_cast<ChewyEntity*>(entity);
-    if (chewy_check != nullptr)
-    {
-        EntityBox box = bounding_box;
-        box.half_height += 0.2f;
-        if (box.box_collision(entity->bounding_box))
-            stepped_on = true;
-    }
-    SpikeEntity* spike_entity = dynamic_cast<SpikeEntity*>(entity);
-    if (spike_entity != nullptr)
-    {
-        EntityBox box = bounding_box;
-        box.half_height += 0.1f;
-        if (box.box_collision(entity->bounding_box))
-            stepped_on = false; // instead of this remove this object
-    }
+    if (typeid(ChewyEntity) == typeid(*entity))
+        stepped_on = true;
+
+    if (typeid(SpikeEntity) == typeid(*entity))
+        list = UNSET_DRAW(list);
 
 }

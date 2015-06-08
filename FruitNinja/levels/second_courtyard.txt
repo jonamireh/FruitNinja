@@ -1,5 +1,5 @@
 ________________________________________
-|OO              X D X                l|
+|OO              X d X                 |
 |O               X C X                 |
 |            X   X   X   XXXXXXXXXXX   |
 |            X   XX XX   X         X   |
@@ -7,17 +7,17 @@ ________________________________________
 |  s  l      X           X    l    X   |
 |  n         X           X         X   |
 |       ew   X           XO        X   |
-|  e w      OX           XOO       X X |
+|  e w      OX           XAO       X X |
 |O         OOXWWWWWWWWWWWXXXXXXX   X   |
 |XXXXXXXXXXXXXWWWWWWWWWWWXXXXXXX s X   |
 |XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
 |                                  X   |
 |                                  X   |
-|     l          l          l      X   |
+|                                  X   |
 |X                                 X   |
 |XX                                X   |
 |WWWWWWWWWWWWWWWWWWWWWWWWWWWWW     X   |
-|WWWWWWXWWWWWXWWWWW WWWWWXWWWWl    X   |
+|WWWWWWXWWWWWXWWWWW WWWWWXWWWW     X   |
 |WWWWWWWWWWWWWWWWWW WWWWWWWWWW     X X |
 |                            X     X   |
 |                            X     X   |
@@ -27,18 +27,18 @@ ________________________________________
 |           W         wW     X     X   |
 |                            X     X   |
 |                      W     X     X   |
-|  n      W              W   X    lX   |
+|  n      W              W   X     X   |
 |  W      s    W             X     X X |
 |                    W       X     X   |
 |      wWe           s       X     X   |
 |                  W         X     X   |
 | Ww                         X     X   |
-|          wW            n   Xl    X   |
+|          wW            n   X     X   |
 |                        W   X         |
 |     We        Wn   n   s   X         |
-|                l D l       XOOOOOOOOO|
+|                l d l       XOOOOOOOOO|
 ________________________________________
-|O               X   X                 |
+|A               X   X                 |
 |                X   X                 |
 |            X   X   X   XXXXXXXXXXX   |
 |            X   XX XX   X         X   |
@@ -79,9 +79,9 @@ ________________________________________
 ________________________________________
 |                X   X                 |
 |                X   X                 |
-|            X   X   X   XXXXXXXXXXX   |
+|            X   XU UX   XXXXXXXXXXX   |
 |            X   XX XX   X         X   |
-|            X           X         X   |
+|            X   D   D   X         X   |
 |            X           X         X   |
 |            X           X         X   |
 |            X           X         X   |
@@ -93,65 +93,65 @@ ________________________________________
 |                                  X   |
 |                                  X   |
 |                                  X   |
-|                                  X   |
+|      U     U     U     U         X   |
 |                                  X   |
 |                                  X   |
 |                  X               X   |
 |                            X     X   |
+|      U                     X     X   |
+|                U           X     X   |
+|      D        L R          X     X   |
+|    R                 U     X     X   |
+|   D      L          L      X     X   |
+|           D                X     X   |
+|         U           L R    X     X   |
+|  U     L                R  X     X   |
+|               U    U   D   X     X   |
+|              D             X     X   |
 |                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X         |
+|                 L          X     X   |
+|                  D         X     X   |
+|            R               X     X   |
+|               U       L R  X         |
 |                            X         |
 |                            X         |
 ________________________________________
-|                                      |
-|                                      |
-|            X   l   l   XXXXXXXXXXX   |
+|                             D        |
+|                          U     U     |
+|            X           XXXXXXXXXXX  L|
 |            X           X         X   |
 |            X           X         X   |
+|            X           X         XR  |
 |            X           X         X   |
 |            X           X         X   |
-|            X           X         X   |
-|            X           X         X   |
-|            X           XXXXXXX   X   |
-|XXXXXXXXXXXXX           XXXXXXX   X   |
+|            X U       U X         X  L|
+|            XXXXXXXXXXXXXXXXXXX   X   |
 |XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
+|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   XR  |
+|D     D     D     D     D     D   X   |
+|                                  X   |
+|R                                 X  L|
 |                                  X   |
 |                                  X   |
+|                                  XR  |
 |                                  X   |
 |                                  X   |
-|                                  X   |
-|                                  X   |
-|                                  X   |
-|                                  X   |
+|                            X    LX  L|
 |                            X     X   |
 |                            X     X   |
-|      l                     X     X   |
+|                            X     XR  |
 |                            X     X   |
 |                            X     X   |
-|           l          l     X     X   |
+|                            XR    X  L|
 |                            X     X   |
 |                            X     X   |
-|                        l   X     X   |
-|              l             X     X   |
-|                            X     X   |
-|       l                    X     X   |
-|                  l         X     X   |
+|                            X     XR  |
 |                            X     X   |
 |                            X     X   |
+|                            X    LX  L|
+|                            X     X   |
+|                            X     X   |
+|                            X     D   |
 |                            X         |
-|     l         l            X         |
 |                            X         |
 ________________________________________

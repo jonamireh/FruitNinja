@@ -15,16 +15,8 @@ void PlatformEntity::update()
 
 void PlatformEntity::collision(GameEntity* entity)
 {
-    ChewyEntity* chewy_check = dynamic_cast<ChewyEntity*>(entity);
-    if (chewy_check != nullptr)
+    if (typeid(ChewyEntity) == typeid(*entity))
     {
-        EntityBox box = bounding_box;
-        box.half_depth += 0.1f;
-        box.half_width += 0.1f;
-        box.half_height += 0.1f;
-        if (box.box_collision(entity->bounding_box))
-        {
-            chewy_check->setPosition(chewy_check->getPosition() + seconds_passed * movement_component.move_speed * movement_component.direction);
-        }
+        entity->setPosition(entity->getPosition() + seconds_passed * movement_component.move_speed * movement_component.direction);
     }
 }
