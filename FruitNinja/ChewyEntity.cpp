@@ -83,7 +83,6 @@ glm::mat4 ChewyEntity::getModelMat()
 			modelMat = getAlignedModelMat() * rotate(mat4(1.f), rotations.y, vec3(0.f, 1.f, 0.f)) * translate(mat4(1.f), change) * rotate(mat4(1.f), rotations.z, vec3(0.f, 0.f, 1.f))
 				* rotate(mat4(1.f), rotations.x, vec3(1.f, 0.f, 0.f)) * translate(mat4(1.f), -change);
 			validModelMat = true;
-			//
 		}
 
 		return modelMat;
