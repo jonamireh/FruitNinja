@@ -60,7 +60,7 @@ void TextureDebugShader::draw(glm::mat4 & view_mat, GameEntity* entity)
 /*
 	Draws a specified texture starting at the initial location and expanding the width to the right and height upwards.
  */
-void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height, float percent)
+void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height, float percent, const glm::vec4 &color)
 {
 	glUseProgram(getProgramID());
 	
@@ -75,8 +75,8 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	check_gl_error("TextureDebugShader error part 3");
 	// Set our "renderedTexture" sampler to user Texture Unit 0
 	glUniform1i(getUniformHandle("uTexture"), 0);
-
 	glUniform1f(getUniformHandle("percent"), percent);
+	//glUniform4f(getUniformHandle("uColor"), color.x, color.y, color.z, color.w);
 
 	check_gl_error("TextureDebugShader error before");
 	// Draw the triangles !
@@ -90,15 +90,15 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	check_gl_error("TextureDebugShader error after");
 }
 
-void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height)
+void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height, const glm::vec4 &color)
 {
-	drawTexture(textureId, xloc, yloc, width, height, 1.0f);
+	drawTexture(textureId, xloc, yloc, width, height, 1.0f, color);
 }
 
 /*
 	Draws a specified texture at 0, 0 with the specified width and height.
 */
-void TextureDebugShader::drawTexture(GLuint textureId, int width, int height)
+void TextureDebugShader::drawTexture(GLuint textureId, int width, int height, const glm::vec4 &color)
 {
-	drawTexture(textureId, 0, 0, width, height);
+	drawTexture(textureId, 0, 0, width, height, color);
 }

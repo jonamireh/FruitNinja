@@ -64,4 +64,6 @@ public:
 
 	glm::vec3 getRotations();
 	void setRotations(glm::vec3 rots);
+
+	std::vector<std::vector<glm::mat4>> boneTransformations;
 };

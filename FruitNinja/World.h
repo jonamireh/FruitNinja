@@ -40,6 +40,7 @@ extern glm::mat4 projection;
 extern glm::mat4 guard_projection;
 extern float game_speed;
 extern float bow_strength;
+extern int arrow_count;
 
 enum GameState{
 	LEVEL1,

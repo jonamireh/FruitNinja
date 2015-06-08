@@ -48,7 +48,8 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	for (int i = 0; i < entsInView.size(); i++) {
-		std::vector<Mesh*> meshes = entsInView[i]->mesh->getMeshes();
+		GameEntity *entity = entsInView[i];
+		std::vector<Mesh*> meshes = entity->mesh->getMeshes();
 
 		glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
 		glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entsInView[i]->getModelMat()));
@@ -73,7 +74,7 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 			if (mesh->bones.size() > 0)
 			{
 				glUniform1i(uBoneFlagHandle, 1);
-				glUniformMatrix4fv(uBonesHandle, mesh->boneTransformations.size(), GL_FALSE, value_ptr(mesh->boneTransformations[0]));
+				glUniformMatrix4fv(uBonesHandle, entity->boneTransformations.size(), GL_FALSE, value_ptr(entity->boneTransformations[j][0]));
 			}
 			else
 			{

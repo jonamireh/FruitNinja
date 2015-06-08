@@ -31,7 +31,6 @@ Mesh::Mesh(std::vector<glm::vec3>* vertexData, std::vector<glm::vec3>* normalDat
 	if (boneData)
 	{	
 		bones = *boneData;
-		boneTransformations.resize(bones.size(), glm::mat4());
 	}
 	if (boneIdData1)
 		boneIds = *boneIdData1;

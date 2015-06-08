@@ -32,12 +32,12 @@ void BasicAnimationComponent::update()
 	// Get bones for each mesh
 	for (int i = 0; i < entityMeshses.size(); i++)
 	{
-		entityMeshses[i]->boneTransformations.clear();
+		entity->boneTransformations[i].clear();
 		// Get transformations for each bone
 		for (int j = 0; j < entityMeshses[i]->bones.size(); j++)
 		{
 			string boneName = entityMeshses[i]->bones[j].mName.C_Str();
-			entityMeshses[i]->boneTransformations.push_back(convertAiMatrix4x4ToMat4(
+			entity->boneTransformations[i].push_back(convertAiMatrix4x4ToMat4(
 				entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));
 		}
 	}

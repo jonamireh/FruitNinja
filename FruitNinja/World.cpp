@@ -53,6 +53,7 @@ float game_speed = 1.0f;
 static vector<std::function<void()>> debugShaderQueue;
 
 float bow_strength = .5f;
+int arrow_count = 10;
 
 World::World()
 {
@@ -69,7 +70,6 @@ void World::init()
 	player_camera = new PlayerCamera();
 	archery_camera = new ArcheryCamera();
 	cinematic_camera = new CinematicCamera();
-
 
     meshes.insert(pair<string, MeshSet*>("tower", new MeshSet(assetPath + "tower.dae")));
     meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
@@ -459,10 +459,11 @@ void World::shootArrows()
 	{
 		held = true;
 	}
-	if (held && !(keys[GLFW_KEY_E] || mouse_buttons_pressed[0]))
+	if (held && !(keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && arrow_count > 0)
 	{
 		entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
         entities.back()->setup_entity_box(meshes.at("arrow_bb"));
+		arrow_count--;
 		held = false;
 	}
 
