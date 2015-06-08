@@ -375,7 +375,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setRotations(rots);
         break;
     case 'L': // left facing lantern on wall
-        entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f),
+        entities.push_back(new LightEntity(placement_position + vec3(0.f, 0.f, 1.f),
             meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
        /* rots = entities.back()->getRotations();
         rots.y = M_PI_2;
