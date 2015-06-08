@@ -36,6 +36,7 @@ using namespace glm;
 
 bool keys[1024];
 bool mouse_buttons_pressed[8];
+float actual_seconds_passed = 0;
 float seconds_passed = 0;
 float x_offset;
 float y_offset;
@@ -836,9 +837,12 @@ void World::update()
 			chewy->isCaught = true;
 		}
 	}
+
+	actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
+
 	if (!time_stopped)
 	{
-		seconds_passed = (glfwGetTime() - start_time) * game_speed;
+		seconds_passed = std::min(actual_seconds_passed, MAX_TIME_STEP);
 	}
 	else
 	{
