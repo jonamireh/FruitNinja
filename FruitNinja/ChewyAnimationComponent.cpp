@@ -16,6 +16,8 @@ ChewyAnimationComponent::~ChewyAnimationComponent()
 
 void ChewyAnimationComponent::update()
 {
+	float static standingTime = 0;
+	standingTime += seconds_passed;
 	if (static_cast<ChewyEntity*>(chewy)->moveComponent.archery_cam->in_use)
 	{
 		basicAnimation.changeToSingleAnimation(BOWPULL_START + bow_strength * BOWPULL_DURATION, BOWPULL_START + BOWPULL_DURATION);
@@ -29,7 +31,13 @@ void ChewyAnimationComponent::update()
 			basicAnimation.changeToSingleAnimation(FALLING_START, FALLING_START + FALLING_DURATION);
 			currentAnimtion = falling;
 		}
-		else */if (static_cast<ChewyEntity*>(chewy)->isCaught && currentAnimtion != caught) {
+		else */if (currentAnimtion == standing && standingTime >= 15.0f)
+		{
+			standingTime = 0;
+			basicAnimation.changeToSingleInterruptibleAnimation(LOOK_AROUND_START, LOOK_AROUND_START + LOOK_AROUND_DURATION);
+			currentAnimtion = looking_around;
+		}
+		else if (static_cast<ChewyEntity*>(chewy)->isCaught && currentAnimtion != caught) {
 			basicAnimation.changeToSingleAnimation(CAUGHT_START, CAUGHT_START + CAUGHT_DURATION);
 			currentAnimtion = caught;
 		}
@@ -45,8 +53,12 @@ void ChewyAnimationComponent::update()
 		}
 		else if (chewy->velocity.y == 0 && !chewy->moving && currentAnimtion != standing)
 		{
-			basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
-			currentAnimtion = standing;
+			if (currentAnimtion == looking_around && standingTime >= LOOK_AROUND_DURATION || currentAnimtion != looking_around)
+			{
+				standingTime = 0;
+				basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
+				currentAnimtion = standing;
+			}
 		}
 	}
 	basicAnimation.update();
