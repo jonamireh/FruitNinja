@@ -26,6 +26,7 @@
 #include "ParticleShader.h"
 #include "CinematicCamera.h"
 #include "AudioManager.h"
+#include "CollectableEntity.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
 #define NUM_PERSISTENT 7
@@ -575,6 +576,7 @@ void World::shootArrows()
 	}
 	if (held && !(keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && arrow_count > 0)
 	{
+		entities.push_back(new CollectableEntity(chewy->getPosition() + vec3(0.0, 10.0, 0.0), meshes["arrow"]));
 		entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
 		entities.back()->setup_entity_box(meshes.at("arrow_bb"));
 		arrow_count--;
