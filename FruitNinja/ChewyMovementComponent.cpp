@@ -45,6 +45,7 @@ void ChewyMovementComponent::update()
 
 	vec3 position = entity.getPosition();
 	vec3 rotations = entity.getRotations();
+	rotations.x = 0.f;
 
 	if (dynamic_cast<ChewyEntity&>(entity)._falling)
 	{
