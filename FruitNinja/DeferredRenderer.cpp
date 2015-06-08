@@ -5,7 +5,7 @@ using namespace glm;
 
 DeferredRenderer::DeferredRenderer(std::string vertShader, std::string fragShader, GBuffer* gbuffer, DirShadowMapBuffer* dirShadowMapBuf)
 	: Shader(vertShader, fragShader), gbuffer(gbuffer), stencilShader("StencilVert.glsl", "StencilFrag.glsl"),
-	lightDir(vec3(0.2f, -1.0f, 0.2f)), dirShadowMapBuffer(dirShadowMapBuf),
+	lightDir(vec3(-0.2115f, -0.8843f, 0.4113f)), dirShadowMapBuffer(dirShadowMapBuf),
 	dirShadowMapShader("DirShadowMapVert.glsl", "DirShadowMapFrag.glsl", dirShadowMapBuffer, lightDir),
 	dirLightShader(gbuffer, dirShadowMapBuffer, lightDir, glm::mat4(dirShadowMapShader.projection_mat * dirShadowMapShader.view_mat))
 	{

@@ -95,7 +95,7 @@ void AppMain()
 
 		if (!(i % 50))
 		{
-			cout << "Frame Rate: " << 1 / seconds_passed << endl;
+			cout << "Frame Rate: " << game_speed / seconds_passed << endl;
 		}
 		i++;
 
