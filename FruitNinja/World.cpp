@@ -318,10 +318,13 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 	bool flag = false; // used for door orientation and accessability
 	switch (obj_to_place)
 	{
+    case 'A':
+        entities.push_back(new CollectableEntity(placement_position, meshes["arrow"]));
+        break;
 	case 'C': // set chewy's position
 		chewy->setPosition(placement_position + vec3(0.f, 5.f, 0.f));
 		break;
-	case 'D': // door
+	case 'd': // door
 		if (placement_position.z < 120.f)
 			placement_position.z -= 2.65f;
 		else
@@ -338,6 +341,9 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		}
         entities.back()->setScale(3.f);
         entities.back()->setRotations(rots);
+        break;
+    case 'e': // static guard facing east
+        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f)));
         break;
     case 'f': // falling box
         entities.push_back(new FallingEntity(placement_position, meshes["box"]));
@@ -356,22 +362,40 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		entities.back()->setRotations(vec3(0.f, M_PI, 0.f));
 		break;
+    case 'l': // Lantern Pole with Lantern
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
+        entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
+        entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f),
+            meshes.at("lantern"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
+        rots = entities.back()->getRotations();
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        break;
+    case 'L': // left facing lantern on wall
+        entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f),
+            meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
+       /* rots = entities.back()->getRotations();
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);*/
+        break;
 	case 'n': // static guard facing north
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f)));
 		break;
+    case 'O': // barrel
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        break;
 	case 's': // static guard facing south
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f)));
 		break;
-	case 'e': // static guard facing east
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f)));
-		break;
+    case 'V': // spikes
+        entities.push_back(new SpikeEntity(placement_position, meshes.at("spikes"), this));
+        entities.back()->setScale(3.f);
+        break;
 	case 'w': // static guard facing west
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f)));
-		break;
-	case 'O': // barrel
-		entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
-		entities.back()->setScale(3.f);
-		entities.back()->list = SET_HIDE((entities.back()->list));
 		break;
 	case 'W': // interior wall
 		entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall")));
@@ -387,20 +411,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->setScale(3.f);
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		break;
-	case 'V': // spikes
-		entities.push_back(new SpikeEntity(placement_position, meshes.at("spikes"), this));
-		entities.back()->setScale(3.f);
-		break;
-	case 'l': // Lantern Pole with Lantern
-		entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
-		entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
-		entities.back()->list = UNSET_WALL(entities.back()->list);
-		entities.push_back(new LightEntity(placement_position + vec3(0.f, 5.9f, 0.8f),
-			meshes.at("lantern"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
-		rots = entities.back()->getRotations();
-		rots.y = M_PI_2;
-		entities.back()->setRotations(rots);
-		break;
+
 	}
 }
 

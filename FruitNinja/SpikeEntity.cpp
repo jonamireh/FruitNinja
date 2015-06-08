@@ -1,4 +1,5 @@
 #include "SpikeEntity.h"
+#include "ChewyEntity.h"
 
 SpikeEntity::SpikeEntity() {}
 
@@ -11,4 +12,6 @@ void SpikeEntity::update() {}
 
 void SpikeEntity::collision(GameEntity* entity)
 {
+    if (typeid(ChewyEntity) == typeid(*entity))
+        world->lose_condition();
 }

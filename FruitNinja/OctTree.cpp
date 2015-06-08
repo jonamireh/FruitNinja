@@ -1,6 +1,8 @@
 #include "OctTree.h"
 #include <iostream>
 #include <thread> 
+#include "ChewyEntity.h"
+#include "PlatformEntity.h"
 using namespace std;
 
 #define MINIMUM_DIMENSION 5.f
@@ -14,8 +16,21 @@ void OctTree::handle_collisions()
 {
     for (auto it = collision_pairs.begin(); it != collision_pairs.end(); ++it)
     {
-        it->first->collision(it->second);
-        it->second->collision(it->first);
+        if (it->first->bounding_box.box_collision(it->second->bounding_box))
+        {
+            it->first->collision(it->second);
+            it->second->collision(it->first);
+        }
+        else if (typeid(PlatformEntity) == typeid(*(it->first)) || typeid(PlatformEntity) == typeid(*(it->second)))
+        {
+            EntityBox delta_check = it->first->bounding_box;
+            delta_check.half_height += 0.1f;
+            if (delta_check.box_collision(it->second->bounding_box))
+            {
+                it->first->collision(it->second);
+                it->second->collision(it->first);
+            }
+        }
     }
 }
 

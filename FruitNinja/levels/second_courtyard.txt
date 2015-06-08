@@ -1,5 +1,5 @@
 ________________________________________
-|OO              X D X                l|
+|OO              X d X                l|
 |O               X C X                 |
 |            X   X   X   XXXXXXXXXXX   |
 |            X   XX XX   X         X   |
@@ -36,7 +36,7 @@ ________________________________________
 |          wW            n   Xl    X   |
 |                        W   X         |
 |     We        Wn   n   s   X         |
-|                l D l       XOOOOOOOOO|
+|                l d l       XOOOOOOOOO|
 ________________________________________
 |O               X   X                 |
 |                X   X                 |

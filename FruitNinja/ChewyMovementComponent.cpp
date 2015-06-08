@@ -114,7 +114,7 @@ void ChewyMovementComponent::update()
 		}
         if (!dynamic_cast<ChewyEntity&>(entity)._falling && keys[GLFW_KEY_SPACE])
 		{
-			entity.velocity.y += 30;
+			entity.velocity.y += 25;
 			jumped = true;
 		} 
 	}

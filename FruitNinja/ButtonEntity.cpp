@@ -16,35 +16,29 @@ void ButtonEntity::update() {}
 
 void ButtonEntity::collision(GameEntity* entity)
 {
+    if (typeid(ChewyEntity) == typeid(*entity))
+    {
+        if (!pressed)
+        {
+            world->setup_level(load_path);
+            pressed = true;
+            playPressedSound();
+        }
+        setPosition(getPosition() - glm::vec3(0.f, bounding_box.half_height, 0.f));
+        glm::vec3 dir_to_move = glm::vec3(getPosition().x, 0.f, getPosition().z) - glm::vec3(entity->getPosition().x, 0.f, entity->getPosition().z);
+        dir_to_move = glm::normalize(dir_to_move);
+        entity->setPosition(entity->getPosition() + glm::vec3(0.f, bounding_box.half_height, 0.f) + 0.5f * dir_to_move);
+        return;
+    }
     if (!pressed)
     {
-        ChewyEntity* chewy_check = dynamic_cast<ChewyEntity*>(entity);
-        if (chewy_check != nullptr)
-        {
-            EntityBox box = bounding_box;
-            box.half_height += 0.1f;
-            if (box.box_collision(entity->bounding_box))
-            {
-                world->setup_level(load_path);
-                setPosition(getPosition() - glm::vec3(0.f, bounding_box.half_height, 0.f));
-                pressed = true;
-				playPressedSound();
-                return;
-            }
-        }
         ProjectileEntity* arrow_check = dynamic_cast<ProjectileEntity*>(entity);
         if (arrow_check != nullptr)
         {
-            EntityBox box = bounding_box;
-            box.half_depth += 0.5f;
-            box.half_width += 0.5f;
-            if (box.box_collision(entity->bounding_box))
-            {
-                world->setup_level(load_path);
-                //setPosition(getPosition() - glm::vec3(0.f, 0.f, 0.f));
-                pressed = true;
-				playPressedSound();
-            }
+
+            world->setup_level(load_path);
+            pressed = true;
+            playPressedSound();
         }
     }
 }
