@@ -14,30 +14,70 @@ CinematicPathingComponent::CinematicPathingComponent(vector<vec3> position_point
 	assert(lookAt_points.size() >= MIN_NUM_CONTROL_POINTS);
 	assert(position_points.size() == lookAt_points.size());
 	current_curve = 0;
+	max_curve = position_points.size() - 2;
 	change_path();
 }
 
 pair<vec3, vec3> CinematicPathingComponent::get_direction()
 {
-	time_elapsed += seconds_passed;
-	if (time_elapsed > current_time)
+time_elapsed += seconds_passed;
+//cout << "time required: " << current_time << endl;
+//cout << time_elapsed << endl;
+if (time_elapsed > position_time)
+{
+	if ((current_curve + 2) > position_points.size() - 1)
 	{
-		if ((current_curve + 2) > position_points.size() - 1)
-		{
-			done = true;
-		}
-		else
-		{
-			current_curve++;
-			change_path();
-		}
+		done = true;
 	}
-	return get_rom_catmull_direction();
+	else
+	{
+		current_curve++;
+		change_path();
+	}
+}
+return get_rom_catmull_direction();
+}
+
+glm::vec3 CinematicPathingComponent::getPosition(float time, vector<vec3> source)
+{
+	vector<vec3> points;
+	if (current_curve == 0)
+	{
+		points.push_back(source.at(0));
+		points.push_back(source.at(0));
+		points.push_back(source.at(1));
+		points.push_back(source.at(2));
+
+	}
+	else if (current_curve == source.size() - 2)
+	{
+		int last_index = source.size() - 1;
+
+		points.push_back(source.at(last_index - 2));
+		points.push_back(source.at(last_index - 1));
+		points.push_back(source.at(last_index));
+		points.push_back(source.at(last_index));
+	}
+	else
+	{
+		points.push_back(source.at(current_curve - 1));
+		points.push_back(source.at(current_curve));
+		points.push_back(source.at(current_curve + 1));
+		points.push_back(source.at(current_curve + 2));
+	}
+
+	vec4 f;
+	f.x = -0.5 * pow(time, 3) + pow(time, 2) + -0.5 * time;
+	f.y = 1.5 * pow(time, 3) + -2.5 * pow(time, 2) + 1;
+	f.z = -1.5 * pow(time, 3) + 2 * pow(time, 2) + 0.5 * time;
+	f.w = 0.5 * pow(time, 3) + -0.5 * pow(time, 2);
+
+	return f.x * points.at(0) + f.y * points.at(1) + f.z * points.at(2) + f.w * points.at(3);
 }
 
 pair<vec3, vec3> CinematicPathingComponent::get_rom_catmull_direction()
 {
-	float time = time_elapsed * (1 / current_time);
+	float time = time_elapsed * (1 / position_time);
 	//assert(time <= current_time);
 	assert(current_curve <= position_points.size() - 2);
 
@@ -88,7 +128,7 @@ pair<vec3, vec3> CinematicPathingComponent::get_rom_catmull_direction()
 	f.z = -4.5 * pow(time, 2) + 4 * time + 0.5;
 	f.w = 1.5 * pow(time, 2) + -time;
 
-	return pair<vec3, vec3>(normalize(f.x * c_position_points.at(0) + f.y * c_position_points.at(1) + f.z * c_position_points.at(2) + f.w * c_position_points.at(3)), 
+	return pair<vec3, vec3>(normalize(f.x * c_position_points.at(0) + f.y * c_position_points.at(1) + f.z * c_position_points.at(2) + f.w * c_position_points.at(3)),
 		normalize(f.x * c_lookAt_points.at(0) + f.y * c_lookAt_points.at(1) + f.z * c_lookAt_points.at(2) + f.w * c_lookAt_points.at(3)));
 }
 
@@ -106,24 +146,26 @@ float CinematicPathingComponent::get_move_speed()
 
 float CinematicPathingComponent::get_lookat_speed()
 {
-	//quadratic interpolation for speed of the lookAt point
-	const float adjustment = 1.f;
-	//y = k * (x-a)*(x-b)
-	float time = time_elapsed;
-	float a = adjustment;
-	float b = current_time + adjustment;
-	float dist = glm::distance(lookAt_points.at(current_curve), lookAt_points.at(current_curve + 1));
-	float k = (6 * dist) / (current_time * (6 * a * b - 3 * a * current_time - 3 * b * current_time + 2 * pow(current_time, 2)));
-	if (k > 0.f)
-		k *= -1.f;
-	//float result = k * (time + a) * (time - b);
-	float result = dist / current_time;
-	return result;
+	return lookAt_distance / position_time;
+}
+
+float CinematicPathingComponent::get_distance(vector<vec3> source)
+{
+	float distance = 0.f;
+	float epsilon = 0.001f;
+	float last_time = 0.f;
+	for (float i = epsilon; i < 1.f; i += epsilon)
+	{
+		distance += glm::distance(getPosition(last_time, source), getPosition(i, source));
+		last_time = i;
+	}
+	return distance;
 }
 
 void CinematicPathingComponent::change_path()
 {
-	current_distance = glm::distance(position_points.at(current_curve), position_points.at(current_curve + 1));
-	current_time = current_distance / get_move_speed();
+	position_distance = get_distance(position_points);
+	lookAt_distance = get_distance(lookAt_points);
+	position_time = position_distance / get_move_speed();
 	time_elapsed = 0.f;
 }

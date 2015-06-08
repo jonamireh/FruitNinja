@@ -12,4 +12,5 @@ public:
 	void draw(ArcheryCamera* a_camera);
 	GLuint VBO;
 	std::vector<glm::mat4> translations;
+	bool draw_at_least_once = false;
 };

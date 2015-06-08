@@ -144,3 +144,7 @@ pair<vec3, vec3> Mesh::get_lower_and_upper_bounds()
 	}
     return pair<vec3, vec3>(glm::vec3(min_x, min_y, min_z), glm::vec3(max_x, max_y, max_z));
 }
+
+std::vector<glm::mat4> Mesh::getBoneTransformations() {
+	return boneTransformations;
+}

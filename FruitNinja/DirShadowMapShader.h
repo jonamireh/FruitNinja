@@ -9,11 +9,11 @@ class DirShadowMapShader : public Shader
 	GLint uViewMatrixHandle;
 	GLint uModelMatrixHandle;
 	GLint uProjMatrixHandle;
-	GLint UtexHandle;
-	GLint UflagHandle;
+	//GLint UtexHandle;
+	//GLint UflagHandle;
 	GLint uBoneFlagHandle;
 	GLint uBonesHandle;
-	GLint UdColorHandle;
+	//GLint UdColorHandle;
 
 public:
 	DirShadowMapShader(std::string vertShader, std::string fragShader, DirShadowMapBuffer *buffer, glm::vec3 lightDirection);

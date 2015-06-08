@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="GLSL.cpp">
@@ -177,6 +177,15 @@
     </ClCompile>
     <ClCompile Include="TextShader.cpp">
       <Filter>Text Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SpikeEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FallingEntity.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -633,6 +642,15 @@
     <ClInclude Include="TextShader.h">
       <Filter>Text Shader</Filter>
     </ClInclude>
+    <ClInclude Include="PlatformEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SpikeEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FallingEntity.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -707,6 +725,12 @@
     </None>
     <None Include="TextFrag.glsl">
       <Filter>Text Shader</Filter>
+    </None>
+    <None Include="DirShadowMapFrag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="DirShadowMapVert.glsl">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

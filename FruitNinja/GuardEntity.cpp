@@ -2,6 +2,7 @@
 #include "World.h"
 #include <glm/geometric.hpp>
 #include "GameEntity.h"
+#include "AudioManager.h"
 
 using namespace glm;
 using namespace std;
@@ -9,12 +10,6 @@ using namespace std;
 #define DETECTION_OUTER_RADIUS 15.f
 #define DETECTION_INNER_RADIUS 7.f
 #define COS_ANGLE 60.f
-
-GuardEntity::GuardEntity() : move_component(*this, vector<vec3>(), 0.f, false), animComponent(this)
-{
-
-}
-
 
 GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points,
 	float move_speed, bool linear_curve) : GameEntity(position, mesh, true),
@@ -24,25 +19,36 @@ GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec
 }
 
 GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir)
-	: GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), animComponent(this, IDLE), move_component(*this, dir)
+	: GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), move_component(*this, dir), animComponent(this, IDLE)
 {
 	current_animation = mesh->getAnimations()[0];
 	static_movement = true;
 }
 
+void GuardEntity::playWalkSound()
+{
+	walk_channel = AudioManager::instance()->play3D(assetPath + "footstep.wav", getPosition(), 10.0f, true);
+}
+
+void GuardEntity::stopWalkSound()
+{
+	if (walk_channel) walk_channel->stop();
+}
+
 void GuardEntity::update()
 {
 	move_component.update(static_movement);
-    animComponent.update();
+	animComponent.update();
+	if (walk_channel) AudioManager::instance()->updateChannelPosition(walk_channel, getPosition());
 }
 
-pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)
+static pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 {
-    vec3 center = bb.center;
-    vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth); // IF VIEW FRUSTUM WAS OFF THIS IS OFF IN THE SAME WAY
+	vec3 center = bb.center;
+	vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth);
 
-	float tMin = FLT_MIN;
-	float tMax = FLT_MAX;
+	float tMin = std::numeric_limits<float>::min();
+	float tMax = std::numeric_limits<float>::max();
 	vec3 p = center - origin;
 	for (int i = 0; i < 3; i++)
 	{
@@ -57,7 +63,7 @@ pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 		float e = dot(ai, p);
 		float f = dot(ai, direction);
 
-		if (abs(f) > FLT_EPSILON)
+		if (abs(f) > 0.0001f)
 		{
 			float t1 = (e + h[i]) / f;
 			float t2 = (e - h[i]) / f;
@@ -65,21 +71,18 @@ pair<bool, float> static obb_ray(vec3 origin, vec3 direction, EntityBox bb)
 			if (t1 > t2)
 			{
 				//swap
-				float temp = t2;
-				t2 = t1;
-				t1 = temp;
+				float temp = t1;
+				t1 = t2;
+				t2 = temp;
 			}
 
-			if (t1 > tMin)
-				tMin = t1;
-			if (t2 < tMax)
-				tMax = t2;
-			if (tMin > tMax)
-				return pair<bool, float>(false, 0.f);
-			if (tMax < 0)
+			tMin = fmax(tMin, t1);
+			tMax = fmin(tMax, t2);
+			if (tMin > tMax || tMax < 0) {
 				return pair<bool, float>(false, 0);
- 		}
-		else if (-e - h[i] > 0 || -e + h[i] < 0)
+			}
+		}
+		else if (-1.0f * e - h[i] > 0 || h[i] - e < 0)
 			return pair<bool, float>(false, 0);
 	}
 	if (tMin > 0)
@@ -135,4 +138,8 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 		}
 	}
 	return false;
+}
+
+GuardEntity::~GuardEntity() {
+	stopWalkSound();
 }

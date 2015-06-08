@@ -26,6 +26,7 @@ collision_response(collision_response)
 	{
 		boneTransformations[i].resize(mesh->getMeshes()[i]->boneWeights.size());
 	}
+	list = SET_WALL(list);
 };
 
 
@@ -56,6 +57,8 @@ void GameEntity::setScale(float entScale)
     bounding_box.half_height *= scale;
     bounding_box.half_depth *= scale;
     bounding_box.center.y = bounding_box.half_height + y_offset;
+	validAlignedModelMat = false;
+	validModelMat = false;
 }
 
 glm::vec3 GameEntity::getRotations()
@@ -66,6 +69,8 @@ glm::vec3 GameEntity::getRotations()
 void GameEntity::setRotations(glm::vec3 rots)
 {
     rotations = rots;
+	validRotModelMat = false;
+	validModelMat = false;
 }
 
 void GameEntity::swap_bounding_box_width_depth()
@@ -83,6 +88,8 @@ glm::vec3 GameEntity::getPosition()
 void GameEntity::setPosition(glm::vec3 position)
 {
     bounding_box.center = position;
+	validAlignedModelMat = false;
+	validModelMat = false;
 }
 
 void GameEntity::setup_entity_box()
@@ -150,22 +157,39 @@ void GameEntity::collision(GameEntity* entity)
 
 glm::mat4 GameEntity::getModelMat()
 {
-    mat4 model_rot_x = rotate(mat4(1.0f), rotations.x, vec3(1.f, 0.f, 0.f));
-    mat4 model_rot_y = rotate(mat4(1.0f), rotations.y, vec3(0.f, 1.f, 0.f));
-    mat4 model_rot_z = rotate(mat4(1.0f), rotations.z, vec3(0.f, 0.f, 1.f));
+	if (!validModelMat) {
+		modelMat = getAlignedModelMat() * getRotMat();
+		validModelMat = true;
+	}
 
-    modelMat = getAlignedModelMat() * model_rot_z * model_rot_x * model_rot_y;
     return modelMat;
 }
 
 glm::mat4 GameEntity::getAlignedModelMat()
 {
-    mat4 model_trans = translate(mat4(1.0f), bounding_box.center - vec3(0.f, bounding_box.half_height, 0.f));
-    mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
+	if (!validAlignedModelMat) {
+		mat4 model_trans = translate(mat4(1.0f), bounding_box.center - vec3(0.f, bounding_box.half_height, 0.f));
+		mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
 
-    alignedModelMat = model_trans * model_scale;
+		alignedModelMat = model_trans * model_scale;
+		validAlignedModelMat = true;
+	}
 
     return alignedModelMat;
+}
+
+glm::mat4 GameEntity::getRotMat()
+{
+	if (!validRotModelMat) {
+		mat4 model_rot_x = rotate(mat4(1.0f), rotations.x, vec3(1.f, 0.f, 0.f));
+		mat4 model_rot_y = rotate(mat4(1.0f), rotations.y, vec3(0.f, 1.f, 0.f));
+		mat4 model_rot_z = rotate(mat4(1.0f), rotations.z, vec3(0.f, 0.f, 1.f));
+
+		rotModelMat = model_rot_z * model_rot_x * model_rot_y;
+		validRotModelMat = true;
+	}
+
+	return rotModelMat;
 }
 
 void GameEntity::update()

@@ -39,6 +39,8 @@ void BasicAnimationComponent::update()
 			string boneName = entityMeshses[i]->bones[j].mName.C_Str();
 			entity->boneTransformations[i].push_back(convertAiMatrix4x4ToMat4(
 				entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));
+			/*entityMeshses[i]->boneTransformations.push_back(convertAiMatrix4x4ToMat4(
+				entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));*///boom
 		}
 	}
 }
@@ -223,11 +225,20 @@ BasicAnimationComponent::BasicAnimationComponent(GameEntity *entity)
 {
 	this->entity = entity;
 	starting_frame_time = 1.0 / FRAMES_PER_SEC;
-	end_frame_time = entity->mesh->getAnimations().at(0)->mDuration;
+	MeshSet* mesh = entity->mesh;
+	end_frame_time = mesh->getAnimations().at(0)->mDuration;
 	looping = true;
+	std::vector<Mesh*> meshes = mesh->getMeshes();
+	for (size_t i = 0; i < meshes.size(); i++) {
+		boneTransformations.push_back(meshes[i]->getBoneTransformations());
+	}
 }
 
 
 BasicAnimationComponent::~BasicAnimationComponent()
 {
+}
+
+std::vector<std::vector<glm::mat4>>* BasicAnimationComponent::getBoneTransformations() {
+	return &boneTransformations;
 }

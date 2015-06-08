@@ -151,6 +151,8 @@
     <None Include="DeferredFragShader.glsl" />
     <None Include="DeferredVertShader.glsl" />
     <None Include="dirLightFrag.glsl" />
+    <None Include="DirShadowMapFrag.glsl" />
+    <None Include="DirShadowMapVert.glsl" />
     <None Include="FireFrag.glsl" />
     <None Include="FireGeom.glsl" />
     <None Include="FireVert.glsl" />
@@ -187,6 +189,7 @@
     <ClCompile Include="DoorEntity.cpp" />
     <ClCompile Include="DirShadowMapShader.cpp" />
     <ClCompile Include="EntityBox.cpp" />
+    <ClCompile Include="FallingEntity.cpp" />
     <ClCompile Include="FireEmitter.cpp" />
     <ClCompile Include="FlameEmitter.cpp" />
     <ClCompile Include="GuardAnimationComponent.cpp" />
@@ -199,9 +202,11 @@
     <ClCompile Include="LightEntity.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Emitter.cpp" />
+    <ClCompile Include="PlatformEntity.cpp" />
     <ClCompile Include="ShadowBufferShader.cpp" />
     <ClCompile Include="SimpleTextureShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="SpikeEntity.cpp" />
     <ClCompile Include="TestSphere.cpp" />
     <ClCompile Include="StencilShader.cpp" />
     <ClCompile Include="TextShader.cpp" />
@@ -248,6 +253,7 @@
     <ClInclude Include="DoorEntity.h" />
     <ClInclude Include="DirShadowMapShader.h" />
     <ClInclude Include="EntityBox.h" />
+    <ClInclude Include="FallingEntity.h" />
     <ClInclude Include="FireEmitter.h" />
     <ClInclude Include="FlameEmitter.h" />
     <ClInclude Include="fmodex\fmod.h" />
@@ -351,9 +357,11 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightEntity.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="PlatformEntity.h" />
     <ClInclude Include="ShadowBufferShader.h" />
     <ClInclude Include="SimpleTextureShader.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SpikeEntity.h" />
     <ClInclude Include="TestSphere.h" />
     <ClInclude Include="StencilShader.h" />
     <ClInclude Include="TextShader.h" />

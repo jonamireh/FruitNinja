@@ -20,6 +20,5 @@ public:
     void update_radius(float delta);
 	void reorient(std::vector<GameEntity*> entities, ChewyEntity* chewy);
 	glm::vec3* PlayerCamera::get_near_plane_corners();
-	glm::vec3 handle_collision_zoom(float minOffsetDist, glm::vec3* frustumNearCorners, std::vector<GameEntity*> entities, ChewyEntity* chewy);
 	glm::vec3 lookAtPoint;
 };
