@@ -3,8 +3,9 @@
 #include "GameEntity.h"
 #include "ProjectileMovementComponent.h"
 
-#define ARROW_LIFE_SPAN 5.0 //in seconds
-#define ARROW_SPEED 200.0f
+#define ARROW_LIFE_SPAN 5.0 //in seconds, no longer 
+#define ARROW_SPEED 100.0f
+#define SHOOT_TIME_SPEED 1.0
 
 class ProjectileEntity : public GameEntity
 {

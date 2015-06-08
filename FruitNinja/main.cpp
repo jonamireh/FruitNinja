@@ -99,7 +99,7 @@ void AppMain()
 			cout << "Frame Rate: " << frameTime << endl;
 			frameTime = 0.0f;
 		}
-		frameTime += game_speed / seconds_passed / 50.0f;
+		frameTime += game_speed / actual_seconds_passed / 50.0f;
 		i++;
 
         glfwSwapBuffers(window);

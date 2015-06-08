@@ -26,6 +26,7 @@
 #include "ParticleShader.h"
 #include "CinematicCamera.h"
 #include "AudioManager.h"
+#include "CollectableEntity.h"
 
 #define FILE_TO_WORLD_SCALE 6.f
 #define NUM_PERSISTENT 7
@@ -35,6 +36,7 @@ using namespace glm;
 
 bool keys[1024];
 bool mouse_buttons_pressed[8];
+float actual_seconds_passed = 0;
 float seconds_passed = 0;
 float x_offset;
 float y_offset;
@@ -202,7 +204,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(19, 4, 5) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
 			meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
 		// second button
-		entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(1, 4, 1) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
+		entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(28, 4, 12) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
 			meshes.at("box"), level_path + "third_courtyard_button_two.txt", this));
 
 		setup_moving_platform(level_path + "third_courtyard_platform_one.txt");
@@ -489,7 +491,7 @@ void World::setup_moving_platform(string file_path)
 
 	string current_line;
 	int current_row = 0;
-	int height_level = 1;
+    int height_level = -1;
 
 	vec3 control_points[10];
 	vec3 starting_position;
@@ -554,7 +556,7 @@ void World::setup_moving_platform(string file_path)
 		else
 			break;
 	}
-	PlatformEntity* platform = new PlatformEntity(starting_position, meshes["box"], spline_points, 6.f);
+	PlatformEntity* platform = new PlatformEntity(starting_position, meshes["box"], spline_points, 12.f);
 	platform->setScale(3.f);
 	entities.push_back(platform);
 	level_file.close();
@@ -570,6 +572,15 @@ void World::shootArrows()
 			shot = true;
 		}
 	}
+	if (!shot)
+	{
+		dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = true;
+	}
+	else
+	{
+		dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = false;
+	}
+
 	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot)
 	{
 		held = true;
@@ -827,9 +838,12 @@ void World::update()
 			chewy->isCaught = true;
 		}
 	}
+
+	actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
+
 	if (!time_stopped)
 	{
-		seconds_passed = (glfwGetTime() - start_time) * game_speed;
+		seconds_passed = std::min(actual_seconds_passed, MAX_TIME_STEP);
 	}
 	else
 	{

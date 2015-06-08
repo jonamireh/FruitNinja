@@ -181,6 +181,7 @@
     <ClCompile Include="ChewyAnimationComponent.cpp" />
     <ClCompile Include="CinematicCamera.cpp" />
     <ClCompile Include="CinematicPathingComponent.cpp" />
+    <ClCompile Include="CollectableEntity.cpp" />
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="DeferredRenderer.cpp" />
     <ClCompile Include="DeferredShader.cpp" />
@@ -348,6 +349,7 @@
     <ClInclude Include="freetype\ttunpat.h" />
     <ClInclude Include="ft2build.h" />
     <ClInclude Include="GuardAnimationComponent.h" />
+    <ClInclude Include="CollectableEntity.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="FrustrumCulling.h" />

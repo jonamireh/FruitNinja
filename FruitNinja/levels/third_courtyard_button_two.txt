@@ -1,44 +1,6 @@
 ________________________________________
 ________________________________________
 ________________________________________
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW|
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
 ________________________________________
 ________________________________________
 |                                      |
@@ -56,26 +18,26 @@ ________________________________________
 |                                      |
 |                                      |
 |                                      |
+|                                     f|
+|                                     f|
+|                               fff   f|
+|            fffffffffffffffff  fff    |
+|            f                  fff    |
+|            f                         |
+|            f                         |
 |                                      |
 |                                      |
-|                                      |
-| fffffffffffffffffffffffffffffffffff  |
-| fffffffffffffffffffffffffffffffffff  |
-| fffffffffffffffffffffffffffffffffff  |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
-|                                      |
+|           fff                        |
+|ff   ff    fff                        |
+|ff   ff    fff                        |
+|f                  fffff              |
+|f                 fffffff             |
+|f                ff     ff            |
+|f               ff                    |
+|f    f    f    ff                     |
+|                             fff      |
+|                             fff      |
+|                  fffffffff           |
 |                                      |
 |                                      |
 |                                      |

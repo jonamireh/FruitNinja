@@ -27,6 +27,7 @@ public:
 	~DeferredShader();
 	virtual void draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights) override;
 	void draw(glm::mat4& view_mat, GameEntity* entity);
+	ArcShader arcShader;
 
 
 private:
@@ -44,7 +45,6 @@ private:
 	vector<Emitter*> emitters;
 
 	ShadowBufferShader shadowBufferShader;
-	ArcShader arcShader;
 	void archeryArcPass(Camera* camera);
 
 	DeferredRenderer renderer;
