@@ -165,7 +165,6 @@ void World::init()
 
 void World::setup_next_courtyard(bool setup_cin_cam)
 {
-	run_cinematic_camera = setup_cin_cam;
 	// remove all non-persistent entities
 	for (int i = NUM_PERSISTENT; i < entities.size(); i++) {
 		should_del.push_back(entities[i]);
@@ -185,7 +184,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_guard(level_path + "first_courtyard_third_guard.txt");
         setup_guard(level_path + "first_courtyard_fourth_guard.txt");
         player_camera->movement(chewy);
-        setup_cinematic_camera(level_path + "first_courtyard_cinematic.txt");
+        setup_cinematic_camera(level_path + "first_courtyard_cinematic.txt", setup_cin_cam);
         break;
     case 2:
         setup_level(level_path + "second_courtyard.txt");
@@ -216,9 +215,10 @@ void World::lose_condition()
     setup_next_courtyard(false);
 }
 
-void World::setup_cinematic_camera(string file_path)
+void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 {
-    ifstream level_file;
+	run_cinematic_camera = setup_cin_cam;
+	ifstream level_file;
     level_file.open(file_path);
 
     string current_line;

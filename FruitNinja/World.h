@@ -76,7 +76,7 @@ public:
 
 	void setup_next_courtyard(bool setup_cin_cam = true);
     void lose_condition();
-    void setup_cinematic_camera(string file_path);
+	void setup_cinematic_camera(string file_path, bool setup_cin_cam);
     void setup_level(string file_path);
 private:
     DebugCamera* debug_camera;
