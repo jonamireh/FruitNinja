@@ -49,14 +49,15 @@ glm::mat4 ProjectileEntity::getModelMat()
 void ProjectileEntity::collision(GameEntity* entity)
 {
 	if (entity->bounding_box.box_collision(bounding_box)) {
-		if (typeid(*entity) == typeid(TestSphere) || typeid(*entity) == typeid(GuardEntity)) {
+		if (typeid(*entity) == typeid(TestSphere)) {
 			//get rid of hit entity
 			entity->list = UNSET_DRAW(entity->list);
+		} 
+		else if (typeid(*entity) == typeid(GuardEntity)) {
 			GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
-			if (ge != nullptr) {
-				ge->stopWalkSound();
-			}
-		} else if (typeid(*entity) == typeid(LightEntity)) {
+			ge->goAheadAndKillYourself();
+		}
+		else if (typeid(*entity) == typeid(LightEntity)) {
 			LightEntity* le = dynamic_cast<LightEntity*>(entity);
 			le->light = NULL;
 		}

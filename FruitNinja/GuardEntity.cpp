@@ -39,6 +39,11 @@ void GuardEntity::update()
 {
 	move_component.update(static_movement);
 	animComponent.update();
+	if (is_dying && animComponent.areYouDoneYet()) {
+		std::cout << "Yo I'm dead\n";
+		list = UNSET_DRAW(list);
+	}
+
 	if (walk_channel) AudioManager::instance()->updateChannelPosition(walk_channel, getPosition());
 }
 
@@ -133,6 +138,8 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 		//seen
 		if (!hidden)
 		{
+			animComponent.setCurrentAnimation(IDLE);
+			static_movement = true;
 			//chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
 			return true;
 		}
@@ -142,4 +149,11 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 
 GuardEntity::~GuardEntity() {
 	stopWalkSound();
+}
+
+void GuardEntity::goAheadAndKillYourself() {
+	is_dying = true;
+	static_movement = true;
+	stopWalkSound();
+	animComponent.setCurrentAnimation(DYING);
 }
