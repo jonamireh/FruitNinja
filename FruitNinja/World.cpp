@@ -92,6 +92,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai.dae")));
 	meshes.insert(pair<string, MeshSet*>("blue_guard", new MeshSet(assetPath + "blue_samurai.dae")));
 	meshes.insert(pair<string, MeshSet*>("guard_bb", new MeshSet(assetPath + "samurai_bbox.obj")));
+	meshes.insert(pair<string, MeshSet*>("guard_outer_bb", new MeshSet(assetPath + "outer_samurai_bbox.obj")));
 	meshes.insert(pair<string, MeshSet*>("arrow", new MeshSet(assetPath + "arrow.dae")));
 	meshes.insert(pair<string, MeshSet*>("arrow_bb", new MeshSet(assetPath + "arrow_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("unit_sphere", new MeshSet(assetPath + "UnitSphere.obj")));

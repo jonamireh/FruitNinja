@@ -193,6 +193,9 @@
     <ClCompile Include="RisingMovementComponent.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="FireArrowEntity.cpp">
+      <Filter>Arrows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -665,6 +668,10 @@
     </ClInclude>
     <ClInclude Include="RisingMovementComponent.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FireArrow.h" />
+    <ClInclude Include="FireArrowEntity.h">
+      <Filter>Arrows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
