@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include "main.h"
 #include <map>
 #include <string>
 
@@ -10,7 +11,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "World.h"
+
+World* world;
 
 // the program starts here
 void AppMain()
@@ -66,7 +68,7 @@ void AppMain()
     
     glClearColor(0.f, 0.f, 0.f, 1.0f);
 
-    World world;
+    world = new World();
 
     // Set Key Callback Function
     glfwSetKeyCallback(window, &World::key_callback);
@@ -91,8 +93,8 @@ void AppMain()
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, GL_TRUE);
 
-		world.update();
-        world.draw();
+		world->update();
+        world->draw();
 
 		if (!(i % 50))
 		{
@@ -106,6 +108,7 @@ void AppMain()
         glfwPollEvents();
     }
 	
+	delete world;
 
     glfwTerminate();
 }

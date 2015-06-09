@@ -666,6 +666,9 @@
     <ClInclude Include="RisingMovementComponent.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

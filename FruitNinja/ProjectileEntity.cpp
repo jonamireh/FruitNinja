@@ -5,6 +5,7 @@
 
 #include "GuardEntity.h"
 #include "LightEntity.h"
+#include "main.h"
 
 
 ProjectileEntity::ProjectileEntity() : movement(*this, new ArcheryCamera()), shot(false), timeLeft(5.0f)
@@ -48,26 +49,37 @@ glm::mat4 ProjectileEntity::getModelMat()
 }
 void ProjectileEntity::collision(GameEntity* entity)
 {
-	if (entity->bounding_box.box_collision(bounding_box)) {
-		if (typeid(*entity) == typeid(TestSphere)) {
-			//get rid of hit entity
-			entity->list = UNSET_DRAW(entity->list);
-		} 
-		else if (typeid(*entity) == typeid(GuardEntity)) {
-			GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
-			if (!ge->is_armored) {
-				ge->goAheadAndKillYourself();
-			}
-		}
-		else if (typeid(*entity) == typeid(LightEntity)) {
-			LightEntity* le = dynamic_cast<LightEntity*>(entity);
-			le->light = NULL;
-		}
-		//get rid of arrow
-		if (!(typeid(*entity) == typeid(ChewyEntity))) {
-			list = UNSET_DRAW(list);
-			game_speed = 1.0;
-			AudioManager::instance()->play3D(assetPath + "arrow_hit.wav", getPosition(), 10.0f, false);
-		}
+	if (typeid(*entity) == typeid(GuardEntity)) {
+		GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
+        if (bounding_box.box_collision(entity->inner_bounding_box))
+        {
+            if (!ge->is_armored)
+            {
+                ge->goAheadAndKillYourself();
+                list = UNSET_DRAW(list);
+                return;
+            }
+        }
+        else
+            return;
+	}
+	else if (typeid(*entity) == typeid(LightEntity)) {
+        if (bounding_box.box_collision(entity->inner_bounding_box))
+        {
+            LightEntity* le = dynamic_cast<LightEntity*>(entity);
+            le->light = NULL;
+            list = UNSET_DRAW(list);
+            return;
+        }
+        else
+            return;
+	}
+
+	//get rid of arrow
+	if (!(typeid(*entity) == typeid(ChewyEntity))) {
+		world->convert_to_collectible(this);
+		list = UNSET_DRAW(list);
+		game_speed = 1.0;
+		AudioManager::instance()->play3D(assetPath + "arrow_hit.wav", getPosition(), 10.0f, false);
 	}
 }

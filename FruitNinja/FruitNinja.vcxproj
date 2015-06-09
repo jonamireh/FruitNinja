@@ -191,6 +191,7 @@
     <ClCompile Include="DirShadowMapShader.cpp" />
     <ClCompile Include="EntityBox.cpp" />
     <ClCompile Include="FallingEntity.cpp" />
+    <ClCompile Include="FireArrowEntity.cpp" />
     <ClCompile Include="FireEmitter.cpp" />
     <ClCompile Include="FlameEmitter.cpp" />
     <ClCompile Include="GuardAnimationComponent.cpp" />
@@ -256,6 +257,8 @@
     <ClInclude Include="DirShadowMapShader.h" />
     <ClInclude Include="EntityBox.h" />
     <ClInclude Include="FallingEntity.h" />
+    <ClInclude Include="FireArrow.h" />
+    <ClInclude Include="FireArrowEntity.h" />
     <ClInclude Include="FireEmitter.h" />
     <ClInclude Include="FlameEmitter.h" />
     <ClInclude Include="fmodex\fmod.h" />
@@ -352,6 +355,7 @@
     <ClInclude Include="GuardAnimationComponent.h" />
     <ClInclude Include="CollectableEntity.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="FrustrumCulling.h" />
     <ClInclude Include="GBuffer.h" />

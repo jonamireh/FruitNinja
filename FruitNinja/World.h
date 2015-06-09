@@ -29,6 +29,7 @@
 //#define PLAYER_DIST (PLAYER_FAR - PLAYER_NEAR)
 //#define GUARD_DIST (GUARD_FAR - GUARD_NEAR)
 
+class ProjectileEntity;
 class ArcheryCamera;
 class GuardEntity;
 const string assetPath = "assets/";
@@ -86,6 +87,9 @@ public:
     void setup_level(string file_path);
     void load_button(string file_path);
     void setup_moving_platform(string file_path);
+	void convert_to_collectible(ProjectileEntity* p);
+	void zoom_on_guard(GuardEntity* g);
+
 
 private:
     DebugCamera* debug_camera;

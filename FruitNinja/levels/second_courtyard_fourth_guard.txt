@@ -1,7 +1,7 @@
 ________________________________________
 |OO              X D X                l|
 |O               X C X                 |
-|            X   X   X   XXXXXXXXXXX2 g|
+|            X   X   X   XXXXXXXXXXX2 B|
 |            X   XX XX   X         X   |
 |  s         X           X e       X   |
 |     l      X           X    l    X   |

@@ -20,6 +20,7 @@ collision_response(collision_response)
     setPosition(position + vec3(0.f, bounding_box.half_height, 0.f));
     list = SET_DRAW(list);
     list = SET_OCTTREE(list);
+    inner_bounding_box = bounding_box;
 
 	boneTransformations.resize(mesh->getMeshes().size());
 	for (int i = 0; i < boneTransformations.size(); i++)
@@ -116,6 +117,39 @@ void GameEntity::setup_entity_box()
     bounding_box.half_width = glm::distance(lower_bound.x, upper_bound.x) / 2.f;
     bounding_box.half_height = glm::distance(lower_bound.y, upper_bound.y) / 2.f;
     bounding_box.half_depth = glm::distance(lower_bound.z, upper_bound.z) / 2.f;
+    inner_bounding_box = bounding_box;
+}
+
+void GameEntity::setup_inner_entity_box(MeshSet* mesh)
+{
+    vector<Mesh*> meshes = mesh->getMeshes();
+    vec3 lower_bound(FLT_MAX, FLT_MAX, FLT_MAX);
+    vec3 upper_bound(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    for (int i = 0; i < meshes.size(); i++)
+    {
+        pair<vec3, vec3> bounds = meshes.at(i)->get_lower_and_upper_bounds();
+        vec3 m_lower_bound(bounds.first);
+        vec3 m_upper_bound(bounds.second);
+
+        vec3 less = lessThan(m_lower_bound, lower_bound);
+        vec3 greater = greaterThan(m_upper_bound, upper_bound);
+        lower_bound.x = less.x ? m_lower_bound.x : lower_bound.x;
+        lower_bound.y = less.y ? m_lower_bound.y : lower_bound.y;
+        lower_bound.z = less.z ? m_lower_bound.z : lower_bound.z;
+        upper_bound.x = greater.x ? m_upper_bound.x : upper_bound.x;
+        upper_bound.y = greater.y ? m_upper_bound.y : upper_bound.y;
+        upper_bound.z = greater.z ? m_upper_bound.z : upper_bound.z;
+    }
+
+    // correct for previous bounding box center
+    inner_bounding_box.center.y -= inner_bounding_box.half_height;
+
+    inner_bounding_box.half_width = glm::distance(lower_bound.x, upper_bound.x) / 2.f;
+    inner_bounding_box.half_height = glm::distance(lower_bound.y, upper_bound.y) / 2.f;
+    inner_bounding_box.half_depth = glm::distance(lower_bound.z, upper_bound.z) / 2.f;
+
+    // new center
+    inner_bounding_box.center.y += inner_bounding_box.half_height;
 }
 
 void GameEntity::setup_entity_box(MeshSet* mesh)
