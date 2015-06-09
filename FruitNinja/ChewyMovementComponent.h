@@ -7,6 +7,8 @@
 #include <math.h>
 
 #define CHEWY_MOVE_SPEED 20.0f
+#define CHEWY_MOVE_SPEED_ARCHERY 5.0f
+
 #define CHEWY_ROTATE_SPEED 15.0f
 
 class ChewyMovementComponent : public Component
