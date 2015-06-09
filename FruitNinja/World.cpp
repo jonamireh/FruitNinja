@@ -77,6 +77,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("tower", new MeshSet(assetPath + "tower.dae")));
 	meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
+	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
     meshes.insert(pair<string, MeshSet*>("door_closed", new MeshSet(assetPath + "door_closed.dae")));
 	meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
@@ -163,8 +164,6 @@ void World::init()
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
-
-	entities.push_back(new ObstacleEntity(vec3(20), meshes.at("door_closed")));
 
 	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
