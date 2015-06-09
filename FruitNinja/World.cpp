@@ -59,6 +59,8 @@ static vector<std::function<void()>> debugShaderQueue;
 float bow_strength = .5f;
 int arrow_count = 10;
 
+int health = MAX_HEALTH;
+
 World::World()
 {
 	debugShader = new DebugShader("debugVert.glsl", "debugFrag.glsl");
@@ -91,6 +93,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai.dae")));
 	meshes.insert(pair<string, MeshSet*>("blue_guard", new MeshSet(assetPath + "blue_samurai.dae")));
 	meshes.insert(pair<string, MeshSet*>("guard_bb", new MeshSet(assetPath + "samurai_bbox.obj")));
+	meshes.insert(pair<string, MeshSet*>("guard_outer_bb", new MeshSet(assetPath + "outer_samurai_bbox.obj")));
 	meshes.insert(pair<string, MeshSet*>("arrow", new MeshSet(assetPath + "arrow.dae")));
 	meshes.insert(pair<string, MeshSet*>("arrow_bb", new MeshSet(assetPath + "arrow_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("unit_sphere", new MeshSet(assetPath + "UnitSphere.obj")));
@@ -225,6 +228,7 @@ void World::lose_condition()
 {
 	current_courtyard--;
 	setup_next_courtyard(false);
+	health--;
 }
 
 void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
@@ -281,6 +285,13 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 	cinematic_camera->init(camera_positions, look_at_positions, 40.f);
 	camera = cinematic_camera;
 	cinematic_camera->in_use = true;
+
+	if (!run_cinematic_camera)
+	{
+		camera->in_use = false;
+		camera = player_camera;
+		camera->in_use = true;
+	}
 
 	chewy->bounding_box.center.y = temp;
 
@@ -365,6 +376,13 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         break;
     case 'e': // static guard facing east
         entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f)));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+        break;
+    case 'E': // static guard facing east Armored
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(1.0f, 0.f, 0.f), true));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
     case 'f': // falling box
         entities.push_back(new FallingEntity(placement_position, meshes["box"]));
@@ -405,7 +423,14 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         break;
 	case 'n': // static guard facing north
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f)));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
+    case 'N': // static guard facing north armored
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(0.0f, 0.f, -1.f), true));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+        break;
     case 'O': // barrel
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
         entities.back()->setScale(3.f);
@@ -422,7 +447,14 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         break;
 	case 's': // static guard facing south
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f)));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
+    case 'S': // static guard facing south armored
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(0.0f, 0.f, 1.f), true));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+        break;
     case 't': // falling stone... its a trap
         entities.push_back(new FallingEntity(placement_position, meshes["interior_wall_1x1"]));
         entities.back()->setScale(3.f);
@@ -447,7 +479,14 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         break;
 	case 'w': // static guard facing west
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f)));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
+    case 'q': // static guard facing west Armored
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(-1.0f, 0.f, 0.f), true));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+        break;
 	case 'W': // interior wall
 		entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall")));
 		entities.back()->setScale(3.f);
@@ -538,6 +577,7 @@ void World::setup_guard(string file_path)
 	vec3 control_points[10];
 	vec3 starting_position;
 	bool linear = false;
+    bool isArmored = false;
 
 	while (!level_file.eof()) // runs through every line
 	{
@@ -555,6 +595,11 @@ void World::setup_guard(string file_path)
 				starting_position = world_position;
 				linear = true;
 				break;
+            case 'B':
+                starting_position = world_position;
+                linear = true;
+                isArmored = true;
+                break;
 			case '0':
 				control_points[0] = world_position;
 				break;
@@ -599,8 +644,13 @@ void World::setup_guard(string file_path)
 		else
 			break;
 	}
-	GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
-	guard_ent->setup_entity_box(meshes["guard_bb"]);
+    GuardEntity* guard_ent;
+    if (isArmored)
+        guard_ent = new GuardEntity(starting_position, meshes["blue_guard"], spline_points, 4.f, linear, isArmored);
+    else
+        guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
+    guard_ent->setup_inner_entity_box(meshes["guard_bb"]);
+    guard_ent->setup_entity_box(meshes["guard_outer_bb"]);
 	entities.push_back(guard_ent);
 	level_file.close();
 }
@@ -930,9 +980,6 @@ void World::update()
 
 	if (state == SPOTTED && cinematic_camera->pathing.done) {
 		lose_condition();
-		camera->in_use = false;
-		camera = player_camera;
-		camera->in_use = true;
 		chewy->isCaught = false;
 		chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
 		chewy->animComponent.currentAnimtion = standing;
@@ -943,20 +990,7 @@ void World::update()
 		entities[i]->update();
 		GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
 		if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
-			//AudioManager::instance()->playAmbient(assetPath + "jons_breakthrough_performance.wav", 5.0f);
-			AudioManager::instance()->play3D(assetPath + "jons_breakthrough_performance.wav", guard_temp->getPosition(), 10.0f, false);
-			state = SPOTTED;
-
-			vec3 p_pos = player_camera->cameraPosition;
-			vec3 look = player_camera->lookAtPoint;
-			vec3 g_dir = guard_temp->getPosition() - player_camera->lookAtPoint;
-			cinematic_camera->init({ p_pos, p_pos + vec3(0.0, 5.0, 0.0), look + vec3(0.0, 5.0, 0.0) + g_dir * .25f,
-				look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f },
-				{ look, look + g_dir * .5f, look + g_dir * .75f, guard_temp->getPosition(), guard_temp->getPosition(), guard_temp->getPosition() }, 10.f);
-			camera->in_use = false;
-			camera = cinematic_camera;
-			camera->in_use = true;
-			chewy->isCaught = true;
+			zoom_on_guard(guard_temp);
 		}
 	}
 
@@ -982,6 +1016,23 @@ void World::update()
 	_skybox->update();
 
 	AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
+}
+
+void World::zoom_on_guard(GuardEntity* guard_temp)
+{
+	AudioManager::instance()->play3D(assetPath + "jons_breakthrough_performance.wav", guard_temp->getPosition(), 10.0f, false);
+	state = SPOTTED;
+
+	vec3 p_pos = player_camera->cameraPosition;
+	vec3 look = player_camera->lookAtPoint;
+	vec3 g_dir = guard_temp->getPosition() - player_camera->lookAtPoint;
+	cinematic_camera->init({ p_pos, p_pos + vec3(0.0, 5.0, 0.0), look + vec3(0.0, 5.0, 0.0) + g_dir * .25f,
+		look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f },
+		{ look, look + g_dir * .5f, look + g_dir * .75f, guard_temp->getPosition(), guard_temp->getPosition(), guard_temp->getPosition() }, 10.f);
+	camera->in_use = false;
+	camera = cinematic_camera;
+	camera->in_use = true;
+	chewy->isCaught = true;
 }
 
 void World::scroll_callback(GLFWwindow* window, double x_pos, double y_pos)

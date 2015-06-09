@@ -42,6 +42,7 @@ protected:
 	glm::mat4 getRotMat();
 public:
     EntityBox bounding_box;
+    EntityBox inner_bounding_box;
     MeshSet* mesh;
     glm::vec3 last_position;
     glm::vec3 velocity = glm::vec3(0);
@@ -58,6 +59,7 @@ public:
 	GameEntity(glm::vec3 position, MeshSet* mesh, bool collision_response = false);
 
     void setup_entity_box();
+    void setup_inner_entity_box(MeshSet* mesh);
     void setup_entity_box(MeshSet* mesh);
     void swap_bounding_box_width_depth();
 

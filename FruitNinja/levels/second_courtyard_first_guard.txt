@@ -33,7 +33,7 @@ ________________________________________
 |      eWw           s       X     X   |
 |                  W         X     X   |
 | We                         X     X   |
-|          wW            n   X     Xg 2|
+|          wW            n   X     XB 2|
 |                        W   X         |
 |     We       W n   n   s   X         |
 |                l D l       XOOOOOOOOO|

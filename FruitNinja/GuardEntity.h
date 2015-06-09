@@ -17,6 +17,7 @@ public:
 	GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir, bool armored = false);
 
 
+    void collision(GameEntity* entity);
 	void update();
 	bool check_view(ChewyEntity* chewy, std::vector<GameEntity*> entities);
 	void stopWalkSound();

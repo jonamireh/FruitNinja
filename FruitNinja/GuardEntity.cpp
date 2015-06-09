@@ -3,6 +3,7 @@
 #include <glm/geometric.hpp>
 #include "GameEntity.h"
 #include "AudioManager.h"
+#include "main.h"
 
 using namespace glm;
 using namespace std;
@@ -14,12 +15,14 @@ using namespace std;
 GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points,
 	float move_speed, bool linear_curve, bool armored) : GameEntity(position, mesh, true),
 	move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(this, WALKIN), is_armored(armored)
+
 {
 	current_animation = mesh->getAnimations()[0];
 }
 
 GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir, bool armored)
 	: GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), move_component(*this, dir), animComponent(this, IDLE), is_armored(armored)
+
 {
 	current_animation = mesh->getAnimations()[0];
 	static_movement = true;
@@ -43,6 +46,8 @@ void GuardEntity::update()
 		std::cout << "Yo I'm dead\n";
 		list = UNSET_DRAW(list);
 	}
+
+    inner_bounding_box.center = bounding_box.center;
 
 	if (walk_channel) AudioManager::instance()->updateChannelPosition(walk_channel, getPosition());
 }
@@ -138,7 +143,7 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 		//seen
 		if (!hidden)
 		{
-			animComponent.setCurrentAnimation(IDLE);
+  			animComponent.setCurrentAnimation(IDLE);
 			static_movement = true;
 			//chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
 			return true;
@@ -149,6 +154,14 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 
 GuardEntity::~GuardEntity() {
 	stopWalkSound();
+}
+
+void GuardEntity::collision(GameEntity* entity)
+{
+    if (typeid(ChewyEntity) == typeid(*entity))
+    {
+		world->zoom_on_guard(this);
+    }
 }
 
 void GuardEntity::goAheadAndKillYourself() {

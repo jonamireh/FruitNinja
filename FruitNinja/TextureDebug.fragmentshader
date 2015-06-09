@@ -11,6 +11,6 @@ out vec4 finalColor;
 void main(){
 	if (UV.y > percent)
 		discard;
-	vec4 texColor = texture(uTexture, vec2(UV.x, 1 - UV.y));
-	finalColor = vec4(texColor.x * 1, texColor.y * 1, texColor.z * 1, texColor.w * 1);
+	vec4 textColor = texture(uTexture, vec2(UV.x, 1 - UV.y));
+	finalColor = textColor;
 }
