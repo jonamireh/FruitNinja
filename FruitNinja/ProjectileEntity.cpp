@@ -49,36 +49,37 @@ glm::mat4 ProjectileEntity::getModelMat()
 }
 void ProjectileEntity::collision(GameEntity* entity)
 {
-	if (entity->bounding_box.box_collision(bounding_box)) {
-
-		if (typeid(*entity) == typeid(GuardEntity)) {
-			GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
-            if (bounding_box.box_collision(entity->inner_bounding_box))
+	if (typeid(*entity) == typeid(GuardEntity)) {
+		GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
+        if (bounding_box.box_collision(entity->inner_bounding_box))
+        {
+            if (!ge->is_armored)
             {
-                if (!ge->is_armored)
-                {
-                    ge->goAheadAndKillYourself();
-                }
-            }
-            else
+                ge->goAheadAndKillYourself();
+                list = UNSET_DRAW(list);
                 return;
-		}
-		else if (typeid(*entity) == typeid(LightEntity)) {
-            if (bounding_box.box_collision(entity->inner_bounding_box))
-            {
-                LightEntity* le = dynamic_cast<LightEntity*>(entity);
-                le->light = NULL;
             }
-            else
-                return;
-		}
+        }
+        else
+            return;
+	}
+	else if (typeid(*entity) == typeid(LightEntity)) {
+        if (bounding_box.box_collision(entity->inner_bounding_box))
+        {
+            LightEntity* le = dynamic_cast<LightEntity*>(entity);
+            le->light = NULL;
+            list = UNSET_DRAW(list);
+            return;
+        }
+        else
+            return;
+	}
 
-		//get rid of arrow
-		if (!(typeid(*entity) == typeid(ChewyEntity))) {
-			world->convert_to_collectible(this);
-			list = UNSET_DRAW(list);
-			game_speed = 1.0;
-			AudioManager::instance()->play3D(assetPath + "arrow_hit.wav", getPosition(), 10.0f, false);
-		}
+	//get rid of arrow
+	if (!(typeid(*entity) == typeid(ChewyEntity))) {
+		world->convert_to_collectible(this);
+		list = UNSET_DRAW(list);
+		game_speed = 1.0;
+		AudioManager::instance()->play3D(assetPath + "arrow_hit.wav", getPosition(), 10.0f, false);
 	}
 }
