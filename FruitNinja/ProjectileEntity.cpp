@@ -55,7 +55,9 @@ void ProjectileEntity::collision(GameEntity* entity)
 		} 
 		else if (typeid(*entity) == typeid(GuardEntity)) {
 			GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
-			ge->goAheadAndKillYourself();
+			if (!ge->is_armored) {
+				ge->goAheadAndKillYourself();
+			}
 		}
 		else if (typeid(*entity) == typeid(LightEntity)) {
 			LightEntity* le = dynamic_cast<LightEntity*>(entity);
