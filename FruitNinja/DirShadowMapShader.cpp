@@ -35,7 +35,13 @@ DirShadowMapShader::~DirShadowMapShader()
 
 void DirShadowMapShader::draw(vector<GameEntity*> ents)
 {
-	std::vector<GameEntity*> entsInView = ents;//get_objects_in_view(ents, view_mat);
+	map<MeshSet*, vector<GameEntity*>> objectMeshes;
+
+	for (int i = 0; i < ents.size(); i++) {
+		map<MeshSet*, vector<GameEntity*>>::iterator meshItr = objectMeshes.find(ents[i]->mesh);
+		objectMeshes[ents[i]->mesh].push_back(ents[i]);
+	}
+
 	glUseProgram(getProgramID());
 
 	glEnable(GL_DEPTH_TEST);
@@ -50,53 +56,38 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 	glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
 	glUniformMatrix4fv(uProjMatrixHandle, 1, GL_FALSE, value_ptr(projection_mat));
 
-	for (int i = 0; i < entsInView.size(); i++) {
-		GameEntity *entity = entsInView[i];
-		std::vector<Mesh*> meshes = entity->mesh->getMeshes();
-
-		glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entsInView[i]->getModelMat()));
+	for (auto& currMeshSet : objectMeshes) {
+		std::vector<Mesh*> meshes = currMeshSet.first->getMeshes();
 		
 		for (int j = 0; j < meshes.size(); j++)
 		{
 			Mesh* mesh = meshes[j];
 			glBindVertexArray(mesh->VAO);
 
-			/*if (mesh->textures.size() > 0) {
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, mesh->textures.at(0).id);
-				glUniform1i(UtexHandle, 0);
-				glUniform1i(UflagHandle, 1);
-			}
-			else {
-
-				glUniform1i(UflagHandle, 0);
-			}*/
-
 			if (mesh->bones.size() > 0)
 			{
 				glUniform1i(uBoneFlagHandle, 1);
-				glUniformMatrix4fv(uBonesHandle, entity->boneTransformations.size(), GL_FALSE, value_ptr(entity->boneTransformations[j][0]));
 			}
 			else
 			{
 				glUniform1i(uBoneFlagHandle, 0);
 			}
 
-			//Material material = mesh->mat;
-			//glUniform3fv(UdColorHandle, 1, value_ptr(material.diffuse));
-
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
 
-			//check_gl_error("Mesh.draw before texture");
+			for (auto& entity : currMeshSet.second) {
+				glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-			glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+				if (mesh->bones.size() > 0) {
+					glUniformMatrix4fv(uBonesHandle, entity->boneTransformations[j].size(), GL_FALSE, value_ptr(entity->boneTransformations[j][0]));
+				}
 
-			//check_gl_error("Mesh.draw after texture");
+				//check_gl_error("Mesh.draw before texture");
 
-			/*if (mesh->textures.size() > 0) {
-				glBindTexture(GL_TEXTURE_2D, 0);
-			}*/
+				glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
+				//check_gl_error("Mesh.draw after texture");
+			}
 		}
 	}
 
