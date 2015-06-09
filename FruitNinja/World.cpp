@@ -58,6 +58,8 @@ static vector<std::function<void()>> debugShaderQueue;
 float bow_strength = .5f;
 int arrow_count = 10;
 
+int health = MAX_HEALTH;
+
 World::World()
 {
 	debugShader = new DebugShader("debugVert.glsl", "debugFrag.glsl");
@@ -88,7 +90,9 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai.dae")));
+	meshes.insert(pair<string, MeshSet*>("blue_guard", new MeshSet(assetPath + "blue_samurai.dae")));
 	meshes.insert(pair<string, MeshSet*>("guard_bb", new MeshSet(assetPath + "samurai_bbox.obj")));
+	meshes.insert(pair<string, MeshSet*>("guard_outer_bb", new MeshSet(assetPath + "outer_samurai_bbox.obj")));
 	meshes.insert(pair<string, MeshSet*>("arrow", new MeshSet(assetPath + "arrow.dae")));
 	meshes.insert(pair<string, MeshSet*>("arrow_bb", new MeshSet(assetPath + "arrow_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("unit_sphere", new MeshSet(assetPath + "UnitSphere.obj")));
@@ -223,6 +227,7 @@ void World::lose_condition()
 {
 	current_courtyard--;
 	setup_next_courtyard(false);
+	health--;
 }
 
 void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
@@ -362,7 +367,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
     case 'e': // static guard facing east
-        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f), this));
+        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
@@ -404,7 +409,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 'n': // static guard facing north
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f), this));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
@@ -423,7 +428,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 's': // static guard facing south
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f), this));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
@@ -450,7 +455,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         break;
 	case 'w': // static guard facing west
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f), this));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
@@ -605,7 +610,7 @@ void World::setup_guard(string file_path)
 		else
 			break;
 	}
-	GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, this, linear);
+	GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
     guard_ent->setup_inner_entity_box(meshes["guard_bb"]);
     guard_ent->setup_entity_box(meshes["guard_outer_bb"]);
 	entities.push_back(guard_ent);
@@ -703,7 +708,7 @@ void World::shootArrows()
 
 	dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = !shot;
 
-	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot)
+	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot && arrow_count > 0)
 	{
 		held = true;
 	}

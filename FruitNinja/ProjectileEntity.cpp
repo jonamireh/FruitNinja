@@ -49,12 +49,15 @@ glm::mat4 ProjectileEntity::getModelMat()
 void ProjectileEntity::collision(GameEntity* entity)
 {
 	if (entity->bounding_box.box_collision(bounding_box)) {
-        if (typeid(*entity) == typeid(GuardEntity))
-        {
+
+		if (typeid(*entity) == typeid(GuardEntity)) {
+			GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
             if (bounding_box.box_collision(entity->inner_bounding_box))
             {
-                GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
-                ge->goAheadAndKillYourself();
+                if (!ge->is_armored)
+                {
+                    ge->goAheadAndKillYourself();
+                }
             }
             else
                 return;

@@ -6,7 +6,8 @@
 
 using namespace glm;
 
-#define MAX_VERTICAL_ANGLE 20.0f
+#define MAX_VERTICAL_ANGLE 45.0f
+#define MIN_VERTICAL_ANGLE -60.0f
 
 /*
 Default constructor.
@@ -42,8 +43,8 @@ void ArcheryCamera::mouse_update()
 
 	if (phi > MAX_VERTICAL_ANGLE)
 		phi = MAX_VERTICAL_ANGLE;
-	if (phi < -MAX_VERTICAL_ANGLE)
-		phi = -MAX_VERTICAL_ANGLE;
+	if (phi < MIN_VERTICAL_ANGLE)
+		phi = MIN_VERTICAL_ANGLE;
 
     vec3 front;
     front.x = cos(radians(theta)) * cos(radians(phi));

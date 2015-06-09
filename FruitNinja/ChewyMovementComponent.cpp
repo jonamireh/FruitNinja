@@ -56,12 +56,12 @@ void ChewyMovementComponent::update()
 		entity.velocity = vec3(0.f);
 	}
 
-	if (player_cam->in_use) 
+	if (player_cam->in_use)// || archery_cam->in_use) 
     {
 		direction.x = 0.f;
 		direction.y = 0.f;
 		direction.z = 0.f;
-		
+
 		bool moved = false;
 
 		if (keys[GLFW_KEY_W]) {
@@ -86,13 +86,13 @@ void ChewyMovementComponent::update()
         vec3 pos_offset;
 
 		if (length(direction) > 0) {
-            direction = normalize(direction * vec3(1, 0, 1));
-                
-            pos_offset = direction * CHEWY_MOVE_SPEED * seconds_passed;
+			direction = normalize(direction * vec3(1, 0, 1));
+
+			pos_offset = direction * CHEWY_MOVE_SPEED * seconds_passed;
 
 			float toAngle = entity.turnAngle(direction).y;
 			float fromAngle = rotations.y;
-			
+
 			if (toAngle - fromAngle < -M_PI)
 			{
 				toAngle += 2 * M_PI;
@@ -119,6 +119,41 @@ void ChewyMovementComponent::update()
 		} 
 	}
 	else if(archery_cam->in_use) {
+		direction.x = 0.f;
+		direction.y = 0.f;
+		direction.z = 0.f;
+
+		bool moved = false;
+
+		if (keys[GLFW_KEY_W]) {
+			direction += forwardDirection(archery_cam);
+			moved = true;
+		}
+		if (keys[GLFW_KEY_S]) {
+			direction += backDirection(archery_cam);
+			moved = true;
+		}
+		if (keys[GLFW_KEY_A]) {
+			direction += leftDirection(archery_cam);
+			moved = true;
+		}
+		if (keys[GLFW_KEY_D]) {
+			direction += rightDirection(archery_cam);
+			moved = true;
+		}
+
+		entity.moving = moved;
+
+		vec3 pos_offset;
+
+		if (length(direction) > 0)
+		{
+			direction = normalize(direction * vec3(1, 0, 1));
+
+			pos_offset = direction * CHEWY_MOVE_SPEED_ARCHERY * seconds_passed;
+
+			position += pos_offset;
+		}
 		rotations = entity.turnAngle(archery_cam->cameraFront);
 		rotations.x = -radians(archery_cam->phi);
 	}

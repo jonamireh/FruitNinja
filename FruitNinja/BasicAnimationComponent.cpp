@@ -52,7 +52,8 @@ void BasicAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatri
 	aiMatrix4x4 nodeTransform(node->mTransformation);
 
 	// Gets the animation info for the bone
-	aiNodeAnim *bone = FindAnimationNode(boneName);
+	BoneInfo* boneInfo = FindBoneInfo(boneName);
+	aiNodeAnim *bone = GetAnimationNode(boneInfo);
 
 	if (bone != nullptr)
 	{
@@ -80,7 +81,7 @@ void BasicAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatri
 	aiMatrix4x4 globalTransformation = parentTransform * nodeTransform;
 
 	if (bone != nullptr)
-		entity->mesh->boneInfo.at(boneName)->transformation = entity->mesh->inverseMat * globalTransformation;
+		boneInfo->transformation = entity->mesh->inverseMat * globalTransformation;
 
 	for (int i = 0; i < node->mNumChildren; i++)
 	{
@@ -88,14 +89,24 @@ void BasicAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatri
 	}
 }
 
-aiNodeAnim* BasicAnimationComponent::FindAnimationNode(string boneName)
+BoneInfo* BasicAnimationComponent::FindBoneInfo(string boneName)
 {
-	std::map<std::string, BoneInfo*>::iterator bone = entity->mesh->boneInfo.find(boneName);
-	if (bone == entity->mesh->boneInfo.end())
+	std::map<std::string, BoneInfo*>::iterator boneInfoItr = entity->mesh->boneInfo.find(boneName);
+	if (boneInfoItr == entity->mesh->boneInfo.end())
 		return nullptr;
-	if (bone->second->bone_anim->size() <= 0)
+	BoneInfo* boneInfo = boneInfoItr->second;
+	if (boneInfo->bone_anim->size() <= 0)
 		return nullptr;
-	return bone->second->bone_anim->at(entity->current_animation);
+	return boneInfo;
+}
+
+aiNodeAnim* BasicAnimationComponent::GetAnimationNode(BoneInfo* boneInfo)
+{
+	if (boneInfo == nullptr) {
+		return nullptr;
+	}
+
+	return boneInfo->bone_anim->at(entity->current_animation);
 }
 
 void BasicAnimationComponent::CalcInterpolatedRotation(aiQuaternion& Out, const aiNodeAnim* pNodeAnim)

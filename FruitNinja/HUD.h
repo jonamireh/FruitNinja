@@ -10,6 +10,8 @@ class HUD
 	tdogl::Texture* arrow_hud;
 	tdogl::Texture* power_bar_frame;
 	tdogl::Texture* power_bar_bar;
+	tdogl::Texture* health_full; 
+	tdogl::Texture* health_empty;
 	ChewyEntity* chewy;
 public:
 	HUD();
