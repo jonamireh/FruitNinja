@@ -37,7 +37,7 @@ void main()
 	}
 
 	vWorldPos = vec3(uModelMatrix * boneTransform * vec4(aPosition, 1.0));
-	vNormal = vec3(uModelMatrix * boneTransform * vec4(normalize(aNormal), 0.0));
+	vNormal = normalize(vec3(uModelMatrix * boneTransform * vec4(aNormal, 0.0)));
 	gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * boneTransform * vec4(aPosition, 1.0);
 	vTextCoord = aTextCoord;
 }

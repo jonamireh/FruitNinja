@@ -33,6 +33,13 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, S
 
 void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 {
+	map<MeshSet*, vector<GameEntity*>> objectMeshes;
+
+	for (int i = 0; i < ents.size(); i++) {
+		map<MeshSet*, vector<GameEntity*>>::iterator meshItr = objectMeshes.find(ents[i]->mesh);
+		objectMeshes[ents[i]->mesh].push_back(ents[i]);
+	}
+
 	check_gl_error("Before geom pass");
 
 	gbuffer.BindForGeomPass();
@@ -45,13 +52,12 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	for (int i = 0; i < ents.size(); i++) {
-		GameEntity *entity = ents[i];
-		std::vector<Mesh*> meshes = entity->mesh->getMeshes();
+	glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
+	glUniformMatrix4fv(uProjMatrixHandle, 1, GL_FALSE, value_ptr(projection));
 
-		glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
-		glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(ents[i]->getModelMat()));
-		glUniformMatrix4fv(uProjMatrixHandle, 1, GL_FALSE, value_ptr(projection));
+	for (auto& currMeshSet: objectMeshes) {
+		
+		std::vector<Mesh*> meshes = currMeshSet.first->getMeshes();
 
 		for (int j = 0; j < meshes.size(); j++)
 		{
@@ -72,7 +78,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 			if (mesh->bones.size() > 0)
 			{
 				glUniform1i(uBoneFlagHandle, 1);
-				glUniformMatrix4fv(uBonesHandle, entity->boneTransformations[j].size(), GL_FALSE, value_ptr(entity->boneTransformations[j][0]));
 			}
 			else
 			{
@@ -84,12 +89,21 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
 
-			//check_gl_error("Mesh.draw before texture");
+			for (auto& entity: currMeshSet.second) {
+				glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-			glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+				if (mesh->bones.size() > 0)
+				{
+					glUniformMatrix4fv(uBonesHandle, entity->boneTransformations[j].size(), GL_FALSE, value_ptr(entity->boneTransformations[j][0]));
+				}
 
-			//check_gl_error("Mesh.draw after texture");
+				//check_gl_error("Mesh.draw before texture");
 
+				glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+
+				//check_gl_error("Mesh.draw after texture");
+
+			}
 			if (mesh->textures.size() > 0) {
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
@@ -108,7 +122,7 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 
 void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights)
 {
-	std::vector<GameEntity*> entsInView = get_objects_in_view(ents, camera->getViewMatrix());
+    std::vector<GameEntity*> entsInView = get_objects_in_view(ents, camera->getViewMatrix());
 	gbuffer.StartFrame();
 	geomPass(camera->getViewMatrix(), entsInView);
 

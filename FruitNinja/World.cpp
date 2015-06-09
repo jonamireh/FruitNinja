@@ -79,6 +79,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x1", new MeshSet(assetPath + "interiorWall_1x1.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
     meshes.insert(pair<string, MeshSet*>("door_closed", new MeshSet(assetPath + "door_closed.dae")));
 	meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
@@ -180,7 +181,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
     current_courtyard++;
 
 	// JUST FOR DEMO
-	if (current_courtyard == 4)
+	if (current_courtyard == 5)
 		current_courtyard = 1;
 
 	switch (current_courtyard)
@@ -204,20 +205,14 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
-
-		// kind of the best time based resolution
-		// first button
-		//entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(19, 4, 5) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
-		//	meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
-		//// second button
-		//entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(28, 4, 12) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
-		//	meshes.at("box"), level_path + "third_courtyard_button_two.txt", this));
         load_button(level_path + "third_courtyard_button_one.txt");
-		/*setup_moving_platform(level_path + "third_courtyard_platform_one.txt");
-		setup_moving_platform(level_path + "third_courtyard_platform_two.txt");*/
 		player_camera->movement(chewy);
 		break;
 	case 4:
+        setup_level(level_path + "fourth_courtyard.txt");
+        setup_moving_platform(level_path + "fourth_courtyard_platform_one.txt");
+        setup_moving_platform(level_path + "fourth_courtyard_platform_two.txt");
+        setup_moving_platform(level_path + "fourth_courtyard_platform_three.txt");
 		break;
 	case 5:
 		break;
@@ -386,6 +381,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		entities.back()->setRotations(vec3(0.f, M_PI, 0.f));
 		break;
+    case 'H': //3x3 inner wall
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_3x3"))); 
+        entities.back()->setScale(3.f);
+        break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
         entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
@@ -422,6 +421,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 	case 's': // static guard facing south
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f)));
 		break;
+    case 't': // falling stone... its a trap
+        entities.push_back(new FallingEntity(placement_position, meshes["interior_wall_1x1"]));
+        entities.back()->setScale(3.f);
+        break;
     case 'U': // "up" or north facing lantern on wall
         entities.push_back(new LightEntity(placement_position,
             meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
@@ -716,7 +719,7 @@ void World::draw()
 
 	if (keys[GLFW_KEY_6])
 	{
-		current_courtyard = 2;
+		current_courtyard = 3;
 		setup_next_courtyard();
 	}
 
