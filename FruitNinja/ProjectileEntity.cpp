@@ -2,6 +2,7 @@
 #include "ArcheryCamera.h"
 #include "LightEntity.h"
 #include "TestSphere.h"
+#include "PlatformEntity.h"
 
 #include "GuardEntity.h"
 #include "LightEntity.h"
@@ -74,6 +75,12 @@ void ProjectileEntity::collision(GameEntity* entity)
         else
             return;
 	}
+
+    if (typeid(*entity) == typeid(PlatformEntity))
+    {
+        list = UNSET_DRAW(list);
+        return;
+    }
 
 	//get rid of arrow
 	if (!(typeid(*entity) == typeid(ChewyEntity))) {

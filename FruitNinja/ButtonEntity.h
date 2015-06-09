@@ -4,7 +4,7 @@
 #include "GameEntity.h"
 #include "LightEntity.h"
 
-class ButtonEntity : public LightEntity
+class ButtonEntity : public GameEntity
 {
     World* world;
     vector<string> on_press_levels;

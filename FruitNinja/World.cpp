@@ -219,6 +219,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fourth_courtyard_platform_one.txt");
         setup_moving_platform(level_path + "fourth_courtyard_platform_two.txt");
         setup_moving_platform(level_path + "fourth_courtyard_platform_three.txt");
+        setup_moving_platform(level_path + "fourth_courtyard_platform_five.txt");
+        load_button(level_path + "fourth_courtyard_button_one.txt");
 		break;
 	case 5:
 		break;
@@ -406,6 +408,18 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_3x3"))); 
         entities.back()->setScale(3.f);
         break;
+    case 'k': // fence
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("fence")));
+        rots = entities.back()->getRotations();
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        entities.back()->setScale(3.f);
+        entities.back()->swap_bounding_box_width_depth();
+        break;
+    case 'K': // fence
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("fence")));
+        entities.back()->setScale(3.f);
+        break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
         entities.back()->setup_entity_box(meshes.at("lanternPole_boundingbox"));
@@ -502,6 +516,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->setScale(3.f);
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		break;
+    case '1':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x1")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        break;
 
 	}
 }
@@ -790,7 +809,8 @@ void World::draw()
 	vector<Light*> lights;
 	for (int i = 0; i < entities.size(); i++) {
 		//even if lantern culled still need light from it
-		if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list)) {
+        if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list))
+        {
 			LightEntity* le = dynamic_cast<LightEntity*>(entities[i]);
 			if (le->light) lights.push_back(le->light);
 		}
