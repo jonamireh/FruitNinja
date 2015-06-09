@@ -18,7 +18,8 @@ public:
 	std::vector<std::vector<glm::mat4>>* getBoneTransformations();
 private:
 	void calculateAnimationTransforms(aiNode *node, aiMatrix4x4 parentTransform);
-	aiNodeAnim* FindAnimationNode(std::string boneName);
+	BoneInfo* FindBoneInfo(std::string boneName);
+	aiNodeAnim* GetAnimationNode(BoneInfo* boneInfo);
 	void CalcInterpolatedRotation(aiQuaternion& Out, const aiNodeAnim* pNodeAnim);
 	glm::uint FindRotation(const aiNodeAnim* pNodeAnim);
 	void CalcInterpolatedScaling(aiVector3D& Out, const aiNodeAnim* pNodeAnim);
