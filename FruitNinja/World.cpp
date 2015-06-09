@@ -165,6 +165,8 @@ void World::init()
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 
+	entities.push_back(new ObstacleEntity(vec3(20), meshes.at("door_closed")));
+
 	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
 
