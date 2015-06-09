@@ -92,6 +92,33 @@ AudioManager* AudioManager::instance()
 	return amInstance;
 }
 
+FMOD::Sound *AudioManager::preload_internal(string filename, bool loop)
+{
+	FMOD_RESULT result;
+	FMOD::Sound *sound = nullptr;
+	map<string, FMOD::Sound*>::iterator soundItr = soundMap.find(filename);
+
+	if (soundItr == soundMap.end()) {
+		cout << "Loading " << filename << "..." << endl;
+		result = system->createSound(filename.c_str(), FMOD_3D | (loop ? FMOD_LOOP_NORMAL : 0), nullptr, &sound);
+		FMODErrorCheck(result);
+
+		cout << "Loaded " << filename << endl;
+
+		soundMap.insert(pair<string, FMOD::Sound*>(filename, sound));
+	}
+	else {
+		sound = soundItr->second;
+	}
+
+	return sound;
+}
+
+void AudioManager::preload(string filename, bool loop)
+{
+	preload_internal(filename, loop);
+}
+
 void AudioManager::playAmbient(string filename, float volume)
 {
 	FMOD_RESULT result;
@@ -135,21 +162,7 @@ void AudioManager::updateListener(glm::vec3 position, glm::vec3 forward, glm::ve
 FMOD::Channel *AudioManager::play3D(string filename, glm::vec3 position, float atten, bool loop)
 {
 	FMOD_RESULT result;
-	FMOD::Sound *sound;
-	map<string, FMOD::Sound*>::iterator soundItr = soundMap.find(filename);
-
-	if (soundItr == soundMap.end()) {
-		cout << "Loading " << filename << "..." << endl;
-		result = system->createSound(filename.c_str(), FMOD_3D | (loop ? FMOD_LOOP_NORMAL : 0), nullptr, &sound);
-		FMODErrorCheck(result);
-
-		cout << "Loaded " << filename << endl;
-
-		soundMap.insert(pair<string, FMOD::Sound*>(filename, sound));
-	}
-	else {
-		sound = soundItr->second;
-	}
+	FMOD::Sound *sound = preload_internal(filename, loop);
 
 	FMOD::Channel *channel;
 	result = system->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
