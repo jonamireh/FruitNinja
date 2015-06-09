@@ -8,15 +8,16 @@
 
 class GuardEntity : public GameEntity
 {
+    World* world;
 public:
 	~GuardEntity();
 	//GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve = false);
 	//GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir);
 
-	GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve = false);
-	GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir);
+    GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed, World* world, bool linear_curve = false);
+	GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir, World* world);
 
-
+    void collision(GameEntity* entity);
 	void update();
 	bool check_view(ChewyEntity* chewy, std::vector<GameEntity*> entities);
 	void stopWalkSound();

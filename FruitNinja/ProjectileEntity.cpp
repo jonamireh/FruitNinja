@@ -49,17 +49,24 @@ glm::mat4 ProjectileEntity::getModelMat()
 void ProjectileEntity::collision(GameEntity* entity)
 {
 	if (entity->bounding_box.box_collision(bounding_box)) {
-		if (typeid(*entity) == typeid(TestSphere)) {
-			//get rid of hit entity
-			entity->list = UNSET_DRAW(entity->list);
-		} 
-		else if (typeid(*entity) == typeid(GuardEntity)) {
-			GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
-			ge->goAheadAndKillYourself();
+        if (typeid(*entity) == typeid(GuardEntity))
+        {
+            if (bounding_box.box_collision(entity->inner_bounding_box))
+            {
+                GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
+                ge->goAheadAndKillYourself();
+            }
+            else
+                return;
 		}
 		else if (typeid(*entity) == typeid(LightEntity)) {
-			LightEntity* le = dynamic_cast<LightEntity*>(entity);
-			le->light = NULL;
+            if (bounding_box.box_collision(entity->inner_bounding_box))
+            {
+                LightEntity* le = dynamic_cast<LightEntity*>(entity);
+                le->light = NULL;
+            }
+            else
+                return;
 		}
 		//get rid of arrow
 		if (!(typeid(*entity) == typeid(ChewyEntity))) {

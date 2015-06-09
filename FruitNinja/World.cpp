@@ -362,7 +362,9 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
     case 'e': // static guard facing east
-        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f)));
+        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f), this));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
     case 'f': // falling box
         entities.push_back(new FallingEntity(placement_position, meshes["box"]));
@@ -402,7 +404,9 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 'n': // static guard facing north
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f), this));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
     case 'O': // barrel
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
@@ -419,7 +423,9 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 's': // static guard facing south
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f), this));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
     case 't': // falling stone... its a trap
         entities.push_back(new FallingEntity(placement_position, meshes["interior_wall_1x1"]));
@@ -444,7 +450,9 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         break;
 	case 'w': // static guard facing west
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f), this));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
 	case 'W': // interior wall
 		entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall")));
@@ -597,8 +605,9 @@ void World::setup_guard(string file_path)
 		else
 			break;
 	}
-	GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
-	guard_ent->setup_entity_box(meshes["guard_bb"]);
+	GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, this, linear);
+    guard_ent->setup_inner_entity_box(meshes["guard_bb"]);
+    guard_ent->setup_entity_box(meshes["guard_outer_bb"]);
 	entities.push_back(guard_ent);
 	level_file.close();
 }
