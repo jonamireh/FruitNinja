@@ -101,6 +101,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("bushes", new MeshSet(assetPath + "bushes.dae")));
 	meshes.insert(pair<string, MeshSet*>("bushes_boundingbox", new MeshSet(assetPath + "bushes_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("statue", new MeshSet(assetPath + "statue.dae")));
+	meshes.insert(pair<string, MeshSet*>("platform", new MeshSet(assetPath + "platform.dae")));
 
 	archery_camera = new ArcheryCamera(meshes.at("unit_sphere")->getMeshes().at(0));
 
@@ -670,7 +671,7 @@ void World::setup_moving_platform(string file_path)
 		else
 			break;
 	}
-	PlatformEntity* platform = new PlatformEntity(starting_position, meshes["box"], spline_points, 12.f);
+	PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 12.f);
 	platform->setScale(3.f);
 	entities.push_back(platform);
 	level_file.close();
@@ -951,7 +952,7 @@ void World::update()
 
 	if (!time_stopped)
 	{
-		seconds_passed = std::min(actual_seconds_passed, MAX_TIME_STEP);
+		seconds_passed = actual_seconds_passed;
 	}
 	else
 	{
