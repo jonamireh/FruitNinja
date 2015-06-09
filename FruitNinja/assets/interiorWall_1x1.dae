@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.74.0 commit date:2015-03-31, commit time:13:39, hash:000dfc0</authoring_tool>
     </contributor>
-    <created>2015-06-08T20:00:26</created>
-    <modified>2015-06-08T20:00:26</modified>
+    <created>2015-06-08T21:44:51</created>
+    <modified>2015-06-08T21:44:51</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -62,7 +62,7 @@
     <geometry id="Cube_001-mesh" name="Cube.001">
       <mesh>
         <source id="Cube_001-mesh-positions">
-          <float_array id="Cube_001-mesh-positions-array" count="72">-1 0 0.9999999 -1 6 0.9999997 -1 0 -1 -1 6 -1 1 0 0.9999999 1 6 0.9999997 1 0 -1 1 6 -1 -0.4431193 6 -1 -1 6 0.5173155 1 6 -0.4774082 0.4415534 6 0.9999997 -1 6 0.9999997 -1 6 -1 1 6 0.9999997 1 6 -1 -0.7160254 6 0.4061462 -0.7292111 6 -1 -0.7325604 6 -0.4338672 -1 6 0.4156298 1 6 -0.4100558 0.728047 6 0.9999997 0.7025651 6 -0.4198762 0.7132661 6 0.426111</float_array>
+          <float_array id="Cube_001-mesh-positions-array" count="72">-1 0 0.9999999 -1 2 0.9999997 -1 0 -1 -1 2 -1 1 0 0.9999999 1 2 0.9999997 1 0 -1 1 2 -1 -0.4431193 2 -1 -1 2 0.5173155 1 2 -0.4774082 0.4415534 2 0.9999997 -1 2 0.9999997 -1 2 -1 1 2 0.9999997 1 2 -1 -0.7160254 2 0.4061462 -0.7292111 2 -1 -0.7325604 2 -0.4338672 -1 2 0.4156298 1 2 -0.4100558 0.728047 2 0.9999997 0.7025651 2 -0.4198762 0.7132661 2 0.426111</float_array>
           <technique_common>
             <accessor source="#Cube_001-mesh-positions-array" count="24" stride="3">
               <param name="X" type="float"/>
@@ -107,7 +107,7 @@
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
       <node id="Cube_002" name="Cube_002" type="NODE">
-        <matrix sid="transform">1 0 0 0 0 0.3333334 0 0 0 0 1 0 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
         <instance_geometry url="#Cube_001-mesh">
           <bind_material>
             <technique_common>
