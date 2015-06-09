@@ -196,6 +196,7 @@
     <ClCompile Include="FlameEmitter.cpp" />
     <ClCompile Include="GuardAnimationComponent.cpp" />
     <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="GuardMovementComponent.cpp" />
@@ -355,6 +356,7 @@
     <ClInclude Include="GuardAnimationComponent.h" />
     <ClInclude Include="CollectableEntity.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="FrustrumCulling.h" />
