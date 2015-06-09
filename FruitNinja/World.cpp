@@ -58,6 +58,8 @@ static vector<std::function<void()>> debugShaderQueue;
 float bow_strength = .5f;
 int arrow_count = 10;
 
+int health = MAX_HEALTH;
+
 World::World()
 {
 	debugShader = new DebugShader("debugVert.glsl", "debugFrag.glsl");
@@ -220,6 +222,7 @@ void World::lose_condition()
 {
 	current_courtyard--;
 	setup_next_courtyard(false);
+	health--;
 }
 
 void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)

@@ -58,6 +58,39 @@ void TextureDebugShader::draw(glm::mat4 & view_mat, GameEntity* entity)
 }
 
 /*
+Draws a specified texture starting at the initial location and expanding the width to the right and height upwards.
+*/
+void TextureDebugShader::drawTextureCentered(GLuint textureId, int xloc, int yloc, int width, int height, float percent, const glm::vec4 &color)
+{
+	glUseProgram(getProgramID());
+
+	glViewport(xloc - width / 2, yloc - height / 2, width, height);
+	check_gl_error("TextureDebugShader error part");
+	glBindVertexArray(VAO);
+	check_gl_error("TextureDebugShader error part 2");
+	// Bind our texture in Texture Unit 0
+	glActiveTexture(GL_TEXTURE0);
+	check_gl_error("TextureDebugShader error part 2.5555");
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	check_gl_error("TextureDebugShader error part 3");
+	// Set our "renderedTexture" sampler to user Texture Unit 0
+	glUniform1i(getUniformHandle("uTexture"), 0);
+	glUniform1f(getUniformHandle("percent"), percent);
+	//glUniform4fv(getUniformHandle("uColor"), 0, glm::value_ptr(color));
+
+	check_gl_error("TextureDebugShader error before");
+	// Draw the triangles !
+	// You have to disable GL_COMPARE_R_TO_TEXTURE above in order to see anything !
+	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
+	glViewport(0, 0, screen_width, screen_height);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindVertexArray(0);
+	glUseProgram(0);
+
+	check_gl_error("TextureDebugShader error after");
+}
+
+/*
 	Draws a specified texture starting at the initial location and expanding the width to the right and height upwards.
  */
 void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height, float percent, const glm::vec4 &color)
@@ -76,7 +109,7 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	// Set our "renderedTexture" sampler to user Texture Unit 0
 	glUniform1i(getUniformHandle("uTexture"), 0);
 	glUniform1f(getUniformHandle("percent"), percent);
-	//glUniform4f(getUniformHandle("uColor"), color.x, color.y, color.z, color.w);
+	//glUniform4fv(getUniformHandle("uColor"), GL_FALSE, glm::value_ptr(color));
 
 	check_gl_error("TextureDebugShader error before");
 	// Draw the triangles !

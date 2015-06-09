@@ -25,6 +25,7 @@
 #define PLAYER_FAR 1000.f
 #define GUARD_NEAR 0.1f
 #define GUARD_FAR 30.f
+#define MAX_HEALTH 4
 //#define PLAYER_DIST (PLAYER_FAR - PLAYER_NEAR)
 //#define GUARD_DIST (GUARD_FAR - GUARD_NEAR)
 
@@ -46,6 +47,7 @@ extern float game_speed;
 extern float bow_strength;
 extern int arrow_count;
 extern int current_courtyard;
+extern int health;
 
 enum GameState{
 	HIDDEN,
