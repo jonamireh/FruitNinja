@@ -4,6 +4,12 @@ ________________________________________
 |                                      |
 |                                      |
 | H  H  H  H  H  H  H  H  H  H  H  H H |
+________________________________________
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
 |                                      |
 |                                      |
 |                                      |
@@ -24,7 +30,7 @@ ________________________________________
 | H  H  H  H  H  H  H     H  H  H  H H |
 |                                      |
 |                                      |
-| H  H  H  H  H  H  H  H  H  H  H  H H |
+| H  H  H  H     H  H  H  H  H  H  H H |
 |                                      |
 |                                      |
 | H  H  H  H  H  H  H  H  H  H  H  H H |
@@ -47,13 +53,13 @@ ________________________________________
 |                                      |
 |                                      |
 |                                      |
-|          fffffffffffffffff           |
-|          fffffffffffffffff           |
-|          fffffffffffffffff           |
-|          fffffffffffffffff           |
-|          fffffffffffffffff           |
-|          fffffffffffffffff           |
-|          fffffffffffffffff           |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
 |                                      |
 |                                      |
 |                                      |
@@ -63,9 +69,9 @@ ________________________________________
 |                     ttt              |
 |                     ttt              |
 |                     ttt              |
-|                                      |
-|                                      |
-|                                      |
+|            ttt                       |
+|            ttt                       |
+|            ttt                       |
 |                                      |
 |                                      |
 |                                      |
