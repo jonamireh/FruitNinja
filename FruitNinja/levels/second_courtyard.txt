@@ -91,7 +91,7 @@ ________________________________________
 |XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
 |                                  X   |
 |                                  X   |
-|                                  X   |
+|R                                 X   |
 |                                  X   |
 |      U     U     U     U         X   |
 |                                  X   |
@@ -106,7 +106,7 @@ ________________________________________
 |           D                X     X   |
 |         U           L R    X     X   |
 |  U     L                R  X     X   |
-|               U    U   D   X     X   |
+|               R    U   D   X     X   |
 |              D             X     X   |
 |                            X     X   |
 |                 L          X     X   |
@@ -130,7 +130,7 @@ ________________________________________
 |XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   XR  |
 |D     D     D     D     D     D   X   |
 |                                  X   |
-|R                                 X  L|
+|                                  X  L|
 |                                  X   |
 |                                  X   |
 |                                  XR  |
