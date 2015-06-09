@@ -208,6 +208,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		setup_guard(level_path + "second_courtyard_third_guard.txt");
 		setup_guard(level_path + "second_courtyard_fourth_guard.txt");
 		player_camera->movement(chewy);
+		loading_screen = new LoadingScreen("LoadScreen1.png", "Color is Key!");
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
@@ -786,86 +787,98 @@ void World::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glUseProgram(0);
-	//static bool usePhong = false;
-
-	if (keys[GLFW_KEY_6])
+	if (loading_screen == nullptr)
 	{
-		current_courtyard = 3;
-		setup_next_courtyard();
-	}
+		glUseProgram(0);
+		//static bool usePhong = false;
 
-	DebugCamera* d_test = dynamic_cast<DebugCamera*>(camera);
-	vector<GameEntity*> in_view;
-
-	PlayerCamera* p_test = dynamic_cast<PlayerCamera*>(camera);
-	if (p_test != nullptr)
-	{
-		p_test->reorient(entities, chewy);
-	}
-	glUseProgram(0);
-
-	//otherwise deferred rendering
-	vector<Light*> lights;
-	for (int i = 0; i < entities.size(); i++) {
-		//even if lantern culled still need light from it
-        if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list))
-        {
-			LightEntity* le = dynamic_cast<LightEntity*>(entities[i]);
-			if (le->light) lights.push_back(le->light);
-		}
-		//if there's an arrow have archery camera follow it and make game slow-mo
-		/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
-		archery_camera->cameraPosition = entities[i]->bounding_box.center - archery_camera->cameraFront * 4.0f;
-		}*/
-
-		if (!SHOULD_DRAW(entities[i]->list)) {
-			should_del.push_back(entities[i]);
-			entities.erase(entities.begin() + i);
-			i--;
-		}
-	}
-	for (int i = 0; i < entities.size(); i++)
-	{
-		if (!SHOULD_DRAW(entities[i]->list)) {
-			entities.erase(entities.begin() + i);
-			i--;
-		}
-	}
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glUseProgram(shaders.at("defShader")->getProgramID());
-	glViewport(0, 0, screen_width, screen_height);
-	shaders.at("defShader")->draw(camera, entities, lights);
-
-	glUseProgram(0);
-	if (debug_enabled)
-	{
-		glUseProgram(debugShader->getProgramID());
-		for (int i = 0; i < entities.size(); i++)
+		if (keys[GLFW_KEY_6])
 		{
-			EntityBox box = entities.at(i)->bounding_box;
-			vector<pair<vec3, vec3>> points = box.get_line_segments();
-			for (int j = 0; j < points.size(); j++)
-			{
-				draw_line(points.at(j).first, points.at(j).second, vec3(1.f, 0.f, 0.f));
-			}
+			current_courtyard = 3;
+			setup_next_courtyard();
+		}
+
+		DebugCamera* d_test = dynamic_cast<DebugCamera*>(camera);
+		vector<GameEntity*> in_view;
+
+	////otherwise deferred rendering
+	//vector<Light*> lights;
+	//for (int i = 0; i < entities.size(); i++) {
+	//	//even if lantern culled still need light from it
+ //       if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list))
+ //       {
+	//		LightEntity* le = dynamic_cast<LightEntity*>(entities[i]);
+	//		if (le->light) lights.push_back(le->light);
+		PlayerCamera* p_test = dynamic_cast<PlayerCamera*>(camera);
+		if (p_test != nullptr)
+		{
+			p_test->reorient(entities, chewy);
 		}
 		glUseProgram(0);
-	}
 
-	glUseProgram(debugShader->getProgramID());
-	for (int i = debugShaderQueue.size() - 1; i >= 0; i--)
-	{
-		debugShaderQueue.at(i)();
-	}
-	if (!time_stopped)
-	{
-		debugShaderQueue.clear();
-	}
-	glUseProgram(0);
+		//otherwise deferred rendering
+		vector<Light*> lights;
+		for (int i = 0; i < entities.size(); i++) {
+			//even if lantern culled still need light from it
+			if (typeid(*entities[i]) == typeid(LightEntity) && SHOULD_DRAW(entities[i]->list)) {
+				LightEntity* le = dynamic_cast<LightEntity*>(entities[i]);
+				if (le->light) lights.push_back(le->light);
+			}
+			//if there's an arrow have archery camera follow it and make game slow-mo
+			/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
+			archery_camera->cameraPosition = entities[i]->bounding_box.center - archery_camera->cameraFront * 4.0f;
+			}*/
 
-	hud->draw();
+			if (!SHOULD_DRAW(entities[i]->list)) {
+				should_del.push_back(entities[i]);
+				entities.erase(entities.begin() + i);
+				i--;
+			}
+		}
+		for (int i = 0; i < entities.size(); i++)
+		{
+			if (!SHOULD_DRAW(entities[i]->list)) {
+				entities.erase(entities.begin() + i);
+				i--;
+			}
+		}
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glUseProgram(shaders.at("defShader")->getProgramID());
+		glViewport(0, 0, screen_width, screen_height);
+		shaders.at("defShader")->draw(camera, entities, lights);
+
+		glUseProgram(0);
+		if (debug_enabled)
+		{
+			glUseProgram(debugShader->getProgramID());
+			for (int i = 0; i < entities.size(); i++)
+			{
+				EntityBox box = entities.at(i)->bounding_box;
+				vector<pair<vec3, vec3>> points = box.get_line_segments();
+				for (int j = 0; j < points.size(); j++)
+				{
+					draw_line(points.at(j).first, points.at(j).second, vec3(1.f, 0.f, 0.f));
+				}
+			}
+			glUseProgram(0);
+		}
+
+		glUseProgram(debugShader->getProgramID());
+		for (int i = debugShaderQueue.size() - 1; i >= 0; i--)
+		{
+			debugShaderQueue.at(i)();
+		}
+		if (!time_stopped)
+		{
+			debugShaderQueue.clear();
+		}
+		glUseProgram(0);
+
+		hud->draw();
+	}
+	else
+		loading_screen->draw();
 }
 
 void World::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -995,48 +1008,53 @@ void World::stop_time()
 
 void World::update()
 {
-	static float start_time = 0.0;
+		static float start_time = 0.0;
 
-	shootArrows();
+		shootArrows();
 
-	if (state == SPOTTED && cinematic_camera->pathing.done) {
-		lose_condition();
-		chewy->isCaught = false;
-		chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
-		chewy->animComponent.currentAnimtion = standing;
-		state = HIDDEN;
-	}
-	for (int i = 0; i < entities.size(); i++)
-	{
-		entities[i]->update();
-		GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
-		if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
-			zoom_on_guard(guard_temp);
+		if (state == SPOTTED && cinematic_camera->pathing.done) {
+			lose_condition();
+			chewy->isCaught = false;
+			chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
+			chewy->animComponent.currentAnimtion = standing;
+			state = HIDDEN;
 		}
-	}
+		for (int i = 0; i < entities.size(); i++)
+		{
+			entities[i]->update();
+			GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
+			if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
+				zoom_on_guard(guard_temp);
+			}
+		}
 
-	actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
+		actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
 
-	if (!time_stopped)
-	{
-		seconds_passed = actual_seconds_passed;
-	}
-	else
-	{
-		seconds_passed = 0.f;
-	}
-	start_time = glfwGetTime();
-	Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
-	OctTree world_oct_tree(vox, entities);
-	world_oct_tree.handle_collisions();
-	for (int i = 0; i < should_del.size(); i++) {
-		delete should_del[i];
-	}
-	should_del.clear();
-	update_key_callbacks();
-	_skybox->update();
+		if (!time_stopped)
+		{
+			seconds_passed = actual_seconds_passed;
+		}
+		else
+		{
+			seconds_passed = 0.f;
+		}
+		start_time = glfwGetTime();
+		Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
+		OctTree world_oct_tree(vox, entities);
+		world_oct_tree.handle_collisions();
+		for (int i = 0; i < should_del.size(); i++) {
+			delete should_del[i];
+		}
+		should_del.clear();
+		update_key_callbacks();
+		_skybox->update();
 
-	AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
+		AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
+		if (loading_screen != nullptr && keys[GLFW_KEY_ENTER])
+		{
+			delete loading_screen;
+			loading_screen = nullptr;
+		}
 }
 
 void World::zoom_on_guard(GuardEntity* guard_temp)

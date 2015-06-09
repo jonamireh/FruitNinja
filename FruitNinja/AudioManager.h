@@ -14,10 +14,12 @@ private:
 	std::map<std::string, FMOD::Sound*> soundMap;
 
 	void FMODErrorCheck(FMOD_RESULT result);
+	FMOD::Sound *preload_internal(std::string filename, bool loop);
 	AudioManager();
 public:
 	static AudioManager* instance();
 
+	void preload(std::string filename, bool loop);
 	void playAmbient(std::string filename, float volume);
 	void updateListener(glm::vec3 position, glm::vec3 forward, glm::vec3 up);
 	FMOD::Channel *play3D(std::string filename, glm::vec3 position, float atten, bool loop);

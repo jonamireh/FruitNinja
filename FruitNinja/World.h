@@ -26,6 +26,7 @@
 #define GUARD_NEAR 0.1f
 #define GUARD_FAR 30.f
 #define MAX_HEALTH 4
+#include "LoadingScreen.h"
 //#define PLAYER_DIST (PLAYER_FAR - PLAYER_NEAR)
 //#define GUARD_DIST (GUARD_FAR - GUARD_NEAR)
 
@@ -90,7 +91,7 @@ public:
 	void convert_to_collectible(ProjectileEntity* p);
 	void zoom_on_guard(GuardEntity* g);
 
-
+	LoadingScreen* loading_screen = nullptr;
 private:
     DebugCamera* debug_camera;
     ArcheryCamera* archery_camera;

@@ -193,6 +193,8 @@
     <ClCompile Include="RisingMovementComponent.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="FireArrowEntity.cpp" />
+    <ClCompile Include="LoadingScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -669,6 +671,9 @@
     <ClInclude Include="main.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="FireArrow.h" />
+    <ClInclude Include="FireArrowEntity.h" />
+    <ClInclude Include="LoadingScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -793,6 +798,9 @@
     </Filter>
     <Filter Include="Arrows">
       <UniqueIdentifier>{b14836d7-7299-4f79-9dc2-f47c8b32910f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LoadingScreen">
+      <UniqueIdentifier>{478a083f-bbe3-41e8-986e-c02aad12e145}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
