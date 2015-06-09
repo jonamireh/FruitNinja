@@ -5,12 +5,14 @@
 
 ButtonEntity::ButtonEntity() {}
 
-ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_press_levels, vector<string> on_press_platforms, vector<string> other_button_files, World* world) : GameEntity(position, mesh)
+ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_press_levels, 
+    vector<string> on_press_platforms, vector<string> other_button_files, vector<string> on_press_cinematic_file, World* world) : GameEntity(position, mesh)
 {
     pressed = false;
     this->on_press_levels = on_press_levels;
     this->on_press_platforms = on_press_platforms;
     this->other_button_files = other_button_files;
+    this->on_press_cinematic_file = on_press_cinematic_file;
     this->world = world;
 }
 
@@ -27,6 +29,9 @@ void ButtonEntity::button_pressed()
     // loads in the other button files
     for (int i = 0; i < other_button_files.size(); i++)
         world->load_button(other_button_files.at(i));
+    // play cinematic camera if has one
+    for (int i = 0; i < on_press_cinematic_file.size(); i++)
+        world->setup_cinematic_camera(on_press_cinematic_file.at(i), true);
 }
 
 void ButtonEntity::collision(GameEntity* entity)

@@ -52,6 +52,7 @@ static Camera* camera;
 static DebugShader* debugShader;
 bool time_stopped = false;
 float game_speed = 1.0f;
+int current_courtyard = 0;
 static vector<std::function<void()>> debugShaderQueue;
 
 float bow_strength = .5f;
@@ -174,6 +175,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	}
 	entities.erase(entities.begin() + NUM_PERSISTENT, entities.end());
 
+    current_courtyard++;
+
 	// JUST FOR DEMO
 	if (current_courtyard == 4)
 		current_courtyard = 1;
@@ -217,8 +220,6 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	case 5:
 		break;
 	}
-
-	current_courtyard++;
 }
 
 void World::lose_condition()
@@ -467,6 +468,7 @@ void World::load_button(string file_path)
     vector<string> on_press_levels;
     vector<string> on_press_platforms;
     vector<string> other_button_files;
+    vector<string> on_press_cinematic_file;
 
     string current_line;
     int current_row = 0;
@@ -480,6 +482,9 @@ void World::load_button(string file_path)
             string load_path = current_line.substr(2, current_line.length() - 1);
             switch (current_line.at(0))
             {
+            case 'C':
+                on_press_cinematic_file.push_back(level_path + load_path);
+                break;
             case 'M': // only happens once, name of the mesh for this button
                 mesh_name = load_path;
                 break;
@@ -506,7 +511,7 @@ void World::load_button(string file_path)
                 glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
                 if (current_line.at(i) == 'B')
                 {
-                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, this));
+                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, this));
                 }
             }
             current_row++;
@@ -709,7 +714,7 @@ void World::draw()
 
 	if (keys[GLFW_KEY_6])
 	{
-		current_courtyard = 3;
+		current_courtyard = 2;
 		setup_next_courtyard();
 	}
 

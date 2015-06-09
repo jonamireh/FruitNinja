@@ -45,6 +45,7 @@ extern glm::mat4 guard_projection;
 extern float game_speed;
 extern float bow_strength;
 extern int arrow_count;
+extern int current_courtyard;
 
 enum GameState{
 	HIDDEN,
@@ -92,7 +93,6 @@ private:
 	Skybox* _skybox;
 	HUD* hud;
 	void init();
-    int current_courtyard = 1;
     void setup_token(char obj_to_place, glm::vec3 file_index);
     void setup_guard(string file_path);
     void shootArrows();
