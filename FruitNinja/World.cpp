@@ -90,6 +90,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai.dae")));
+	meshes.insert(pair<string, MeshSet*>("blue_guard", new MeshSet(assetPath + "blue_samurai.dae")));
 	meshes.insert(pair<string, MeshSet*>("guard_bb", new MeshSet(assetPath + "samurai_bbox.obj")));
 	meshes.insert(pair<string, MeshSet*>("arrow", new MeshSet(assetPath + "arrow.dae")));
 	meshes.insert(pair<string, MeshSet*>("arrow_bb", new MeshSet(assetPath + "arrow_boundingbox.dae")));
@@ -212,6 +213,9 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		break;
 	case 4:
         setup_level(level_path + "fourth_courtyard.txt");
+        setup_moving_platform(level_path + "fourth_courtyard_platform_one.txt");
+        setup_moving_platform(level_path + "fourth_courtyard_platform_two.txt");
+        setup_moving_platform(level_path + "fourth_courtyard_platform_three.txt");
 		break;
 	case 5:
 		break;
@@ -694,7 +698,7 @@ void World::shootArrows()
 
 	dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = !shot;
 
-	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot)
+	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot && arrow_count > 0)
 	{
 		held = true;
 	}

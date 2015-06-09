@@ -13,8 +13,8 @@ public:
 	//GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve = false);
 	//GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir);
 
-	GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve = false);
-	GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir);
+	GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed, bool linear_curve = false, bool armored = false);
+	GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir, bool armored = false);
 
 
 	void update();
@@ -24,6 +24,7 @@ public:
 	glm::vec3 front;
 	GuardMovementComponent move_component;
 	GuardAnimationComponent animComponent;
+	bool is_armored;
 private:
 	bool static_movement = false;
 	bool is_dying = false;
