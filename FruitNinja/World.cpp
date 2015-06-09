@@ -691,7 +691,7 @@ void World::shootArrows()
 
 	dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = !shot;
 
-	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot)
+	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot && arrow_count > 0)
 	{
 		held = true;
 	}
