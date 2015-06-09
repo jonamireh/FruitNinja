@@ -48,7 +48,8 @@ float screen_height = SCREEN_HEIGHT;
 mat4 projection = mat4(perspective((float)radians(PLAYER_FOV), screen_width / screen_height, PLAYER_NEAR, PLAYER_FAR));
 mat4 guard_projection = mat4(perspective((float)radians(GUARD_FOV), screen_width / screen_height, GUARD_NEAR, GUARD_FAR));
 
-static Camera* camera;
+Camera* camera;
+PlayerCamera* player_camera;
 static DebugShader* debugShader;
 bool time_stopped = false;
 float game_speed = 1.0f;

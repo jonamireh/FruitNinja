@@ -138,6 +138,7 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 		//seen
 		if (!hidden)
 		{
+
 			animComponent.setCurrentAnimation(IDLE);
 			static_movement = true;
 			//chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));

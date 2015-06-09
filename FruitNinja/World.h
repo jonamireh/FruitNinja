@@ -47,6 +47,9 @@ extern float bow_strength;
 extern int arrow_count;
 extern int current_courtyard;
 
+extern Camera* camera;
+extern PlayerCamera* player_camera;
+
 enum GameState{
 	HIDDEN,
 	SPOTTED,
@@ -88,7 +91,6 @@ public:
 private:
     DebugCamera* debug_camera;
     ArcheryCamera* archery_camera;
-    PlayerCamera* player_camera;
 	CinematicCamera* cinematic_camera;
 	Skybox* _skybox;
 	HUD* hud;
