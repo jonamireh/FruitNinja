@@ -5,14 +5,29 @@
 
 ButtonEntity::ButtonEntity() {}
 
-ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, string load_path, World* world) : GameEntity(position, mesh)
+ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_press_levels, vector<string> on_press_platforms, vector<string> other_button_files, World* world) : GameEntity(position, mesh)
 {
     pressed = false;
-    this->load_path = load_path;
+    this->on_press_levels = on_press_levels;
+    this->on_press_platforms = on_press_platforms;
+    this->other_button_files = other_button_files;
     this->world = world;
 }
 
 void ButtonEntity::update() {}
+
+void ButtonEntity::button_pressed()
+{
+    // loads all the level files in
+    for (int i = 0; i < on_press_levels.size(); i++)
+        world->setup_level(on_press_levels.at(i));
+    // loads in the moving platforms
+    for (int i = 0; i < on_press_platforms.size(); i++)
+        world->setup_moving_platform(on_press_platforms.at(i));
+    // loads in the other button files
+    for (int i = 0; i < other_button_files.size(); i++)
+        world->load_button(other_button_files.at(i));
+}
 
 void ButtonEntity::collision(GameEntity* entity)
 {
@@ -20,7 +35,7 @@ void ButtonEntity::collision(GameEntity* entity)
     {
         if (typeid(ChewyEntity) == typeid(*entity))
         {
-            world->setup_level(load_path);
+            button_pressed();
             pressed = true;
             setPosition(getPosition() - glm::vec3(0.f, 2.f * bounding_box.half_height, 0.f));
             playPressedSound();
@@ -32,7 +47,7 @@ void ButtonEntity::collision(GameEntity* entity)
         ProjectileEntity* arrow_check = dynamic_cast<ProjectileEntity*>(entity);
         if (arrow_check != nullptr)
         {
-            world->setup_level(load_path);
+            button_pressed();
             pressed = true;
             playPressedSound();
         }

@@ -202,14 +202,14 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 
 		// kind of the best time based resolution
 		// first button
-		entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(19, 4, 5) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
-			meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
-		// second button
-		entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(28, 4, 12) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
-			meshes.at("box"), level_path + "third_courtyard_button_two.txt", this));
-
-		setup_moving_platform(level_path + "third_courtyard_platform_one.txt");
-		setup_moving_platform(level_path + "third_courtyard_platform_two.txt");
+		//entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(19, 4, 5) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
+		//	meshes.at("box"), level_path + "third_courtyard_button_one.txt", this));
+		//// second button
+		//entities.push_back(new ButtonEntity(FILE_TO_WORLD_SCALE * vec3(28, 4, 12) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f),
+		//	meshes.at("box"), level_path + "third_courtyard_button_two.txt", this));
+        load_button(level_path + "third_courtyard_button_one.txt");
+		/*setup_moving_platform(level_path + "third_courtyard_platform_one.txt");
+		setup_moving_platform(level_path + "third_courtyard_platform_two.txt");*/
 		player_camera->movement(chewy);
 		break;
 	case 4:
@@ -306,8 +306,11 @@ void World::setup_level(string file_path)
 		}
 		for (int i = 0; i < current_line.length(); i++)
 		{
-			glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
-			setup_token(current_line.at(i), world_position);
+            if (height_level >= 0)
+            {
+                glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
+                setup_token(current_line.at(i), world_position);
+            }
 		}
 		current_row++;
 	}
@@ -324,6 +327,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     case 'A':
         entities.push_back(new CollectableEntity(placement_position, meshes["arrow"]));
         break;
+    // dont' use 'B'
 	case 'C': // set chewy's position
 		chewy->setPosition(placement_position + vec3(0.f, 5.f, 0.f));
 		break;
@@ -452,6 +456,63 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		break;
 
 	}
+}
+
+void World::load_button(string file_path)
+{
+    ifstream level_file;
+    level_file.open(file_path);
+
+    string mesh_name;
+    vector<string> on_press_levels;
+    vector<string> on_press_platforms;
+    vector<string> other_button_files;
+
+    string current_line;
+    int current_row = 0;
+    int height_level = -1;
+
+    while (!level_file.eof()) // runs through every line
+    {
+        getline(level_file, current_line);
+        if (height_level < 0 && current_line.length() > 1) // saving all things of importance
+        {
+            string load_path = current_line.substr(2, current_line.length() - 1);
+            switch (current_line.at(0))
+            {
+            case 'M': // only happens once, name of the mesh for this button
+                mesh_name = load_path;
+                break;
+            case 'B': // button file
+                other_button_files.push_back(level_path + load_path);
+                break;
+            case 'P': // platform file
+                on_press_platforms.push_back(level_path + load_path);
+                break;
+            case 'L': // level file
+                on_press_levels.push_back(level_path + load_path);
+                break;
+            }
+        }
+        if (current_line == "________________________________________")
+        {
+            current_row = 0;
+            height_level++;
+        }
+        if (height_level >= 0)
+        {
+            for (int i = 0; i < current_line.length(); i++)
+            {
+                glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
+                if (current_line.at(i) == 'B')
+                {
+                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, this));
+                }
+            }
+            current_row++;
+        }
+    }
+    level_file.close();
 }
 
 void World::setup_guard(string file_path)

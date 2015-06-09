@@ -1,3 +1,8 @@
+M box
+P third_courtyard_platform_one.txt
+P third_courtyard_platform_two.txt
+B third_courtyard_button_two.txt
+L third_courtyard_button_one.txt
 ________________________________________
 |       W                   W          |
 |                               W      |
@@ -92,6 +97,11 @@ ________________________________________
 |                                      |
 |                                      |
 ________________________________________
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                  B                   |
 ________________________________________
 |                                      |
 |                           D  L       |
