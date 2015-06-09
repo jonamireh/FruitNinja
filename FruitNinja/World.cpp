@@ -27,6 +27,7 @@
 #include "CinematicCamera.h"
 #include "AudioManager.h"
 #include "CollectableEntity.h"
+#include <glm/gtc/matrix_access.inl>
 
 #define FILE_TO_WORLD_SCALE 6.f
 #define NUM_PERSISTENT 7
@@ -816,6 +817,12 @@ void World::mouse_button_callback(GLFWwindow* window, int button, int action, in
 {
 	if (action == GLFW_PRESS)
 		mouse_buttons_pressed[button] = true;
+}
+
+void World::convert_to_collectible(ProjectileEntity* p)
+{
+	entities.push_back(new CollectableEntity(p->getPosition(), meshes.at("arrow"), false, 1));
+	dynamic_cast<CollectableEntity*>(entities.back())->custom_rotate(p->rot);
 }
 
 void World::change_camera()

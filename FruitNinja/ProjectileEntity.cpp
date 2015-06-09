@@ -5,6 +5,7 @@
 
 #include "GuardEntity.h"
 #include "LightEntity.h"
+#include "main.h"
 
 
 ProjectileEntity::ProjectileEntity() : movement(*this, new ArcheryCamera()), shot(false), timeLeft(5.0f)
@@ -55,16 +56,21 @@ void ProjectileEntity::collision(GameEntity* entity)
 		} 
 		else if (typeid(*entity) == typeid(GuardEntity)) {
 			GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
+			list = UNSET_DRAW(list);
 			if (!ge->is_armored) {
 				ge->goAheadAndKillYourself();
 			}
 		}
 		else if (typeid(*entity) == typeid(LightEntity)) {
 			LightEntity* le = dynamic_cast<LightEntity*>(entity);
+			list = UNSET_DRAW(list);
 			le->light = NULL;
+			return;
 		}
+
 		//get rid of arrow
 		if (!(typeid(*entity) == typeid(ChewyEntity))) {
+			world->convert_to_collectible(this);
 			list = UNSET_DRAW(list);
 			game_speed = 1.0;
 			AudioManager::instance()->play3D(assetPath + "arrow_hit.wav", getPosition(), 10.0f, false);
