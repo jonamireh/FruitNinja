@@ -90,11 +90,12 @@ void BasicAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatri
 
 aiNodeAnim* BasicAnimationComponent::FindAnimationNode(string boneName)
 {
-	if (entity->mesh->boneInfo.find(boneName) == entity->mesh->boneInfo.end())
+	std::map<std::string, BoneInfo*>::iterator bone = entity->mesh->boneInfo.find(boneName);
+	if (bone == entity->mesh->boneInfo.end())
 		return nullptr;
-	if (entity->mesh->boneInfo.at(boneName)->bone_anim->size() <= 0)
+	if (bone->second->bone_anim->size() <= 0)
 		return nullptr;
-	return entity->mesh->boneInfo.at(boneName)->bone_anim->at(entity->current_animation);
+	return bone->second->bone_anim->at(entity->current_animation);
 }
 
 void BasicAnimationComponent::CalcInterpolatedRotation(aiQuaternion& Out, const aiNodeAnim* pNodeAnim)
