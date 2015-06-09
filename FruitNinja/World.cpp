@@ -208,6 +208,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		setup_guard(level_path + "second_courtyard_third_guard.txt");
 		setup_guard(level_path + "second_courtyard_fourth_guard.txt");
 		player_camera->movement(chewy);
+		loading_screen = new LoadingScreen("LoadScreen1.png", "Color is Key!");
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
@@ -980,8 +981,6 @@ void World::stop_time()
 
 void World::update()
 {
-	if (loading_screen == nullptr)
-	{
 		static float start_time = 0.0;
 
 		shootArrows();
@@ -1024,15 +1023,11 @@ void World::update()
 		_skybox->update();
 
 		AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
-	}
-	else
-	{
-		if (keys[GLFW_KEY_SPACE])
+		if (loading_screen != nullptr && keys[GLFW_KEY_ENTER])
 		{
 			delete loading_screen;
 			loading_screen = nullptr;
 		}
-	}
 }
 
 void World::zoom_on_guard(GuardEntity* guard_temp)
