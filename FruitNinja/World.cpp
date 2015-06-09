@@ -109,6 +109,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("bushes_boundingbox", new MeshSet(assetPath + "bushes_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("statue", new MeshSet(assetPath + "statue.dae")));
 	meshes.insert(pair<string, MeshSet*>("platform", new MeshSet(assetPath + "platform.dae")));
+	meshes.insert(pair<string, MeshSet*>("fence", new MeshSet(assetPath + "fence.dae")));
 
 	archery_camera = new ArcheryCamera(meshes.at("unit_sphere")->getMeshes().at(0));
 

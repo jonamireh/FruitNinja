@@ -27,6 +27,8 @@ HUD::~HUD()
 	delete arrow_hud;
 	delete power_bar_frame;
 	delete power_bar_bar;
+	delete health_full;
+	delete health_empty;
 }
 
 void HUD::draw()
@@ -43,7 +45,7 @@ void HUD::draw()
 	}
 	for (; temp < MAX_HEALTH; temp++)
 	{
-		shader.drawTextureCentered(health_empty->object(), 20 + health_full->originalWidth() * .3 / 2 + temp * (health_full->originalWidth() * .3 + 10), screen_height - 20 - health_full->originalHeight() * .3 / 2, health_empty->originalWidth() * .8, health_empty->originalHeight() * .8, 1, glm::vec4(1));
+		shader.drawTextureCentered(health_empty->object(), 20 + health_full->originalWidth() * .3 / 2 + temp * (health_full->originalWidth() * .3 + 10), screen_height - 20 - health_full->originalHeight() * .3 / 2, health_empty->originalWidth() * .5, health_empty->originalHeight() * .5, 1, glm::vec4(1));
 	}
 
 	if (chewy->moveComponent.archery_cam->in_use)
