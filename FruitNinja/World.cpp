@@ -371,6 +371,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
+    case 'E': // static guard facing east Armored
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(1.0f, 0.f, 0.f), true));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+        break;
     case 'f': // falling box
         entities.push_back(new FallingEntity(placement_position, meshes["box"]));
         entities.back()->setScale(3.f);
@@ -413,6 +418,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
+    case 'N': // static guard facing north armored
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(0.0f, 0.f, -1.f), true));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+        break;
     case 'O': // barrel
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
         entities.back()->setScale(3.f);
@@ -432,6 +442,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
+    case 'S': // static guard facing south armored
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(0.0f, 0.f, 1.f), true));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+        break;
     case 't': // falling stone... its a trap
         entities.push_back(new FallingEntity(placement_position, meshes["interior_wall_1x1"]));
         entities.back()->setScale(3.f);
@@ -459,6 +474,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
+    case 'q': // static guard facing west Armored
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(-1.0f, 0.f, 0.f), true));
+        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
+        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+        break;
 	case 'W': // interior wall
 		entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall")));
 		entities.back()->setScale(3.f);
@@ -549,6 +569,7 @@ void World::setup_guard(string file_path)
 	vec3 control_points[10];
 	vec3 starting_position;
 	bool linear = false;
+    bool isArmored = false;
 
 	while (!level_file.eof()) // runs through every line
 	{
@@ -566,6 +587,11 @@ void World::setup_guard(string file_path)
 				starting_position = world_position;
 				linear = true;
 				break;
+            case 'B':
+                starting_position = world_position;
+                linear = true;
+                isArmored = true;
+                break;
 			case '0':
 				control_points[0] = world_position;
 				break;
@@ -610,7 +636,11 @@ void World::setup_guard(string file_path)
 		else
 			break;
 	}
-	GuardEntity* guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
+    GuardEntity* guard_ent;
+    if (isArmored)
+        guard_ent = new GuardEntity(starting_position, meshes["blue_guard"], spline_points, 4.f, linear, isArmored);
+    else
+        guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
     guard_ent->setup_inner_entity_box(meshes["guard_bb"]);
     guard_ent->setup_entity_box(meshes["guard_outer_bb"]);
 	entities.push_back(guard_ent);
