@@ -180,7 +180,7 @@
     </ClCompile>
     <ClCompile Include="FallingEntity.cpp">
       <Filter>Source</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="ProjectileEntity.cpp">
       <Filter>Arrows</Filter>
     </ClCompile>
@@ -189,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="CollectableEntity.cpp">
       <Filter>Arrows</Filter>
+    </ClCompile>
+    <ClCompile Include="RisingMovementComponent.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -650,7 +653,7 @@
     </ClInclude>
     <ClInclude Include="ft2build.h">
       <Filter>Headers\freetype</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="ProjectileEntity.h">
       <Filter>Arrows</Filter>
     </ClInclude>
@@ -659,6 +662,9 @@
     </ClInclude>
     <ClInclude Include="CollectableEntity.h">
       <Filter>Arrows</Filter>
+    </ClInclude>
+    <ClInclude Include="RisingMovementComponent.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
