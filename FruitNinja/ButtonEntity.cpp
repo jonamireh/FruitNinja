@@ -2,11 +2,12 @@
 #include "ProjectileEntity.h"
 #include "AudioManager.h"
 #include "World.h"
+#include "main.h"
 
 ButtonEntity::ButtonEntity() {}
 
 ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_press_levels, 
-    vector<string> on_press_platforms, vector<string> other_button_files, vector<string> on_press_cinematic_file, World* world) : GameEntity(position, mesh)
+    vector<string> on_press_platforms, vector<string> other_button_files, vector<string> on_press_cinematic_file, World* world) : LightEntity(position, mesh, 300.f, world->meshes["unit_sphere"], glm::vec3(1.0f, 0.5f, 0.5f))
 {
     pressed = false;
     this->on_press_levels = on_press_levels;

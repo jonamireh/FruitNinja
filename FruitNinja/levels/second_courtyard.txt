@@ -7,7 +7,7 @@ ________________________________________
 |  s  l      X           X    l    X   |
 |  n         X           X         X   |
 |       ew   X           XO        X   |
-|  e w      OX           XAO       X X |
+|  e w      OX           X O       X X |
 |O         OOXWWWWWWWWWWWXXXXXXX   X   |
 |XXXXXXXXXXXXXWWWWWWWWWWWXXXXXXX s X   |
 |XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
@@ -38,7 +38,7 @@ ________________________________________
 |     We        Wn   n   s   X         |
 |                l d l       XOOOOOOOOO|
 ________________________________________
-|A               X   X                 |
+|                X   X                 |
 |                X   X                 |
 |            X   X   X   XXXXXXXXXXX   |
 |            X   XX XX   X         X   |

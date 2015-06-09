@@ -1,6 +1,7 @@
 #include "DoorEntity.h"
 #include "ChewyEntity.h"
 #include "World.h"
+#include "main.h"
 using namespace std;
 
 DoorEntity::DoorEntity()
@@ -8,10 +9,9 @@ DoorEntity::DoorEntity()
 }
 
 
-DoorEntity::DoorEntity(glm::vec3 position, MeshSet* mesh, bool open, World* world) : GameEntity(position, mesh)
+DoorEntity::DoorEntity(glm::vec3 position, MeshSet* mesh, bool open) : GameEntity(position, mesh)
 {
     this->open = open;
-    this->world = world;
 }
 
 void DoorEntity::update()

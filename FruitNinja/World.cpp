@@ -346,14 +346,14 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         if (placement_position.z < 120.f)
         {
             placement_position.z -= 2.65f;
-            entities.push_back(new DoorEntity(placement_position, meshes.at("door_closed"), flag, this));
+            entities.push_back(new DoorEntity(placement_position, meshes.at("door_closed"), flag));
         }
 		else
 		{
 			placement_position.z += 2.65f;
 			rots = vec3(0.f, M_PI, 0.f);
 			flag = true;
-            entities.push_back(new DoorEntity(placement_position, meshes.at("door"), flag, this));
+            entities.push_back(new DoorEntity(placement_position, meshes.at("door"), flag));
 		}
 		
 		if (num_doors == 0)
