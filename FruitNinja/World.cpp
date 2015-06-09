@@ -339,7 +339,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         if (placement_position.z < 120.f)
         {
             placement_position.z -= 2.65f;
-            entities.push_back(new DoorEntity(placement_position, meshes.at("door"), flag, this));
+            entities.push_back(new DoorEntity(placement_position, meshes.at("door_closed"), flag, this));
         }
 		else
 		{
@@ -673,7 +673,7 @@ void World::setup_moving_platform(string file_path)
 		else
 			break;
 	}
-	PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 12.f);
+	PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
 	platform->setScale(4.f);
 	entities.push_back(platform);
 	level_file.close();
