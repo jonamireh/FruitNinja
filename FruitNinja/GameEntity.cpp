@@ -14,7 +14,7 @@ using namespace glm;
 using namespace std;
 
 GameEntity::GameEntity(glm::vec3 position, MeshSet* mesh, bool collision_response) : mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f)),
-collision_response(collision_response), rising_component(this)
+collision_response(collision_response)
 {
     setup_entity_box();
     setPosition(position + vec3(0.f, bounding_box.half_height, 0.f));
