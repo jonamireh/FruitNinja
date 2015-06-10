@@ -20,6 +20,7 @@
 #include "FallingEntity.h"
 #include "DoorEntity.h"
 #include "SpikeEntity.h"
+#include "GateEntity.h"
 #include "FrustrumCulling.h"
 #include <iostream>
 #include <fstream>
@@ -99,11 +100,18 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x6", new MeshSet(assetPath + "interiorWall_1x6.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x7", new MeshSet(assetPath + "interiorWall_1x7.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
+    meshes.insert(pair<string, MeshSet*>("spike", new MeshSet(assetPath + "spikes.dae")));
+    meshes.insert(pair<string, MeshSet*>("spikes_floor", new MeshSet(assetPath + "spikes_floor.dae")));
     meshes.insert(pair<string, MeshSet*>("button", new MeshSet(assetPath + "button.dae")));
+    meshes.insert(pair<string, MeshSet*>("button_base", new MeshSet(assetPath + "button_base.dae")));
+    meshes.insert(pair<string, MeshSet*>("target", new MeshSet(assetPath + "target.dae")));
+    meshes.insert(pair<string, MeshSet*>("target_rotated", new MeshSet(assetPath + "target_rotated.dae")));
+    meshes.insert(pair<string, MeshSet*>("gate_spike", new MeshSet(assetPath + "gate_spikes.dae")));
+    meshes.insert(pair<string, MeshSet*>("gate_base", new MeshSet(assetPath + "gate_base.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
     meshes.insert(pair<string, MeshSet*>("door_closed", new MeshSet(assetPath + "door_closed.dae")));
-	meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
-	meshes.insert(pair<string, MeshSet*>("spikes_floor", new MeshSet(assetPath + "spikes_floor.dae")));
+	meshes.insert(pair<string, MeshSet*>("gate_spikes", new MeshSet(assetPath + "gate_spikes.dae")));
+	meshes.insert(pair<string, MeshSet*>("gate_base", new MeshSet(assetPath + "gate_base.dae")));
 	meshes.insert(pair<string, MeshSet*>("ground", new MeshSet(assetPath + "ground.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
@@ -185,6 +193,11 @@ void World::init()
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+
+	//entities.push_back(new ObstacleEntity(glm::vec3(35, 0, 35), meshes.at("gate_spikes")));
+	//entities.back()->setScale(3.f);
+	//entities.push_back(new ObstacleEntity(glm::vec3(35, 0, 35), meshes.at("gate_base")));
+	//entities.back()->setScale(3.f);
 
 	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
@@ -442,6 +455,24 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		entities.back()->setRotations(vec3(0.f, M_PI, 0.f));
 		break;
+    case 'g':
+        entities.push_back(new GateEntity(placement_position, meshes.at("gate_spike")));
+        entities.back()->setScale(3.f);
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("gate_base")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = UNSET_OCTTREE((entities.back()->list));
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        break;
+    case 'G':
+        entities.push_back(new GateEntity(placement_position, meshes.at("gate_spike")));
+        entities.back()->setScale(3.f);
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("gate_base")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = UNSET_OCTTREE((entities.back()->list));
+        break;
     case 'H': //3x3 inner wall
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_3x3"))); 
         if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
@@ -533,7 +564,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         break;
     case 'V': // spikes
-        entities.push_back(new SpikeEntity(placement_position, meshes.at("spikes"), this));
+        entities.push_back(new SpikeEntity(placement_position, meshes.at("spike"), this));
         entities.back()->setScale(3.f);
         break;
 	case 'w': // static guard facing west
@@ -662,7 +693,7 @@ void World::load_button(string file_path)
                 glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
                 if (current_line.at(i) == 'B')
                 {
-                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, this));
+                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file));
                 }
             }
             current_row++;

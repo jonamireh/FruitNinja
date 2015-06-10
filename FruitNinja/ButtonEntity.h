@@ -1,23 +1,20 @@
 #pragma once
 
-#include "World.h"
 #include "GameEntity.h"
-#include "LightEntity.h"
 
 class ButtonEntity : public GameEntity
 {
-    World* world;
-    vector<string> on_press_levels;
-    vector<string> on_press_platforms;
-    vector<string> other_button_files;
-    vector<string> on_press_cinematic_file;
+    std::vector<std::string> on_press_levels;
+    std::vector<std::string> on_press_platforms;
+    std::vector<std::string> other_button_files;
+    std::vector<std::string> on_press_cinematic_file;
 
 	void playPressedSound();
 public:
     bool pressed;
     ButtonEntity();
-    ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_press_levels,
-        vector<string> on_press_platforms, vector<string> other_button_files, vector<string> on_press_cinematic_file, World* world);
+    ButtonEntity(glm::vec3 position, MeshSet* mesh, std::vector<std::string> on_press_levels,
+        std::vector<std::string> on_press_platforms, std::vector<std::string> other_button_files, std::vector<std::string> on_press_cinematic_file);
     void update();
     void button_pressed();
     void collision(GameEntity* entity) override;
