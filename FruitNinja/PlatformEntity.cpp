@@ -17,6 +17,15 @@ void PlatformEntity::collision(GameEntity* entity)
 {
     if (typeid(ChewyEntity) == typeid(*entity))
     {
-        entity->setPosition(entity->getPosition() + seconds_passed * movement_component.move_speed * movement_component.direction);
+		glm::vec3 pos = entity->getPosition();
+
+		if (pos.y - entity->bounding_box.half_height < bounding_box.get_lower_bound().y) {
+			pos.y = bounding_box.get_upper_bound().y + entity->bounding_box.half_height;
+			entity->velocity.y = movement_component.move_speed * movement_component.direction.y * 1.2;
+		}
+
+		pos += seconds_passed * movement_component.move_speed * movement_component.direction;
+
+		entity->setPosition(pos);
     }
 }
