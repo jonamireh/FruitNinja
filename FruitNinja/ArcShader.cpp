@@ -40,38 +40,56 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, a_camera->particle->IND);
 
 		vec3 velocity = a_camera->cameraFront * ARROW_SPEED * bow_strength;
-		vec3 base_transformation = a_camera->cameraPosition + 4.f * a_camera->cameraFront;
-		vec3 left = glm::normalize(glm::cross(vec3(0.f, 1.f, 0.f), a_camera->cameraFront));
-		vec3 offset = 0.45f * left;
-		offset.y -= 0.5f;
-		vec3 incremental_offset = offset / (float)NUM_INSTANCES;
-		base_transformation += offset;
+		vec3 base_transformation = a_camera->cameraPosition + 6.f * a_camera->cameraFront;
+
 		float t1 = -(sqrt(pow(velocity.y, 2) - 2.f * -GRAVITY * base_transformation.y) + velocity.y) / -GRAVITY;
 		float t2 = (sqrt(pow(velocity.y, 2) - 2.f * -GRAVITY * base_transformation.y) - velocity.y) / -GRAVITY;
 		float intersection_time = glm::max(t1, t2);
 		float pseudo_time = intersection_time / NUM_INSTANCES;
+		vec3 left = glm::normalize(glm::cross(vec3(0.f, 1.f, 0.f), a_camera->cameraFront));
+		vec3 offset = 0.45f * left;
+		offset.y -= 0.5f;
+		vec3 incremental_offset = offset / intersection_time;
+		base_transformation += offset;
+		vector<pair<float, float>> divisions;
+		//time, instances distribution
+		divisions.push_back(pair<float, float>(0.10f, 0.40f));
+		divisions.push_back(pair<float, float>(0.30f, 0.30f));
+		divisions.push_back(pair<float, float>(0.60f, 0.30f));
 
-
-		for (int i = 0; i < NUM_INSTANCES; i++)
+		float time = 0.f;
+		for (int i = 0; i < divisions.size(); i++)
 		{
-			vec3 final_translate = base_transformation;
-			vec3 displacement;
-			float instance_time = i * pseudo_time;
-			displacement.x = velocity.x * instance_time;
-			displacement.y = (-0.5f * GRAVITY * pow(instance_time, 2)) + velocity.y * instance_time;
-			displacement.z = velocity.z * instance_time;
-			final_translate += displacement;
-			final_translate -= incremental_offset * (float)i;
-			mat4 mat = glm::translate(mat4(1.f), final_translate);
-			for (int j = 0; j < 4; j++)
+			float time_size = intersection_time * divisions.at(i).first;
+			float normal_inst_size = NUM_INSTANCES * divisions.at(i).first;
+			int block_size = NUM_INSTANCES * divisions.at(i).second;
+
+			float proportion = normal_inst_size / block_size;
+			float target_time = time + time_size;
+
+			for (; time < target_time; time += pseudo_time * proportion)
 			{
-				vec4 column = glm::column(mat, j);
+				vec3 final_translate = base_transformation;
+				vec3 displacement;
+				displacement.x = velocity.x * time;
+				displacement.y = (-0.5f * GRAVITY * pow(time, 2)) + velocity.y * time;
+				displacement.z = velocity.z * time;
+				final_translate += displacement;
+				final_translate -= vec3(0.f, incremental_offset.y * time, 0.f);
+				mat4 mat = glm::translate(mat4(1.f), final_translate);
 				for (int k = 0; k < 4; k++)
 				{
-					translations.push_back(column[k]);
+					vec4 column = glm::column(mat, k);
+					for (int l = 0; l < 4; l++)
+					{
+						translations.push_back(column[l]);
+					}
 				}
 			}
 		}
+
+
+		
 
 
 
