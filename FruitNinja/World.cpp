@@ -531,7 +531,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
     case 'W': // static guard facing west Armored
-        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(-1.0f, 0.f, 0.f), true));
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(-1.0f, 0.f, 0.f), true));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
