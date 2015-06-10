@@ -9,25 +9,32 @@
 #define EXP_AT 0.0075*/
 
 
+Light::Light(glm::vec3 pos, glm::vec3 color, float intensity, MeshSet* mesh) : pos(pos), color(color), intensity(intensity),
+mesh(mesh){
+	_IND = mesh->getMeshes()[0]->IND;
+	_VAO = mesh->getMeshes()[0]->VAO;
+	_ind_size = mesh->getMeshes()[0]->indices.size();
+	_transform = translate(glm::mat4(1.0f), pos) * calc_scale_mat();
+}
+
 GLuint Light::IND()
 {
-	return mesh->getMeshes()[0]->IND;
+	return _IND;
 }
 
 GLuint Light::VAO()
 {
-	return mesh->getMeshes()[0]->VAO;
+	return _VAO;
 }
 
 size_t Light::indices_size()
 {
-	return mesh->getMeshes()[0]->indices.size();
+	return _ind_size;
 }
 
 glm::mat4 Light::transform()
 {
-	glm::mat4 trans = translate(glm::mat4(1.0f), pos);
-	return trans*scale;
+	return _transform;
 }
 
 //calculate how big the size needs to be based on intensity

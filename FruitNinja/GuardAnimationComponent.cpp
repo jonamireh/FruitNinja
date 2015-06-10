@@ -20,10 +20,6 @@ GuardAnimationComponent::~GuardAnimationComponent()
 
 void GuardAnimationComponent::update()
 {
-	if (basicAnimation.animationComplete)
-	{
-		//basicAnimation.changeToSingleAnimation(WALKIN_START, WALKIN_START + WALKIN_DURATION);
-	}
 	basicAnimation.update();
 }
 

@@ -7,7 +7,8 @@ uniform mat4 uViewProjMatrix;
 uniform vec3 uEyePos;
 uniform int uWidth;
 uniform int uHeight;
-uniform float uSize;
+uniform float uPartWidth;
+uniform float uPartHeight;
 
 in vec2 cellPos[1];
 
@@ -23,26 +24,26 @@ void main() {
 
 
 	//lower left
-	pos -= (right * 0.5 * uSize);
+	pos -= (right * 0.5 * uPartWidth);
 	texCoord = vec2(cellPos[0].x, 1.0 / float(uHeight) + cellPos[0].y);
     gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 
 	//upper left
-	pos.y += 1.0 * uSize;
+	pos.y += 1.0 * uPartHeight;
 	texCoord = vec2(cellPos[0].x, cellPos[0].y);
 	gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 
 	//lower right
-	pos.y -= 1.0 * uSize;
-    pos += right * uSize;
+	pos.y -= 1.0 * uPartHeight;
+    pos += right * uPartWidth;
 	texCoord = vec2(1.0 / float(uWidth) + cellPos[0].x, 1.0 / float(uHeight) + cellPos[0].y);
 	gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 
 	//upper right
-	pos.y += 1.0 * uSize;
+	pos.y += 1.0 * uPartHeight;
 	texCoord = vec2(1.0 / float(uWidth) + cellPos[0].x, cellPos[0].y);
 	gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();

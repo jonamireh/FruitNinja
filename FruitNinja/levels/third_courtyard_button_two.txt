@@ -19,26 +19,26 @@ ________________________________________
 |                                      |
 |                                      |
 |                                      |
-|                 W                    |
+|                 6                    |
 |                                      |
-|        W                      W  W   |
-|                    W                 |
-|W                                     |
-|                          W          W|
-|       W                              |
+|        6                      6  6   |
+|                    6                 |
+|6                                     |
+|                          6          6|
+|       6                              |
 |                                      |
-|            W      W                  |
-|      W                               |
-|       W                              |
-|       W                              |
-|       W          W                  W|
-|       W     W              WWWW      |
-|                            W         |
-|   W                 WWWWWWWW       W |
+|            6      6                  |
+|      6                               |
+|       6                              |
+|       6                              |
+|       6          6                  6|
+|       6     6              6666      |
+|                            6         |
+|                     66666666       6 |
 |                                      |
-|       W                              |
-|                                  W   |
-|   W      W                           |
+|       6                              |
+|                                  6   |
+|   6      6                           |
 ________________________________________
 ________________________________________
 ________________________________________
@@ -60,26 +60,26 @@ ________________________________________
 |                                      |
 |                                     f|
 |                                     f|
-|                 W                   f|
 |                                     f|
-|        W   fffffffffffffffff  W  W  f|
-|            f       W       f         |
-|W   fffffffff               ffff  ff  |
-|                          W       ff W|
-|       W                              |
+|                                     f|
+|            fffffffffffffffff        f|
+|            f               f         |
+|    fffffffff               ffff  ff  |
+|                                  ff  |
+|                                      |
 |  ff                                  |
-|  ff        W                         |
-|      W          fffff                |
-|       W   fffffff   ff               |
-|  fff  Wffff          ff              |
-|  fff  Wf         W    fffffffffffff W|
-|       Wf    W              WWWW   f  |
-|       ff                   W      f  |
-|       ff            WWWWWWWWfff   fW |
+|  ff                                  |
+|                 fffff                |
+|           fffffff   ff               |
+|  fff   ffff          ff              |
+|  fff   f              fffffffffffff  |
+|        f                          f  |
+|  f    ff                          f  |
+|       ff                    fff   f  |
 |                  ffffffffffffff   f  |
-|       W                              |
-|                                  W   |
-|   W      W                           |
+|                                      |
+|                                      |
+|                                      |
 ________________________________________
 |                                      |
 |                                      |

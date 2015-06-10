@@ -3,3 +3,7 @@
 void LightEntity::update()
 {
 }
+
+LightEntity::~LightEntity() {
+	delete light;
+}

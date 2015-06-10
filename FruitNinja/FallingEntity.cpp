@@ -62,7 +62,10 @@ void FallingEntity::update()
 void FallingEntity::collision(GameEntity* entity)
 {
     if (typeid(ChewyEntity) == typeid(*entity))
+    {
         stepped_on = true;
+        collision_response = true;
+    }
 
     if (typeid(SpikeEntity) == typeid(*entity))
         list = UNSET_DRAW(list);
