@@ -5,6 +5,7 @@
 #include <glm/gtx/string_cast.inl>
 #include <glm/gtx/intersect.hpp>
 #include "CollectableEntity.h"
+#include "LightEntity.h"
 
 using namespace glm;
 
@@ -33,33 +34,37 @@ void ChewyEntity::collision(GameEntity* entity)
 {
     if (typeid(CollectableEntity) == typeid(*entity))
         return;
-	vec3 pos = getPosition();
 
-	setPosition(vec3(last_position.x, pos.y, pos.z));
-
-	if (!entity->bounding_box.box_collision(bounding_box))
+	if (typeid(*entity) != typeid(LightEntity) || (typeid(*entity) == typeid(LightEntity) && bounding_box.box_collision(entity->inner_bounding_box)))
 	{
-		return;
+		vec3 pos = getPosition();
+
+		setPosition(vec3(last_position.x, pos.y, pos.z));
+
+		if (!entity->bounding_box.box_collision(bounding_box))
+		{
+			return;
+		}
+
+		setPosition(vec3(pos.x, pos.y, last_position.z));
+
+		if (!entity->bounding_box.box_collision(bounding_box))
+		{
+			return;
+		}
+
+		setPosition(vec3(pos.x, last_position.y, pos.z));
+
+		if (!entity->bounding_box.box_collision(bounding_box))
+		{
+			if (entity->bounding_box.center.y > bounding_box.center.y)
+				velocity.y = 0.f;
+			else
+				_falling = false;
+			return;
+		}
+		setPosition(vec3(pos.x, pos.y, last_position.z));
 	}
-
-	setPosition(vec3(pos.x, pos.y, last_position.z));
-
-	if (!entity->bounding_box.box_collision(bounding_box))
-	{
-		return;
-	}
-
-	setPosition(vec3(pos.x, last_position.y, pos.z));
-
-	if (!entity->bounding_box.box_collision(bounding_box))
-	{
-		if (entity->bounding_box.center.y > bounding_box.center.y)
-			velocity.y = 0.f;
-		else
-			_falling = false;
-		return;
-	}
-	setPosition(vec3(pos.x, pos.y, last_position.z));
 }
 
 glm::mat4 ChewyEntity::getModelMat()

@@ -120,27 +120,30 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 		entities_in_view = get_objects_in_view(entities, view, true);
 		EntityBox chewy_bb = chewy->bounding_box;
 		
-        vec3 chewy_lower_bound = chewy_bb.get_lower_bound();
-        vec3 chewy_upper_bound = chewy_bb.get_upper_bound();
-
-		//chewy->set_material(Material(vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(0.f, 1.f, 0.f), 10.f));
 		bool hidden = false;
+		float chewy_distance = glm::distance(getPosition(), chewy->getPosition());
 		for (int i = 0; i < entities_in_view.size(); i++)
 		{
 			if (entities_in_view.at(i) != chewy)
 			{
 				EntityBox bb = entities_in_view.at(i)->bounding_box;
-
-                pair<bool, float> lower_result = obb_ray(bounding_box.center, normalize(chewy_lower_bound - bounding_box.center), bb);
-                pair<bool, float> upper_result = obb_ray(bounding_box.center, normalize(chewy_upper_bound - bounding_box.center), bb);
-                float chewy_distance = glm::distance(bounding_box.center, (chewy_lower_bound + chewy_upper_bound) / 2.f);
-				if (lower_result.first && upper_result.first)
+				vector<vec3> points = chewy->bounding_box.get_points();
+				float results = 0.f;
+				for (int i = 0; i < 8; i++)
 				{
-					if (chewy_distance > lower_result.second && chewy_distance > upper_result.second)
+					pair<bool, float> result = obb_ray(bounding_box.center, normalize(points[i] - bounding_box.center), bb);
+					if (result.first)
 					{
-						hidden = true;
-						break;
+						if (chewy_distance > result.second)
+						{
+							results += 0.125;
+						}
 					}
+				}
+				if (results >= 0.5)
+				{
+					hidden = true;
+					break;
 				}
 			}
 		}
@@ -149,7 +152,6 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 		{
   			animComponent.setCurrentAnimation(IDLE);
 			static_movement = true;
-			//chewy->set_material(Material(vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), vec3(1.f, 1.f, 0.f), 10.f));
 			return true;
 		}
 	}

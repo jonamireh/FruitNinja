@@ -73,6 +73,8 @@ void ProjectileEntity::collision(GameEntity* entity)
         {
             LightEntity* le = dynamic_cast<LightEntity*>(entity);
             le->light = NULL;
+			le->setup_inner = false;
+			le->bounding_box = le->inner_bounding_box;
             list = UNSET_DRAW(list);
 			AudioManager::instance()->play3D(assetPath + "WW_Arrow_Bounce_Metal1.wav", getPosition(), 8.0f, false);
             return;
@@ -81,7 +83,7 @@ void ProjectileEntity::collision(GameEntity* entity)
             return;
 	}
 
-    if (typeid(*entity) == typeid(PlatformEntity))
+   if (typeid(*entity) == typeid(PlatformEntity))
     {
         list = UNSET_DRAW(list);
 		AudioManager::instance()->play3D(assetPath + "WW_Arrow_Bounce_Stone1.wav", getPosition(), 10.0f, false);

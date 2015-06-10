@@ -15,6 +15,7 @@ public:
 
     bool box_collision(EntityBox other_box);
     std::vector<std::pair<glm::vec3, glm::vec3>> get_line_segments();
+	std::vector<glm::vec3> EntityBox::get_points();
     glm::vec3 get_lower_bound();
     glm::vec3 get_upper_bound();
 };

@@ -41,9 +41,10 @@ protected:
 	glm::vec3 rotations;
 	glm::mat4 getRotMat();
 public:
+	bool setup_inner = false;
     void setScale(glm::vec3 entScale);
 
-    EntityBox bounding_box;
+	EntityBox bounding_box;
     EntityBox inner_bounding_box;
     MeshSet* mesh;
     glm::vec3 last_position;
