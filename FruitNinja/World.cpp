@@ -340,7 +340,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 	switch (obj_to_place)
 	{
     case 'A':
-        entities.push_back(new CollectableEntity(placement_position, meshes["arrow"]));
+		entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["arrow"]));
         break;
     // dont' use 'B'
 	case 'C': // set chewy's position
