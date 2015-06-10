@@ -6,7 +6,7 @@
 
 
 FallingEntity::FallingEntity(glm::vec3 position, MeshSet* mesh) :
-GameEntity(position, mesh, true)
+GameEntity(position, mesh)
 {
     velocity = glm::vec3(0.f);
     stepped_on = false;
@@ -29,6 +29,7 @@ void FallingEntity::update()
         {
             setRotations(glm::vec3(0.f));
             velocity.y -= GRAVITY * 0.5f * seconds_passed;
+			collision_response = true;
         }
         else
         {
