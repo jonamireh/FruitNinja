@@ -287,6 +287,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fourth_courtyard_platform_five.txt");
         setup_guard(level_path + "fourth_courtyard_first_guard.txt");
         setup_guard(level_path + "fourth_courtyard_second_guard.txt");
+        setup_guard(level_path + "fourth_courtyard_third_guard.txt");
         load_button(level_path + "fourth_courtyard_button_one.txt");
         load_button(level_path + "fourth_courtyard_button_two.txt");
 
