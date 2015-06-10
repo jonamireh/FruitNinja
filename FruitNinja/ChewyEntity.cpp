@@ -4,7 +4,9 @@
 #include "SpikeEntity.h"
 #include <glm/gtx/string_cast.inl>
 #include <glm/gtx/intersect.hpp>
+#include "CollectableEntity.h"
 #include "LightEntity.h"
+#include "PlatformEntity.h"
 
 using namespace glm;
 
@@ -31,6 +33,12 @@ void ChewyEntity::update()
 
 void ChewyEntity::collision(GameEntity* entity)
 {
+    if (typeid(CollectableEntity) == typeid(*entity))
+        return;
+
+	if (typeid(*entity) == typeid(PlatformEntity))
+		return;
+
 	if (typeid(*entity) != typeid(LightEntity) || (typeid(*entity) == typeid(LightEntity) && bounding_box.box_collision(entity->inner_bounding_box)))
 	{
 		vec3 pos = getPosition();

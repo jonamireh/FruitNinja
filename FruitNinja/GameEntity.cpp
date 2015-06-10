@@ -94,9 +94,18 @@ void GameEntity::setRotations(glm::vec3 rots)
 
 void GameEntity::swap_bounding_box_width_depth()
 {
-    float save_width = bounding_box.half_width;
-    bounding_box.half_width = bounding_box.half_depth;
-    bounding_box.half_depth = save_width;
+    if (!setup_inner)
+    {
+        float save_width = bounding_box.half_width;
+        bounding_box.half_width = bounding_box.half_depth;
+        bounding_box.half_depth = save_width;
+    }
+    else
+    {
+        float save_width = inner_bounding_box.half_width;
+        inner_bounding_box.half_width = inner_bounding_box.half_depth;
+        inner_bounding_box.half_depth = save_width;
+    }
 }
 
 glm::vec3 GameEntity::getPosition()
@@ -107,6 +116,7 @@ glm::vec3 GameEntity::getPosition()
 void GameEntity::setPosition(glm::vec3 position)
 {
     bounding_box.center = position;
+    inner_bounding_box.center = position;
 	validAlignedModelMat = false;
 	validModelMat = false;
 }

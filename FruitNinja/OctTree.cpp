@@ -14,6 +14,9 @@ OctTree::OctTree()
 
 void OctTree::handle_collisions()
 {
+	/*if (collision_pairs.size() > 1) {
+		std::cout << "Collisions this frame: " << collision_pairs.size() << std::endl;
+	}*/
     for (auto it = collision_pairs.begin(); it != collision_pairs.end(); ++it)
     {
         if (it->first->bounding_box.box_collision(it->second->bounding_box))
@@ -51,13 +54,6 @@ OctTree::OctTree(Voxel vox, vector<GameEntity*> objects_in_section)
     {
         MyNode* cur = q.front();
         q.pop();
-        min_radius = FLT_MAX;
-       /* for (int i = 0; i < cur->objects.size(); i++)
-        {
-            float temp = cur->objects[i]->getRadius();
-            if (temp < min_radius)
-                min_radius = temp;
-        }*/
         if (cur->voxel.upper_bound.x - cur->voxel.lower_bound.x <= MINIMUM_DIMENSION)
         {
             for (int i = 0; i < cur->objects.size() - 1; i++)

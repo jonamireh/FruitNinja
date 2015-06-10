@@ -91,6 +91,8 @@ public:
 	void zoom_on_guard(GuardEntity* g);
 	void set_chewy_light_distance(float dist, float le_hv_length);
 
+	GameState getState();
+
 	LoadingScreen* loading_screen = nullptr;
 private:
     DebugCamera* debug_camera;
