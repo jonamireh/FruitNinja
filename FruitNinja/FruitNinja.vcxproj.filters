@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="GLSL.cpp">
@@ -169,9 +169,6 @@
     <ClCompile Include="TextShader.cpp">
       <Filter>Text Shader</Filter>
     </ClCompile>
-    <ClCompile Include="PlatformEntity.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="SpikeEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -207,6 +204,12 @@
     </ClCompile>
     <ClCompile Include="GameEntity.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformEntity.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformMovementComponent.cpp">
+      <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -657,9 +660,6 @@
     <ClInclude Include="TextShader.h">
       <Filter>Text Shader</Filter>
     </ClInclude>
-    <ClInclude Include="PlatformEntity.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="SpikeEntity.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -699,6 +699,12 @@
     <ClInclude Include="FireArrow.h" />
     <ClInclude Include="GateEntity.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformEntity.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformMovementComponent.h">
+      <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -827,6 +833,9 @@
     </Filter>
     <Filter Include="LoadingScreen">
       <UniqueIdentifier>{478a083f-bbe3-41e8-986e-c02aad12e145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{9df291ef-c9cc-46b3-9bf6-1076117d9152}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

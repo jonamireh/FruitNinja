@@ -210,6 +210,7 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="PlatformEntity.cpp" />
+    <ClCompile Include="PlatformMovementComponent.cpp" />
     <ClCompile Include="RisingMovementComponent.cpp" />
     <ClCompile Include="ShadowBufferShader.cpp" />
     <ClCompile Include="SimpleTextureShader.cpp" />
@@ -374,6 +375,7 @@
     <ClInclude Include="LightEntity.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PlatformEntity.h" />
+    <ClInclude Include="PlatformMovementComponent.h" />
     <ClInclude Include="RisingMovementComponent.h" />
     <ClInclude Include="ShadowBufferShader.h" />
     <ClInclude Include="SimpleTextureShader.h" />
