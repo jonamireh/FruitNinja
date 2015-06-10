@@ -22,13 +22,22 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, S
 	glBindAttribLocation(getProgramID(), 1, "aNormal");
 
 	uViewMatrixHandle = getUniformHandle("uViewMatrix");
-	uModelMatrixHandle = getUniformHandle("uModelMatrix");
+	//uModelMatrixHandle = getUniformHandle("uModelMatrix");
 	uProjMatrixHandle = getUniformHandle("uProjMatrix");
 	UtexHandle = getUniformHandle("Utex");
 	UflagHandle = getUniformHandle("Uflag");
 	uBoneFlagHandle = getUniformHandle("uBoneFlag");
 	uBonesHandle = getUniformHandle("uBones[0]");
 	UdColorHandle = getUniformHandle("UdColor");
+	glGenBuffers(1, &entViewMatrixBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, entViewMatrixBuffer);
+
+	for (int i = 0; i < 4; i++) {
+		glEnableVertexAttribArray(MAT_BUF_LOC + i);
+		glVertexAttribPointer(MAT_BUF_LOC + i, 4, GL_FLOAT, GL_FALSE, 4 * 4 * sizeof(GLfloat), (const GLvoid*)(sizeof(GLfloat) * i * 4));
+		glVertexAttribDivisor(MAT_BUF_LOC + i, 1);
+		glEnableVertexAttribArray(MAT_BUF_LOC + i);
+	}
 }
 
 void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
@@ -40,7 +49,7 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 		objectMeshes[ents[i]->mesh].push_back(ents[i]);
 	}
 
-	check_gl_error("Before geom pass");
+	//check_gl_error("Before geom pass");
 
 	gbuffer.BindForGeomPass();
 
@@ -54,6 +63,8 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 
 	glUniformMatrix4fv(uViewMatrixHandle, 1, GL_FALSE, value_ptr(view_mat));
 	glUniformMatrix4fv(uProjMatrixHandle, 1, GL_FALSE, value_ptr(projection));
+
+	glBindAttribLocation(getProgramID(), MAT_BUF_LOC, "uModelMatrix");
 
 	for (auto& currMeshSet: objectMeshes) {
 		
@@ -71,40 +82,108 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 				glUniform1i(UflagHandle, 1);
 			}
 			else {
-
 				glUniform1i(UflagHandle, 0);
-			}
-			
-			if (mesh->bones.size() > 0)
-			{
-				glUniform1i(uBoneFlagHandle, 1);
-			}
-			else
-			{
-				glUniform1i(uBoneFlagHandle, 0);
 			}
 
 			Material material = mesh->mat;
 			glUniform3fv(UdColorHandle, 1, value_ptr(material.diffuse));
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
+			
+			if (mesh->bones.size() > 0)
+			{
+				glUniform1i(uBoneFlagHandle, 1);
 
-			for (auto& entity: currMeshSet.second) {
-				glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
+				map<std::vector<std::vector<glm::mat4>>*, vector<GameEntity*>> meshAnimations;
 
-				if (mesh->bones.size() > 0)
-				{
-					std::vector<std::vector<glm::mat4>>* boneTs = entity->getBoneTransformations();
-					glUniformMatrix4fv(uBonesHandle, boneTs->at(j).size(), GL_FALSE, value_ptr(boneTs->at(j)[0]));
+				for (auto& entity : currMeshSet.second) {
+					map<std::vector<std::vector<glm::mat4>>*, vector<GameEntity*>>::iterator meshItr = meshAnimations.find(entity->getBoneTransformations());
+					meshAnimations[entity->getBoneTransformations()].push_back(entity);
 				}
+
+				for (auto& currAnimation: meshAnimations) {
+					std::vector<std::vector<glm::mat4>>* boneTs = currAnimation.first;
+					glUniformMatrix4fv(uBonesHandle, boneTs->at(j).size(), GL_FALSE, value_ptr(boneTs->at(j)[0]));
+
+					int numInstances = currAnimation.second.size();
+
+					vector<float> modelMatrices;
+					modelMatrices.reserve(numInstances);
+
+					for (auto& entity : currAnimation.second) {
+						mat4 modelMat = entity->getModelMat();
+						for (int j = 0; j < 4; j++)
+						{
+							vec4 column = modelMat[j];
+							for (int k = 0; k < 4; k++)
+							{
+								modelMatrices.push_back(column[k]);
+							}
+						}
+					}
+
+					glBindBuffer(GL_ARRAY_BUFFER, entViewMatrixBuffer);
+					glBufferData(GL_ARRAY_BUFFER, numInstances * 4 * 4 * sizeof(GLfloat), &modelMatrices[0], GL_DYNAMIC_DRAW);
+
+					check_gl_error("Def shader before draw");
+
+					glDrawElementsInstanced(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0, numInstances);
+
+					check_gl_error("Def shader after draw");
+
+					/*for (auto& entity: currAnimation.second) {
+						glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
+
+						//check_gl_error("Def shader before draw");
+
+						glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+
+						//check_gl_error("Def shader after draw");
+					}*/
+				}
+			}
+			else
+			{
+				glUniform1i(uBoneFlagHandle, 0);
+
+				int numInstances = currMeshSet.second.size();
+
+				vector<float> modelMatrices;
+				modelMatrices.reserve(numInstances);
+
+				for (auto& entity: currMeshSet.second) {
+					mat4 modelMat = entity->getModelMat();
+					for (int j = 0; j < 4; j++)
+					{
+						vec4 column = modelMat[j];
+						for (int k = 0; k < 4; k++)
+						{
+							modelMatrices.push_back(column[k]);
+						}
+					}
+				}
+
+				glBindBuffer(GL_ARRAY_BUFFER, entViewMatrixBuffer);
+				glBufferData(GL_ARRAY_BUFFER, numInstances * 4 * 4 * sizeof(GLfloat), &modelMatrices[0], GL_DYNAMIC_DRAW);
 
 				check_gl_error("Def shader before draw");
 
-				glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+				glDrawElementsInstanced(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0, numInstances);
 
 				check_gl_error("Def shader after draw");
 
+				/*for (auto& entity : currMeshSet.second) {
+					glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
+
+					//check_gl_error("Def shader before draw");
+
+					glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+
+					//check_gl_error("Def shader after draw");
+				}*/
 			}
+
+
 			if (mesh->textures.size() > 0) {
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}

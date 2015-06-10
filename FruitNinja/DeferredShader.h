@@ -10,6 +10,7 @@
 #include "DirShadowMapBuffer.h"
 #include "ShadowBufferShader.h"
 
+#define MAT_BUF_LOC 5
 
 //#include <glm/gtc/type_ptr.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
@@ -51,11 +52,13 @@ private:
 	DisplayMode disp_mode;
 
 	GLint uViewMatrixHandle;
-	GLint uModelMatrixHandle;
+	//GLint uModelMatrixHandle;
 	GLint uProjMatrixHandle;
 	GLint UtexHandle;
 	GLint UflagHandle;
 	GLint uBoneFlagHandle;
 	GLint uBonesHandle;
 	GLint UdColorHandle;
+
+	GLuint entViewMatrixBuffer;
 };
