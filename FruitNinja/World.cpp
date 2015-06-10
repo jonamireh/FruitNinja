@@ -100,6 +100,8 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x6", new MeshSet(assetPath + "interiorWall_1x6.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x7", new MeshSet(assetPath + "interiorWall_1x7.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
+    meshes.insert(pair<string, MeshSet*>("spike", new MeshSet(assetPath + "spikes.dae")));
+    meshes.insert(pair<string, MeshSet*>("spikes_floor", new MeshSet(assetPath + "spikes_floor.dae")));
     meshes.insert(pair<string, MeshSet*>("button", new MeshSet(assetPath + "button.dae")));
     meshes.insert(pair<string, MeshSet*>("button_base", new MeshSet(assetPath + "button_base.dae")));
     meshes.insert(pair<string, MeshSet*>("target", new MeshSet(assetPath + "target.dae")));
@@ -562,7 +564,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         break;
     case 'V': // spikes
-        entities.push_back(new SpikeEntity(placement_position, meshes.at("spikes"), this));
+        entities.push_back(new SpikeEntity(placement_position, meshes.at("spike"), this));
         entities.back()->setScale(3.f);
         break;
 	case 'w': // static guard facing west
