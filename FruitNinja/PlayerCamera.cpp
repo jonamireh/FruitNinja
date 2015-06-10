@@ -148,7 +148,7 @@ float static cast_ray(vec3 ray_start, vec3 ray_end, vector<GameEntity*> entities
 		ChewyEntity* c_test = dynamic_cast<ChewyEntity*>(entities.at(i));
 		if (c_test == nullptr && IN_OCTTREE(entities.at(i)->list) && IS_WALL(entities.at(i)->list))
 		{
-			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->bounding_box);
+			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->setup_inner ? entities.at(i)->inner_bounding_box  : entities.at(i)->bounding_box);
 			if (result.first && result.second < ray_dist)
 			{
 				if (result.second / ray_dist < dist)

@@ -69,6 +69,8 @@ void ProjectileEntity::collision(GameEntity* entity)
         {
             LightEntity* le = dynamic_cast<LightEntity*>(entity);
             le->light = NULL;
+			le->setup_inner = false;
+			le->bounding_box = le->inner_bounding_box;
             list = UNSET_DRAW(list);
             return;
         }
@@ -76,7 +78,7 @@ void ProjectileEntity::collision(GameEntity* entity)
             return;
 	}
 
-    if (typeid(*entity) == typeid(PlatformEntity))
+   if (typeid(*entity) == typeid(PlatformEntity))
     {
         list = UNSET_DRAW(list);
         return;

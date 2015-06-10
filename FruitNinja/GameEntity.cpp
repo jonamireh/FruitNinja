@@ -150,6 +150,8 @@ void GameEntity::setup_inner_entity_box(MeshSet* mesh)
 
     // new center
     inner_bounding_box.center.y += inner_bounding_box.half_height;
+
+	setup_inner = true;
 }
 
 void GameEntity::setup_entity_box(MeshSet* mesh)
@@ -202,7 +204,15 @@ glm::mat4 GameEntity::getModelMat()
 glm::mat4 GameEntity::getAlignedModelMat()
 {
 	if (!validAlignedModelMat) {
-		mat4 model_trans = translate(mat4(1.0f), bounding_box.center - vec3(0.f, bounding_box.half_height, 0.f));
+		mat4 model_trans;
+		if (setup_inner)
+		{
+			model_trans = translate(mat4(1.0f), inner_bounding_box.center - vec3(0.f, inner_bounding_box.half_height, 0.f));
+		}
+		else
+		{
+			model_trans = translate(mat4(1.0f), bounding_box.center - vec3(0.f, bounding_box.half_height, 0.f));
+		}
 		mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
 
 		alignedModelMat = model_trans * model_scale;

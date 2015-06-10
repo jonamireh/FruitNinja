@@ -14,21 +14,18 @@
 #include "DebugShader.h"
 #include "ChewyEntity.h"
 #include "HUD.h"
+#include "LoadingScreen.h"
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define GRAVITY 33
 #define MAX_TIME_STEP (1.0f / 25.0f)
 #define PLAYER_FOV 45.f
-#define GUARD_FOV 45.f
 #define PLAYER_NEAR 0.1f
 #define PLAYER_FAR 1000.f
 #define GUARD_NEAR 0.1f
-#define GUARD_FAR 30.f
+
 #define MAX_HEALTH 4
-#include "LoadingScreen.h"
-//#define PLAYER_DIST (PLAYER_FAR - PLAYER_NEAR)
-//#define GUARD_DIST (GUARD_FAR - GUARD_NEAR)
 
 class ProjectileEntity;
 class ArcheryCamera;
@@ -90,6 +87,7 @@ public:
     void setup_moving_platform(string file_path);
 	void convert_to_collectible(ProjectileEntity* p);
 	void zoom_on_guard(GuardEntity* g);
+	void set_chewy_light_distance(float dist, float le_hv_length);
 
 	LoadingScreen* loading_screen = nullptr;
 private:

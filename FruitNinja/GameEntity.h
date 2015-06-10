@@ -41,6 +41,7 @@ protected:
 	glm::vec3 rotations;
 	glm::mat4 getRotMat();
 public:
+	bool setup_inner = false;
     EntityBox bounding_box;
     EntityBox inner_bounding_box;
     MeshSet* mesh;
