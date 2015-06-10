@@ -12,18 +12,20 @@ using namespace std;
 #define DETECTION_INNER_RADIUS 7.f
 #define COS_ANGLE 60.f
 
-GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points,
+GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, GuardPuppeteer* puppeteer, std::vector<glm::vec3> control_points,
 	float move_speed, bool linear_curve, bool armored) : GameEntity(position, mesh),
 	move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(this, WALKIN), is_armored(armored)
 
 {
+	_puppeteer = puppeteer;
 	current_animation = mesh->getAnimations()[0];
 }
 
-GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir, bool armored)
+GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, GuardPuppeteer* puppeteer, glm::vec3 dir, bool armored)
 	: GameEntity(position, mesh), front(0.f, 0.f, 1.f), move_component(*this, dir), animComponent(this, IDLE), is_armored(armored)
 
 {
+	_puppeteer = puppeteer;
 	current_animation = mesh->getAnimations()[0];
 	static_movement = true;
 }
@@ -41,10 +43,12 @@ void GuardEntity::stopWalkSound()
 void GuardEntity::update()
 {
 	move_component.update(static_movement);
-	animComponent.update();
 	if (is_dying && animComponent.areYouDoneYet()) {
 		std::cout << "Yo I'm dead\n";
 		list = UNSET_DRAW(list);
+	}
+	else if (_puppeteer == nullptr || is_dying) {
+		animComponent.update();
 	}
 
     inner_bounding_box.center = bounding_box.center;
@@ -160,6 +164,8 @@ void GuardEntity::collision(GameEntity* entity)
 {
     if (typeid(ChewyEntity) == typeid(*entity))
     {
+		animComponent.setCurrentAnimation(IDLE);
+		static_movement = true;
 		world->zoom_on_guard(this);
     }
 }
@@ -169,4 +175,19 @@ void GuardEntity::goAheadAndKillYourself() {
 	static_movement = true;
 	stopWalkSound();
 	animComponent.setCurrentAnimation(DYING);
+	animComponent.update();
+}
+
+std::vector<std::vector<glm::mat4>>* GuardEntity::getBoneTransformations() {
+	if (is_dying || _puppeteer == nullptr) {
+		return animComponent.basicAnimation.getBoneTransformations();
+	}
+	else {
+		if (static_movement) {
+			return _puppeteer->getIdleBoneTransform();
+		}
+		else {
+			return _puppeteer->getWalkerBoneTransform();
+		}
+	}
 }

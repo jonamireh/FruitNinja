@@ -31,6 +31,6 @@ private:
 	float starting_frame_time;
 	float end_frame_time;
 	bool looping;
-	std::vector<std::vector<glm::mat4>> boneTransformations;
+	std::vector<std::vector<glm::mat4>> _boneTransformations;
 };
 

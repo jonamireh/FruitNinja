@@ -38,4 +38,6 @@ private:
 	GLuint position_handle;
 	GLuint light_pos_handle;
 	GLuint light_color_handle;
+
+	GLuint shiny_handle;
 };

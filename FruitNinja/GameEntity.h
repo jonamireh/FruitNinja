@@ -56,6 +56,8 @@ public:
     void setPosition(glm::vec3 position);
 
     GameEntity() {}
+	//Keep this in! Very important! 
+	virtual ~GameEntity();
 	GameEntity(glm::vec3 position, MeshSet* mesh, bool collision_response = false);
 
     void setup_entity_box();
@@ -75,5 +77,5 @@ public:
 	glm::vec3 getRotations();
 	void setRotations(glm::vec3 rots);
 
-	std::vector<std::vector<glm::mat4>> boneTransformations;
+	virtual std::vector<std::vector<glm::mat4>>* getBoneTransformations();
 };

@@ -127,6 +127,10 @@ Shader::Shader(string vertShader, string geomShader, string fragShader) {
 
 }
 
+Shader::~Shader() {
+
+}
+
 void Shader::setupHandles()
 {
     int total = -1;

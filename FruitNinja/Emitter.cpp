@@ -1,7 +1,9 @@
 #include "Emitter.h"
 
-Emitter::Emitter(string filename, int nframes, double tframe, int width, int height, float size) 
-	: num_frames(nframes), frame_time(tframe), atlas_width(width), atlas_height(height), particle_size(size) {
+Emitter::Emitter(string filename, double tframe, int width, int height, float part_w, float part_h)
+	: num_frames(width * height), frame_time(tframe), atlas_width(width), atlas_height(height), 
+	particle_width(part_w), particle_height(part_h)
+{
 	//need one to bind, I know this is stupid
 	particles.position.push_back(glm::vec3(-200, -200, -200));
 	particles.frame.push_back(0);

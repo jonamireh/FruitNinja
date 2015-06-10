@@ -1,6 +1,6 @@
 #include "FlameEmitter.h"
 
-FlameEmitter::FlameEmitter() : Emitter("nice_fire.png", 36, .03, 6, 6, 5.0) {
+FlameEmitter::FlameEmitter() : Emitter("nice_fire.png", .03, 6, 6, 5.0, 5.0) {
 
 }
 

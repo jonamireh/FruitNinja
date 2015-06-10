@@ -32,12 +32,12 @@ void BasicAnimationComponent::update()
 	// Get bones for each mesh
 	for (int i = 0; i < entityMeshses.size(); i++)
 	{
-		entity->boneTransformations[i].clear();
+		_boneTransformations[i].clear();
 		// Get transformations for each bone
 		for (int j = 0; j < entityMeshses[i]->bones.size(); j++)
 		{
 			string boneName = entityMeshses[i]->bones[j].mName.C_Str();
-			entity->boneTransformations[i].push_back(convertAiMatrix4x4ToMat4(
+			_boneTransformations[i].push_back(convertAiMatrix4x4ToMat4(
 				entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));
 			/*entityMeshses[i]->boneTransformations.push_back(convertAiMatrix4x4ToMat4(
 				entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));*///boom
@@ -299,7 +299,7 @@ BasicAnimationComponent::BasicAnimationComponent(GameEntity *entity)
 	looping = true;
 	std::vector<Mesh*> meshes = mesh->getMeshes();
 	for (size_t i = 0; i < meshes.size(); i++) {
-		boneTransformations.push_back(meshes[i]->getBoneTransformations());
+		_boneTransformations.push_back(meshes[i]->getBoneTransformations());
 	}
 }
 
@@ -309,5 +309,5 @@ BasicAnimationComponent::~BasicAnimationComponent()
 }
 
 std::vector<std::vector<glm::mat4>>* BasicAnimationComponent::getBoneTransformations() {
-	return &boneTransformations;
+	return &_boneTransformations;
 }
