@@ -24,7 +24,7 @@ void DoorEntity::collision(GameEntity* entity)
     ChewyEntity* chewy_check = dynamic_cast<ChewyEntity*>(entity);
     if (chewy_check != nullptr && open)
     {
-		AudioManager::instance()->play3D(assetPath + "WW_LargeChest_Open1.wav", getPosition(), 3.f, false);
+		AudioManager::instance()->play2D(assetPath + "WW_LargeChest_Open1.wav", false, 0.3f);
         world->setup_next_courtyard();
     }
 }
