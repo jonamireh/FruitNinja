@@ -108,8 +108,8 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("gate_base", new MeshSet(assetPath + "gate_base.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
     meshes.insert(pair<string, MeshSet*>("door_closed", new MeshSet(assetPath + "door_closed.dae")));
-	meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
-	meshes.insert(pair<string, MeshSet*>("spikes_floor", new MeshSet(assetPath + "spikes_floor.dae")));
+	meshes.insert(pair<string, MeshSet*>("gate_spikes", new MeshSet(assetPath + "gate_spikes.dae")));
+	meshes.insert(pair<string, MeshSet*>("gate_base", new MeshSet(assetPath + "gate_base.dae")));
 	meshes.insert(pair<string, MeshSet*>("ground", new MeshSet(assetPath + "ground.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
@@ -191,6 +191,11 @@ void World::init()
 
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
+
+	//entities.push_back(new ObstacleEntity(glm::vec3(35, 0, 35), meshes.at("gate_spikes")));
+	//entities.back()->setScale(3.f);
+	//entities.push_back(new ObstacleEntity(glm::vec3(35, 0, 35), meshes.at("gate_base")));
+	//entities.back()->setScale(3.f);
 
 	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
