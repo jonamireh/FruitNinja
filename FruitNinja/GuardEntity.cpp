@@ -13,7 +13,7 @@ using namespace std;
 #define COS_ANGLE 60.f
 
 GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points,
-	float move_speed, bool linear_curve, bool armored) : GameEntity(position, mesh, true),
+	float move_speed, bool linear_curve, bool armored) : GameEntity(position, mesh),
 	move_component(*this, control_points, move_speed, linear_curve), front(0.f, 0.f, 1.f), animComponent(this, WALKIN), is_armored(armored)
 
 {
@@ -21,7 +21,7 @@ GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec
 }
 
 GuardEntity::GuardEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 dir, bool armored)
-	: GameEntity(position, mesh, true), front(0.f, 0.f, 1.f), move_component(*this, dir), animComponent(this, IDLE), is_armored(armored)
+	: GameEntity(position, mesh), front(0.f, 0.f, 1.f), move_component(*this, dir), animComponent(this, IDLE), is_armored(armored)
 
 {
 	current_animation = mesh->getAnimations()[0];

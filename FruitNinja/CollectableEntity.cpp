@@ -56,7 +56,6 @@ glm::mat4 CollectableEntity::getModelMat()
 	}
 	else
 	{
-		validModelMat = false;
 		return GameEntity::getModelMat();
 	}
 }
