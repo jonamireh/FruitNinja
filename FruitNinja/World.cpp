@@ -103,6 +103,7 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("button", new MeshSet(assetPath + "button.dae")));
     meshes.insert(pair<string, MeshSet*>("button_base", new MeshSet(assetPath + "button_base.dae")));
     meshes.insert(pair<string, MeshSet*>("target", new MeshSet(assetPath + "target.dae")));
+    meshes.insert(pair<string, MeshSet*>("target_rotated", new MeshSet(assetPath + "target_rotated.dae")));
     meshes.insert(pair<string, MeshSet*>("gate_spike", new MeshSet(assetPath + "gate_spikes.dae")));
     meshes.insert(pair<string, MeshSet*>("gate_base", new MeshSet(assetPath + "gate_base.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));

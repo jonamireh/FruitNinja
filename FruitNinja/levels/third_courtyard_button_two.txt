@@ -1,4 +1,4 @@
-M target
+M target_rotated
 L third_courtyard_button_two.txt
 ________________________________________
 |                                      |
