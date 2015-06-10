@@ -194,7 +194,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="FireArrowEntity.cpp" />
-    <ClCompile Include="LoadingScreen.cpp" />
+    <ClCompile Include="LoadingScreen.cpp">
+      <Filter>LoadingScreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -673,7 +675,9 @@
     </ClInclude>
     <ClInclude Include="FireArrow.h" />
     <ClInclude Include="FireArrowEntity.h" />
-    <ClInclude Include="LoadingScreen.h" />
+    <ClInclude Include="LoadingScreen.h">
+      <Filter>LoadingScreen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

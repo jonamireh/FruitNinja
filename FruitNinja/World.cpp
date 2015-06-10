@@ -173,7 +173,7 @@ void World::init()
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 
-	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
+	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.3f);
 }
 
 void World::setup_next_courtyard(bool setup_cin_cam)
@@ -208,7 +208,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		setup_guard(level_path + "second_courtyard_third_guard.txt");
 		setup_guard(level_path + "second_courtyard_fourth_guard.txt");
 		player_camera->movement(chewy);
-		loading_screen = new LoadingScreen("LoadScreen1.png", "Color is Key!");
+		if (setup_cin_cam)
+			loading_screen = new LoadingScreen("LoadScreen1.png", "Color is Key!");
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
@@ -777,7 +778,7 @@ void World::shootArrows()
 		entities.back()->setup_entity_box(meshes.at("arrow_bb"));
 		arrow_count--;
 		held = false;
-		AudioManager::instance()->play3D(assetPath + "bow_better.wav", chewy->getPosition(), 3.0f, false);
+		AudioManager::instance()->play3D(assetPath + "WW_Arrow_Shoot.wav", chewy->getPosition(), 1.0f, false);
 	}
 
 	mouse_buttons_pressed[0] = false;
@@ -1008,8 +1009,11 @@ void World::stop_time()
 
 void World::update()
 {
-		static float start_time = 0.0;
+	static float start_time = 0.0;
 
+	if (loading_screen == nullptr)
+	{
+		
 		shootArrows();
 
 		if (state == SPOTTED && cinematic_camera->pathing.done) {
@@ -1050,11 +1054,27 @@ void World::update()
 		_skybox->update();
 
 		AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
-		if (loading_screen != nullptr && keys[GLFW_KEY_ENTER])
+	}
+	else
+	{
+		actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
+		if (!time_stopped)
 		{
+			seconds_passed = actual_seconds_passed;
+		}
+		else
+		{
+			seconds_passed = 0.f;
+		}
+		start_time = glfwGetTime();
+
+		if (keys[GLFW_KEY_ENTER])
+		{
+			
 			delete loading_screen;
 			loading_screen = nullptr;
 		}
+	}
 }
 
 void World::zoom_on_guard(GuardEntity* guard_temp)

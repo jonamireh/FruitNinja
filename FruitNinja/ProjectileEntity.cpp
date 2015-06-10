@@ -58,11 +58,17 @@ void ProjectileEntity::collision(GameEntity* entity)
             {
                 ge->goAheadAndKillYourself();
                 list = UNSET_DRAW(list);
+				AudioManager::instance()->play3D(assetPath + "WW_Arrow_Hit.wav", getPosition(), 10.0f, false);
                 return;
             }
+			else
+			{
+				list = UNSET_DRAW(list);
+				AudioManager::instance()->play3D(assetPath + "WW_Arrow_Bounce_Metal1.wav", getPosition(), 8.0f, false);
+			}
         }
-        else
-            return;
+		else
+			return;
 	}
 	else if (typeid(*entity) == typeid(LightEntity)) {
         if (bounding_box.box_collision(entity->inner_bounding_box))
@@ -70,6 +76,7 @@ void ProjectileEntity::collision(GameEntity* entity)
             LightEntity* le = dynamic_cast<LightEntity*>(entity);
             le->light = NULL;
             list = UNSET_DRAW(list);
+			AudioManager::instance()->play3D(assetPath + "WW_Arrow_Bounce_Metal1.wav", getPosition(), 8.0f, false);
             return;
         }
         else
@@ -79,6 +86,7 @@ void ProjectileEntity::collision(GameEntity* entity)
     if (typeid(*entity) == typeid(PlatformEntity))
     {
         list = UNSET_DRAW(list);
+		AudioManager::instance()->play3D(assetPath + "WW_Arrow_Bounce_Stone1.wav", getPosition(), 10.0f, false);
         return;
     }
 
@@ -87,6 +95,6 @@ void ProjectileEntity::collision(GameEntity* entity)
 		world->convert_to_collectible(this);
 		list = UNSET_DRAW(list);
 		game_speed = 1.0;
-		AudioManager::instance()->play3D(assetPath + "arrow_hit.wav", getPosition(), 10.0f, false);
+		AudioManager::instance()->play3D(assetPath + "WW_Arrow_Hit.wav", getPosition(), 10.0f, false);
 	}
 }

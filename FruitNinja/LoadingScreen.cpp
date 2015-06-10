@@ -23,15 +23,15 @@ void LoadingScreen::draw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	float static timePassed = 0;
+	float static timePassed = -.2;
 	timePassed += seconds_passed;
 	shader.drawTexture(screen->object(), screen_width, screen_height, glm::vec4(1));
 	_bonzai84.draw_text_left(text, glm::vec2(20, screen_height - 70), glm::vec3(254.f / 255.f, 215.f / 255.f, 0));
-	if (timePassed <= 1.5f)
+	if (timePassed <= 1.f)
 	{
 		_bonzai42.draw_text_right("Press Enter to Continue", glm::vec2(screen_width - 20, 20), glm::vec3(254.f / 255.f, 215.f / 255.f, 0));
 	}
-	if (timePassed > 2.f)
+	if (timePassed > 1.5f)
 	{
 		timePassed = 0;
 	}
