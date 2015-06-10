@@ -92,7 +92,7 @@ AudioManager* AudioManager::instance()
 	return amInstance;
 }
 
-FMOD::Sound *AudioManager::preload_internal(string filename, bool loop)
+FMOD::Sound *AudioManager::preload_internal(string filename, bool loop, bool is3d)
 {
 	FMOD_RESULT result;
 	FMOD::Sound *sound = nullptr;
@@ -100,7 +100,7 @@ FMOD::Sound *AudioManager::preload_internal(string filename, bool loop)
 
 	if (soundItr == soundMap.end()) {
 		cout << "Loading " << filename << "..." << endl;
-		result = system->createSound(filename.c_str(), FMOD_3D | (loop ? FMOD_LOOP_NORMAL : 0), nullptr, &sound);
+		result = system->createSound(filename.c_str(), (is3d ? FMOD_3D : FMOD_DEFAULT) | (loop ? FMOD_LOOP_NORMAL : 0), nullptr, &sound);
 		FMODErrorCheck(result);
 
 		cout << "Loaded " << filename << endl;
@@ -114,9 +114,9 @@ FMOD::Sound *AudioManager::preload_internal(string filename, bool loop)
 	return sound;
 }
 
-void AudioManager::preload(string filename, bool loop)
+void AudioManager::preload(string filename, bool loop, bool is3d)
 {
-	preload_internal(filename, loop);
+	preload_internal(filename, loop, is3d);
 }
 
 void AudioManager::playAmbient(string filename, float volume)
@@ -162,14 +162,33 @@ void AudioManager::updateListener(glm::vec3 position, glm::vec3 forward, glm::ve
 FMOD::Channel *AudioManager::play3D(string filename, glm::vec3 position, float atten, bool loop)
 {
 	FMOD_RESULT result;
-	FMOD::Sound *sound = preload_internal(filename, loop);
+	FMOD::Sound *sound = preload_internal(filename, loop, true);
 
 	FMOD::Channel *channel;
 	result = system->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
 	FMODErrorCheck(result);
 
 	updateChannelPosition(channel, position);
-	channel->set3DMinMaxDistance(atten, 10000.0f);
+	result = channel->set3DMinMaxDistance(atten, 10000.0f);
+	FMODErrorCheck(result);
+
+	result = channel->setPaused(false);
+	FMODErrorCheck(result);
+
+	return channel;
+}
+
+FMOD::Channel *AudioManager::play2D(string filename, bool loop, float volume)
+{
+	FMOD_RESULT result;
+	FMOD::Sound *sound = preload_internal(filename, loop, false);
+
+	FMOD::Channel *channel;
+	result = system->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
+	FMODErrorCheck(result);
+
+	result = channel->setVolume(volume);
+	FMODErrorCheck(result);
 
 	result = channel->setPaused(false);
 	FMODErrorCheck(result);
