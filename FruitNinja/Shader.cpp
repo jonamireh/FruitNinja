@@ -232,6 +232,7 @@ bool Shader::check_gl_error(std::string msg) {
 		std::cerr << msg << ": OpenGL Error: " << error << std::endl;
 		return true;
 	}
+	
 	return false;
 }
 

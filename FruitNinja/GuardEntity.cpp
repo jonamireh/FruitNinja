@@ -164,11 +164,12 @@ GuardEntity::~GuardEntity() {
 
 void GuardEntity::collision(GameEntity* entity)
 {
-    if (typeid(ChewyEntity) == typeid(*entity))
+    if (typeid(ChewyEntity) == typeid(*entity) && world->getState() == HIDDEN)
     {
 		animComponent.setCurrentAnimation(IDLE);
 		static_movement = true;
 		world->zoom_on_guard(this);
+		bounding_box = inner_bounding_box;
     }
 }
 

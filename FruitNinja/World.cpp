@@ -1256,3 +1256,8 @@ World::~World() {
 	if (_puppeteer)
 		delete _puppeteer;
 }
+
+
+GameState World::getState() {
+	return state;
+}
