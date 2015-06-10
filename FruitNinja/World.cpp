@@ -20,6 +20,7 @@
 #include "FallingEntity.h"
 #include "DoorEntity.h"
 #include "SpikeEntity.h"
+#include "GateEntity.h"
 #include "FrustrumCulling.h"
 #include <iostream>
 #include <fstream>
@@ -43,13 +44,21 @@ float actual_seconds_passed = 0;
 float seconds_passed = 0;
 float x_offset;
 float y_offset;
+float cached_le_distance = FLT_MAX;
+float guard_far;
+float guard_fov;
+const float min_guard_far = 30.f;
+const float max_guard_far = 80.f;
+const float min_guard_fov = 45.f;
+const float max_guard_fov = 60.f;
+float relative = 0.f;
 
 bool debug_enabled = false;
 float screen_width = SCREEN_WIDTH;
 float screen_height = SCREEN_HEIGHT;
 
 mat4 projection = mat4(perspective((float)radians(PLAYER_FOV), screen_width / screen_height, PLAYER_NEAR, PLAYER_FAR));
-mat4 guard_projection = mat4(perspective((float)radians(GUARD_FOV), screen_width / screen_height, GUARD_NEAR, GUARD_FAR));
+mat4 guard_projection = mat4(1.f);
 
 static Camera* camera;
 static DebugShader* debugShader;
@@ -91,6 +100,11 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x6", new MeshSet(assetPath + "interiorWall_1x6.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x7", new MeshSet(assetPath + "interiorWall_1x7.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
+    meshes.insert(pair<string, MeshSet*>("button", new MeshSet(assetPath + "button.dae")));
+    meshes.insert(pair<string, MeshSet*>("button_base", new MeshSet(assetPath + "button_base.dae")));
+    meshes.insert(pair<string, MeshSet*>("target", new MeshSet(assetPath + "target.dae")));
+    meshes.insert(pair<string, MeshSet*>("gate_spike", new MeshSet(assetPath + "gate_spikes.dae")));
+    meshes.insert(pair<string, MeshSet*>("gate_base", new MeshSet(assetPath + "gate_base.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
     meshes.insert(pair<string, MeshSet*>("door_closed", new MeshSet(assetPath + "door_closed.dae")));
 	meshes.insert(pair<string, MeshSet*>("gate_spikes", new MeshSet(assetPath + "gate_spikes.dae")));
@@ -118,7 +132,6 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("statue", new MeshSet(assetPath + "statue.dae")));
 	meshes.insert(pair<string, MeshSet*>("platform", new MeshSet(assetPath + "platform.dae")));
 	meshes.insert(pair<string, MeshSet*>("fence", new MeshSet(assetPath + "fence.dae")));
-	meshes.insert(pair<string, MeshSet*>("target", new MeshSet(assetPath + "target.dae")));
 
 	archery_camera = new ArcheryCamera(meshes.at("unit_sphere")->getMeshes().at(0));
 
@@ -409,7 +422,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         rots.y = M_PI_2;
         entities.back()->setRotations(rots);
         entities.back()->swap_bounding_box_width_depth();
-        entities.back()->setPosition(entities.back()->getPosition() - vec3(0.f, 0.f, 3.f - entities.back()->bounding_box.half_depth));
+        entities.back()->setPosition(entities.back()->getPosition() - vec3(0.f, 0.f, 3.f - entities.back()->inner_bounding_box.half_depth));
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
     case 'e': // static guard facing east
@@ -439,6 +452,24 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		entities.back()->setRotations(vec3(0.f, M_PI, 0.f));
 		break;
+    case 'g':
+        entities.push_back(new GateEntity(placement_position, meshes.at("gate_spike")));
+        entities.back()->setScale(3.f);
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("gate_base")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = UNSET_OCTTREE((entities.back()->list));
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        break;
+    case 'G':
+        entities.push_back(new GateEntity(placement_position, meshes.at("gate_spike")));
+        entities.back()->setScale(3.f);
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("gate_base")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = UNSET_OCTTREE((entities.back()->list));
+        break;
     case 'H': //3x3 inner wall
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_3x3"))); 
         if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
@@ -454,10 +485,12 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setRotations(rots);
         entities.back()->setScale(3.f);
         entities.back()->swap_bounding_box_width_depth();
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         break;
     case 'K': // fence
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("fence")));
         entities.back()->setScale(3.f);
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));
@@ -472,7 +505,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
     case 'L': // left facing lantern on wall
         entities.push_back(new LightEntity(placement_position,
             meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
-        entities.back()->setPosition(entities.back()->getPosition() + vec3(3.f - entities.back()->bounding_box.half_width, 0.f, 0.f));
+        entities.back()->setPosition(entities.back()->getPosition() + vec3(3.f - entities.back()->inner_bounding_box.half_width, 0.f, 0.f));
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 'n': // static guard facing north
@@ -496,7 +529,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         rots = entities.back()->getRotations();
         rots.y = M_PI;
         entities.back()->setRotations(rots);
-        entities.back()->setPosition(entities.back()->getPosition() - vec3(3.f - entities.back()->bounding_box.half_width, 0.f, 0.f));
+        entities.back()->setPosition(entities.back()->getPosition() - vec3(3.f - entities.back()->inner_bounding_box.half_width, 0.f, 0.f));
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 's': // static guard facing south
@@ -520,7 +553,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         rots.y = -M_PI_2;
         entities.back()->setRotations(rots);
         entities.back()->swap_bounding_box_width_depth();
-        entities.back()->setPosition(entities.back()->getPosition() + vec3(0.f, 0.f, 3.f - entities.back()->bounding_box.half_depth));
+        entities.back()->setPosition(entities.back()->getPosition() + vec3(0.f, 0.f, 3.f - entities.back()->inner_bounding_box.half_depth));
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
     case 'v': // spikes on the floor
@@ -657,7 +690,7 @@ void World::load_button(string file_path)
                 glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
                 if (current_line.at(i) == 'B')
                 {
-                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, this));
+                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file));
                 }
             }
             current_row++;
@@ -990,6 +1023,21 @@ void World::convert_to_collectible(ProjectileEntity* p)
 	dynamic_cast<CollectableEntity*>(entities.back())->custom_rotate(p->rot);
 }
 
+void World::set_chewy_light_distance(float dist, float le_hv_length)
+{
+    if (dist < cached_le_distance)
+    {
+        cached_le_distance = dist;
+        relative = 1.f - (dist / le_hv_length);
+
+        float m_fov = max_guard_fov - min_guard_fov;
+        guard_fov = m_fov * relative + min_guard_fov;
+
+        float m_far = max_guard_far - min_guard_far;
+        guard_far = m_far * relative + min_guard_far;
+    }
+}
+
 void World::change_camera()
 {
 	if (keys[GLFW_KEY_1])
@@ -1235,4 +1283,9 @@ World::~World() {
 	}
 	if (_puppeteer)
 		delete _puppeteer;
+}
+
+
+GameState World::getState() {
+	return state;
 }

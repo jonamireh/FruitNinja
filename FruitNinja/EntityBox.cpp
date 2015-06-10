@@ -10,6 +10,22 @@ bool EntityBox::box_collision(EntityBox other_box)
         fabs(center.z - other_box.center.z) < half_depth + other_box.half_depth);
 }
 
+vector<vec3> EntityBox::get_points()
+{
+	vector<vec3> points;
+	vec3 lower_bound = get_lower_bound();
+	vec3 upper_bound = get_upper_bound();
+	points.push_back(lower_bound);
+	points.push_back(vec3(lower_bound.x, lower_bound.y, upper_bound.z));
+	points.push_back(vec3(lower_bound.x, upper_bound.y, lower_bound.z));
+	points.push_back(vec3(upper_bound.x, lower_bound.y, lower_bound.z));
+	points.push_back(upper_bound);
+	points.push_back(vec3(upper_bound.x, upper_bound.y, lower_bound.z));
+	points.push_back(vec3(upper_bound.x, lower_bound.y, upper_bound.z));
+	points.push_back(vec3(lower_bound.x, upper_bound.y, upper_bound.z));
+	return points;
+}
+
 
 vector<pair<vec3, vec3>> EntityBox::get_line_segments()
 {
