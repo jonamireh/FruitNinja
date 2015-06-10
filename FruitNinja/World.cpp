@@ -286,7 +286,11 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fourth_courtyard_platform_two.txt");
         setup_moving_platform(level_path + "fourth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fourth_courtyard_platform_five.txt");
+        setup_guard(level_path + "fourth_courtyard_first_guard.txt");
+        setup_guard(level_path + "fourth_courtyard_second_guard.txt");
+        setup_guard(level_path + "fourth_courtyard_third_guard.txt");
         load_button(level_path + "fourth_courtyard_button_one.txt");
+        load_button(level_path + "fourth_courtyard_button_two.txt");
 
         // these are supposedly the walls... lets hope the indices dont change!
         entities.at(3)->setScale(vec3(30.f, 40.f, 30.f));
@@ -455,6 +459,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setRotations(rots);
         entities.back()->swap_bounding_box_width_depth();
         entities.back()->setPosition(entities.back()->getPosition() - vec3(0.f, 0.f, 3.f - entities.back()->inner_bounding_box.half_depth));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
     case 'e': // static guard facing east
@@ -484,22 +489,48 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		entities.back()->setRotations(vec3(0.f, M_PI, 0.f));
 		break;
-    case 'g':
+    case '<':
         entities.push_back(new GateEntity(placement_position, meshes.at("gate_spike")));
         entities.back()->setScale(3.f);
+        entities.back()->swap_bounding_box_width_depth();
         rots.y = M_PI_2;
         entities.back()->setRotations(rots);
+        entities.back()->setPosition(entities.back()->getPosition() - vec3(3.f - entities.back()->inner_bounding_box.half_width, 0.f, 0.f));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("gate_base")));
         entities.back()->setScale(3.f);
-        entities.back()->list = UNSET_OCTTREE((entities.back()->list));
+        entities.back()->swap_bounding_box_width_depth();
         rots.y = M_PI_2;
         entities.back()->setRotations(rots);
+        entities.back()->setPosition(entities.at(entities.size() - 2)->getPosition() - vec3(0.f, entities.at(entities.size() - 2)->bounding_box.half_height, 0.f));
+        entities.back()->list = UNSET_OCTTREE((entities.back()->list));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
+        break;
+    case '>':
+        entities.push_back(new GateEntity(placement_position, meshes.at("gate_spike")));
+        entities.back()->setScale(3.f);
+        entities.back()->swap_bounding_box_width_depth();
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        entities.back()->setPosition(entities.back()->getPosition() + vec3(3.f - entities.back()->inner_bounding_box.half_width, 0.f, 0.f));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("gate_base")));
+        entities.back()->setScale(3.f);
+        entities.back()->swap_bounding_box_width_depth();
+        rots.y = M_PI_2;
+        entities.back()->setRotations(rots);
+        entities.back()->setPosition(entities.at(entities.size() - 2)->getPosition() - vec3(0.f, entities.at(entities.size() - 2)->bounding_box.half_height, 0.f));
+        entities.back()->list = UNSET_OCTTREE((entities.back()->list));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         break;
     case 'G':
         entities.push_back(new GateEntity(placement_position, meshes.at("gate_spike")));
         entities.back()->setScale(3.f);
+        entities.back()->setPosition(entities.back()->getPosition() + vec3(0.f, 0.f, 3.f - entities.back()->inner_bounding_box.half_depth));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("gate_base")));
         entities.back()->setScale(3.f);
+        entities.back()->setPosition(entities.back()->getPosition() + vec3(0.f, 0.f, 3.f - entities.back()->inner_bounding_box.half_depth));
         entities.back()->list = UNSET_OCTTREE((entities.back()->list));
         break;
     case 'H': //3x3 inner wall
@@ -533,11 +564,13 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         rots = entities.back()->getRotations();
         rots.y = M_PI_2;
         entities.back()->setRotations(rots);
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         break;
     case 'L': // left facing lantern on wall
         entities.push_back(new LightEntity(placement_position,
             meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
         entities.back()->setPosition(entities.back()->getPosition() + vec3(3.f - entities.back()->inner_bounding_box.half_width, 0.f, 0.f));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 'n': // static guard facing north
@@ -562,6 +595,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         rots.y = M_PI;
         entities.back()->setRotations(rots);
         entities.back()->setPosition(entities.back()->getPosition() - vec3(3.f - entities.back()->inner_bounding_box.half_width, 0.f, 0.f));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 's': // static guard facing south
@@ -586,6 +620,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setRotations(rots);
         entities.back()->swap_bounding_box_width_depth();
         entities.back()->setPosition(entities.back()->getPosition() + vec3(0.f, 0.f, 3.f - entities.back()->inner_bounding_box.half_depth));
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
     case 'v': // spikes on the floor
@@ -684,6 +719,7 @@ void World::load_button(string file_path)
     string current_line;
     int current_row = 0;
     int height_level = -1;
+    bool open_gate = false;
 
     while (!level_file.eof()) // runs through every line
     {
@@ -708,6 +744,9 @@ void World::load_button(string file_path)
             case 'L': // level file
                 on_press_levels.push_back(level_path + load_path);
                 break;
+            case 'G':
+                open_gate = true;
+                break;
             }
         }
         if (current_line == "________________________________________")
@@ -722,7 +761,7 @@ void World::load_button(string file_path)
                 glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
                 if (current_line.at(i) == 'B')
                 {
-                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file));
+                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, open_gate));
                 }
             }
             current_row++;
@@ -738,6 +777,7 @@ void World::setup_guard(string file_path)
 
 	string current_line;
 	int current_row = 0;
+    int height_level = -1;
 
 	vec3 control_points[10];
 	vec3 starting_position;
@@ -747,10 +787,14 @@ void World::setup_guard(string file_path)
 	while (!level_file.eof()) // runs through every line
 	{
 		getline(level_file, current_line);
-
+        if (current_line == "________________________________________")
+        {
+            current_row = 0;
+            height_level++;
+        }
 		for (int i = 0; i < current_line.length(); i++)
 		{
-			glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, 0.f, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
+			glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
 			switch (current_line.at(i))
 			{
 			case 'G':
