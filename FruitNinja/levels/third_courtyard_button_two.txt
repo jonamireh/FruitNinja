@@ -1,5 +1,5 @@
 M box
-L third_courtyard_button_t6o.txt
+L third_courtyard_button_two.txt
 ________________________________________
 |                                      |
 |                                      |
