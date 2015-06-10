@@ -101,9 +101,12 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x6", new MeshSet(assetPath + "interiorWall_1x6.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x7", new MeshSet(assetPath + "interiorWall_1x7.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
+    meshes.insert(pair<string, MeshSet*>("spike", new MeshSet(assetPath + "spikes.dae")));
+    meshes.insert(pair<string, MeshSet*>("spikes_floor", new MeshSet(assetPath + "spikes_floor.dae")));
     meshes.insert(pair<string, MeshSet*>("button", new MeshSet(assetPath + "button.dae")));
     meshes.insert(pair<string, MeshSet*>("button_base", new MeshSet(assetPath + "button_base.dae")));
     meshes.insert(pair<string, MeshSet*>("target", new MeshSet(assetPath + "target.dae")));
+    meshes.insert(pair<string, MeshSet*>("target_rotated", new MeshSet(assetPath + "target_rotated.dae")));
     meshes.insert(pair<string, MeshSet*>("gate_spike", new MeshSet(assetPath + "gate_spikes.dae")));
     meshes.insert(pair<string, MeshSet*>("gate_base", new MeshSet(assetPath + "gate_base.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
@@ -368,6 +371,9 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 		camera = player_camera;
 		camera->in_use = true;
 	}
+	else {
+		player_camera->in_use = false;
+	}
 
 	chewy->bounding_box.center.y = temp;
 
@@ -586,7 +592,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         break;
     case 'V': // spikes
-        entities.push_back(new SpikeEntity(placement_position, meshes.at("spikes"), this));
+        entities.push_back(new SpikeEntity(placement_position, meshes.at("spike"), this));
         entities.back()->setScale(3.f);
         break;
 	case 'w': // static guard facing west
@@ -897,7 +903,8 @@ void World::shootArrows()
 	static bool held = false;
 	bool shot = false;
 	for (auto it = entities.begin(); it != entities.end(); ++it) {
-		if (typeid(*(*it)) == typeid(ProjectileEntity)) {
+		ProjectileEntity* p_test = dynamic_cast<ProjectileEntity*>(*it);
+		if (p_test != nullptr) {
 			shot = true;
 		}
 	}

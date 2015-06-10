@@ -16,11 +16,11 @@ ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_
     this->other_button_files = other_button_files;
     this->on_press_cinematic_file = on_press_cinematic_file;
 
-    //if (mesh == world->meshes["button"])
-    //{
-    //    world->entities.push_back(new ObstacleEntity(position, world->meshes.at("button_base")));
-    //    world->entities.back()->list = UNSET_OCTTREE((world->entities.back()->list));
-    //}
+    if (mesh == world->meshes["button"])
+    {
+        world->entities.push_back(new ObstacleEntity(position, world->meshes.at("button_base")));
+        world->entities.back()->list = UNSET_OCTTREE((world->entities.back()->list));
+    }
 }
 
 void ButtonEntity::update() {}

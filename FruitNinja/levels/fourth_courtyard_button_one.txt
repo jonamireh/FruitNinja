@@ -1,4 +1,4 @@
-M target
+M target_rotated
 P fourth_courtyard_platform_four.txt
 ________________________________________
 ________________________________________
