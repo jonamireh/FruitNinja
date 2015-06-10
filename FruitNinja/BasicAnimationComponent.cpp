@@ -91,7 +91,7 @@ void BasicAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatri
 
 BoneInfo* BasicAnimationComponent::FindBoneInfo(string boneName)
 {
-	std::map<std::string, BoneInfo*>::iterator boneInfoItr = entity->mesh->boneInfo.find(boneName);
+	std::unordered_map<std::string, BoneInfo*>::iterator boneInfoItr = entity->mesh->boneInfo.find(boneName);
 	if (boneInfoItr == entity->mesh->boneInfo.end())
 		return nullptr;
 	BoneInfo* boneInfo = boneInfoItr->second;
@@ -133,11 +133,27 @@ glm::uint BasicAnimationComponent::FindRotation(const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumRotationKeys > 0);
 
-	for (glm::uint i = 0; i < pNodeAnim->mNumRotationKeys - 1; i++) {
+	glm::uint lower = 0;
+	glm::uint upper = pNodeAnim->mNumRotationKeys - 2;
+
+	while (lower < upper) {
+		glm::uint currIdx = (upper - lower) / 2 + lower;
+
+		if (frameTime < (float)pNodeAnim->mRotationKeys[currIdx + 1].mTime) {
+			upper = currIdx;
+		}
+		else {
+			lower = currIdx + 1;
+		}
+	}
+
+	return upper;
+
+	/*for (glm::uint i = 0; i < pNodeAnim->mNumRotationKeys - 1; i++) {
 		if (frameTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime) {
 			return i;
 		}
-	}
+	}*/
 	assert(0);
 }
 
@@ -166,11 +182,27 @@ glm::uint BasicAnimationComponent::FindScaling(const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumScalingKeys > 0);
 
-	for (glm::uint i = 0; i < pNodeAnim->mNumScalingKeys - 1; i++) {
+	glm::uint lower = 0;
+	glm::uint upper = pNodeAnim->mNumScalingKeys - 2;
+
+	while (lower < upper) {
+		glm::uint currIdx = (upper - lower) / 2 + lower;
+
+		if (frameTime < (float)pNodeAnim->mScalingKeys[currIdx + 1].mTime) {
+			upper = currIdx;
+		}
+		else {
+			lower = currIdx + 1;
+		}
+	}
+
+	return upper;
+
+	/*for (glm::uint i = 0; i < pNodeAnim->mNumScalingKeys - 1; i++) {
 		if (frameTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) {
 			return i;
 		}
-	}
+	}*/
 	assert(0);
 }
 
@@ -199,11 +231,27 @@ glm::uint BasicAnimationComponent::FindTranslation(const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumPositionKeys > 0);
 
-	for (glm::uint i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) {
+	glm::uint lower = 0;
+	glm::uint upper = pNodeAnim->mNumPositionKeys - 2;
+
+	while (lower < upper) {
+		glm::uint currIdx = (upper - lower) / 2 + lower;
+
+		if (frameTime < (float)pNodeAnim->mPositionKeys[currIdx + 1].mTime) {
+			upper = currIdx;
+		}
+		else {
+			lower = currIdx + 1;
+		}
+	}
+
+	return upper;
+
+	/*for (glm::uint i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) {
 		if (frameTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
 			return i;
 		}
-	}
+	}*/
 	assert(0);
 }
 
