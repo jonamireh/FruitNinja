@@ -157,6 +157,9 @@ void ChewyMovementComponent::update()
 		rotations = entity.turnAngle(archery_cam->cameraFront);
 		rotations.x = -radians(archery_cam->phi);
 	}
+	else {
+		entity.moving = false;
+	}
 
 	position += entity.velocity * seconds_passed;
 	dynamic_cast<ChewyEntity&>(entity)._falling = true;
@@ -165,8 +168,11 @@ void ChewyMovementComponent::update()
 		AudioManager::instance()->play3D(assetPath + "jump.wav", position, 5.0f, false);
 	}
     // a clamp that happens if you've already fallen through the floor
-    if (position.y - entity.bounding_box.half_height < -0.5f)
-        position.y = 0.5f;
+	if (position.y - entity.bounding_box.half_height < -0.5f) {
+		position.y = entity.bounding_box.half_height + 0.1f;
+		entity.velocity.y = 0;
+		dynamic_cast<ChewyEntity*>(&entity)->_falling = false;
+	}
 
 	entity.setPosition(position);
 	entity.setRotations(rotations);
