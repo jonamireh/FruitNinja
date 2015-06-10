@@ -249,7 +249,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 66.f, entities.at(10)->getPosition().z));
 
 	// JUST FOR DEMO
-	if (current_courtyard == 5)
+	if (current_courtyard == 6)
 		current_courtyard = 1;
 
 	set_puppeteer(current_courtyard);
@@ -304,6 +304,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 86.f, entities.at(10)->getPosition().z));
 		break;
 	case 5:
+        setup_level(level_path + "fifth_courtyard.txt");
 		break;
 	}
 }
