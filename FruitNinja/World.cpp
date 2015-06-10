@@ -346,6 +346,9 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 		camera = player_camera;
 		camera->in_use = true;
 	}
+	else {
+		player_camera->in_use = false;
+	}
 
 	chewy->bounding_box.center.y = temp;
 
