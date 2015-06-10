@@ -273,6 +273,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		player_camera->movement(chewy);
 		if (setup_cin_cam)
 			loading_screen = new LoadingScreen("LoadScreen1.png", "Color is Key!");
+			setup_cinematic_camera(level_path + "second_courtyard_cinematic.txt", setup_cin_cam);
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
@@ -422,7 +423,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         break;
     // dont' use 'B'
 	case 'C': // set chewy's position
-		chewy->setPosition(placement_position + vec3(0.f, 5.f, 0.f));
+		chewy->setPosition(placement_position + vec3(0.f, chewy->bounding_box.half_height + 0.05f, 0.f));
 		break;
 	case 'd': // door
         if (placement_position.z < 120.f)
