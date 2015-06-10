@@ -71,44 +71,59 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 				glUniform1i(UflagHandle, 1);
 			}
 			else {
-
 				glUniform1i(UflagHandle, 0);
-			}
-			
-			if (mesh->bones.size() > 0)
-			{
-				glUniform1i(uBoneFlagHandle, 1);
-			}
-			else
-			{
-				glUniform1i(uBoneFlagHandle, 0);
 			}
 
 			Material material = mesh->mat;
 			glUniform3fv(UdColorHandle, 1, value_ptr(material.diffuse));
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->IND);
+			
+			if (mesh->bones.size() > 0)
+			{
+				glUniform1i(uBoneFlagHandle, 1);
 
-			for (auto& entity: currMeshSet.second) {
-				glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
+				map<std::vector<std::vector<glm::mat4>>*, vector<GameEntity*>> meshAnimations;
 
-				if (mesh->bones.size() > 0)
-				{
-					std::vector<std::vector<glm::mat4>>* boneTs = entity->getBoneTransformations();
-					glUniformMatrix4fv(uBonesHandle, boneTs->at(j).size(), GL_FALSE, value_ptr(boneTs->at(j)[0]));
+				for (auto& entity : currMeshSet.second) {
+					map<std::vector<std::vector<glm::mat4>>*, vector<GameEntity*>>::iterator meshItr = meshAnimations.find(entity->getBoneTransformations());
+					meshAnimations[entity->getBoneTransformations()].push_back(entity);
 				}
 
-				check_gl_error("Def shader before draw");
+				for (auto& currAnimation: meshAnimations) {
+					std::vector<std::vector<glm::mat4>>* boneTs = currAnimation.first;
+					glUniformMatrix4fv(uBonesHandle, boneTs->at(j).size(), GL_FALSE, value_ptr(boneTs->at(j)[0]));
 
-				glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+					for (auto& entity: currAnimation.second) {
+						glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-				check_gl_error("Def shader after draw");
+						check_gl_error("Def shader before draw");
 
+						glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+
+						check_gl_error("Def shader after draw");
+					}
+				}
 			}
+			else
+			{
+				glUniform1i(uBoneFlagHandle, 0);
+
+				for (auto& entity : currMeshSet.second) {
+					glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
+
+					check_gl_error("Def shader before draw");
+
+					glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
+
+					check_gl_error("Def shader after draw");
+				}
+			}
+
+
 			if (mesh->textures.size() > 0) {
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
-			
 		}
 	}
 	glDepthMask(GL_FALSE);
