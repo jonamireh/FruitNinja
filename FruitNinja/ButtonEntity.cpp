@@ -3,18 +3,19 @@
 #include "AudioManager.h"
 #include "main.h"
 #include "ObstacleEntity.h"
-//#include "GateEntity.h"
+#include "GateEntity.h"
 
 ButtonEntity::ButtonEntity() {}
 
 ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_press_levels, 
-    vector<string> on_press_platforms, vector<string> other_button_files, vector<string> on_press_cinematic_file) : GameEntity(position, mesh)
+    vector<string> on_press_platforms, vector<string> other_button_files, vector<string> on_press_cinematic_file, bool gate_open) : GameEntity(position, mesh)
 {
     pressed = false;
     this->on_press_levels = on_press_levels;
     this->on_press_platforms = on_press_platforms;
     this->other_button_files = other_button_files;
     this->on_press_cinematic_file = on_press_cinematic_file;
+    this->gate_open = gate_open;
 
     if (mesh == world->meshes["button"])
     {
@@ -40,20 +41,21 @@ void ButtonEntity::button_pressed()
     for (int i = 0; i < on_press_cinematic_file.size(); i++)
         world->setup_cinematic_camera(on_press_cinematic_file.at(i), true);
 
-    //for (int i = 0; i < world->entities.size(); i++)
-    //{
-    //    if (typeid(GateEntity) == typeid(*world->entities.at(i)))
-    //    {
-
-    //    }
-    //}
+    if (gate_open)
+    {
+        for (int i = 0; i < world->entities.size(); i++)
+        {
+            if (typeid(GateEntity) == typeid(*world->entities.at(i)))
+                world->entities.at(i)->list = UNSET_DRAW(world->entities.at(i)->list);
+        }
+    }
 }
 
 void ButtonEntity::collision(GameEntity* entity)
 {
     if (!pressed)
     {
-        if (typeid(ChewyEntity) == typeid(*entity))
+        if (typeid(ChewyEntity) == typeid(*entity) && mesh == world->meshes["button"])
         {
             button_pressed();
             pressed = true;
