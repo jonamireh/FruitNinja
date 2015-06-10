@@ -6,7 +6,7 @@
 
 
 FallingEntity::FallingEntity(glm::vec3 position, MeshSet* mesh) :
-GameEntity(position, mesh, true)
+GameEntity(position, mesh)
 {
     velocity = glm::vec3(0.f);
     stepped_on = false;
@@ -50,7 +50,10 @@ void FallingEntity::update()
 void FallingEntity::collision(GameEntity* entity)
 {
     if (typeid(ChewyEntity) == typeid(*entity))
+    {
         stepped_on = true;
+        collision_response = true;
+    }
 
     if (typeid(SpikeEntity) == typeid(*entity))
         list = UNSET_DRAW(list);

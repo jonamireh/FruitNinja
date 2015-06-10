@@ -5,33 +5,33 @@ ________________________________________
 |                                     X|
 |                                      |
 |                                      |
-|        WWW   WWWWWWWWWW   WWW        |
-|        WWW   WWWWWWWWWW   WWW        |
-|        WWW   WWWWWWWWWW   WWW        |
+|                    3                 |
+|         H     H  H 3 H     H         |
+|                    3                 |
 |                                      |
 |                                      |
 |                                      |
-|l       WWW                WWW       l|
-|        WWW       l        WWW        |
-|        WWW                WWW        |
-|        WWW                WWW        |
-|        WWW                WWW        |
-|        WWW                WWW        |
-|        WWW                WWW        |
-|E      lWWW       F        WWWl      q|
-|        WWW                WWW        |
-|        WWW                WWW        |
-|        WWW                WWW        |
-|        WWW                WWW        |
-|        WWW                WWW        |
-|        WWW       l        WWW        |
-|l       WWW                WWW       l|
+|l                                    l|
+|         H        l         H         |
+|                                      |
+|                                      |
+|         H                  H         |
+|                                      |
+|                                      |
+|E      l H        F         H l      q|
+|                                      |
+|                                      |
+|         H                  H         |
+|                                      |
+|                                      |
+|         H        l         H         |
+|l                                    l|
 |                                      |
 |                                      |
 |                                      |
-|        WWW   WWWWWWWWWW   WWW        |
-|        WWW   WWWWWWWWWW   WWW        |
-|        WWW   WWWWWWWWWW   WWW        |
+|                       3              |
+|         H     H  H  H 3              |
+|                       3              |
 |                                      |
 |                                      |
 |                                      |

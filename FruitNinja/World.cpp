@@ -81,8 +81,14 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("tower", new MeshSet(assetPath + "tower.dae")));
 	meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
-	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x1", new MeshSet(assetPath + "interiorWall_1x1.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x2", new MeshSet(assetPath + "interiorWall_1x2.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x3", new MeshSet(assetPath + "interiorWall_1x3.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x4", new MeshSet(assetPath + "interiorWall_1x4.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x5", new MeshSet(assetPath + "interiorWall_1x5.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x6", new MeshSet(assetPath + "interiorWall_1x6.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x7", new MeshSet(assetPath + "interiorWall_1x7.dae")));
+	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
     meshes.insert(pair<string, MeshSet*>("door_closed", new MeshSet(assetPath + "door_closed.dae")));
 	meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
@@ -407,7 +413,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		break;
     case 'H': //3x3 inner wall
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_3x3"))); 
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
         entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'k': // fence
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("fence")));
@@ -521,8 +531,58 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x1")));
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
         break;
-
+    case '2':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x2")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '3':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x3")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '4':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x4")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '5':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x5")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '6':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x6")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '7':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x7")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
 	}
 }
 
@@ -801,6 +861,7 @@ void World::draw()
 		DebugCamera* d_test = dynamic_cast<DebugCamera*>(camera);
 		vector<GameEntity*> in_view;
 
+        // MERGE STUFF HAPPENED HERE
 	////otherwise deferred rendering
 	//vector<Light*> lights;
 	//for (int i = 0; i < entities.size(); i++) {
