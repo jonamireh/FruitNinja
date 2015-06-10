@@ -47,19 +47,34 @@ vec3 GameEntity::turnAngle(vec3 cartesian)
 
 float GameEntity::getScale()
 {
-    return scale;
+    return scale.x;
 }
 
 void GameEntity::setScale(float entScale)
 {
-    scale = entScale;
+    scale = vec3(entScale, entScale, entScale);
     float y_offset = bounding_box.center.y - bounding_box.half_height;
-    bounding_box.half_width *= scale;
-    bounding_box.half_height *= scale;
-    bounding_box.half_depth *= scale;
+    bounding_box.half_width *= scale.x;
+    bounding_box.half_height *= scale.y;
+    bounding_box.half_depth *= scale.z;
     bounding_box.center.y = bounding_box.half_height + y_offset;
 	validAlignedModelMat = false;
 	validModelMat = false;
+}
+
+void GameEntity::setScale(glm::vec3 entScale)
+{
+    float y_offset = bounding_box.center.y - bounding_box.half_height;
+    bounding_box.half_width /= scale.x;
+    bounding_box.half_height /= scale.y;
+    bounding_box.half_depth /= scale.z;
+    scale = entScale;
+    bounding_box.half_width *= scale.x;
+    bounding_box.half_height *= scale.y;
+    bounding_box.half_depth *= scale.z;
+    bounding_box.center.y = bounding_box.half_height + y_offset;
+    validAlignedModelMat = false;
+    validModelMat = false;
 }
 
 glm::vec3 GameEntity::getRotations()
@@ -203,7 +218,7 @@ glm::mat4 GameEntity::getAlignedModelMat()
 {
 	if (!validAlignedModelMat) {
 		mat4 model_trans = translate(mat4(1.0f), bounding_box.center - vec3(0.f, bounding_box.half_height, 0.f));
-		mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
+		mat4 model_scale = glm::scale(mat4(1.0f), scale);
 
 		alignedModelMat = model_trans * model_scale;
 		validAlignedModelMat = true;

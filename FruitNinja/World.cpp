@@ -135,20 +135,16 @@ void World::init()
 	float wall_scale = 30.f;
 	GameEntity* wall_left = new ObstacleEntity(vec3(120.f, 0.f, 240.f), meshes.at("wall"));
 	wall_left->setScale(wall_scale);
-	wall_left->bounding_box.half_height = wall_left->bounding_box.half_height + 12.f;
 	GameEntity* wall_right = new ObstacleEntity(vec3(120.f, 0.f, 0.f), meshes.at("wall"));
 	wall_right->setScale(wall_scale);
-	wall_right->bounding_box.half_height = wall_right->bounding_box.half_height + 12.f;
 	GameEntity* wall_front = new ObstacleEntity(vec3(0.f, 0.f, 120.f), meshes.at("wall"));
 	wall_front->setScale(wall_scale);
 	wall_front->setRotations(vec3(0.f, M_PI_2, 0.f));
 	wall_front->swap_bounding_box_width_depth();
-	wall_front->bounding_box.half_height = wall_front->bounding_box.half_height + 12.f;
 	GameEntity* wall_back = new ObstacleEntity(vec3(240.f, 0.f, 120.f), meshes.at("wall"));
 	wall_back->setScale(wall_scale);
 	wall_back->setRotations(vec3(0.f, M_PI_2, 0.f));
 	wall_back->swap_bounding_box_width_depth();
-	wall_back->bounding_box.half_height = wall_back->bounding_box.half_height + 12.f;
 	GameEntity* ground = new ObstacleEntity(vec3(120.f, -12.0f, 120.f), meshes.at("ground"));
 	ground->setScale(30.f);
 
@@ -159,12 +155,12 @@ void World::init()
 	// or you can just remove everything after their index since
 	// they're pushed first (for swapping levels)
 	entities.push_back(chewy);
+    entities.push_back(ground);
 	entities.push_back(tower);
 	entities.push_back(wall_left);
 	entities.push_back(wall_right);
 	entities.push_back(wall_front);
 	entities.push_back(wall_back);
-	entities.push_back(ground);
 
 	setup_next_courtyard();
 
@@ -191,6 +187,12 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	entities.erase(entities.begin() + NUM_PERSISTENT, entities.end());
 
     current_courtyard++;
+
+    // these are supposedly the walls... lets hope the indices dont change!
+    entities.at(3)->setScale(vec3(30.f));
+    entities.at(4)->setScale(vec3(30.f));
+    entities.at(5)->setScale(vec3(30.f));
+    entities.at(6)->setScale(vec3(30.f));
 
 	// JUST FOR DEMO
 	if (current_courtyard == 5)
@@ -229,6 +231,12 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fourth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fourth_courtyard_platform_five.txt");
         load_button(level_path + "fourth_courtyard_button_one.txt");
+
+        // these are supposedly the walls... lets hope the indices dont change!
+        entities.at(3)->setScale(vec3(30.f, 40.f, 30.f));
+        entities.at(4)->setScale(vec3(30.f, 40.f, 30.f));
+        entities.at(5)->setScale(vec3(30.f, 40.f, 30.f));
+        entities.at(6)->setScale(vec3(30.f, 40.f, 30.f));
 		break;
 	case 5:
 		break;
@@ -509,20 +517,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
-    case 'q': // static guard facing west Armored
+    case 'W': // static guard facing west Armored
         entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(-1.0f, 0.f, 0.f), true));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
-	case 'W': // interior wall
-		entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall")));
-		entities.back()->setScale(3.f);
-		// this will rotate alternating so that the textures line up correctly
-		if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
-			(!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
-			entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
-		entities.back()->list = SET_HIDE((entities.back()->list));
-		break;
 	case 'X': // crate
 		entities.push_back(new ObstacleEntity(placement_position, meshes.at("box")));
 		entities.back()->setScale(3.f);

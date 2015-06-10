@@ -37,10 +37,12 @@ protected:
 	bool validModelMat = false;
 	bool validAlignedModelMat = false;
 	bool validRotModelMat = false;
-	float scale = 1.0f;
+	glm::vec3 scale = glm::vec3(1.0f);
 	glm::vec3 rotations;
 	glm::mat4 getRotMat();
 public:
+    void setScale(glm::vec3 entScale);
+
     EntityBox bounding_box;
     EntityBox inner_bounding_box;
     MeshSet* mesh;
