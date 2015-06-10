@@ -3,6 +3,7 @@
 #include "World.h"
 #include <math.h>
 #include <glm/gtx/string_cast.hpp>
+#include "AudioManager.h"
 
 
 FallingEntity::FallingEntity(glm::vec3 position, MeshSet* mesh) :
@@ -18,24 +19,32 @@ void FallingEntity::update()
     static float rotationX = 0; 
     static float prevRotationZ = 0;
     static float rotationZ = 0;
-    static float rotationTime = 0;
+    static float rotationTime = .1;
+	static float soundTime = .3;
     if (stepped_on)
     {
         setPosition(getPosition() + velocity * seconds_passed);
         elapsed_time += seconds_passed;
         rotationTime += seconds_passed;
+		soundTime += seconds_passed;
         
         if (elapsed_time > TIME_TO_FALL)
         {
             setRotations(glm::vec3(0.f));
             velocity.y -= GRAVITY * 0.5f * seconds_passed;
 			collision_response = true;
+			
         }
         else
         {
             float newRotationX = prevRotationX + (prevRotationX - rotationX) * (rotationTime / .1f);
             float newRotationZ = prevRotationZ + (prevRotationZ - rotationZ) * (rotationTime / .1f);
             setRotations(glm::vec3(newRotationX, 0.f, newRotationZ));
+			if (soundTime > .5)
+			{
+				soundTime = 0;
+				AudioManager::instance()->play3D(assetPath + "OOT_DekuScrub_Crumble.wav", getPosition(), 5.0f, false);
+			}
         }
         if (rotationTime > .1)
         {
@@ -45,13 +54,18 @@ void FallingEntity::update()
             prevRotationZ = rotationZ;
             rotationZ = glm::radians((float)rand() / (float)RAND_MAX * 4.0f - 2.0f);
         }
+
+		
     }
 }
 
 void FallingEntity::collision(GameEntity* entity)
 {
     if (typeid(ChewyEntity) == typeid(*entity))
+    {
         stepped_on = true;
+        collision_response = true;
+    }
 
     if (typeid(SpikeEntity) == typeid(*entity))
         list = UNSET_DRAW(list);

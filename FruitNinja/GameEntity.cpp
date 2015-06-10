@@ -22,13 +22,16 @@ collision_response(collision_response)
     list = SET_OCTTREE(list);
     inner_bounding_box = bounding_box;
 
-	boneTransformations.resize(mesh->getMeshes().size());
+	/*boneTransformations.resize(mesh->getMeshes().size());
 	for (int i = 0; i < boneTransformations.size(); i++)
 	{
 		boneTransformations[i].resize(mesh->getMeshes()[i]->boneWeights.size());
-	}
+	}*/
 	list = SET_WALL(list);
-};
+}
+
+GameEntity::~GameEntity() {
+}
 
 
 vec3 GameEntity::turnAngle(vec3 cartesian)
@@ -47,19 +50,34 @@ vec3 GameEntity::turnAngle(vec3 cartesian)
 
 float GameEntity::getScale()
 {
-    return scale;
+    return scale.x;
 }
 
 void GameEntity::setScale(float entScale)
 {
-    scale = entScale;
+    scale = vec3(entScale, entScale, entScale);
     float y_offset = bounding_box.center.y - bounding_box.half_height;
-    bounding_box.half_width *= scale;
-    bounding_box.half_height *= scale;
-    bounding_box.half_depth *= scale;
+    bounding_box.half_width *= scale.x;
+    bounding_box.half_height *= scale.y;
+    bounding_box.half_depth *= scale.z;
     bounding_box.center.y = bounding_box.half_height + y_offset;
 	validAlignedModelMat = false;
 	validModelMat = false;
+}
+
+void GameEntity::setScale(glm::vec3 entScale)
+{
+    float y_offset = bounding_box.center.y - bounding_box.half_height;
+    bounding_box.half_width /= scale.x;
+    bounding_box.half_height /= scale.y;
+    bounding_box.half_depth /= scale.z;
+    scale = entScale;
+    bounding_box.half_width *= scale.x;
+    bounding_box.half_height *= scale.y;
+    bounding_box.half_depth *= scale.z;
+    bounding_box.center.y = bounding_box.half_height + y_offset;
+    validAlignedModelMat = false;
+    validModelMat = false;
 }
 
 glm::vec3 GameEntity::getRotations()
@@ -213,7 +231,7 @@ glm::mat4 GameEntity::getAlignedModelMat()
 		{
 			model_trans = translate(mat4(1.0f), bounding_box.center - vec3(0.f, bounding_box.half_height, 0.f));
 		}
-		mat4 model_scale = glm::scale(mat4(1.0f), vec3(scale, scale, scale));
+		mat4 model_scale = glm::scale(mat4(1.0f), scale);
 
 		alignedModelMat = model_trans * model_scale;
 		validAlignedModelMat = true;
@@ -238,4 +256,8 @@ glm::mat4 GameEntity::getRotMat()
 
 void GameEntity::update()
 {
+}
+
+std::vector<std::vector<glm::mat4>>* GameEntity::getBoneTransformations() {
+	return NULL;
 }

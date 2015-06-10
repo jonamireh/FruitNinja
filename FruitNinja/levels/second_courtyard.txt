@@ -1,157 +1,157 @@
 ________________________________________
-|OO              X d X                 |
-|O               X C X                 |
-|            X   X   X   XXXXXXXXXXX   |
-|            X   XX XX   X         X   |
-|            X           X e       X   |
-|  s  l      X           X    l    X   |
-|  n         X           X         X   |
-|       ew   X           XO        X   |
-|  e w      OX           X O       X X |
-|O         OOXWWWWWWWWWWWXXXXXXX   X   |
-|XXXXXXXXXXXXXWWWWWWWWWWWXXXXXXX s X   |
-|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
-|                                  X   |
-|                                  X   |
-|                                  X   |
-|X                                 X   |
-|XX                                X   |
-|WWWWWWWWWWWWWWWWWWWWWWWWWWWWW     X   |
-|WWWWWWXWWWWWXWWWWW WWWWWXWWWW     X   |
-|WWWWWWWWWWWWWWWWWW WWWWWWWWWW     X X |
-|                            X     X   |
-|                            X     X   |
-|      We                    X     X   |
-|                W           X     X   |
-|  wW       n                X     X   |
-|           W         wW     X     X   |
-|                            X     X   |
-|                      W     X     X   |
-|  n      W              W   X     X   |
-|  W      s    W             X     X X |
-|                    W       X     X   |
-|      wWe           s       X     X   |
-|                  W         X     X   |
-| Ww                         X     X   |
-|          wW            n   X     X   |
-|                        W   X         |
-|     We        Wn   n   s   X         |
-|                l d l       XOOOOOOOOO|
+|OO              3 d 3                 |
+|O               3 C 3                 |
+|            4   3   3   44444444444   |
+|            4   33 33   4         4   |
+|            4           4 e       4   |
+|  s  l      4           4    l    4   |
+|  n         4           4         4   |
+|       ew   4           4O        4   |
+|  e w      O4           4 O       4 X |
+|O         OO4444444444444444444   4   |
+|4444444444444444444444444444444 s 4   |
+|4444444444444444444444444444444   4   |
+|                                  4   |
+|                                  4   |
+|                                  4   |
+|X                                 4   |
+|XX                                4   |
+|      3   333   333   333   3     4   |
+| H  H 2 H 332 H 33  H 332 H 3     4   |
+|      3   333   33    333   3     4 X |
+|                            3     4   |
+|                            3     4   |
+|      3e                    3     4   |
+|                3           3     4   |
+|  33       n                3     4   |
+|           3         w3     3     4   |
+|                            3     4   |
+|                      3     3     4   |
+|  n      3              3   3     4   |
+|  3      s    3             3     4 X |
+|                    3       3     4   |
+|      w3e                   3     4   |
+|                  3         3     4   |
+| w3                         3     4   |
+|          w3            n   3     4   |
+|                        3   3         |
+|     3e        3n   n   s   3        O|
+|                l d l       3O      OO|
 ________________________________________
-|                X   X                 |
-|                X   X                 |
-|            X   X   X   XXXXXXXXXXX   |
-|            X   XX XX   X         X   |
-|            X           X         X   |
-|            X           X         X   |
-|            X           X         X   |
-|            X           X         X   |
-|            X           X         X   |
-|            X           XXXXXXX   X   |
-|XXXXXXXXXXXXX           XXXXXXX   X   |
-|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
-|                                  X   |
-|                                  X   |
-|                                  X   |
-|                                  X   |
-|X                                 X   |
-|                                  X   |
-|                                  X   |
-|                  X               X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X     X   |
-|                            X         |
-|                            X         |
-|                            X         |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|X                                     |
+|                                      |
+|                                      |
+|                  2                   |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                     O|
 ________________________________________
-|                X   X                 |
-|                X   X                 |
-|            X   XU UX   XXXXXXXXXXX   |
-|            X   XX XX   X         X   |
-|            X   D   D   X         X   |
-|            X           X         X   |
-|            X           X         X   |
-|            X           X         X   |
-|            X           X         X   |
-|            X           XXXXXXX   X   |
-|XXXXXXXXXXXXX           XXXXXXX   X   |
-|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
-|                                  X   |
-|                                  X   |
-|R                                 X   |
-|                                  X   |
-|      U     U     U     U         X   |
-|                                  X   |
-|                                  X   |
-|                  X               X   |
-|                            X     X   |
-|      U                     X     X   |
-|                U           X     X   |
-|      D        L R          X     X   |
-|    R                 U     X     X   |
-|   D      L          L      X     X   |
-|           D                X     X   |
-|         U           L R    X     X   |
-|  U     L                R  X     X   |
-|               R    U   D   X     X   |
-|              D             X     X   |
-|                            X     X   |
-|                 L          X     X   |
-|                  D         X     X   |
-|            R               X     X   |
-|               U       L R  X         |
-|                            X         |
-|                            X         |
+|                                      |
+|                                      |
+|                 U U                  |
+|                                      |
+|                D   D                 |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|R                                     |
+|                                      |
+|      U     U     U     U             |
+|                                      |
+|                                      |
+|                                      |
+|                                      |
+|      U                               |
+|                U                     |
+|      D        L R                    |
+|    R                 U               |
+|   D      L          L                |
+|           D                          |
+|         U           L R              |
+|  U     L                R            |
+|               R    U   D             |
+|              D                       |
+|                                      |
+|                 L                    |
+|                  D                   |
+|            R                         |
+|               U       L R            |
+|                                      |
+|                                      |
 ________________________________________
 |                             D        |
 |                          U     U     |
-|            X           XXXXXXXXXXX  L|
-|            X           X         X   |
-|            X           X         X   |
-|            X           X         XR  |
-|            X           X         X   |
-|            X           X         X   |
-|            X U       U X         X  L|
-|            XXXXXXXXXXXXXXXXXXX   X   |
-|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   X   |
-|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   XR  |
-|D     D     D     D     D     D   X   |
-|                                  X   |
-|                                  X  L|
-|                                  X   |
-|                                  X   |
-|                                  XR  |
-|                                  X   |
-|                                  X   |
-|                            X    LX  L|
-|                            X     X   |
-|                            X     X   |
-|                            X     XR  |
-|                            X     X   |
-|                            X     X   |
-|                            XR    X  L|
-|                            X     X   |
-|                            X     X   |
-|                            X     XR  |
-|                            X     X   |
-|                            X     X   |
-|                            X    LX  L|
-|                            X     X   |
-|                            X     X   |
-|                            X     D   |
-|                            X         |
-|                            X         |
+|                                     L|
+|                                      |
+|                                      |
+|                                   R  |
+|                                      |
+|                                      |
+|              U       U              L|
+|                                      |
+|                                      |
+|                                   R  |
+|D     D     D     D     D     D       |
+|                                      |
+|                                     L|
+|                                      |
+|                                      |
+|                                   R  |
+|                                      |
+|                                      |
+|                                 L   L|
+|                                      |
+|                                      |
+|                                   R  |
+|                                      |
+|                                      |
+|                             R       L|
+|                                      |
+|                                      |
+|                                   R  |
+|                                      |
+|                                      |
+|                                 L   L|
+|                                      |
+|                                      |
+|                                  D   |
+|                                      |
+|                                      |
 ________________________________________

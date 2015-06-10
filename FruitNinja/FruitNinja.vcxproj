@@ -173,6 +173,8 @@
     <None Include="TextVert.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ExplosionEmitter.cpp" />
+    <ClCompile Include="GuardPuppeteer.cpp" />
     <ClCompile Include="ArcheryCamera.cpp" />
     <ClCompile Include="ArcShader.cpp" />
     <ClCompile Include="AudioManager.cpp" />
@@ -241,6 +243,8 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ExplosionEmitter.h" />
+    <ClInclude Include="GuardPuppeteer.h" />
     <ClInclude Include="ArcheryCamera.h" />
     <ClInclude Include="ArcShader.h" />
     <ClInclude Include="AudioManager.h" />

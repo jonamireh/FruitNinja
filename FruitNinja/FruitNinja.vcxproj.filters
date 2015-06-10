@@ -193,8 +193,18 @@
     <ClCompile Include="RisingMovementComponent.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="FireArrowEntity.cpp" />
-    <ClCompile Include="LoadingScreen.cpp" />
+    <ClCompile Include="FireArrowEntity.cpp">
+		<Filter>Arrows</Filter>
+	</ClCompile>
+    <ClCompile Include="LoadingScreen.cpp">
+      <Filter>LoadingScreen</Filter>
+	</ClCompile>
+    <ClCompile Include="GuardPuppeteer.cpp">
+      <Filter>Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionEmitter.cpp">
+      <Filter>Fire</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -671,9 +681,18 @@
     <ClInclude Include="main.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="FireArrow.h" />
-    <ClInclude Include="FireArrowEntity.h" />
-    <ClInclude Include="LoadingScreen.h" />
+    <ClInclude Include="FireArrowEntity.h">
+		<Filter>Arrows</Filter>
+	</ClInclude>
+    <ClInclude Include="LoadingScreen.h">
+      <Filter>LoadingScreen</Filter>
+	</ClInclude>
+    <ClInclude Include="GuardPuppeteer.h">
+      <Filter>Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplosionEmitter.h">
+      <Filter>Fire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

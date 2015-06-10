@@ -30,6 +30,8 @@
 class ProjectileEntity;
 class ArcheryCamera;
 class GuardEntity;
+class GuardPuppeteer;
+
 const string assetPath = "assets/";
 const string level_path = "levels/";
 extern bool keys[1024];
@@ -108,10 +110,9 @@ private:
 	GameState state;
 	vector<GameEntity*> should_del;
 
-	GuardEntity* walking_g;
-	GuardEntity* idle_g;
-
 	float starting_platform_height;
 	int num_doors = 0;
+	GuardPuppeteer* _puppeteer = nullptr;
+	void set_puppeteer(int courtyard);
 };
 

@@ -28,6 +28,8 @@
 #include "AudioManager.h"
 #include "CollectableEntity.h"
 #include <glm/gtc/matrix_access.inl>
+#include "GuardPuppeteer.h"
+
 
 #define FILE_TO_WORLD_SCALE 6.f
 #define NUM_PERSISTENT 7
@@ -90,8 +92,14 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("tower", new MeshSet(assetPath + "tower.dae")));
 	meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
-	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x1", new MeshSet(assetPath + "interiorWall_1x1.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x2", new MeshSet(assetPath + "interiorWall_1x2.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x3", new MeshSet(assetPath + "interiorWall_1x3.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x4", new MeshSet(assetPath + "interiorWall_1x4.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x5", new MeshSet(assetPath + "interiorWall_1x5.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x6", new MeshSet(assetPath + "interiorWall_1x6.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x7", new MeshSet(assetPath + "interiorWall_1x7.dae")));
+	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
     meshes.insert(pair<string, MeshSet*>("door_closed", new MeshSet(assetPath + "door_closed.dae")));
 	meshes.insert(pair<string, MeshSet*>("spikes", new MeshSet(assetPath + "spikes.dae")));
@@ -138,20 +146,16 @@ void World::init()
 	float wall_scale = 30.f;
 	GameEntity* wall_left = new ObstacleEntity(vec3(120.f, 0.f, 240.f), meshes.at("wall"));
 	wall_left->setScale(wall_scale);
-	wall_left->bounding_box.half_height = wall_left->bounding_box.half_height + 12.f;
 	GameEntity* wall_right = new ObstacleEntity(vec3(120.f, 0.f, 0.f), meshes.at("wall"));
 	wall_right->setScale(wall_scale);
-	wall_right->bounding_box.half_height = wall_right->bounding_box.half_height + 12.f;
 	GameEntity* wall_front = new ObstacleEntity(vec3(0.f, 0.f, 120.f), meshes.at("wall"));
 	wall_front->setScale(wall_scale);
 	wall_front->setRotations(vec3(0.f, M_PI_2, 0.f));
 	wall_front->swap_bounding_box_width_depth();
-	wall_front->bounding_box.half_height = wall_front->bounding_box.half_height + 12.f;
 	GameEntity* wall_back = new ObstacleEntity(vec3(240.f, 0.f, 120.f), meshes.at("wall"));
 	wall_back->setScale(wall_scale);
 	wall_back->setRotations(vec3(0.f, M_PI_2, 0.f));
 	wall_back->swap_bounding_box_width_depth();
-	wall_back->bounding_box.half_height = wall_back->bounding_box.half_height + 12.f;
 	GameEntity* ground = new ObstacleEntity(vec3(120.f, -12.0f, 120.f), meshes.at("ground"));
 	ground->setScale(30.f);
 
@@ -162,12 +166,12 @@ void World::init()
 	// or you can just remove everything after their index since
 	// they're pushed first (for swapping levels)
 	entities.push_back(chewy);
+    entities.push_back(ground);
 	entities.push_back(tower);
 	entities.push_back(wall_left);
 	entities.push_back(wall_right);
 	entities.push_back(wall_front);
 	entities.push_back(wall_back);
-	entities.push_back(ground);
 
 	setup_next_courtyard();
 
@@ -185,6 +189,16 @@ void World::init()
 	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
 
+void World::set_puppeteer(int courtyard) {
+	if (_puppeteer)
+		delete _puppeteer;
+	_puppeteer = nullptr;
+	//use puppeteer if more than 2 or 3 guards in a courtyard
+	if (courtyard == 1 || courtyard == 2) {
+		_puppeteer = new GuardPuppeteer(meshes["guard"]);
+	}
+}
+
 void World::setup_next_courtyard(bool setup_cin_cam)
 {
 	// remove all non-persistent entities
@@ -195,10 +209,17 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 
     current_courtyard++;
 
+    // these are supposedly the walls... lets hope the indices dont change!
+    entities.at(3)->setScale(vec3(30.f));
+    entities.at(4)->setScale(vec3(30.f));
+    entities.at(5)->setScale(vec3(30.f));
+    entities.at(6)->setScale(vec3(30.f));
+
 	// JUST FOR DEMO
 	if (current_courtyard == 5)
 		current_courtyard = 1;
 
+	set_puppeteer(current_courtyard);
 	switch (current_courtyard)
 	{
 	case 1:
@@ -217,7 +238,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		setup_guard(level_path + "second_courtyard_third_guard.txt");
 		setup_guard(level_path + "second_courtyard_fourth_guard.txt");
 		player_camera->movement(chewy);
-		loading_screen = new LoadingScreen("LoadScreen1.png", "Color is Key!");
+		if (setup_cin_cam)
+			loading_screen = new LoadingScreen("LoadScreen1.png", "Color is Key!");
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
@@ -231,6 +253,12 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fourth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fourth_courtyard_platform_five.txt");
         load_button(level_path + "fourth_courtyard_button_one.txt");
+
+        // these are supposedly the walls... lets hope the indices dont change!
+        entities.at(3)->setScale(vec3(30.f, 40.f, 30.f));
+        entities.at(4)->setScale(vec3(30.f, 40.f, 30.f));
+        entities.at(5)->setScale(vec3(30.f, 40.f, 30.f));
+        entities.at(6)->setScale(vec3(30.f, 40.f, 30.f));
 		break;
 	case 5:
 		break;
@@ -388,12 +416,12 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
     case 'e': // static guard facing east
-        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(1.0f, 0.f, 0.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
     case 'E': // static guard facing east Armored
-        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(1.0f, 0.f, 0.f), true));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(1.0f, 0.f, 0.f), true));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
@@ -416,7 +444,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		break;
     case 'H': //3x3 inner wall
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_3x3"))); 
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
         entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
         break;
     case 'k': // fence
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("fence")));
@@ -447,12 +479,12 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 'n': // static guard facing north
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(0.0f, 0.f, -1.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
     case 'N': // static guard facing north armored
-        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(0.0f, 0.f, -1.f), true));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(0.0f, 0.f, -1.f), true));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
@@ -471,12 +503,12 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 's': // static guard facing south
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(0.0f, 0.f, 1.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
     case 'S': // static guard facing south armored
-        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(0.0f, 0.f, 1.f), true));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(0.0f, 0.f, 1.f), true));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
@@ -503,24 +535,15 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         break;
 	case 'w': // static guard facing west
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(-1.0f, 0.f, 0.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
-    case 'q': // static guard facing west Armored
-        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(-1.0f, 0.f, 0.f), true));
+    case 'W': // static guard facing west Armored
+        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(-1.0f, 0.f, 0.f), true));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
-	case 'W': // interior wall
-		entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall")));
-		entities.back()->setScale(3.f);
-		// this will rotate alternating so that the textures line up correctly
-		if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
-			(!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
-			entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
-		entities.back()->list = SET_HIDE((entities.back()->list));
-		break;
 	case 'X': // crate
 		entities.push_back(new ObstacleEntity(placement_position, meshes.at("box")));
 		entities.back()->setScale(3.f);
@@ -530,8 +553,58 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x1")));
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
         break;
-
+    case '2':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x2")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '3':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x3")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '4':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x4")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '5':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x5")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '6':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x6")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
+    case '7':
+        entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x7")));
+        entities.back()->setScale(3.f);
+        entities.back()->list = SET_HIDE((entities.back()->list));
+        if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
+            (!(((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && !(((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)))
+            entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        break;
 	}
 }
 
@@ -676,9 +749,9 @@ void World::setup_guard(string file_path)
 	}
     GuardEntity* guard_ent;
     if (isArmored)
-        guard_ent = new GuardEntity(starting_position, meshes["blue_guard"], spline_points, 4.f, linear, isArmored);
+		guard_ent = new GuardEntity(starting_position, meshes["blue_guard"], _puppeteer, spline_points, 4.f, linear, isArmored);
     else
-        guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
+		guard_ent = new GuardEntity(starting_position, meshes["guard"], _puppeteer, spline_points, 4.f, linear);
     guard_ent->setup_inner_entity_box(meshes["guard_bb"]);
     guard_ent->setup_entity_box(meshes["guard_outer_bb"]);
 	entities.push_back(guard_ent);
@@ -782,11 +855,12 @@ void World::shootArrows()
 	}
 	if (held && !(keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && arrow_count > 0)
 	{
-		entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
+		entities.push_back(new FireArrowEntity(meshes["arrow"], archery_camera));
+		//entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
 		entities.back()->setup_entity_box(meshes.at("arrow_bb"));
 		arrow_count--;
 		held = false;
-		AudioManager::instance()->play3D(assetPath + "bow_better.wav", chewy->getPosition(), 3.0f, false);
+		AudioManager::instance()->play3D(assetPath + "WW_Arrow_Shoot.wav", chewy->getPosition(), 1.0f, false);
 	}
 
 	mouse_buttons_pressed[0] = false;
@@ -810,6 +884,7 @@ void World::draw()
 		DebugCamera* d_test = dynamic_cast<DebugCamera*>(camera);
 		vector<GameEntity*> in_view;
 
+        // MERGE STUFF HAPPENED HERE
 	////otherwise deferred rendering
 	//vector<Light*> lights;
 	//for (int i = 0; i < entities.size(); i++) {
@@ -1030,11 +1105,15 @@ void World::stop_time()
 		time_stopped = false;
 }
 
+
 void World::update()
 {
-		static float start_time = 0.0;
-		vector<GameEntity*> guards;
+	static float start_time = 0.0;
+
+	if (loading_screen == nullptr)
+	{
 		shootArrows();
+		vector<GameEntity*> guards;
 
 		if (state == SPOTTED && cinematic_camera->pathing.done) {
 			lose_condition();
@@ -1042,6 +1121,9 @@ void World::update()
 			chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
 			chewy->animComponent.currentAnimtion = standing;
 			state = HIDDEN;
+		}
+		if (_puppeteer){
+			_puppeteer->update();
 		}
 		for (int i = 0; i < entities.size(); i++)
 		{
@@ -1086,11 +1168,27 @@ void World::update()
 		_skybox->update();
 
 		AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
-		if (loading_screen != nullptr && keys[GLFW_KEY_ENTER])
+	}
+	else
+	{
+		actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
+		if (!time_stopped)
 		{
+			seconds_passed = actual_seconds_passed;
+		}
+		else
+		{
+			seconds_passed = 0.f;
+		}
+		start_time = glfwGetTime();
+
+		if (keys[GLFW_KEY_ENTER])
+		{
+			
 			delete loading_screen;
 			loading_screen = nullptr;
 		}
+	}
 }
 
 void World::zoom_on_guard(GuardEntity* guard_temp)
@@ -1165,6 +1263,6 @@ World::~World() {
 	for (auto it = meshes.begin(); it != meshes.end(); ++it) {
 		delete it->second;
 	}
-	delete walking_g;
-	delete idle_g;
+	if (_puppeteer)
+		delete _puppeteer;
 }

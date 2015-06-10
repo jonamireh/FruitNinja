@@ -21,7 +21,6 @@ class GuardAnimationComponent : public Component
 public:
 	void update() override;
 private:
-	BasicAnimationComponent basicAnimation;
 	GAnimationState currentAnimtion;
 	GameEntity *guard;
 public:
@@ -29,5 +28,6 @@ public:
 	~GuardAnimationComponent();
 	bool areYouDoneYet();
 	void setCurrentAnimation(GAnimationState anim_st);
+	BasicAnimationComponent basicAnimation;
 };
 

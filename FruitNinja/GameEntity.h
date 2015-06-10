@@ -37,12 +37,14 @@ protected:
 	bool validModelMat = false;
 	bool validAlignedModelMat = false;
 	bool validRotModelMat = false;
-	float scale = 1.0f;
+	glm::vec3 scale = glm::vec3(1.0f);
 	glm::vec3 rotations;
 	glm::mat4 getRotMat();
 public:
 	bool setup_inner = false;
-    EntityBox bounding_box;
+    void setScale(glm::vec3 entScale);
+
+	EntityBox bounding_box;
     EntityBox inner_bounding_box;
     MeshSet* mesh;
     glm::vec3 last_position;
@@ -57,6 +59,8 @@ public:
     void setPosition(glm::vec3 position);
 
     GameEntity() {}
+	//Keep this in! Very important! 
+	virtual ~GameEntity();
 	GameEntity(glm::vec3 position, MeshSet* mesh, bool collision_response = false);
 
     void setup_entity_box();
@@ -76,5 +80,5 @@ public:
 	glm::vec3 getRotations();
 	void setRotations(glm::vec3 rots);
 
-	std::vector<std::vector<glm::mat4>> boneTransformations;
+	virtual std::vector<std::vector<glm::mat4>>* getBoneTransformations();
 };

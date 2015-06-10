@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include <string>
 #include <map>
+#include <unordered_map>
 #include "tdogl/Texture.h"
 #include "tdogl/Bitmap.h"
 
@@ -28,7 +29,7 @@ public:
 	~MeshSet();
 	std::vector<Mesh*>& getMeshes();
 	std::vector<aiAnimation*>& getAnimations();
-	std::map<std::string, BoneInfo*> boneInfo;
+	std::unordered_map<std::string, BoneInfo*> boneInfo;
 	aiNode *bone_tree;
 	aiMatrix4x4 inverseMat;
 private:

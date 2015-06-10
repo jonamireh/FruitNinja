@@ -11,6 +11,7 @@ public:
 	LightEntity();
 	LightEntity(glm::vec3 position, MeshSet* mesh, float intensity, MeshSet* unit_sphere);
 	LightEntity(glm::vec3 position, MeshSet* mesh, float intensity, MeshSet* unit_sphere, glm::vec3 color);
+	~LightEntity();
 	void update();
 	Light* light;
 	void collision(GameEntity* entity);

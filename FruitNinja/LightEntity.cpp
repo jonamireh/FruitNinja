@@ -37,3 +37,8 @@ void LightEntity::collision(GameEntity* entity)
 		world->set_chewy_light_distance(glm::distance(getPosition(), entity->getPosition()), glm::length(glm::vec3(bounding_box.half_width, bounding_box.half_height, bounding_box.half_depth)));
 	}
 }
+
+LightEntity::~LightEntity()
+{
+	delete light;
+}

@@ -38,7 +38,7 @@ private:
 	void startLightPasses();
 	void finalPass();
 	void skyboxPass(Camera* camera);
-	void particlePass(Camera* camera, std::vector<Light*> lights);
+	void particlePass(Camera* camera, std::vector<Light*> lights, std::vector<GameEntity*> ents);
 	Skybox* skybox;
 	SimpleTextureShader skyShader;
 	ParticleShader fireShader;
@@ -58,5 +58,4 @@ private:
 	GLint uBoneFlagHandle;
 	GLint uBonesHandle;
 	GLint UdColorHandle;
-
 };

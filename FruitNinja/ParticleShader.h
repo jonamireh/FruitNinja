@@ -2,6 +2,7 @@
 
 #include "Emitter.h"
 #include "Shader.h"
+#include "FireArrowEntity.h"
 
 
 
@@ -16,12 +17,13 @@ public:
 
 	void draw(glm::mat4& view_mat, GameEntity* entity) override;
 
-	void draw(Camera* camera, std::vector<Emitter*> emitters, std::vector<Light*> lights);
+	void draw(Camera* camera, std::vector<Emitter*> emitters, std::vector<Light*> lights, std::vector<FireArrowEntity*> fireArrows);
 
 private:
 	GLuint width_handle;
 	GLuint height_handle;
-	GLuint size_handle;
+	GLuint particle_width_handle;
+	GLuint particle_height_handle;
 	GLuint vp_handle;
 	GLuint eye_handle;
 	GLuint texture_handle;

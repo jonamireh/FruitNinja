@@ -32,12 +32,12 @@ void BasicAnimationComponent::update()
 	// Get bones for each mesh
 	for (int i = 0; i < entityMeshses.size(); i++)
 	{
-		entity->boneTransformations[i].clear();
+		_boneTransformations[i].clear();
 		// Get transformations for each bone
 		for (int j = 0; j < entityMeshses[i]->bones.size(); j++)
 		{
 			string boneName = entityMeshses[i]->bones[j].mName.C_Str();
-			entity->boneTransformations[i].push_back(convertAiMatrix4x4ToMat4(
+			_boneTransformations[i].push_back(convertAiMatrix4x4ToMat4(
 				entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));
 			/*entityMeshses[i]->boneTransformations.push_back(convertAiMatrix4x4ToMat4(
 				entity->mesh->boneInfo.at(boneName)->transformation * entityMeshses[i]->bones[j].mOffsetMatrix));*///boom
@@ -91,7 +91,7 @@ void BasicAnimationComponent::calculateAnimationTransforms(aiNode *node, aiMatri
 
 BoneInfo* BasicAnimationComponent::FindBoneInfo(string boneName)
 {
-	std::map<std::string, BoneInfo*>::iterator boneInfoItr = entity->mesh->boneInfo.find(boneName);
+	std::unordered_map<std::string, BoneInfo*>::iterator boneInfoItr = entity->mesh->boneInfo.find(boneName);
 	if (boneInfoItr == entity->mesh->boneInfo.end())
 		return nullptr;
 	BoneInfo* boneInfo = boneInfoItr->second;
@@ -133,11 +133,27 @@ glm::uint BasicAnimationComponent::FindRotation(const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumRotationKeys > 0);
 
-	for (glm::uint i = 0; i < pNodeAnim->mNumRotationKeys - 1; i++) {
+	glm::uint lower = 0;
+	glm::uint upper = pNodeAnim->mNumRotationKeys - 2;
+
+	while (lower < upper) {
+		glm::uint currIdx = (upper - lower) / 2 + lower;
+
+		if (frameTime < (float)pNodeAnim->mRotationKeys[currIdx + 1].mTime) {
+			upper = currIdx;
+		}
+		else {
+			lower = currIdx + 1;
+		}
+	}
+
+	return upper;
+
+	/*for (glm::uint i = 0; i < pNodeAnim->mNumRotationKeys - 1; i++) {
 		if (frameTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime) {
 			return i;
 		}
-	}
+	}*/
 	assert(0);
 }
 
@@ -166,11 +182,27 @@ glm::uint BasicAnimationComponent::FindScaling(const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumScalingKeys > 0);
 
-	for (glm::uint i = 0; i < pNodeAnim->mNumScalingKeys - 1; i++) {
+	glm::uint lower = 0;
+	glm::uint upper = pNodeAnim->mNumScalingKeys - 2;
+
+	while (lower < upper) {
+		glm::uint currIdx = (upper - lower) / 2 + lower;
+
+		if (frameTime < (float)pNodeAnim->mScalingKeys[currIdx + 1].mTime) {
+			upper = currIdx;
+		}
+		else {
+			lower = currIdx + 1;
+		}
+	}
+
+	return upper;
+
+	/*for (glm::uint i = 0; i < pNodeAnim->mNumScalingKeys - 1; i++) {
 		if (frameTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) {
 			return i;
 		}
-	}
+	}*/
 	assert(0);
 }
 
@@ -199,11 +231,27 @@ glm::uint BasicAnimationComponent::FindTranslation(const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumPositionKeys > 0);
 
-	for (glm::uint i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) {
+	glm::uint lower = 0;
+	glm::uint upper = pNodeAnim->mNumPositionKeys - 2;
+
+	while (lower < upper) {
+		glm::uint currIdx = (upper - lower) / 2 + lower;
+
+		if (frameTime < (float)pNodeAnim->mPositionKeys[currIdx + 1].mTime) {
+			upper = currIdx;
+		}
+		else {
+			lower = currIdx + 1;
+		}
+	}
+
+	return upper;
+
+	/*for (glm::uint i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) {
 		if (frameTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
 			return i;
 		}
-	}
+	}*/
 	assert(0);
 }
 
@@ -251,7 +299,7 @@ BasicAnimationComponent::BasicAnimationComponent(GameEntity *entity)
 	looping = true;
 	std::vector<Mesh*> meshes = mesh->getMeshes();
 	for (size_t i = 0; i < meshes.size(); i++) {
-		boneTransformations.push_back(meshes[i]->getBoneTransformations());
+		_boneTransformations.push_back(meshes[i]->getBoneTransformations());
 	}
 }
 
@@ -261,5 +309,5 @@ BasicAnimationComponent::~BasicAnimationComponent()
 }
 
 std::vector<std::vector<glm::mat4>>* BasicAnimationComponent::getBoneTransformations() {
-	return &boneTransformations;
+	return &_boneTransformations;
 }

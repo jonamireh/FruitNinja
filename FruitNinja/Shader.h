@@ -26,6 +26,7 @@ public:
 	Shader();
 	Shader(std::string vertShader, std::string fragShader);
 	Shader(std::string vertShader, std::string geomShader, std::string fragShader);
+	virtual ~Shader(); // important
 	void setupHandles();
 	GLint getAttributeHandle(std::string name);
 	GLint getUniformHandle(std::string name);
