@@ -33,7 +33,7 @@
 
 
 #define FILE_TO_WORLD_SCALE 6.f
-#define NUM_PERSISTENT 7
+#define NUM_PERSISTENT 11
 
 using namespace std;
 using namespace glm;
@@ -91,6 +91,7 @@ void World::init()
 
 	meshes.insert(pair<string, MeshSet*>("tower", new MeshSet(assetPath + "tower.dae")));
 	meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
+	meshes.insert(pair<string, MeshSet*>("roof", new MeshSet(assetPath + "roof.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x1", new MeshSet(assetPath + "interiorWall_1x1.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x2", new MeshSet(assetPath + "interiorWall_1x2.dae")));
@@ -107,8 +108,6 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("gate_base", new MeshSet(assetPath + "gate_base.dae")));
 	meshes.insert(pair<string, MeshSet*>("door", new MeshSet(assetPath + "door.dae")));
     meshes.insert(pair<string, MeshSet*>("door_closed", new MeshSet(assetPath + "door_closed.dae")));
-	meshes.insert(pair<string, MeshSet*>("gate_spikes", new MeshSet(assetPath + "gate_spikes.dae")));
-	meshes.insert(pair<string, MeshSet*>("gate_base", new MeshSet(assetPath + "gate_base.dae")));
 	meshes.insert(pair<string, MeshSet*>("ground", new MeshSet(assetPath + "ground.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
@@ -161,6 +160,18 @@ void World::init()
 	wall_back->setScale(wall_scale);
 	wall_back->setRotations(vec3(0.f, M_PI_2, 0.f));
 	wall_back->swap_bounding_box_width_depth();
+	GameEntity* roof_left = new ObstacleEntity(vec3(120.f, 60.f, 240.f), meshes.at("roof"));
+	roof_left->setScale(wall_scale);
+	GameEntity* roof_right = new ObstacleEntity(vec3(120.f, 60.f, 0.f), meshes.at("roof"));
+	roof_right->setScale(wall_scale);
+	GameEntity* roof_front = new ObstacleEntity(vec3(0.f, 60.f, 120.f), meshes.at("roof"));
+	roof_front->setScale(wall_scale);
+	roof_front->setRotations(vec3(0.f, M_PI_2, 0.f));
+	roof_front->swap_bounding_box_width_depth();
+	GameEntity* roof_back = new ObstacleEntity(vec3(240.f, 60.f, 120.f), meshes.at("roof"));
+	roof_back->setScale(wall_scale);
+	roof_back->setRotations(vec3(0.f, M_PI_2, 0.f));
+	roof_back->swap_bounding_box_width_depth();
 	GameEntity* ground = new ObstacleEntity(vec3(120.f, -12.0f, 120.f), meshes.at("ground"));
 	ground->setScale(30.f);
 
@@ -177,6 +188,10 @@ void World::init()
 	entities.push_back(wall_right);
 	entities.push_back(wall_front);
 	entities.push_back(wall_back);
+	entities.push_back(roof_left);
+	entities.push_back(roof_right);
+	entities.push_back(roof_front);
+	entities.push_back(roof_back);
 
 	setup_next_courtyard();
 
@@ -224,6 +239,11 @@ void World::setup_next_courtyard(bool setup_cin_cam)
     entities.at(4)->setScale(vec3(30.f));
     entities.at(5)->setScale(vec3(30.f));
     entities.at(6)->setScale(vec3(30.f));
+	// these are supposedly the roofs
+	entities.at(7)->setPosition(vec3(entities.at(7)->getPosition().x, 66.f, entities.at(7)->getPosition().z));
+	entities.at(8)->setPosition(vec3(entities.at(8)->getPosition().x, 66.f, entities.at(8)->getPosition().z));
+	entities.at(9)->setPosition(vec3(entities.at(9)->getPosition().x, 66.f, entities.at(9)->getPosition().z));
+	entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 66.f, entities.at(10)->getPosition().z));
 
 	// JUST FOR DEMO
 	if (current_courtyard == 5)
@@ -269,6 +289,11 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         entities.at(4)->setScale(vec3(30.f, 40.f, 30.f));
         entities.at(5)->setScale(vec3(30.f, 40.f, 30.f));
         entities.at(6)->setScale(vec3(30.f, 40.f, 30.f));
+		// these are supposedly the roofs
+		entities.at(7)->setPosition(vec3(entities.at(7)->getPosition().x, 86.f, entities.at(7)->getPosition().z));
+		entities.at(8)->setPosition(vec3(entities.at(8)->getPosition().x, 86.f, entities.at(8)->getPosition().z));
+		entities.at(9)->setPosition(vec3(entities.at(9)->getPosition().x, 86.f, entities.at(9)->getPosition().z));
+		entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 86.f, entities.at(10)->getPosition().z));
 		break;
 	case 5:
 		break;
@@ -1206,7 +1231,7 @@ void World::update()
 			delete loading_screen;
 			loading_screen = nullptr;
 		}
-	}
+	}	
 }
 
 void World::zoom_on_guard(GuardEntity* guard_temp)
