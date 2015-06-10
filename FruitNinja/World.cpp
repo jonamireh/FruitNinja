@@ -843,7 +843,8 @@ void World::shootArrows()
 	static bool held = false;
 	bool shot = false;
 	for (auto it = entities.begin(); it != entities.end(); ++it) {
-		if (typeid(*(*it)) == typeid(ProjectileEntity)) {
+		ProjectileEntity* p_test = dynamic_cast<ProjectileEntity*>(*it);
+		if (p_test != nullptr) {
 			shot = true;
 		}
 	}
