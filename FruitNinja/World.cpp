@@ -448,10 +448,12 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setRotations(rots);
         entities.back()->setScale(3.f);
         entities.back()->swap_bounding_box_width_depth();
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         break;
     case 'K': // fence
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("fence")));
         entities.back()->setScale(3.f);
+        entities.back()->list = UNSET_WALL(entities.back()->list);
         break;
     case 'l': // Lantern Pole with Lantern
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("lanternPole")));

@@ -4,6 +4,7 @@
 #include "SpikeEntity.h"
 #include <glm/gtx/string_cast.inl>
 #include <glm/gtx/intersect.hpp>
+#include "CollectableEntity.h"
 
 using namespace glm;
 
@@ -30,6 +31,8 @@ void ChewyEntity::update()
 
 void ChewyEntity::collision(GameEntity* entity)
 {
+    if (typeid(CollectableEntity) == typeid(*entity))
+        return;
 	vec3 pos = getPosition();
 
 	setPosition(vec3(last_position.x, pos.y, pos.z));
