@@ -15,7 +15,7 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, S
 	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl"), arcShader("arcVertex.glsl", "arcFrag.glsl"), shadowBufferShader(&dirShadowMapBuffer)
 {
 	emitters.push_back(new FlameEmitter);
-	//emitters.push_back(new FireEmitter);
+	emitters.push_back(new FireEmitter);
 	gbuffer.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	dirShadowMapBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
@@ -94,14 +94,15 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 
 				if (mesh->bones.size() > 0)
 				{
-					glUniformMatrix4fv(uBonesHandle, entity->boneTransformations[j].size(), GL_FALSE, value_ptr(entity->boneTransformations[j][0]));
+					std::vector<std::vector<glm::mat4>>* boneTs = entity->getBoneTransformations();
+					glUniformMatrix4fv(uBonesHandle, boneTs->at(j).size(), GL_FALSE, value_ptr(boneTs->at(j)[0]));
 				}
 
-				//check_gl_error("Mesh.draw before texture");
+				check_gl_error("Def shader before draw");
 
 				glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-				//check_gl_error("Mesh.draw after texture");
+				check_gl_error("Def shader after draw");
 
 			}
 			if (mesh->textures.size() > 0) {
@@ -118,8 +119,6 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 	glUseProgram(0);
 }
 
-
-
 void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights)
 {
     std::vector<GameEntity*> entsInView = get_objects_in_view(ents, camera->getViewMatrix());
@@ -133,7 +132,7 @@ void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::ve
 		renderer.draw(camera, ents, lights);
 		
 		skyboxPass(camera);
-		particlePass(camera, lights);
+		particlePass(camera, lights, ents);
 		archeryArcPass(camera);
 		finalPass();
 		//shadowBufferShader.draw();
@@ -145,13 +144,22 @@ void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::ve
 		disp_mode = four_screen;
 }
 
-void DeferredShader::particlePass(Camera* camera, std::vector<Light*> lights) {
+void DeferredShader::particlePass(Camera* camera, std::vector<Light*> lights, std::vector<GameEntity*> ents) {
 	glUseProgram(fireShader.getProgramID());
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	fireShader.draw(camera, emitters, lights);
+	std::vector<FireArrowEntity*> fireArrows;
+	FireArrowEntity* fa;
+	for (int i = 0; i < ents.size(); i++) {
+		fa = dynamic_cast<FireArrowEntity*>(ents[i]);
+		if (fa) {
+			fireArrows.push_back(fa);
+		}
+	}
+
+	fireShader.draw(camera, emitters, lights, fireArrows);
 }
 
 void DeferredShader::archeryArcPass(Camera* camera) {

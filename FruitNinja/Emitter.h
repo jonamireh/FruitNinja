@@ -20,7 +20,7 @@ protected:
 	int num_frames;
 	double frame_time;
 public:
-	Emitter(string filename, int nframes, double tframe, int width, int height, float size);
+	Emitter(string filename, double tframe, int width, int height, float part_w, float part_h);
 	virtual ~Emitter();
 
 	virtual void update(double deltaTime);
@@ -29,7 +29,8 @@ public:
 
 	int atlas_height;
 	int atlas_width;
-	float particle_size;
+	float particle_width;
+	float particle_height;
 
 	GLuint VAO;
 };

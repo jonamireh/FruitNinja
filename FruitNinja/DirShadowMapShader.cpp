@@ -79,14 +79,15 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 				glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
 				if (mesh->bones.size() > 0) {
-					glUniformMatrix4fv(uBonesHandle, entity->boneTransformations[j].size(), GL_FALSE, value_ptr(entity->boneTransformations[j][0]));
+					std::vector<std::vector<glm::mat4>>* boneTs = entity->getBoneTransformations();
+					glUniformMatrix4fv(uBonesHandle, boneTs->at(j).size(), GL_FALSE, value_ptr(boneTs->at(j)[0]));
 				}
 
-				//check_gl_error("Mesh.draw before texture");
+				check_gl_error("Shadows before draw");
 
 				glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-				//check_gl_error("Mesh.draw after texture");
+				check_gl_error("Shadows after draw");
 			}
 		}
 	}

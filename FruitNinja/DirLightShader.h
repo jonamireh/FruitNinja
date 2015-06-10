@@ -36,4 +36,6 @@ private:
 	GLuint position_handle;
 
 	GLuint shadowvp_handle;
+
+	GLuint shiny_handle;
 };

@@ -9,7 +9,8 @@ ParticleShader::ParticleShader(std::string vertShader, std::string fragShader) :
 	glBindAttribLocation(getProgramID(), FRAME_ATTRIB, "aFrame");
 	width_handle = getUniformHandle("uWidth");
 	height_handle = getUniformHandle("uHeight");
-	size_handle = getUniformHandle("uSize");
+	particle_width_handle = getUniformHandle("uPartWidth");
+	particle_height_handle = getUniformHandle("uPartHeight");
 	vp_handle = getUniformHandle("uViewProjMatrix");
 	eye_handle = getUniformHandle("uEyePos");
 	texture_handle = getUniformHandle("Utex");
@@ -20,7 +21,8 @@ ParticleShader::ParticleShader(std::string vertShader, std::string geomShader, s
 	glBindAttribLocation(getProgramID(), FRAME_ATTRIB, "aFrame");
 	width_handle = getUniformHandle("uWidth");
 	height_handle = getUniformHandle("uHeight");
-	size_handle = getUniformHandle("uSize");
+	particle_width_handle = getUniformHandle("uPartWidth");
+	particle_height_handle = getUniformHandle("uPartHeight");
 	vp_handle = getUniformHandle("uViewProjMatrix");
 	eye_handle = getUniformHandle("uEyePos");
 	texture_handle = getUniformHandle("Utex");
@@ -34,7 +36,7 @@ void ParticleShader::draw(glm::mat4& view_mat, GameEntity* entity) {
 	printf("Don't call this either\n");
 }
 
-void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector<Light*> lights) {
+void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector<Light*> lights, std::vector<FireArrowEntity*> fireArrows) {
 
 	check_gl_error("Particle beginning of draw function");
 
@@ -50,7 +52,8 @@ void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector
 
 		glUniform1i(width_handle, emitters[i]->atlas_width);
 		glUniform1i(height_handle, emitters[i]->atlas_height);
-		glUniform1f(size_handle, emitters[i]->particle_size);
+		glUniform1f(particle_width_handle, emitters[i]->particle_width);
+		glUniform1f(particle_height_handle, emitters[i]->particle_height);
 
 		glUniformMatrix4fv(vp_handle, 1, GL_FALSE, glm::value_ptr(projection * camera->getViewMatrix()));
 
@@ -58,11 +61,13 @@ void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector
 
 		glBindVertexArray(emitters[i]->VAO);
 		FlameEmitter* flem;
+		FireEmitter* fe;
 		if ((flem = dynamic_cast<FlameEmitter*>(emitters[i])) != nullptr) {
 			flem->update(seconds_passed, lights);
 		}
-		else {
-			emitters[i]->update(seconds_passed);
+		else if ((fe = dynamic_cast<FireEmitter*>(emitters[i])) != nullptr){
+			fe->update(seconds_passed, fireArrows);
+			//emitters[i]->update(seconds_passed);
 		}
 
 		check_gl_error("Before particle draw");

@@ -78,3 +78,7 @@ glm::mat4 ChewyEntity::getModelMat()
 		return GameEntity::getModelMat();
 	}
 }
+
+std::vector<std::vector<glm::mat4>>* ChewyEntity::getBoneTransformations() {
+	return animComponent.basicAnimation.getBoneTransformations();
+}

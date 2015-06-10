@@ -15,8 +15,6 @@ ProjectileEntity::ProjectileEntity() : movement(*this, new ArcheryCamera()), sho
 
 ProjectileEntity::~ProjectileEntity()
 {
-	//not called til out of world scope. sort of a mem leak
-	//std::cout << "Arrow destroyed!!!!!!!\n";
 }
 
 

@@ -22,13 +22,16 @@ collision_response(collision_response)
     list = SET_OCTTREE(list);
     inner_bounding_box = bounding_box;
 
-	boneTransformations.resize(mesh->getMeshes().size());
+	/*boneTransformations.resize(mesh->getMeshes().size());
 	for (int i = 0; i < boneTransformations.size(); i++)
 	{
 		boneTransformations[i].resize(mesh->getMeshes()[i]->boneWeights.size());
-	}
+	}*/
 	list = SET_WALL(list);
-};
+}
+
+GameEntity::~GameEntity() {
+}
 
 
 vec3 GameEntity::turnAngle(vec3 cartesian)
@@ -243,4 +246,8 @@ glm::mat4 GameEntity::getRotMat()
 
 void GameEntity::update()
 {
+}
+
+std::vector<std::vector<glm::mat4>>* GameEntity::getBoneTransformations() {
+	return NULL;
 }

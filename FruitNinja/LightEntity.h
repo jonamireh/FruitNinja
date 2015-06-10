@@ -22,6 +22,7 @@ public:
 		: GameEntity(position, mesh), light(new Light(getPosition(), color, intensity, unit_sphere))
 	{
 	}
+	virtual ~LightEntity();
 	void update();
 	Light* light;
 };

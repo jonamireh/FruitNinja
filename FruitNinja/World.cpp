@@ -28,6 +28,8 @@
 #include "AudioManager.h"
 #include "CollectableEntity.h"
 #include <glm/gtc/matrix_access.inl>
+#include "GuardPuppeteer.h"
+
 
 #define FILE_TO_WORLD_SCALE 6.f
 #define NUM_PERSISTENT 7
@@ -175,7 +177,17 @@ void World::init()
 	//shared_ptr<Shader> textDebugShader(new TextureDebugShader());
 	//shaders.insert(pair<string, shared_ptr<Shader>>("textureDebugShader", textDebugShader));
 
-	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.3f);
+	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
+}
+
+void World::set_puppeteer(int courtyard) {
+	if (_puppeteer)
+		delete _puppeteer;
+	_puppeteer = nullptr;
+	//use puppeteer if more than 2 or 3 guards in a courtyard
+	if (courtyard == 1 || courtyard == 2) {
+		_puppeteer = new GuardPuppeteer(meshes["guard"]);
+	}
 }
 
 void World::setup_next_courtyard(bool setup_cin_cam)
@@ -198,6 +210,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	if (current_courtyard == 5)
 		current_courtyard = 1;
 
+	set_puppeteer(current_courtyard);
 	switch (current_courtyard)
 	{
 	case 1:
@@ -394,12 +407,12 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
     case 'e': // static guard facing east
-        entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(1.0f, 0.f, 0.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(1.0f, 0.f, 0.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
     case 'E': // static guard facing east Armored
-        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(1.0f, 0.f, 0.f), true));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(1.0f, 0.f, 0.f), true));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
@@ -457,12 +470,12 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 'n': // static guard facing north
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, -1.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(0.0f, 0.f, -1.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
     case 'N': // static guard facing north armored
-        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(0.0f, 0.f, -1.f), true));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(0.0f, 0.f, -1.f), true));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
@@ -481,12 +494,12 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         dynamic_cast<LightEntity*>(entities.back())->light->pos = entities.back()->getPosition();
         break;
 	case 's': // static guard facing south
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(0.0f, 0.f, 1.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(0.0f, 0.f, 1.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
     case 'S': // static guard facing south armored
-        entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), vec3(0.0f, 0.f, 1.f), true));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(0.0f, 0.f, 1.f), true));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
         break;
@@ -513,7 +526,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         break;
 	case 'w': // static guard facing west
-		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), vec3(-1.0f, 0.f, 0.f)));
+		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(-1.0f, 0.f, 0.f)));
         entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 		break;
@@ -727,9 +740,9 @@ void World::setup_guard(string file_path)
 	}
     GuardEntity* guard_ent;
     if (isArmored)
-        guard_ent = new GuardEntity(starting_position, meshes["blue_guard"], spline_points, 4.f, linear, isArmored);
+		guard_ent = new GuardEntity(starting_position, meshes["blue_guard"], _puppeteer, spline_points, 4.f, linear, isArmored);
     else
-        guard_ent = new GuardEntity(starting_position, meshes["guard"], spline_points, 4.f, linear);
+		guard_ent = new GuardEntity(starting_position, meshes["guard"], _puppeteer, spline_points, 4.f, linear);
     guard_ent->setup_inner_entity_box(meshes["guard_bb"]);
     guard_ent->setup_entity_box(meshes["guard_outer_bb"]);
 	entities.push_back(guard_ent);
@@ -833,7 +846,8 @@ void World::shootArrows()
 	}
 	if (held && !(keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && arrow_count > 0)
 	{
-		entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
+		entities.push_back(new FireArrowEntity(meshes["arrow"], archery_camera));
+		//entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
 		entities.back()->setup_entity_box(meshes.at("arrow_bb"));
 		arrow_count--;
 		held = false;
@@ -1067,6 +1081,7 @@ void World::stop_time()
 		time_stopped = false;
 }
 
+
 void World::update()
 {
 	static float start_time = 0.0;
@@ -1082,6 +1097,9 @@ void World::update()
 			chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
 			chewy->animComponent.currentAnimtion = standing;
 			state = HIDDEN;
+		}
+		if (_puppeteer){
+			_puppeteer->update();
 		}
 		for (int i = 0; i < entities.size(); i++)
 		{
@@ -1209,6 +1227,6 @@ World::~World() {
 	for (auto it = meshes.begin(); it != meshes.end(); ++it) {
 		delete it->second;
 	}
-	delete walking_g;
-	delete idle_g;
+	if (_puppeteer)
+		delete _puppeteer;
 }
