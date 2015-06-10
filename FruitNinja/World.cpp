@@ -982,12 +982,6 @@ void World::draw()
 		glUseProgram(0);
 		//static bool usePhong = false;
 
-		if (keys[GLFW_KEY_6])
-		{
-			current_courtyard = 3;
-			setup_next_courtyard();
-		}
-
 		DebugCamera* d_test = dynamic_cast<DebugCamera*>(camera);
 		vector<GameEntity*> in_view;
 
@@ -1216,11 +1210,16 @@ void World::stop_time()
 void World::update()
 {
 	static float start_time = 0.0;
-
+	if (keys[GLFW_KEY_6])
+	{
+		current_courtyard = 3;
+		setup_next_courtyard();
+	}
 	if (loading_screen == nullptr)
 	{
-		
+
 		shootArrows();
+		vector<GameEntity*> guards;
 
 		if (state == SPOTTED && cinematic_camera->pathing.done) {
 			lose_condition();
@@ -1236,8 +1235,9 @@ void World::update()
 		{
 			entities[i]->update();
 			GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
-			if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
-				zoom_on_guard(guard_temp);
+			if (guard_temp != nullptr)
+			{
+				guards.push_back(entities[i]);
 			}
 		}
 
@@ -1252,9 +1252,20 @@ void World::update()
 			seconds_passed = 0.f;
 		}
 		start_time = glfwGetTime();
+		guard_fov = min_guard_fov;
+		guard_far = min_guard_far;
+		cached_le_distance = FLT_MAX;
 		Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
 		OctTree world_oct_tree(vox, entities);
 		world_oct_tree.handle_collisions();
+		guard_projection = mat4(perspective((float)radians(guard_fov), screen_width / screen_height, GUARD_NEAR, guard_far));
+		for (int i = 0; i < guards.size(); i++)
+		{
+			GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(guards[i]);
+			if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
+				zoom_on_guard(guard_temp);
+			}
+		}
 		for (int i = 0; i < should_del.size(); i++) {
 			delete should_del[i];
 		}
@@ -1279,11 +1290,11 @@ void World::update()
 
 		if (keys[GLFW_KEY_ENTER])
 		{
-			
+
 			delete loading_screen;
 			loading_screen = nullptr;
 		}
-	}	
+	}
 }
 
 void World::zoom_on_guard(GuardEntity* guard_temp)
