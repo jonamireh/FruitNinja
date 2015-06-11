@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="GLSL.cpp">
@@ -214,6 +214,8 @@
     <ClCompile Include="ExplosiveEntity.cpp">
       <Filter>Fire</Filter>
     </ClCompile>
+    <ClCompile Include="EndScene.cpp" />
+    <ClCompile Include="StaticCamera.cpp" />
     <ClCompile Include="WallOfDoomEntity.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -715,6 +717,8 @@
     <ClInclude Include="ExplosiveEntity.h">
       <Filter>Fire</Filter>
     </ClInclude>
+    <ClInclude Include="EndScene.h" />
+    <ClInclude Include="StaticCamera.h" />
     <ClInclude Include="WallOfDoomEntity.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -848,6 +852,9 @@
     </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{9df291ef-c9cc-46b3-9bf6-1076117d9152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="End Scene">
+      <UniqueIdentifier>{1f0e0858-0a0c-4760-9b37-9f4c6f460024}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

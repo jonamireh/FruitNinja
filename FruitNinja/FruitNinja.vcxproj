@@ -173,6 +173,7 @@
     <None Include="TextVert.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EndScene.cpp" />
     <ClCompile Include="ExplosionEmitter.cpp" />
     <ClCompile Include="ExplosiveEntity.cpp" />
     <ClCompile Include="GameEntity.cpp" />
@@ -217,6 +218,7 @@
     <ClCompile Include="SimpleTextureShader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SpikeEntity.cpp" />
+    <ClCompile Include="StaticCamera.cpp" />
     <ClCompile Include="TestSphere.cpp" />
     <ClCompile Include="StencilShader.cpp" />
     <ClCompile Include="TextShader.cpp" />
@@ -247,6 +249,7 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EndScene.h" />
     <ClInclude Include="ExplosionEmitter.h" />
     <ClInclude Include="ExplosiveEntity.h" />
     <ClInclude Include="GateEntity.h" />
@@ -384,6 +387,7 @@
     <ClInclude Include="SimpleTextureShader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="SpikeEntity.h" />
+    <ClInclude Include="StaticCamera.h" />
     <ClInclude Include="TestSphere.h" />
     <ClInclude Include="StencilShader.h" />
     <ClInclude Include="TextShader.h" />

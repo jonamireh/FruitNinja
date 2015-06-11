@@ -9,6 +9,8 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/detail/func_vector_relational.hpp>
 #include "World.h"
+#include "AudioManager.h"
+#include "main.h"
 
 #define ANIMATE_TIME 3.f
 
@@ -268,6 +270,8 @@ glm::mat4 GameEntity::getRotMat()
 
 void GameEntity::update()
 {
+	static float sound_time = .05;
+	static FMOD::Channel* sound;
 	//static glm::vec3 startingPosition = getPosition();
 	if (!setup_inner)
 	{
