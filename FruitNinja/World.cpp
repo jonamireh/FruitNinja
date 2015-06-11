@@ -1046,9 +1046,9 @@ void World::setup_moving_platform(string file_path)
 		else
 			break;
 	}
-	PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
-	platform->setScale(4.f);
-	entities.push_back(platform);
+    PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
+    platform->setScale(4.f);
+    entities.push_back(platform);
 	level_file.close();
 }
 
