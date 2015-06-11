@@ -71,6 +71,7 @@ float bow_strength = .5f;
 int arrow_count = 10;
 
 int health = MAX_HEALTH;
+glm::vec3 directional_light = glm::vec3(0);
 
 World::World()
 {
@@ -90,6 +91,11 @@ void World::init()
 	cinematic_camera = new CinematicCamera();
 
 	meshes.insert(pair<string, MeshSet*>("tower", new MeshSet(assetPath + "tower.dae")));
+	meshes.insert(pair<string, MeshSet*>("courtyard1", new MeshSet(assetPath + "courtyard1.dae")));
+	meshes.insert(pair<string, MeshSet*>("courtyard2", new MeshSet(assetPath + "courtyard2.dae")));
+	meshes.insert(pair<string, MeshSet*>("courtyard3", new MeshSet(assetPath + "courtyard3.dae")));
+	meshes.insert(pair<string, MeshSet*>("courtyard4", new MeshSet(assetPath + "courtyard4.dae")));
+	meshes.insert(pair<string, MeshSet*>("courtyard5", new MeshSet(assetPath + "courtyard5.dae")));
 	meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
 	meshes.insert(pair<string, MeshSet*>("roof", new MeshSet(assetPath + "roof.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
@@ -146,10 +152,35 @@ void World::init()
 	_skybox->setScale(750.f);
 	_skybox->list = UNSET_OCTTREE((_skybox->list));
 
-	GameEntity* tower = new ObstacleEntity(vec3(0.0, 0.0, 0.0), meshes.at("tower"));
+	GameEntity* tower = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("tower"));
 	tower->setScale(30.0f);
 	tower->list = UNSET_OCTTREE((tower->list));
 	tower->collision_response = false;
+
+	/*GameEntity* courtyard1 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard1"));
+	courtyard1->setScale(30.0f);
+	courtyard1->list = UNSET_OCTTREE((courtyard1->list));
+	courtyard1->collision_response = false;
+
+	GameEntity* courtyard2 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard2"));
+	courtyard2->setScale(30.0f);
+	courtyard2->list = UNSET_OCTTREE((courtyard2->list));
+	courtyard2->collision_response = false;
+
+	GameEntity* courtyard3 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard3"));
+	courtyard3->setScale(30.0f);
+	courtyard3->list = UNSET_OCTTREE((courtyard3->list));
+	courtyard3->collision_response = false;
+
+	GameEntity* courtyard4 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard4"));
+	courtyard4->setScale(30.0f);
+	courtyard4->list = UNSET_OCTTREE((courtyard4->list));
+	courtyard4->collision_response = false;
+
+	GameEntity* courtyard5 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard5"));
+	courtyard5->setScale(30.0f);
+	courtyard5->list = UNSET_OCTTREE((courtyard5->list));
+	courtyard5->collision_response = false;*/
 
 	float wall_scale = 30.f;
 	GameEntity* wall_left = new ObstacleEntity(vec3(120.f, 0.f, 240.f), meshes.at("wall"));
@@ -196,6 +227,11 @@ void World::init()
 	entities.push_back(roof_right);
 	entities.push_back(roof_front);
 	entities.push_back(roof_back);
+	/*entities.push_back(courtyard1);
+	entities.push_back(courtyard2);
+	entities.push_back(courtyard3);
+	entities.push_back(courtyard4);
+	entities.push_back(courtyard5);*/
 
 	setup_next_courtyard();
 
@@ -247,11 +283,13 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	entities.at(7)->setPosition(vec3(entities.at(7)->getPosition().x, 66.f, entities.at(7)->getPosition().z));
 	entities.at(8)->setPosition(vec3(entities.at(8)->getPosition().x, 66.f, entities.at(8)->getPosition().z));
 	entities.at(9)->setPosition(vec3(entities.at(9)->getPosition().x, 66.f, entities.at(9)->getPosition().z));
-	entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 66.f, entities.at(10)->getPosition().z));
+	entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 66.f, entities.at(10)->getPosition().z));	
 
 	// JUST FOR DEMO
-	if (current_courtyard == 5)
+	if (current_courtyard == 6)
 		current_courtyard = 1;
+
+	push_courtyards(current_courtyard);
 
 	set_puppeteer(current_courtyard);
 	switch (current_courtyard)
@@ -305,8 +343,75 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 86.f, entities.at(10)->getPosition().z));
 		break;
 	case 5:
+        setup_level(level_path + "fifth_courtyard.txt");
 		break;
 	}
+}
+
+void World::push_courtyards(int current_courtyard)
+{
+	float wall_scale = 30.f;
+
+	for (int i = 1; i <= 5; i++)
+	{
+		if (i == current_courtyard)
+			continue;
+		
+		glm::vec3 offset_xz = glm::vec3(9.7808f * wall_scale - 120, 0.f, -120.f);
+		glm::vec3 offset_y = glm::vec3(0.f, (i - current_courtyard) * wall_scale, 0.f);
+		glm::vec3 offset_wally = glm::vec3(0.f, -current_courtyard * wall_scale, 0.f);
+		float angle = (current_courtyard - i) * glm::radians(72.f);
+
+		GameEntity* wall_left = new ObstacleEntity(rotateY(vec3(120.f, 0.f, 240.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
+		wall_left->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
+		wall_left->setRotations(vec3(0.f, angle, 0.f));
+		wall_left->setPosition(wall_left->getPosition() - offset_xz);
+		GameEntity* wall_right = new ObstacleEntity(rotateY(vec3(120.f, 0.f, 0.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
+		wall_right->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
+		wall_right->setRotations(vec3(0.f, angle, 0.f));
+		wall_right->setPosition(wall_right->getPosition() - offset_xz);
+		GameEntity* wall_front = new ObstacleEntity(rotateY(vec3(0.f, 0.f, 120.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
+		wall_front->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
+		wall_front->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
+		wall_front->setPosition(wall_front->getPosition() - offset_xz);
+		GameEntity* wall_back = new ObstacleEntity(rotateY(vec3(240.f, 0.f, 120.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
+		wall_back->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
+		wall_back->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
+		wall_back->setPosition(wall_back->getPosition() - offset_xz);
+		GameEntity* roof_left = new ObstacleEntity(rotateY(vec3(120.f, 60.f, 240.f) + offset_xz + offset_y, angle), meshes.at("roof"));
+		roof_left->setScale(wall_scale);
+		roof_left->setRotations(vec3(0.f, angle, 0.f));
+		roof_left->setPosition(roof_left->getPosition() - offset_xz);
+		GameEntity* roof_right = new ObstacleEntity(rotateY(vec3(120.f, 60.f, 0.f) + offset_xz + offset_y, angle), meshes.at("roof"));
+		roof_right->setScale(wall_scale);
+		roof_right->setRotations(vec3(0.f, angle, 0.f));
+		roof_right->setPosition(roof_right->getPosition() - offset_xz);
+		GameEntity* roof_front = new ObstacleEntity(rotateY(vec3(0.f, 60.f, 120.f) + offset_xz + offset_y, angle), meshes.at("roof"));
+		roof_front->setScale(wall_scale);
+		roof_front->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
+		roof_front->setPosition(roof_front->getPosition() - offset_xz);
+		GameEntity* roof_back = new ObstacleEntity(rotateY(vec3(240.f, 60.f, 120.f) + offset_xz + offset_y, angle), meshes.at("roof"));
+		roof_back->setScale(wall_scale);
+		roof_back->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
+		roof_back->setPosition(roof_back->getPosition() - offset_xz);
+		GameEntity* ground = new ObstacleEntity(rotateY(vec3(120.f, -12.0f, 120.f) + offset_xz + offset_y, angle), meshes.at("ground"));
+		ground->setScale(wall_scale);
+		ground->setRotations(vec3(0.f, angle, 0.f));
+		ground->setPosition(ground->getPosition() - offset_xz);
+
+		entities.push_back(wall_left);
+		entities.push_back(wall_right);
+		entities.push_back(wall_front);
+		entities.push_back(wall_back);
+		entities.push_back(roof_left);
+		entities.push_back(roof_right);
+		entities.push_back(roof_front);
+		entities.push_back(roof_back);
+		entities.push_back(ground);
+	}
+
+	entities.at(2)->setRotations(vec3(0.f, (current_courtyard - 1) * glm::radians(72.f), 0.f));
+	entities.at(2)->setPosition(vec3(entities.at(2)->getPosition().x, entities.at(2)->bounding_box.half_height + (1 - current_courtyard) * wall_scale, entities.at(2)->getPosition().z));
 }
 
 void World::lose_condition()
@@ -1230,7 +1335,7 @@ void World::update()
 	static float start_time = 0.0;
 	if (keys[GLFW_KEY_6])
 	{
-		current_courtyard = 3;
+		current_courtyard = 4;
 		setup_next_courtyard();
 	}
 	if (loading_screen == nullptr)

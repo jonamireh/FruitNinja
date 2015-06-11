@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.74.0 commit date:2015-03-31, commit time:13:39, hash:000dfc0</authoring_tool>
     </contributor>
-    <created>2015-06-10T03:41:14</created>
-    <modified>2015-06-10T03:41:14</modified>
+    <created>2015-06-10T19:14:58</created>
+    <modified>2015-06-10T19:14:58</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -62,7 +62,7 @@
     <geometry id="Cube_031-mesh" name="Cube.031">
       <mesh>
         <source id="Cube_031-mesh-positions">
-          <float_array id="Cube_031-mesh-positions-array" count="24">-4.105 3.85731e-4 0.2 -4.105 2.000007 0.2 4.105 3.85731e-4 0.2 4.105 2.000007 0.2 -4.104512 2.000007 -0.2 4.104512 2.000007 -0.1999984 -4.104512 7.28416e-6 -0.1999984 4.104512 7.28416e-6 -0.1999984</float_array>
+          <float_array id="Cube_031-mesh-positions-array" count="24">-4.2 3.85731e-4 0.2 -4.2 2.000007 0.2 4.2 3.85731e-4 0.2 4.2 2.000007 0.2 -4.199501 2.000007 -0.2 4.199501 2.000007 -0.1999984 -4.199501 7.28416e-6 -0.1999984 4.199501 7.28416e-6 -0.1999984</float_array>
           <technique_common>
             <accessor source="#Cube_031-mesh-positions-array" count="8" stride="3">
               <param name="X" type="float"/>
@@ -72,7 +72,7 @@
           </technique_common>
         </source>
         <source id="Cube_031-mesh-normals">
-          <float_array id="Cube_031-mesh-normals-array" count="18">0 0 1 0 1 0 0 -7.7486e-7 -1 0 0 1 0 1 0 1.88783e-7 0 -1</float_array>
+          <float_array id="Cube_031-mesh-normals-array" count="18">0 0 1 0 1 0 0 -7.7486e-7 -1 0 0 1 0 1 0 1.84512e-7 0 -1</float_array>
           <technique_common>
             <accessor source="#Cube_031-mesh-normals-array" count="6" stride="3">
               <param name="X" type="float"/>
@@ -107,7 +107,7 @@
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
       <node id="Cube_037" name="Cube_037" type="NODE">
-        <matrix sid="transform">1.023142 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
         <instance_geometry url="#Cube_031-mesh">
           <bind_material>
             <technique_common>
