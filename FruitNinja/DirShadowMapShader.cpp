@@ -112,7 +112,7 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 	glCullFace(GL_BACK);
 	glDepthMask(GL_FALSE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glViewport(0, 0, screen_width, screen_height);
 	glUseProgram(0);
 }
 

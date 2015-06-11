@@ -30,6 +30,7 @@
 #include "CollectableEntity.h"
 #include <glm/gtc/matrix_access.inl>
 #include "GuardPuppeteer.h"
+#include "ExplosiveEntity.h"
 
 
 #define FILE_TO_WORLD_SCALE 6.f
@@ -52,6 +53,8 @@ const float max_guard_far = 80.f;
 const float min_guard_fov = 45.f;
 const float max_guard_fov = 60.f;
 float relative = 0.f;
+bool screen_changed;
+int sw, sh;
 
 bool debug_enabled = false;
 float screen_width = SCREEN_WIDTH;
@@ -68,7 +71,7 @@ int current_courtyard = 0;
 static vector<std::function<void()>> debugShaderQueue;
 
 float bow_strength = .5f;
-int arrow_count = 10;
+int arrow_count = 100;
 
 int health = MAX_HEALTH;
 glm::vec3 directional_light = glm::vec3(0);
@@ -207,7 +210,7 @@ void World::init()
 
 	hud = new HUD(chewy);
 
-	shaders.insert(pair<string, Shader*>("defShader", new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox)));
+	defShader =  new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox);
 
 	shaders.insert(pair<string, Shader*>("debugShader", debugShader));
 
@@ -282,7 +285,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		player_camera->movement(chewy);
 		if (setup_cin_cam)
 			loading_screen = new LoadingScreen("LoadScreen1.png", "Color is Key!");
-			setup_cinematic_camera(level_path + "second_courtyard_cinematic.txt", setup_cin_cam);
+		setup_cinematic_camera(level_path + "second_courtyard_cinematic.txt", setup_cin_cam);
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
@@ -1037,8 +1040,8 @@ void World::shootArrows()
 			shot = true;
 		}
 	}
-
-	dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = !shot;
+	
+	defShader->arcShader.enabled = !shot;
 
 	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot && arrow_count > 0)
 	{
@@ -1064,6 +1067,15 @@ void World::shootArrows()
 void World::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	if (screen_changed) {
+		screen_changed = false;
+		screen_width = sw;
+		screen_height = sh;
+		mat4 projection = mat4(perspective((float)radians(PLAYER_FOV), screen_width / screen_height, PLAYER_NEAR, PLAYER_FAR));
+
+		defShader->resizeWindow();
+	}
 
 	if (loading_screen == nullptr)
 	{
@@ -1117,9 +1129,9 @@ void World::draw()
 		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glUseProgram(shaders.at("defShader")->getProgramID());
+		glUseProgram(defShader->getProgramID());
 		glViewport(0, 0, screen_width, screen_height);
-		shaders.at("defShader")->draw(camera, entities, lights);
+		defShader->draw(camera, entities, lights);
 
 		glUseProgram(0);
 		if (debug_enabled)
@@ -1406,6 +1418,7 @@ void World::update()
 
 			delete loading_screen;
 			loading_screen = nullptr;
+
 		}
 	}
 }
@@ -1484,9 +1497,20 @@ World::~World() {
 	}
 	if (_puppeteer)
 		delete _puppeteer;
+	delete defShader;
 }
 
 
 GameState World::getState() {
 	return state;
+}
+
+void World::resize_window(GLFWwindow* window, int w, int h) {
+	screen_changed = true;
+	sw = w;
+	sh = h;
+}
+
+void World::addExplosion(glm::vec3 pos) {
+	defShader->addExplosion(pos);
 }

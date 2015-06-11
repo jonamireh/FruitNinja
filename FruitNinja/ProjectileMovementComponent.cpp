@@ -38,3 +38,7 @@ void ProjectileMovementComponent::update()
 	entity.rot[2] = glm::vec4(look, 0);
 	entity.rot[3] = glm::vec4(0, 0, 0, 1);
 }
+
+glm::vec3 ProjectileMovementComponent::getVelocity() {
+	return velocity;
+}

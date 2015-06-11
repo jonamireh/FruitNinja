@@ -112,3 +112,7 @@ void ProjectileEntity::collision(GameEntity* entity)
 		}
 	}
 }
+
+glm::vec3 ProjectileEntity::getVelocity() {
+	return movement.getVelocity();
+}

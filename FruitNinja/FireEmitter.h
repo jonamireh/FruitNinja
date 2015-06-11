@@ -7,4 +7,6 @@ public:
 	FireEmitter();
 	~FireEmitter();
 	void update(double deltaTime, std::vector<FireArrowEntity*> fireArrows);
+private:
+	int prev_arrows = 0;
 };

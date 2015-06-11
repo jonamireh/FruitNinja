@@ -5,8 +5,8 @@ layout(triangle_strip, max_vertices = 4) out;
 
 uniform mat4 uViewProjMatrix;
 uniform vec3 uEyePos;
-uniform int uWidth;
-uniform int uHeight;
+uniform int uColumns;
+uniform int uRows;
 uniform float uPartWidth;
 uniform float uPartHeight;
 
@@ -25,7 +25,7 @@ void main() {
 
 	//lower left
 	pos -= (right * 0.5 * uPartWidth);
-	texCoord = vec2(cellPos[0].x, 1.0 / float(uHeight) + cellPos[0].y);
+	texCoord = vec2(cellPos[0].x, 1.0 / float(uRows) + cellPos[0].y);
     gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 
@@ -38,13 +38,13 @@ void main() {
 	//lower right
 	pos.y -= 1.0 * uPartHeight;
     pos += right * uPartWidth;
-	texCoord = vec2(1.0 / float(uWidth) + cellPos[0].x, 1.0 / float(uHeight) + cellPos[0].y);
+	texCoord = vec2(1.0 / float(uColumns) + cellPos[0].x, 1.0 / float(uRows) + cellPos[0].y);
 	gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 
 	//upper right
 	pos.y += 1.0 * uPartHeight;
-	texCoord = vec2(1.0 / float(uWidth) + cellPos[0].x, cellPos[0].y);
+	texCoord = vec2(1.0 / float(uColumns) + cellPos[0].x, cellPos[0].y);
 	gl_Position = uViewProjMatrix * vec4(pos, 1.0);
 	EmitVertex();
 

@@ -28,6 +28,8 @@ public:
 	virtual void draw(Camera* camera, std::vector<GameEntity*> ents, std::vector<Light*> lights) override;
 	void draw(glm::mat4& view_mat, GameEntity* entity);
 	ArcShader arcShader;
+	void resizeWindow();
+	void addExplosion(glm::vec3 pos);
 
 
 private:

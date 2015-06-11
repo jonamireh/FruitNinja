@@ -13,6 +13,7 @@ public:
 	ProjectileMovementComponent(ProjectileEntity& entity, Camera* camera) : entity(entity), camera(camera), velocity(glm::vec3(0.0f, 0.0f, 0.0f)) {}
 	void update();
 	glm::vec3 velocity;
+	glm::vec3 getVelocity();
 private:
 	ProjectileEntity& entity;
 	Camera* camera;
