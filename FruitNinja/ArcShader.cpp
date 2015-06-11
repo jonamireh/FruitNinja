@@ -6,7 +6,7 @@
 using namespace glm;
 using namespace std;
 
-#define NUM_INSTANCES 300
+#define NUM_INSTANCES 1000
 
 ArcShader::ArcShader(std::string vertShader, std::string fragShader) : Shader(vertShader, fragShader)
 {
