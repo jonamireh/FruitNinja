@@ -29,6 +29,12 @@ LightEntity::LightEntity(glm::vec3 position, MeshSet* mesh, float intensity, Mes
 void LightEntity::update()
 {
 	GameEntity::update();
+	if (animate)
+	{
+		light->pos = getPosition();
+		light->_transform = translate(glm::mat4(1.0f), light->pos) * light->calc_scale_mat();
+
+	}
 }
 
 void LightEntity::collision(GameEntity* entity)

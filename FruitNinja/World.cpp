@@ -75,6 +75,8 @@ float bow_strength = .5f;
 int arrow_count = 100;
 int starting_arrow_count = arrow_count;
 
+float wall_height;
+
 int health = MAX_HEALTH;
 glm::vec3 directional_light = glm::vec3(0);
 
@@ -255,6 +257,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	if (setup_cin_cam)
 	{
 		starting_arrow_count = arrow_count;
+		player_camera->theta = -90.f;
+		player_camera->phi = 0.f;
 	}
 
     current_courtyard++;
@@ -264,6 +268,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
     entities.at(4)->setScale(vec3(30.f));
     entities.at(5)->setScale(vec3(30.f));
     entities.at(6)->setScale(vec3(30.f));
+	wall_height = entities.at(6)->bounding_box.half_height;
 	// these are supposedly the roofs
 	entities.at(7)->setPosition(vec3(entities.at(7)->getPosition().x, 66.f, entities.at(7)->getPosition().z));
 	entities.at(8)->setPosition(vec3(entities.at(8)->getPosition().x, 66.f, entities.at(8)->getPosition().z));
@@ -321,6 +326,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         entities.at(4)->setScale(vec3(30.f, 40.f, 30.f));
         entities.at(5)->setScale(vec3(30.f, 40.f, 30.f));
         entities.at(6)->setScale(vec3(30.f, 40.f, 30.f));
+		wall_height = entities.at(6)->bounding_box.half_height;
 		// these are supposedly the roofs
 		entities.at(7)->setPosition(vec3(entities.at(7)->getPosition().x, 86.f, entities.at(7)->getPosition().z));
 		entities.at(8)->setPosition(vec3(entities.at(8)->getPosition().x, 86.f, entities.at(8)->getPosition().z));
@@ -505,7 +511,7 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 	level_file.close();
 }
 
-void World::setup_level(string file_path)
+void World::setup_level(string file_path, bool animate_elements)
 {
 	ifstream level_file;
 	level_file.open(file_path);
@@ -513,6 +519,7 @@ void World::setup_level(string file_path)
 	string current_line;
 	int current_row = 0;
 	int height_level = -1;
+	int animate_index = entities.size();
 
 	while (!level_file.eof()) // runs through every line
 	{
@@ -534,6 +541,13 @@ void World::setup_level(string file_path)
 	}
 	num_doors = 0;
 	level_file.close();
+	if (animate_elements && animate_index < entities.size())
+	{
+		for (int i = animate_index; i < entities.size(); i++)
+		{
+			entities.at(i)->startAnimate();
+		}
+	}
 }
 
 void World::setup_token(char obj_to_place, glm::vec3 placement_position)
@@ -1275,6 +1289,7 @@ void World::convert_to_collectible(ProjectileEntity* p)
 	//entities.back()->inner_bounding_box.center -= p->dist * normalize(p->movement.velocity);
 	entities.back()->setup_inner = true;
 	dynamic_cast<CollectableEntity*>(entities.back())->custom_rotate(p->rot);
+	entities.back()->list = UNSET_OCTTREE(entities.back()->list);
 }
 
 void World::set_chewy_light_distance(float dist, float le_hv_length)
@@ -1395,7 +1410,7 @@ void World::update()
 	static float start_time = 0.0;
 	if (keys[GLFW_KEY_6])
 	{
-		current_courtyard = 4;
+		current_courtyard = 2;
 		setup_next_courtyard();
 	}
 	//jon's middle click doesn't work
@@ -1430,7 +1445,7 @@ void World::update()
 		{
 			entities[i]->update();
 			GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
-			if (guard_temp != nullptr)
+			if (guard_temp != nullptr && !guard_temp->is_dying)
 			{
 				guards.push_back(entities[i]);
 			}

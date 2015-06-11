@@ -1,5 +1,6 @@
 M target_rotated
 L third_courtyard_button_two.txt
+C third_courtyard_cinematic.txt
 ________________________________________
 |                                      |
 |                                      |
