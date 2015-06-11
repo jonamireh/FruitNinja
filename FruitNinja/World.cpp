@@ -441,7 +441,10 @@ void World::lose_condition()
 	health--;
 	arrow_count = starting_arrow_count;
 	//set player camera sorta
-	keys[GLFW_KEY_2] = true;
+	camera = player_camera;
+	debug_camera->in_use = false;
+	player_camera->in_use = true;
+	archery_camera->in_use = false;
 }
 
 void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
