@@ -111,6 +111,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
     meshes.insert(pair<string, MeshSet*>("exploding_barrel", new MeshSet(assetPath + "explodingBarrel.dae")));
     meshes.insert(pair<string, MeshSet*>("heart", new MeshSet(assetPath + "heart.dae")));
+    meshes.insert(pair<string, MeshSet*>("fire_arrow_pickup", new MeshSet(assetPath + "tempFireArrowPickup.dae")));
     meshes.insert(pair<string, MeshSet*>("single_arrow_pickup", new MeshSet(assetPath + "arrowPickup_single.dae")));
     meshes.insert(pair<string, MeshSet*>("triple_arrow_pickup", new MeshSet(assetPath + "arrowPickup_triple.dae")));
     meshes.insert(pair<string, MeshSet*>("spike", new MeshSet(assetPath + "spikes.dae")));
@@ -742,6 +743,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
+        break;
+    case 'p': //fire arrow pickup
+        entities.push_back(new CollectableEntity(placement_position, meshes.at("fire_arrow_pickup"), FIRE_ARROW_TYPE, true));
+        entities.back()->setup_entity_box(meshes["arrow_pickup"]);
         break;
     case 'P':
         entities.push_back(new DoorEntity(placement_position, meshes.at("door"), true));
