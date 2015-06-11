@@ -113,6 +113,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
     meshes.insert(pair<string, MeshSet*>("exploding_barrel", new MeshSet(assetPath + "explodingBarrel.dae")));
     meshes.insert(pair<string, MeshSet*>("heart", new MeshSet(assetPath + "heart.dae")));
+    meshes.insert(pair<string, MeshSet*>("doom_wall", new MeshSet(assetPath + "spikes_rotated.dae")));
     meshes.insert(pair<string, MeshSet*>("fire_arrow_pickup", new MeshSet(assetPath + "tempFireArrowPickup.dae")));
     meshes.insert(pair<string, MeshSet*>("single_arrow_pickup", new MeshSet(assetPath + "arrowPickup_single.dae")));
     meshes.insert(pair<string, MeshSet*>("triple_arrow_pickup", new MeshSet(assetPath + "arrowPickup_triple.dae")));
@@ -822,8 +823,9 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		break;
     case'{':
-        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("box"), vec3(-1.f, 0.f, 0.f)));sdfsdf
+        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("doom_wall"), vec3(-1.f, 0.f, 0.f)));
         entities.back()->setScale(3.f);
+        entities.back()->setRotations(vec3(0.f, -M_PI_2, 0.f));
         break;
     case '1':
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x1")));
