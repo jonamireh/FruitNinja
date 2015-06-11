@@ -317,7 +317,6 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		break;
 	case 5:
         setup_level(level_path + "fifth_courtyard.txt");
-        setup_moving_platform(level_path + "fifth_courtyard_platform_one.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_two.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_four.txt");
@@ -680,6 +679,11 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
+    case 'P':
+        entities.push_back(new DoorEntity(placement_position, meshes.at("door"), true));
+        entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        entities.back()->setScale(3.f);
+        break;
     case 'R': // right facing lantern on wall
         entities.push_back(new LightEntity(placement_position,
             meshes.at("lantern_hook"), 300.f, meshes.at("unit_sphere"), vec3(1.0, 0.5, 0.0)));
@@ -964,6 +968,7 @@ void World::setup_moving_platform(string file_path)
 	string current_line;
 	int current_row = 0;
     int height_level = -1;
+    bool tile = false;
 
 	vec3 control_points[10];
 	vec3 starting_position;
@@ -984,6 +989,10 @@ void World::setup_moving_platform(string file_path)
 			case 'P':
 				starting_position = world_position;
 				break;
+            case 'T':
+                starting_position = world_position;
+                tile = true;
+                break;
 			case '0':
 				control_points[0] = world_position;
 				break;
@@ -1029,7 +1038,10 @@ void World::setup_moving_platform(string file_path)
 			break;
 	}
     PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
-    platform->setScale(4.f);
+    if (tile)
+        platform->setScale(6.f);
+    else
+        platform->setScale(4.f);
     entities.push_back(platform);
 	level_file.close();
 }
