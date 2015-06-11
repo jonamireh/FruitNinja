@@ -339,6 +339,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fifth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_four.txt");
         load_button(level_path + "fifth_courtyard_button_one.txt");
+        // gate drop button
+        load_button(level_path + "wall_of_doom.txt");
 		break;
 	}
 }
@@ -877,6 +879,7 @@ void World::load_button(string file_path)
     int current_row = 0;
     int height_level = -1;
     bool open_gate = false;
+    bool wall_of_doom = false;
 
     while (!level_file.eof()) // runs through every line
     {
@@ -904,6 +907,9 @@ void World::load_button(string file_path)
             case 'G':
                 open_gate = true;
                 break;
+            case '{':
+                wall_of_doom = true;
+                break;
             }
         }
         if (current_line == "________________________________________")
@@ -918,12 +924,13 @@ void World::load_button(string file_path)
                 glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
                 if (current_line.at(i) == 'B')
                 {
-                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, open_gate));
+                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, open_gate, wall_of_doom));
                 }
             }
             current_row++;
         }
     }
+
     level_file.close();
 }
 
@@ -1445,7 +1452,7 @@ void World::update()
 		{
 			entities[i]->update();
 			GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
-			if (guard_temp != nullptr && !guard_temp->is_dying)
+			if (guard_temp != nullptr && !guard_temp->is_dying())
 			{
 				guards.push_back(entities[i]);
 			}
@@ -1465,7 +1472,7 @@ void World::update()
 		guard_fov = min_guard_fov;
 		guard_far = min_guard_far;
 		cached_le_distance = FLT_MAX;
-		Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
+		Voxel vox(vec3(0, 0.f, 0.f), vec3(240.f, 120.f, 240.f));
 		OctTree world_oct_tree(vox, entities);
 		world_oct_tree.handle_collisions();
 		guard_projection = mat4(perspective((float)radians(guard_fov), screen_width / screen_height, GUARD_NEAR, guard_far));
