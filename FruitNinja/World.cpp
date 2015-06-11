@@ -1279,7 +1279,7 @@ void World::convert_to_collectible(ProjectileEntity* p)
 	//entities.back()->inner_bounding_box.center -= p->dist * normalize(p->movement.velocity);
 	entities.back()->setup_inner = true;
 	dynamic_cast<CollectableEntity*>(entities.back())->custom_rotate(p->rot);
-	entities.back()->list = UNSET_OCTREE(entities.back()->list);
+	entities.back()->list = UNSET_OCTTREE(entities.back()->list);
 }
 
 void World::set_chewy_light_distance(float dist, float le_hv_length)
