@@ -17,6 +17,7 @@ DoorEntity::DoorEntity(glm::vec3 position, MeshSet* mesh, bool open) : GameEntit
 
 void DoorEntity::update()
 {
+	GameEntity::update();
 }
 
 void DoorEntity::collision(GameEntity* entity)

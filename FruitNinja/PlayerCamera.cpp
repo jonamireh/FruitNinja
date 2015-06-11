@@ -2,6 +2,7 @@
 #include "World.h"
 #include "ChewyEntity.h"
 #include <glm/gtx/string_cast.inl>
+#include "FrustrumCulling.h"
 
 using namespace glm;
 
@@ -90,55 +91,6 @@ void PlayerCamera::update_radius(float delta)
     radius = new_radius;
 }
 
-pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
-{
-    vec3 center = bb.center;
-    vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth);
-
-	float tMin = std::numeric_limits<float>::min();
-	float tMax = std::numeric_limits<float>::max();
-    vec3 p = center - origin;
-    for (int i = 0; i < 3; i++)
-    {
-        vec3 ai(0.f);
-        if (i == 0)
-            ai = vec3(1.f, 0.f, 0.f);
-        if (i == 1)
-            ai = vec3(0.f, 1.f, 0.f);
-        if (i == 2)
-            ai = vec3(0.f, 0.f, 1.f);
-
-        float e = dot(ai, p);
-        float f = dot(ai, direction);
-
-		if (abs(f) > 0.0001f)
-        {
-            float t1 = (e + h[i]) / f;
-            float t2 = (e - h[i]) / f;
-
-            if (t1 > t2)
-            {
-                //swap
-				float temp = t1;
-				t1 = t2;
-				t2 = temp;
-            }
-
-			tMin = fmax(tMin, t1);
-			tMax = fmin(tMax, t2);
-			if (tMin > tMax || tMax < 0) {
-				return pair<bool, float>(false, 0);
-			}
-        }
-		else if (-1.0f * e - h[i] > 0 || h[i] - e < 0)
-            return pair<bool, float>(false, 0);
-    }
-    if (tMin > 0)
-        return pair<bool, float>(true, tMin);
-    else
-        return pair<bool, float>(false, tMax);
-}
-
 float static cast_ray(vec3 ray_start, vec3 ray_end, vector<GameEntity*> entities)
 {
 	float dist = 1.0f;
@@ -148,7 +100,7 @@ float static cast_ray(vec3 ray_start, vec3 ray_end, vector<GameEntity*> entities
 		ChewyEntity* c_test = dynamic_cast<ChewyEntity*>(entities.at(i));
 		if (c_test == nullptr && IN_OCTTREE(entities.at(i)->list) && IS_WALL(entities.at(i)->list))
 		{
-			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->setup_inner ? entities.at(i)->inner_bounding_box  : entities.at(i)->bounding_box);
+			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->setup_inner ? entities.at(i)->inner_bounding_box : entities.at(i)->bounding_box);
 			if (result.first && result.second < ray_dist)
 			{
 				if (result.second / ray_dist < dist)

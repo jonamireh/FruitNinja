@@ -121,6 +121,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("guard_outer_bb", new MeshSet(assetPath + "outer_samurai_bbox.obj")));
 	meshes.insert(pair<string, MeshSet*>("arrow", new MeshSet(assetPath + "arrow.dae")));
 	meshes.insert(pair<string, MeshSet*>("arrow_bb", new MeshSet(assetPath + "arrow_boundingbox.dae")));
+	meshes.insert(pair<string, MeshSet*>("arrow_pickup", new MeshSet(assetPath + "arrowPickup_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("unit_sphere", new MeshSet(assetPath + "UnitSphere.obj")));
 	meshes.insert(pair<string, MeshSet*>("lantern", new MeshSet(assetPath + "lantern.dae")));
 	meshes.insert(pair<string, MeshSet*>("lanternPole", new MeshSet(assetPath + "lanternPole.dae")));
@@ -450,10 +451,6 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 	camera_positions.push_back(player_camera->cameraPosition);
 	look_at_positions.push_back(player_camera->lookAtPoint);
 
-	cinematic_camera->init(camera_positions, look_at_positions, 40.f);
-	camera = cinematic_camera;
-	cinematic_camera->in_use = true;
-
 	if (!run_cinematic_camera)
 	{
 		camera->in_use = false;
@@ -461,6 +458,9 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 		camera->in_use = true;
 	}
 	else {
+		cinematic_camera->init(camera_positions, look_at_positions, 40.f);
+		camera = cinematic_camera;
+		cinematic_camera->in_use = true;
 		player_camera->in_use = false;
 	}
 
@@ -1046,9 +1046,13 @@ void World::shootArrows()
 	}
 	if (held && !(keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && arrow_count > 0)
 	{
-		entities.push_back(new FireArrowEntity(meshes["arrow"], archery_camera));
-		//entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
-		entities.back()->setup_entity_box(meshes.at("arrow_bb"));
+		//entities.push_back(new FireArrowEntity(meshes["arrow"], archery_camera));
+		entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
+		vec3 center = entities.back()->getPosition();
+		entities.back()->setup_entity_box(meshes.at("arrow_pickup"));
+		entities.back()->setup_inner_entity_box(meshes.at("arrow_bb"));
+		dynamic_cast<ProjectileEntity*>(entities.back())->dist = glm::distance(entities.back()->inner_bounding_box.center, center);
+		entities.back()->bounding_box.center = entities.back()->inner_bounding_box.center;
 		arrow_count--;
 		held = false;
 		AudioManager::instance()->play3D(assetPath + "WW_Arrow_Shoot.wav", chewy->getPosition(), 1.0f, false);
@@ -1095,7 +1099,7 @@ void World::draw()
 			}
 			//if there's an arrow have archery camera follow it and make game slow-mo
 			/*if (typeid(*entities[i]) == typeid(ProjectileEntity)) {
-			archery_camera->cameraPosition = entities[i]->bounding_box.center - archery_camera->cameraFront * 4.0f;
+				archery_camera->cameraPosition = entities[i]->bounding_box.center - archery_camera->cameraFront * 4.0f;
 			}*/
 
 			if (!SHOULD_DRAW(entities[i]->list)) {
@@ -1128,6 +1132,16 @@ void World::draw()
 				for (int j = 0; j < points.size(); j++)
 				{
 					draw_line(points.at(j).first, points.at(j).second, vec3(1.f, 0.f, 0.f));
+				}
+
+				if (entities.at(i)->setup_inner)
+				{
+					EntityBox box = entities.at(i)->inner_bounding_box;
+					vector<pair<vec3, vec3>> points = box.get_line_segments();
+					for (int j = 0; j < points.size(); j++)
+					{
+						draw_line(points.at(j).first, points.at(j).second, vec3(0.f, 0.f, 1.f));
+					}
 				}
 			}
 			glUseProgram(0);
@@ -1175,6 +1189,10 @@ void World::mouse_button_callback(GLFWwindow* window, int button, int action, in
 void World::convert_to_collectible(ProjectileEntity* p)
 {
 	entities.push_back(new CollectableEntity(p->getPosition(), meshes.at("arrow"), false, 1));
+	entities.back()->bounding_box = p->bounding_box;
+	entities.back()->inner_bounding_box = p->inner_bounding_box;
+	//entities.back()->inner_bounding_box.center -= p->dist * normalize(p->movement.velocity);
+	entities.back()->setup_inner = true;
 	dynamic_cast<CollectableEntity*>(entities.back())->custom_rotate(p->rot);
 }
 
@@ -1297,6 +1315,17 @@ void World::update()
 	if (keys[GLFW_KEY_6])
 	{
 		current_courtyard = 4;
+		setup_next_courtyard();
+	}
+	//jon's middle click doesn't work
+	if (keys[GLFW_KEY_7])
+	{
+		setup_next_courtyard();
+	}
+	//faster level design
+	if (keys[GLFW_KEY_8])
+	{
+		current_courtyard--;
 		setup_next_courtyard();
 	}
 	if (loading_screen == nullptr)

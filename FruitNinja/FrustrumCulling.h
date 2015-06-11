@@ -7,6 +7,55 @@
 #include <iostream>
 #include "ChewyEntity.h"
 
+static pair<bool, float> obb_ray(glm::vec3 origin, glm::vec3 direction, EntityBox bb)
+{
+	glm::vec3 center = bb.center;
+	glm::vec3 h = glm::vec3(bb.half_width, bb.half_height, bb.half_depth);
+
+	float tMin = std::numeric_limits<float>::min();
+	float tMax = std::numeric_limits<float>::max();
+	glm::vec3 p = center - origin;
+	for (int i = 0; i < 3; i++)
+	{
+		glm::vec3 ai(0.f);
+		if (i == 0)
+			ai = glm::vec3(1.f, 0.f, 0.f);
+		if (i == 1)
+			ai = glm::vec3(0.f, 1.f, 0.f);
+		if (i == 2)
+			ai = glm::vec3(0.f, 0.f, 1.f);
+
+		float e = glm::dot(ai, p);
+		float f = glm::dot(ai, direction);
+
+		if (abs(f) > 0.0001f)
+		{
+			float t1 = (e + h[i]) / f;
+			float t2 = (e - h[i]) / f;
+
+			if (t1 > t2)
+			{
+				//swap
+				float temp = t1;
+				t1 = t2;
+				t2 = temp;
+			}
+
+			tMin = fmax(tMin, t1);
+			tMax = fmin(tMax, t2);
+			if (tMin > tMax || tMax < 0) {
+				return std::pair<bool, float>(false, 0);
+			}
+		}
+		else if (-1.0f * e - h[i] > 0 || h[i] - e < 0)
+			return std::pair<bool, float>(false, 0);
+	}
+	if (tMin > 0)
+		return std::pair<bool, float>(true, tMin);
+	else
+		return std::pair<bool, float>(false, tMax);
+}
+
 static glm::vec4 normalize_plane(glm::vec4& p1)
 {
 	glm::vec4 p1_c(p1);

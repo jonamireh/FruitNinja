@@ -24,7 +24,9 @@ ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_
     }
 }
 
-void ButtonEntity::update() {}
+void ButtonEntity::update() {
+	GameEntity::update();
+}
 
 void ButtonEntity::button_pressed()
 {

@@ -20,6 +20,6 @@ public:
 	bool shot;
 	glm::mat4 rot;
 	float timeLeft;
-private:
+	float dist;
 	ProjectileMovementComponent movement;
 };

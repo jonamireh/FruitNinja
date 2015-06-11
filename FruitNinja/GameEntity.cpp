@@ -266,6 +266,10 @@ glm::mat4 GameEntity::getRotMat()
 
 void GameEntity::update()
 {
+	if (!setup_inner)
+	{
+		inner_bounding_box = bounding_box;
+	}
 }
 
 std::vector<std::vector<glm::mat4>>* GameEntity::getBoneTransformations() {

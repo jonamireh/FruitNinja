@@ -7,6 +7,9 @@
 #include "GuardEntity.h"
 #include "LightEntity.h"
 #include "main.h"
+#include "FrustrumCulling.h"
+
+using namespace glm;
 
 
 ProjectileEntity::ProjectileEntity() : movement(*this, new ArcheryCamera()), shot(false), timeLeft(5.0f)
@@ -29,8 +32,9 @@ void ProjectileEntity::update()
 {
 	GameEntity::update();
 	movement.update();
+	inner_bounding_box.center = bounding_box.center;
 	glm::vec3 pos = getPosition();
-	if (pos.y < 0.0 || pos.x < 0.0 || pos.z < 0.0 || pos.x > 240.0 || pos.z > 240.0) {
+	if (pos.y < -1.0 || pos.x < -1.0 || pos.z < -1.0 || pos.x > 240.0 || pos.z > 240.0) {
 		list = UNSET_DRAW(list);
 		game_speed = 1.0;
 	}
@@ -50,7 +54,8 @@ void ProjectileEntity::collision(GameEntity* entity)
 {
 	if (typeid(*entity) == typeid(GuardEntity)) {
 		GuardEntity* ge = dynamic_cast<GuardEntity*>(entity);
-        if (bounding_box.box_collision(entity->inner_bounding_box))
+		bool result = obb_ray(getPosition(), normalize(last_position - getPosition()), entity->inner_bounding_box).first;
+		if (inner_bounding_box.box_collision(entity->inner_bounding_box) || result)
         {
             if (!ge->is_armored)
             {
@@ -69,8 +74,9 @@ void ProjectileEntity::collision(GameEntity* entity)
 			return;
 	}
 	else if (typeid(*entity) == typeid(LightEntity)) {
-        if (bounding_box.box_collision(entity->inner_bounding_box))
-        {
+		bool result = obb_ray(getPosition(), normalize(last_position - getPosition()), entity->inner_bounding_box).first;
+		if (inner_bounding_box.box_collision(entity->inner_bounding_box) || result)
+		{
             LightEntity* le = dynamic_cast<LightEntity*>(entity);
             le->light = NULL;
 			le->setup_inner = false;
@@ -85,16 +91,24 @@ void ProjectileEntity::collision(GameEntity* entity)
 
    if (typeid(*entity) == typeid(PlatformEntity))
     {
-        list = UNSET_DRAW(list);
-		AudioManager::instance()->play3D(assetPath + "WW_Arrow_Bounce_Stone1.wav", getPosition(), 10.0f, false);
-        return;
+		bool result = obb_ray(getPosition(), normalize(last_position - getPosition()), entity->inner_bounding_box).first;
+		if (inner_bounding_box.box_collision(entity->inner_bounding_box) || result)
+		{
+			list = UNSET_DRAW(list);
+			AudioManager::instance()->play3D(assetPath + "WW_Arrow_Bounce_Stone1.wav", getPosition(), 10.0f, false);
+			return;
+		}
     }
 
 	//get rid of arrow
 	if (!(typeid(*entity) == typeid(ChewyEntity))) {
-		world->convert_to_collectible(this);
-		list = UNSET_DRAW(list);
-		game_speed = 1.0;
-		AudioManager::instance()->play3D(assetPath + "WW_Arrow_Hit.wav", getPosition(), 10.0f, false);
+		bool result = obb_ray(getPosition(), normalize(last_position - getPosition()), entity->inner_bounding_box).first;
+		if (inner_bounding_box.box_collision(entity->inner_bounding_box) || result)
+		{
+			world->convert_to_collectible(this);
+			list = UNSET_DRAW(list);
+			game_speed = 1.0;
+			AudioManager::instance()->play3D(assetPath + "WW_Arrow_Hit.wav", getPosition(), 10.0f, false);
+		}
 	}
 }
