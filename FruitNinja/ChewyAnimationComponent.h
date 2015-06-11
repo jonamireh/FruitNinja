@@ -17,7 +17,9 @@
 #define BOWPULL_START LANDING_START + LANDING_DURATION + 1.0 / FRAMES_PER_SEC
 #define BOWPULL_DURATION 10.0 / FRAMES_PER_SEC
 #define CAUGHT_START BOWPULL_START + BOWPULL_DURATION + 1.0 / FRAMES_PER_SEC
-#define CAUGHT_DURATION 22.0 / FRAMES_PER_SEC
+#define CAUGHT_DURATION 23.0 / FRAMES_PER_SEC
+#define DEATH_START CAUGHT_START + CAUGHT_DURATION + 1.0 / FRAMES_PER_SEC
+#define DEATH_DURATION 19.0 / FRAMES_PER_SEC
 
 enum AnimationState
 {
@@ -28,7 +30,8 @@ enum AnimationState
 	falling, 
 	landing,
 	bowpull,
-	caught
+	caught,
+	death
 };
 
 class ChewyAnimationComponent : public Component

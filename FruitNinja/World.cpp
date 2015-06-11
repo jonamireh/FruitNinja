@@ -77,6 +77,8 @@ int starting_arrow_count = 100;
 int health = MAX_HEALTH;
 glm::vec3 directional_light = glm::vec3(0);
 
+float wall_height;
+
 World::World()
 {
 	debugShader = new DebugShader("debugVert.glsl", "debugFrag.glsl");
@@ -197,6 +199,7 @@ void World::init()
 	entities.push_back(wall_right);
 	entities.push_back(wall_front);
 	entities.push_back(wall_back);
+	wall_height = entities.back()->bounding_box.half_height;
 	entities.push_back(roof_left);
 	entities.push_back(roof_right);
 	entities.push_back(roof_front);
@@ -314,6 +317,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         entities.at(4)->setScale(vec3(30.f, 40.f, 30.f));
         entities.at(5)->setScale(vec3(30.f, 40.f, 30.f));
         entities.at(6)->setScale(vec3(30.f, 40.f, 30.f));
+		wall_height = entities.at(6)->bounding_box.half_height;
 		// these are supposedly the roofs
 		entities.at(7)->setPosition(vec3(entities.at(7)->getPosition().x, 86.f, entities.at(7)->getPosition().z));
 		entities.at(8)->setPosition(vec3(entities.at(8)->getPosition().x, 86.f, entities.at(8)->getPosition().z));
@@ -483,7 +487,7 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 	level_file.close();
 }
 
-void World::setup_level(string file_path)
+void World::setup_level(string file_path, bool animate_elements)
 {
 	ifstream level_file;
 	level_file.open(file_path);
@@ -491,6 +495,7 @@ void World::setup_level(string file_path)
 	string current_line;
 	int current_row = 0;
 	int height_level = -1;
+	int animate_index = entities.size();
 
 	while (!level_file.eof()) // runs through every line
 	{
@@ -512,6 +517,13 @@ void World::setup_level(string file_path)
 	}
 	num_doors = 0;
 	level_file.close();
+	if (animate_elements && animate_index < entities.size())
+	{
+		for (int i = animate_index; i < entities.size(); i++)
+		{
+			entities.at(i)->startAnimate();
+		}
+	}
 }
 
 void World::setup_token(char obj_to_place, glm::vec3 placement_position)

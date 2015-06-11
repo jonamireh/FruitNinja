@@ -32,7 +32,7 @@ void ButtonEntity::button_pressed()
 {
     // loads all the level files in
     for (int i = 0; i < on_press_levels.size(); i++)
-        world->setup_level(on_press_levels.at(i));
+        world->setup_level(on_press_levels.at(i), true);
     // loads in the moving platforms
     for (int i = 0; i < on_press_platforms.size(); i++)
         world->setup_moving_platform(on_press_platforms.at(i));
