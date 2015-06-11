@@ -88,12 +88,13 @@ public:
 	void setup_next_courtyard(bool setup_cin_cam = true);
 	void push_courtyards(int current_courtyard);
 	void lose_condition();
+	void delayed_lose_condition();
 	void setup_cinematic_camera(string file_path, bool setup_cin_cam);
     void setup_level(string file_path, bool animate_elements = false);
     void load_button(string file_path);
     void setup_moving_platform(string file_path);
 	void convert_to_collectible(ProjectileEntity* p);
-	void zoom_on_guard(GuardEntity* g);
+	void zoom_on_guard(GameEntity* g);
 	void set_chewy_light_distance(float dist, float le_hv_length);
 
 	GameState getState();

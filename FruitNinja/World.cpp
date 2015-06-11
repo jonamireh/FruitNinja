@@ -410,6 +410,22 @@ void World::push_courtyards(int current_courtyard)
 	entities.at(2)->setPosition(vec3(entities.at(2)->getPosition().x, entities.at(2)->bounding_box.half_height + (1 - current_courtyard) * wall_scale, entities.at(2)->getPosition().z));
 }
 
+void World::delayed_lose_condition()
+{
+	state = SPOTTED;
+
+	vec3 p_pos = player_camera->cameraPosition;
+	vec3 look = player_camera->lookAtPoint;
+	vec3 g_dir = chewy->getPosition() - player_camera->lookAtPoint;
+	cinematic_camera->init({ p_pos, p_pos + vec3(0.0, 5.0, 0.0), look + vec3(0.0, 5.0, 0.0) + g_dir * .25f,
+		look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f },
+		{ look, look + g_dir * .5f, look + g_dir * .75f, chewy->getPosition(), chewy->getPosition(), chewy->getPosition() }, 10.f);
+	camera->in_use = false;
+	camera = cinematic_camera;
+	camera->in_use = true;
+	chewy->isDead = true;
+}
+
 void World::lose_condition()
 {
 	current_courtyard--;
@@ -533,7 +549,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 	switch (obj_to_place)
 	{
     case 'A':
-		entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["arrow"]));
+		entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["arrow"], ARROW_TYPE));
         break;
     // dont' use 'B'
 	case 'C': // set chewy's position
@@ -1223,7 +1239,7 @@ void World::mouse_button_callback(GLFWwindow* window, int button, int action, in
 
 void World::convert_to_collectible(ProjectileEntity* p)
 {
-	entities.push_back(new CollectableEntity(p->getPosition(), meshes.at("arrow"), false, 1));
+	entities.push_back(new CollectableEntity(p->getPosition(), meshes.at("arrow"), ARROW_TYPE, false, 1));
 	entities.back()->bounding_box = p->bounding_box;
 	entities.back()->inner_bounding_box = p->inner_bounding_box;
 	//entities.back()->inner_bounding_box.center -= p->dist * normalize(p->movement.velocity);
@@ -1373,6 +1389,7 @@ void World::update()
 		if (state == SPOTTED && cinematic_camera->pathing.done) {
 			lose_condition();
 			chewy->isCaught = false;
+			chewy->isDead = false;
 			chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
 			chewy->animComponent.currentAnimtion = standing;
 			state = HIDDEN;
@@ -1447,7 +1464,7 @@ void World::update()
 	}
 }
 
-void World::zoom_on_guard(GuardEntity* guard_temp)
+void World::zoom_on_guard(GameEntity* guard_temp)
 {
 	AudioManager::instance()->play3D(assetPath + "jons_breakthrough_performance.wav", guard_temp->getPosition(), 10.0f, false);
 	state = SPOTTED;

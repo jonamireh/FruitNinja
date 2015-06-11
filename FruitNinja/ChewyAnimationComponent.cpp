@@ -26,12 +26,12 @@ void ChewyAnimationComponent::update()
 	if (basicAnimation.animationComplete && currentAnimtion != caught)
 	{
 		
-		/*if (chewy->velocity.y < 15 && currentAnimtion == jumping && currentAnimtion)
+		if (static_cast<ChewyEntity*>(chewy)->isDead && currentAnimtion != death)
 		{
-			basicAnimation.changeToSingleAnimation(FALLING_START, FALLING_START + FALLING_DURATION);
-			currentAnimtion = falling;
+			basicAnimation.changeToSingleAnimation(DEATH_START, DEATH_START + DEATH_DURATION);
+			currentAnimtion = death;
 		}
-		else */if (currentAnimtion == standing && standingTime >= 15.0f)
+		else if (currentAnimtion == standing && standingTime >= 15.0f)
 		{
 			standingTime = 0;
 			basicAnimation.changeToSingleInterruptibleAnimation(LOOK_AROUND_START, LOOK_AROUND_START + LOOK_AROUND_DURATION);
