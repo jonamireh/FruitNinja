@@ -70,3 +70,7 @@ glm::mat4 CollectableEntity::getModelMat()
 		return GameEntity::getModelMat();
 	}
 }
+
+CollectableType CollectableEntity::getType() {
+	return _type;
+}

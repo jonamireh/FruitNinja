@@ -8,6 +8,9 @@
 #define LINEAR_AT 0.0
 #define EXP_AT 0.0075*/
 
+Light::Light(glm::vec3 pos) : pos(pos) {
+
+}
 
 Light::Light(glm::vec3 pos, glm::vec3 color, float intensity, MeshSet* mesh) : pos(pos), color(color), intensity(intensity),
 mesh(mesh){
