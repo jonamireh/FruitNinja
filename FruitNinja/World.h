@@ -127,6 +127,6 @@ private:
 	GuardPuppeteer* _puppeteer = nullptr;
 	void set_puppeteer(int courtyard);
 	DeferredShader* defShader;
-	bool _fiery_arrows = false;
+	bool _fiery_arrows = true;
 };
 

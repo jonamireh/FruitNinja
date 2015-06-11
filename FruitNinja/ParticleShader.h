@@ -17,7 +17,8 @@ public:
 
 	void draw(glm::mat4& view_mat, GameEntity* entity) override;
 
-	void draw(Camera* camera, std::vector<Emitter*> emitters, std::vector<Light*> lights, std::vector<FireArrowEntity*> fireArrows);
+	void draw(Camera* camera, std::vector<Emitter*> emitters, std::vector<Light*> lights,
+		std::vector<FireArrowEntity*> fireArrows, bool do_stuff_for_jon = false);
 
 private:
 	GLuint col_handle;

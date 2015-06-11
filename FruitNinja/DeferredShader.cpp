@@ -4,6 +4,7 @@
 #include "GuardEntity.h"
 #include "ArcheryCamera.h"
 #include "ExplosionEmitter.h"
+#include "LightEntity.h"
 
 using namespace glm;
 using namespace std;
@@ -17,9 +18,9 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, S
 {
 	emitters.push_back(new FlameEmitter());
 	emitters.push_back(new FireEmitter());
-	emitters.push_back(new ExplosionEmitter("fire_atlas.png", .03, 4, 4, 8.0, 8.0, 10));
-	emitters.push_back(new ExplosionEmitter("explosion_fireball_atlas.png", .03, 4, 4, 8.0, 8.0, 30));
-	emitters.push_back(new ExplosionEmitter("smoke_atlas.png", .04, 4, 4, 10.0, 10.0, 8, glm::vec3(0.0, 10.0, 0.0)));
+	emitters.push_back(new ExplosionEmitter("fire_atlas.png", .03, 4, 4, 8.0, 8.0, 30));
+	emitters.push_back(new ExplosionEmitter("explosion_fireball_atlas.png", .03, 4, 4, 8.0, 8.0, 100));
+	emitters.push_back(new ExplosionEmitter("smoke_atlas.png", .04, 4, 4, 10.0, 10.0, 20, glm::vec3(0.0, 10.0, 0.0)));
 	gbuffer.Init(screen_width, screen_height);
 	dirShadowMapBuffer.init(screen_height, screen_height);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
@@ -176,14 +177,20 @@ void DeferredShader::particlePass(Camera* camera, std::vector<Light*> lights, st
 
 	std::vector<FireArrowEntity*> fireArrows;
 	FireArrowEntity* fa;
+	LightEntity* le;
+	bool do_stuff_for_jon = false;
 	for (int i = 0; i < ents.size(); i++) {
 		fa = dynamic_cast<FireArrowEntity*>(ents[i]);
 		if (fa) {
 			fireArrows.push_back(fa);
 		}
+		le = dynamic_cast<LightEntity*>(ents[i]);
+		if (le && le->animate) {
+			do_stuff_for_jon = true;
+		}
 	}
 
-	fireShader.draw(camera, emitters, lights, fireArrows);
+	fireShader.draw(camera, emitters, lights, fireArrows, do_stuff_for_jon);
 }
 
 void DeferredShader::archeryArcPass(Camera* camera) {

@@ -146,6 +146,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("statue", new MeshSet(assetPath + "statue.dae")));
 	meshes.insert(pair<string, MeshSet*>("platform", new MeshSet(assetPath + "platform.dae")));
 	meshes.insert(pair<string, MeshSet*>("fence", new MeshSet(assetPath + "fence.dae")));
+	meshes.insert(pair<string, MeshSet*>("fire_arrow_pickup", new MeshSet(assetPath + "tempFireArrowPickup.dae")));
 
 	archery_camera = new ArcheryCamera(meshes.at("unit_sphere")->getMeshes().at(0));
 
@@ -441,6 +442,11 @@ void World::lose_condition()
 	setup_next_courtyard(false);
 	health--;
 	arrow_count = starting_arrow_count;
+	//set player camera sorta
+	camera = player_camera;
+	debug_camera->in_use = false;
+	player_camera->in_use = true;
+	archery_camera->in_use = false;
 }
 
 void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)

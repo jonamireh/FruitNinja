@@ -10,7 +10,7 @@ public:
 	FlameEmitter();
 	~FlameEmitter();
 
-	void update(double deltaTime, std::vector<Light*> lights);
+	void update(double deltaTime, std::vector<Light*> lights, bool do_stuff = false);
 private:
 	int prev_size = 0;
 };
