@@ -6,6 +6,7 @@
 #include "FrustrumCulling.h"
 #include "AudioManager.h"
 #include "GuardPuppeteer.h"
+#include "EntityBox.h"
 
 class GuardEntity : public GameEntity
 {

@@ -11,6 +11,7 @@ ObstacleEntity::ObstacleEntity(glm::vec3 position, MeshSet* mesh) : GameEntity(p
 
 void ObstacleEntity::update()
 {
+	GameEntity::update();
 }
 
 void ObstacleEntity::collision(GameEntity* entity)

@@ -13,16 +13,20 @@ void ProjectileMovementComponent::update()
 		vec3 left = glm::normalize(glm::cross(vec3(0.f, 1.f, 0.f), camera->cameraFront));
 		vec3 offset = 0.45f * left;
 		offset.y -= 0.5f;
+		entity.last_position = entity.inner_bounding_box.center;
 		pos += offset;
 		entity.setPosition(pos);
+		entity.inner_bounding_box.center = entity.bounding_box.center;
 		velocity = camera->cameraFront * ARROW_SPEED * bow_strength;
 
 		entity.list = SET_DRAW(entity.list);
 		entity.shot = true;
 	}
 	else {
+		entity.last_position = entity.inner_bounding_box.center;
 		velocity.y -= GRAVITY * (float)seconds_passed;
 		entity.setPosition(entity.getPosition() + velocity * (float)seconds_passed);
+		entity.inner_bounding_box.center += entity.bounding_box.center;
 	}
 
 	glm::vec3 look = glm::normalize(velocity);

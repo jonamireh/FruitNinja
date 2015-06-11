@@ -6,7 +6,7 @@
 using namespace glm;
 using namespace std;
 
-#define NUM_INSTANCES 300
+#define NUM_INSTANCES 1000
 
 ArcShader::ArcShader(std::string vertShader, std::string fragShader) : Shader(vertShader, fragShader)
 {
@@ -51,7 +51,28 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 		offset.y -= 0.5f;
 		vec3 incremental_offset = offset / intersection_time;
 		base_transformation += offset;
-		vector<pair<float, float>> divisions;
+		for (int i = 0; i < NUM_INSTANCES; i++)
+		{
+			vec3 final_translate = base_transformation;
+			vec3 displacement;
+			float instance_time = i * pseudo_time;
+			displacement.x = velocity.x * instance_time;
+			displacement.y = (-0.5f * GRAVITY * pow(instance_time, 2)) + velocity.y * instance_time;
+			displacement.z = velocity.z * instance_time;
+			final_translate += displacement;
+			//final_translate -= incremental_offset * (float)i;
+			mat4 mat = glm::translate(mat4(1.f), final_translate);
+			for (int k = 0; k < 4; k++)
+			{
+				vec4 column = glm::column(mat, k);
+				for (int l = 0; l < 4; l++)
+				{
+					translations.push_back(column[l]);
+				}
+			}
+		}
+		//density
+		/*vector<pair<float, float>> divisions;
 		//time, instances distribution
 		divisions.push_back(pair<float, float>(0.10f, 0.40f));
 		divisions.push_back(pair<float, float>(0.30f, 0.30f));
@@ -86,7 +107,7 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 					}
 				}
 			}
-		}
+		}*/
 
 
 		

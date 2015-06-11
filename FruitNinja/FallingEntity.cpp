@@ -15,6 +15,7 @@ GameEntity(position, mesh)
 
 void FallingEntity::update()
 {
+	GameEntity::update();
     static float prevRotationX = 0;
     static float rotationX = 0; 
     static float prevRotationZ = 0;

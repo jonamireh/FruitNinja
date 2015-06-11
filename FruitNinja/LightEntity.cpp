@@ -28,11 +28,12 @@ LightEntity::LightEntity(glm::vec3 position, MeshSet* mesh, float intensity, Mes
 
 void LightEntity::update()
 {
+	GameEntity::update();
 }
 
 void LightEntity::collision(GameEntity* entity)
 {
-	if (typeid(ChewyEntity) == typeid(*entity))
+	if (typeid(ChewyEntity) == typeid(*entity) && light != NULL)
 	{
 		world->set_chewy_light_distance(glm::distance(getPosition(), entity->getPosition()), glm::length(glm::vec3(bounding_box.half_width, bounding_box.half_height, bounding_box.half_depth)));
 	}
