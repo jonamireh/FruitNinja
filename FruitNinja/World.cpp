@@ -1213,7 +1213,7 @@ void World::update()
 	static float start_time = 0.0;
 	if (keys[GLFW_KEY_6])
 	{
-		current_courtyard = 3;
+		current_courtyard = 4;
 		setup_next_courtyard();
 	}
 	if (loading_screen == nullptr)
