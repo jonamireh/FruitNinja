@@ -4,6 +4,8 @@
 #include "GameEntity.h"
 #include "AudioManager.h"
 #include "main.h"
+#include "FrustrumCulling.h"
+#include "EntityBox.h"
 
 using namespace glm;
 using namespace std;
@@ -54,55 +56,6 @@ void GuardEntity::update()
     inner_bounding_box.center = bounding_box.center;
 
 	if (walk_channel) AudioManager::instance()->updateChannelPosition(walk_channel, getPosition());
-}
-
-static pair<bool, float> obb_ray(vec3 origin, vec3 direction, EntityBox bb)
-{
-	vec3 center = bb.center;
-	vec3 h = vec3(bb.half_width, bb.half_height, bb.half_depth);
-
-	float tMin = std::numeric_limits<float>::min();
-	float tMax = std::numeric_limits<float>::max();
-	vec3 p = center - origin;
-	for (int i = 0; i < 3; i++)
-	{
-		vec3 ai(0.f);
-		if (i == 0)
-			ai = vec3(1.f, 0.f, 0.f);
-		if (i == 1)
-			ai = vec3(0.f, 1.f, 0.f);
-		if (i == 2)
-			ai = vec3(0.f, 0.f, 1.f);
-
-		float e = dot(ai, p);
-		float f = dot(ai, direction);
-
-		if (abs(f) > 0.0001f)
-		{
-			float t1 = (e + h[i]) / f;
-			float t2 = (e - h[i]) / f;
-
-			if (t1 > t2)
-			{
-				//swap
-				float temp = t1;
-				t1 = t2;
-				t2 = temp;
-			}
-
-			tMin = fmax(tMin, t1);
-			tMax = fmin(tMax, t2);
-			if (tMin > tMax || tMax < 0) {
-				return pair<bool, float>(false, 0);
-			}
-		}
-		else if (-1.0f * e - h[i] > 0 || h[i] - e < 0)
-			return pair<bool, float>(false, 0);
-	}
-	if (tMin > 0)
-		return pair<bool, float>(true, tMin);
-	else
-		return pair<bool, float>(false, tMax);
 }
 
 bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entities)

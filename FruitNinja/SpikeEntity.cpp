@@ -8,7 +8,9 @@ SpikeEntity::SpikeEntity(glm::vec3 position, MeshSet* mesh, World* world) : Game
     this->world = world;
 }
 
-void SpikeEntity::update() {}
+void SpikeEntity::update() {
+	GameEntity::update();
+}
 
 void SpikeEntity::collision(GameEntity* entity)
 {

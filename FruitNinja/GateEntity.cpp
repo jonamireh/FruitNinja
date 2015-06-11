@@ -6,7 +6,7 @@ GateEntity::GateEntity(glm::vec3 position, MeshSet* mesh) : GameEntity(position,
 }
 void GateEntity::update()
 {
-
+	GameEntity::update();
 }
 
 void GateEntity::collision(GameEntity* entity)

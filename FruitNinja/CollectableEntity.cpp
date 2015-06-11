@@ -40,6 +40,7 @@ void CollectableEntity::custom_rotate(glm::mat4& rot)
 	{
 		this->rot = rot;
 		validModelMat = false;
+		validAlignedModelMat = false;
 	}
 }
 

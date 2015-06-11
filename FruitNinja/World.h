@@ -49,6 +49,7 @@ extern float bow_strength;
 extern int arrow_count;
 extern int current_courtyard;
 extern int health;
+extern glm::vec3 directional_light;
 
 enum GameState{
 	HIDDEN,
@@ -82,7 +83,8 @@ public:
 	static void draw_box(EntityBox* box, glm::vec3 color);
 
 	void setup_next_courtyard(bool setup_cin_cam = true);
-    void lose_condition();
+	void push_courtyards(int current_courtyard);
+	void lose_condition();
 	void setup_cinematic_camera(string file_path, bool setup_cin_cam);
     void setup_level(string file_path);
     void load_button(string file_path);
