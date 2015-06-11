@@ -46,19 +46,19 @@ Call this at the end of the draw loop to update for strafing.
 */
 void DebugCamera::movement(GameEntity* chewy)
 {
-    float cameraSpeed = 1.;
+    
 
 	if (keys[GLFW_KEY_W])
-		cameraPosition += cameraSpeed * cameraFront;
+		cameraPosition += DEBUG_SPEED * cameraFront;
 	if (keys[GLFW_KEY_S])
-		cameraPosition -= cameraSpeed * cameraFront;
+		cameraPosition -= DEBUG_SPEED * cameraFront;
 	if (keys[GLFW_KEY_A])
-		cameraPosition -= normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
+		cameraPosition -= normalize(cross(cameraFront, cameraUp)) * DEBUG_SPEED;
 	if (keys[GLFW_KEY_D])
-		cameraPosition += normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
+		cameraPosition += normalize(cross(cameraFront, cameraUp)) * DEBUG_SPEED;
 
-	cout << "pos: " << glm::to_string(cameraPosition) << endl;
-	cout << glm::to_string(cameraPosition + 5.0f * normalize(cameraFront)) << endl;
+	//cout << "pos: " << glm::to_string(cameraPosition) << endl;
+	//cout << glm::to_string(cameraPosition + 5.0f * normalize(cameraFront)) << endl;
 
     // NOW DO MOUSE ADJUSTS!
     mouse_update();

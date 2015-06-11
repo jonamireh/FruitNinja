@@ -20,11 +20,14 @@ public:
 	void draw(Camera* camera, std::vector<Emitter*> emitters, std::vector<Light*> lights, std::vector<FireArrowEntity*> fireArrows);
 
 private:
-	GLuint width_handle;
-	GLuint height_handle;
+	GLuint col_handle;
+	GLuint row_handle;
 	GLuint particle_width_handle;
 	GLuint particle_height_handle;
 	GLuint vp_handle;
 	GLuint eye_handle;
 	GLuint texture_handle;
+	GLuint time_handle;
+	GLuint frame_time_handle;
+	GLuint accel_handle;
 };

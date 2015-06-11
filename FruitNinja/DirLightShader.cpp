@@ -86,7 +86,7 @@ void DirLightShader::pass(Camera* camera)
 	glm::vec3 eye = camera->cameraPosition;
 
 	glUniform3f(eye_handle, eye.x, eye.y, eye.z);
-	glUniform2f(size_handle, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+	glUniform2f(size_handle, (float)screen_width, (float)screen_height);
 	glUniform3f(position_handle, pos.x, pos.y, pos.z);
 
 	glUniformMatrix4fv(model_handle, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));

@@ -3,6 +3,7 @@
 #include "SimpleTextureShader.h"
 #include "GuardEntity.h"
 #include "ArcheryCamera.h"
+#include "ExplosionEmitter.h"
 
 using namespace glm;
 using namespace std;
@@ -14,10 +15,13 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, S
 	renderer("lightVert.glsl", "pointLightFrag.glsl", &gbuffer, &dirShadowMapBuffer), disp_mode(deferred),
 	fireShader("FireVert.glsl", "FireGeom.glsl", "FireFrag.glsl"), arcShader("arcVertex.glsl", "arcFrag.glsl"), shadowBufferShader(&dirShadowMapBuffer)
 {
-	emitters.push_back(new FlameEmitter);
-	emitters.push_back(new FireEmitter);
-	gbuffer.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
-	dirShadowMapBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
+	emitters.push_back(new FlameEmitter());
+	emitters.push_back(new FireEmitter());
+	emitters.push_back(new ExplosionEmitter("fire_atlas.png", .03, 4, 4, 8.0, 8.0, 10));
+	emitters.push_back(new ExplosionEmitter("explosion_fireball_atlas.png", .03, 4, 4, 8.0, 8.0, 30));
+	emitters.push_back(new ExplosionEmitter("smoke_atlas.png", .04, 4, 4, 10.0, 10.0, 8, glm::vec3(0.0, 10.0, 0.0)));
+	gbuffer.Init(screen_width, screen_height);
+	dirShadowMapBuffer.init(screen_height, screen_height);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
 	glBindAttribLocation(getProgramID(), 1, "aNormal");
 
@@ -29,6 +33,11 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, S
 	uBoneFlagHandle = getUniformHandle("uBoneFlag");
 	uBonesHandle = getUniformHandle("uBones[0]");
 	UdColorHandle = getUniformHandle("UdColor");
+}
+
+void DeferredShader::resizeWindow() {
+	gbuffer.Init(screen_width, screen_height);
+	dirShadowMapBuffer.init(screen_height, screen_height);
 }
 
 void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
@@ -207,8 +216,8 @@ void DeferredShader::finalPass()
 {
 	getProgramID();
 	gbuffer.BindForFinalPass();
-	glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
-		0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBlitFramebuffer(0, 0, screen_width, screen_height,
+		0, 0, screen_width, screen_height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 }
 
 void DeferredShader::startLightPasses()
@@ -235,20 +244,20 @@ void DeferredShader::lightPass()
 
 	gbuffer.BindForReading();
 
-	GLsizei HalfWidth = (GLsizei)(SCREEN_WIDTH / 2.0f);
-	GLsizei HalfHeight = (GLsizei)(SCREEN_HEIGHT / 2.0f);
+	GLsizei HalfWidth = (GLsizei)(screen_width / 2.0f);
+	GLsizei HalfHeight = (GLsizei)(screen_height / 2.0f);
 
 	gbuffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
-	glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
+	glBlitFramebuffer(0, 0, screen_width, screen_height,
 		0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 	gbuffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
-	glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
-		0, HalfHeight, HalfWidth, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBlitFramebuffer(0, 0, screen_width, screen_height,
+		0, HalfHeight, HalfWidth, screen_height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 	gbuffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
-	glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
-		HalfWidth, HalfHeight, SCREEN_WIDTH, SCREEN_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBlitFramebuffer(0, 0, screen_width, screen_height,
+		HalfWidth, HalfHeight, screen_width, screen_height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 	/*gbuffer.SetReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_TEXCOORD);
 	glBlitFramebuffer(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -258,5 +267,14 @@ void DeferredShader::lightPass()
 DeferredShader::~DeferredShader() {
 	for (int i = 0; i < emitters.size(); i++) {
 		delete emitters[i];
+	}
+}
+
+void DeferredShader::addExplosion(glm::vec3 pos) {
+	ExplosionEmitter* ee;
+	for (int i = 0; i < emitters.size(); i++) {
+		if (ee = dynamic_cast<ExplosionEmitter*>(emitters[i])) {
+			ee->add(pos);
+		}
 	}
 }

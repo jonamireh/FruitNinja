@@ -30,6 +30,7 @@
 #include "CollectableEntity.h"
 #include <glm/gtc/matrix_access.inl>
 #include "GuardPuppeteer.h"
+#include "ExplosiveEntity.h"
 
 
 #define FILE_TO_WORLD_SCALE 6.f
@@ -52,6 +53,8 @@ const float max_guard_far = 80.f;
 const float min_guard_fov = 45.f;
 const float max_guard_fov = 60.f;
 float relative = 0.f;
+bool screen_changed;
+int sw, sh;
 
 bool debug_enabled = false;
 float screen_width = SCREEN_WIDTH;
@@ -68,7 +71,7 @@ int current_courtyard = 0;
 static vector<std::function<void()>> debugShaderQueue;
 
 float bow_strength = .5f;
-int arrow_count = 10;
+int arrow_count = 100;
 
 int health = MAX_HEALTH;
 glm::vec3 directional_light = glm::vec3(0);
@@ -91,11 +94,6 @@ void World::init()
 	cinematic_camera = new CinematicCamera();
 
 	meshes.insert(pair<string, MeshSet*>("tower", new MeshSet(assetPath + "tower.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard1", new MeshSet(assetPath + "courtyard1.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard2", new MeshSet(assetPath + "courtyard2.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard3", new MeshSet(assetPath + "courtyard3.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard4", new MeshSet(assetPath + "courtyard4.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard5", new MeshSet(assetPath + "courtyard5.dae")));
 	meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
 	meshes.insert(pair<string, MeshSet*>("roof", new MeshSet(assetPath + "roof.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
@@ -157,31 +155,6 @@ void World::init()
 	tower->list = UNSET_OCTTREE((tower->list));
 	tower->collision_response = false;
 
-	/*GameEntity* courtyard1 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard1"));
-	courtyard1->setScale(30.0f);
-	courtyard1->list = UNSET_OCTTREE((courtyard1->list));
-	courtyard1->collision_response = false;
-
-	GameEntity* courtyard2 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard2"));
-	courtyard2->setScale(30.0f);
-	courtyard2->list = UNSET_OCTTREE((courtyard2->list));
-	courtyard2->collision_response = false;
-
-	GameEntity* courtyard3 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard3"));
-	courtyard3->setScale(30.0f);
-	courtyard3->list = UNSET_OCTTREE((courtyard3->list));
-	courtyard3->collision_response = false;
-
-	GameEntity* courtyard4 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard4"));
-	courtyard4->setScale(30.0f);
-	courtyard4->list = UNSET_OCTTREE((courtyard4->list));
-	courtyard4->collision_response = false;
-
-	GameEntity* courtyard5 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard5"));
-	courtyard5->setScale(30.0f);
-	courtyard5->list = UNSET_OCTTREE((courtyard5->list));
-	courtyard5->collision_response = false;*/
-
 	float wall_scale = 30.f;
 	GameEntity* wall_left = new ObstacleEntity(vec3(120.f, 0.f, 240.f), meshes.at("wall"));
 	wall_left->setScale(wall_scale);
@@ -237,7 +210,7 @@ void World::init()
 
 	hud = new HUD(chewy);
 
-	shaders.insert(pair<string, Shader*>("defShader", new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox)));
+	defShader =  new DeferredShader("DeferredVertShader.glsl", "DeferredFragShader.glsl", _skybox);
 
 	shaders.insert(pair<string, Shader*>("debugShader", debugShader));
 
@@ -312,7 +285,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		player_camera->movement(chewy);
 		if (setup_cin_cam)
 			loading_screen = new LoadingScreen("LoadScreen1.png", "Color is Key!");
-			setup_cinematic_camera(level_path + "second_courtyard_cinematic.txt", setup_cin_cam);
+		setup_cinematic_camera(level_path + "second_courtyard_cinematic.txt", setup_cin_cam);
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
@@ -371,38 +344,47 @@ void World::push_courtyards(int current_courtyard)
 		wall_left->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
 		wall_left->setRotations(vec3(0.f, angle, 0.f));
 		wall_left->setPosition(wall_left->getPosition() - offset_xz);
+		wall_left->list = UNSET_OCTTREE(wall_left->list);
 		GameEntity* wall_right = new ObstacleEntity(rotateY(vec3(120.f, 0.f, 0.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
 		wall_right->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
 		wall_right->setRotations(vec3(0.f, angle, 0.f));
 		wall_right->setPosition(wall_right->getPosition() - offset_xz);
+		wall_right->list = UNSET_OCTTREE(wall_right->list);
 		GameEntity* wall_front = new ObstacleEntity(rotateY(vec3(0.f, 0.f, 120.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
 		wall_front->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
 		wall_front->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
 		wall_front->setPosition(wall_front->getPosition() - offset_xz);
+		wall_front->list = UNSET_OCTTREE(wall_front->list);
 		GameEntity* wall_back = new ObstacleEntity(rotateY(vec3(240.f, 0.f, 120.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
 		wall_back->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
 		wall_back->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
 		wall_back->setPosition(wall_back->getPosition() - offset_xz);
+		wall_back->list = UNSET_OCTTREE(wall_back->list);
 		GameEntity* roof_left = new ObstacleEntity(rotateY(vec3(120.f, 60.f, 240.f) + offset_xz + offset_y, angle), meshes.at("roof"));
 		roof_left->setScale(wall_scale);
 		roof_left->setRotations(vec3(0.f, angle, 0.f));
 		roof_left->setPosition(roof_left->getPosition() - offset_xz);
+		roof_left->list = UNSET_OCTTREE(roof_left->list);
 		GameEntity* roof_right = new ObstacleEntity(rotateY(vec3(120.f, 60.f, 0.f) + offset_xz + offset_y, angle), meshes.at("roof"));
 		roof_right->setScale(wall_scale);
 		roof_right->setRotations(vec3(0.f, angle, 0.f));
 		roof_right->setPosition(roof_right->getPosition() - offset_xz);
+		roof_right->list = UNSET_OCTTREE(roof_right->list);
 		GameEntity* roof_front = new ObstacleEntity(rotateY(vec3(0.f, 60.f, 120.f) + offset_xz + offset_y, angle), meshes.at("roof"));
 		roof_front->setScale(wall_scale);
 		roof_front->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
 		roof_front->setPosition(roof_front->getPosition() - offset_xz);
+		roof_front->list = UNSET_OCTTREE(roof_front->list);
 		GameEntity* roof_back = new ObstacleEntity(rotateY(vec3(240.f, 60.f, 120.f) + offset_xz + offset_y, angle), meshes.at("roof"));
 		roof_back->setScale(wall_scale);
 		roof_back->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
 		roof_back->setPosition(roof_back->getPosition() - offset_xz);
+		roof_back->list = UNSET_OCTTREE(roof_back->list);
 		GameEntity* ground = new ObstacleEntity(rotateY(vec3(120.f, -12.0f, 120.f) + offset_xz + offset_y, angle), meshes.at("ground"));
 		ground->setScale(wall_scale);
 		ground->setRotations(vec3(0.f, angle, 0.f));
 		ground->setPosition(ground->getPosition() - offset_xz);
+		ground->list = UNSET_OCTTREE(ground->list);
 
 		entities.push_back(wall_left);
 		entities.push_back(wall_right);
@@ -1063,8 +1045,8 @@ void World::shootArrows()
 			shot = true;
 		}
 	}
-
-	dynamic_cast<DeferredShader*>(shaders.at("defShader"))->arcShader.enabled = !shot;
+	
+	defShader->arcShader.enabled = !shot;
 
 	if ((keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && archery_camera->in_use && !held && !shot && arrow_count > 0)
 	{
@@ -1090,6 +1072,15 @@ void World::shootArrows()
 void World::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	if (screen_changed) {
+		screen_changed = false;
+		screen_width = sw;
+		screen_height = sh;
+		mat4 projection = mat4(perspective((float)radians(PLAYER_FOV), screen_width / screen_height, PLAYER_NEAR, PLAYER_FAR));
+
+		defShader->resizeWindow();
+	}
 
 	if (loading_screen == nullptr)
 	{
@@ -1143,9 +1134,9 @@ void World::draw()
 		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glUseProgram(shaders.at("defShader")->getProgramID());
+		glUseProgram(defShader->getProgramID());
 		glViewport(0, 0, screen_width, screen_height);
-		shaders.at("defShader")->draw(camera, entities, lights);
+		defShader->draw(camera, entities, lights);
 
 		glUseProgram(0);
 		if (debug_enabled)
@@ -1343,6 +1334,17 @@ void World::update()
 		current_courtyard = 4;
 		setup_next_courtyard();
 	}
+	//jon's middle click doesn't work
+	if (keys[GLFW_KEY_7])
+	{
+		setup_next_courtyard();
+	}
+	//faster level design
+	if (keys[GLFW_KEY_8])
+	{
+		current_courtyard--;
+		setup_next_courtyard();
+	}
 	if (loading_screen == nullptr)
 	{
 
@@ -1421,6 +1423,7 @@ void World::update()
 
 			delete loading_screen;
 			loading_screen = nullptr;
+
 		}
 	}
 }
@@ -1499,9 +1502,20 @@ World::~World() {
 	}
 	if (_puppeteer)
 		delete _puppeteer;
+	delete defShader;
 }
 
 
 GameState World::getState() {
 	return state;
+}
+
+void World::resize_window(GLFWwindow* window, int w, int h) {
+	screen_changed = true;
+	sw = w;
+	sh = h;
+}
+
+void World::addExplosion(glm::vec3 pos) {
+	defShader->addExplosion(pos);
 }

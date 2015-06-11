@@ -31,6 +31,7 @@ class ProjectileEntity;
 class ArcheryCamera;
 class GuardEntity;
 class GuardPuppeteer;
+class DeferredShader;
 
 const string assetPath = "assets/";
 const string level_path = "levels/";
@@ -96,6 +97,10 @@ public:
 	GameState getState();
 
 	LoadingScreen* loading_screen = nullptr;
+
+	static void resize_window(GLFWwindow* window, int w, int h);
+	void addExplosion(glm::vec3 pos);
+
 private:
     DebugCamera* debug_camera;
     ArcheryCamera* archery_camera;
@@ -118,5 +123,6 @@ private:
 	int num_doors = 0;
 	GuardPuppeteer* _puppeteer = nullptr;
 	void set_puppeteer(int courtyard);
+	DeferredShader* defShader;
 };
 
