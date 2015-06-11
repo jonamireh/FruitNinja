@@ -45,11 +45,11 @@ void GuardEntity::stopWalkSound()
 void GuardEntity::update()
 {
 	move_component.update(static_movement);
-	if (is_dying && animComponent.areYouDoneYet()) {
+	if (_is_dying && animComponent.areYouDoneYet()) {
 		std::cout << "Yo I'm dead\n";
 		list = UNSET_DRAW(list);
 	}
-	else if (_puppeteer == nullptr || is_dying) {
+	else if (_puppeteer == nullptr || _is_dying) {
 		animComponent.update();
 	}
 
@@ -127,7 +127,7 @@ void GuardEntity::collision(GameEntity* entity)
 }
 
 void GuardEntity::goAheadAndKillYourself() {
-	is_dying = true;
+	_is_dying = true;
 	static_movement = true;
 	stopWalkSound();
 	animComponent.setCurrentAnimation(DYING);
@@ -135,7 +135,7 @@ void GuardEntity::goAheadAndKillYourself() {
 }
 
 std::vector<std::vector<glm::mat4>>* GuardEntity::getBoneTransformations() {
-	if (is_dying || _puppeteer == nullptr) {
+	if (_is_dying || _puppeteer == nullptr) {
 		return animComponent.basicAnimation.getBoneTransformations();
 	}
 	else {
@@ -146,4 +146,8 @@ std::vector<std::vector<glm::mat4>>* GuardEntity::getBoneTransformations() {
 			return _puppeteer->getWalkerBoneTransform();
 		}
 	}
+}
+
+bool GuardEntity::is_dying() {
+	return _is_dying;
 }

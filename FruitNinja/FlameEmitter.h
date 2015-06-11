@@ -11,4 +11,6 @@ public:
 	~FlameEmitter();
 
 	void update(double deltaTime, std::vector<Light*> lights);
+private:
+	int prev_size = 0;
 };

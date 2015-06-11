@@ -58,7 +58,7 @@ void DeferredRenderer::pointLightPass(Camera* camera, Light* light)
 	glUniform3f(eye_handle, eye.x, eye.y, eye.z);
 	glUniform3f(light_pos_handle, light_pos.x, light_pos.y, light_pos.z);
 	glUniform3f(light_color_handle, light_color.x, light_color.y, light_color.z);
-	glUniform2f(size_handle, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+	glUniform2f(size_handle, (float)screen_width, (float)screen_height);
 
 	glUniformMatrix4fv(model_handle, 1, GL_FALSE, value_ptr(light->transform()));
 	glUniformMatrix4fv(view_handle, 1, GL_FALSE, glm::value_ptr(camera->getViewMatrix()));

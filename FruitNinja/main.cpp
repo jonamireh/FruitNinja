@@ -27,7 +27,7 @@ void AppMain()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    //glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Fruit Ninja", NULL, NULL);
 	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -81,6 +81,8 @@ void AppMain()
     glfwSetScrollCallback(window, &World::scroll_callback);
 
 	glfwSetMouseButtonCallback(window, &World::mouse_button_callback);
+
+	glfwSetWindowSizeCallback(window, &World::resize_window);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
