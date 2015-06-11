@@ -2,10 +2,9 @@
 #include <glm/gtx/string_cast.hpp>
 
 
-PlatformEntity::PlatformEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed) : 
+PlatformEntity::PlatformEntity(glm::vec3 position, MeshSet* mesh, std::vector<glm::vec3> control_points, float move_speed) :
 GameEntity(position, mesh), movement_component(*this, control_points, move_speed, true)
 {
-
 }
 
 void PlatformEntity::update()

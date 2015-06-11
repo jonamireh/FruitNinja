@@ -317,6 +317,11 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		break;
 	case 5:
         setup_level(level_path + "fifth_courtyard.txt");
+        setup_moving_platform(level_path + "fifth_courtyard_platform_one.txt");
+        setup_moving_platform(level_path + "fifth_courtyard_platform_two.txt");
+        setup_moving_platform(level_path + "fifth_courtyard_platform_three.txt");
+        setup_moving_platform(level_path + "fifth_courtyard_platform_four.txt");
+        load_button(level_path + "fifth_courtyard_button_one.txt");
 		break;
 	}
 }
@@ -551,13 +556,13 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         break;
     case 'e': // static guard facing east
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(1.0f, 0.f, 0.f)));
-        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         break;
     case 'E': // static guard facing east Armored
 		entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(1.0f, 0.f, 0.f), true));
-        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         break;
     case 'f': // falling box
         entities.push_back(new FallingEntity(placement_position, meshes["box"]));
@@ -662,13 +667,13 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         break;
 	case 'n': // static guard facing north
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(0.0f, 0.f, -1.f)));
-        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
 		break;
     case 'N': // static guard facing north armored
 		entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(0.0f, 0.f, -1.f), true));
-        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         break;
     case 'O': // barrel
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
@@ -687,13 +692,13 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         break;
 	case 's': // static guard facing south
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(0.0f, 0.f, 1.f)));
-        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
 		break;
     case 'S': // static guard facing south armored
 		entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(0.0f, 0.f, 1.f), true));
-        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         break;
     case 't': // falling stone... its a trap
         entities.push_back(new FallingEntity(placement_position, meshes["interior_wall_1x1"]));
@@ -720,13 +725,13 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         break;
 	case 'w': // static guard facing west
 		entities.push_back(new GuardEntity(placement_position, meshes.at("guard"), _puppeteer, vec3(-1.0f, 0.f, 0.f)));
-        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
 		break;
     case 'W': // static guard facing west Armored
         entities.push_back(new GuardEntity(placement_position, meshes.at("blue_guard"), _puppeteer, vec3(-1.0f, 0.f, 0.f), true));
-        entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-        entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+		entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
         break;
 	case 'X': // crate
 		entities.push_back(new ObstacleEntity(placement_position, meshes.at("box")));
@@ -945,8 +950,8 @@ void World::setup_guard(string file_path)
 		guard_ent = new GuardEntity(starting_position, meshes["blue_guard"], _puppeteer, spline_points, 4.f, linear, isArmored);
     else
 		guard_ent = new GuardEntity(starting_position, meshes["guard"], _puppeteer, spline_points, 4.f, linear);
-    guard_ent->setup_inner_entity_box(meshes["guard_bb"]);
-    guard_ent->setup_entity_box(meshes["guard_outer_bb"]);
+	entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
+	entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
 	entities.push_back(guard_ent);
 	level_file.close();
 }
@@ -1023,9 +1028,9 @@ void World::setup_moving_platform(string file_path)
 		else
 			break;
 	}
-	PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
-	platform->setScale(4.f);
-	entities.push_back(platform);
+    PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
+    platform->setScale(4.f);
+    entities.push_back(platform);
 	level_file.close();
 }
 

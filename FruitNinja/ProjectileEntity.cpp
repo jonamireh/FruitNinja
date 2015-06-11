@@ -68,6 +68,7 @@ void ProjectileEntity::collision(GameEntity* entity)
 			{
 				list = UNSET_DRAW(list);
 				AudioManager::instance()->play3D(assetPath + "WW_Arrow_Bounce_Metal1.wav", getPosition(), 8.0f, false);
+				return;
 			}
         }
 		else
