@@ -224,8 +224,8 @@ void World::init()
 	//entities.back()->setScale(3.f);
 	//entities.push_back(new ObstacleEntity(glm::vec3(35, 0, 35), meshes.at("gate_base")));
 	//entities.back()->setScale(3.f);
-
-	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
+	AudioManager::instance()->playAmbient(assetPath + "zelda_music.mp3", 0.1f);
+	//AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
 
 void World::set_puppeteer(int courtyard) {
