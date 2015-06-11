@@ -81,4 +81,7 @@ public:
 	void setRotations(glm::vec3 rots);
 
 	virtual std::vector<std::vector<glm::mat4>>* getBoneTransformations();
+	bool animate = false;
+	void startAnimate();
+	float time_elapsed = 0;
 };
