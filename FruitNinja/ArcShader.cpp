@@ -19,9 +19,11 @@ void ArcShader::draw(ArcheryCamera* a_camera)
 {
 	if (enabled)
 	{
-		int currentId;
-		glGetIntegerv(GL_CURRENT_PROGRAM, &currentId);
-		assert(currentId == getProgramID());
+		if (DEBUG_MODE) {
+			int currentId;
+			glGetIntegerv(GL_CURRENT_PROGRAM, &currentId);
+			assert(currentId == getProgramID());
+		}
 		assert(translations.size() == 0);
 
 		glBindVertexArray(a_camera->particle->VAO);

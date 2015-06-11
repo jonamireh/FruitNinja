@@ -95,10 +95,14 @@ void DirLightShader::pass(Camera* camera)
 	glUniformMatrix4fv(shadowvp_handle, 1, GL_FALSE, glm::value_ptr(shadowVP));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IND);
-	check_gl_error("rend before");
+
+	if (DEBUG_MODE)
+		check_gl_error("rend before");
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	check_gl_error("rend after");
+
+	if (DEBUG_MODE)
+		check_gl_error("rend after");
 
 
 

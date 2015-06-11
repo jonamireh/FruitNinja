@@ -1331,7 +1331,7 @@ void World::set_chewy_light_distance(float dist, float le_hv_length)
 
 void World::change_camera()
 {
-	if (keys[GLFW_KEY_1])
+	if (keys[GLFW_KEY_1] && DEBUG_MODE)
 	{
 		camera = debug_camera;
 		debug_camera->in_use = true;
@@ -1379,15 +1379,43 @@ void World::enable_debugging()
 
 void World::skip_level()
 {
+	
 	if (mouse_buttons_pressed[2]) {
-		setup_next_courtyard();
+		if (DEBUG_MODE) {
+			setup_next_courtyard();
+		}
+		else {
+			if (keys[GLFW_KEY_PAGE_DOWN]) {
+				setup_next_courtyard();
+			}
+		}
+
+		mouse_buttons_pressed[2] = false;
 	}
 
-	mouse_buttons_pressed[2] = false;
+	if (DEBUG_MODE) {
+		//jon's middle click doesn't work
+		if (keys[GLFW_KEY_7])
+		{
+			current_courtyard = 3;
+			setup_next_courtyard();
+		}
+		if (keys[GLFW_KEY_6])
+		{
+			current_courtyard = 3;
+			setup_next_courtyard();
+		}
+		//faster level design
+		if (keys[GLFW_KEY_8])
+		{
+			current_courtyard--;
+			setup_next_courtyard();
+		}
+	}
 }
 void World::cancel_cinematic()
 {
-	if (keys[GLFW_KEY_0])
+	if (keys[GLFW_KEY_ENTER])
 	{
 		run_cinematic_camera = false;
 		camera = player_camera;
@@ -1409,9 +1437,11 @@ void World::update_key_callbacks()
 	else if (state != SPOTTED)
 	{
 		change_camera();
-		enable_debugging();
 		skip_level();
-		stop_time();
+		if (DEBUG_MODE) {
+			enable_debugging();
+			stop_time();
+		}
 	}
 	camera->movement(chewy);
 	x_offset = 0;
@@ -1430,22 +1460,7 @@ void World::stop_time()
 void World::update()
 {
 	static float start_time = 0.0;
-	if (keys[GLFW_KEY_6])
-	{
-		current_courtyard = 3;
-		setup_next_courtyard();
-	}
-	//jon's middle click doesn't work
-	if (keys[GLFW_KEY_7])
-	{
-		setup_next_courtyard();
-	}
-	//faster level design
-	if (keys[GLFW_KEY_8])
-	{
-		current_courtyard--;
-		setup_next_courtyard();
-	}
+
 	if (loading_screen == nullptr)
 	{
 

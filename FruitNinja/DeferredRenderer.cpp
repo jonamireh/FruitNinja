@@ -66,9 +66,14 @@ void DeferredRenderer::pointLightPass(Camera* camera, Light* light)
 
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, light->IND());
-	check_gl_error("rend before");
+
+	if (DEBUG_MODE)
+		check_gl_error("rend before");
+
 	glDrawElements(GL_TRIANGLES, light->indices_size(), GL_UNSIGNED_INT, 0);
-	check_gl_error("rend after");
+
+	if (DEBUG_MODE)
+		check_gl_error("rend after");
 
 
 	glBindTexture(GL_TEXTURE_2D, 0);

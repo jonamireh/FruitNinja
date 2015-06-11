@@ -84,11 +84,13 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 					for (auto& entity : currAnimation.second) {
 						glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-						check_gl_error("Def shader before draw");
+						if (DEBUG_MODE)
+							check_gl_error("Def shader before draw");
 
 						glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-						check_gl_error("Def shader after draw");
+						if (DEBUG_MODE)
+							check_gl_error("Def shader after draw");
 					}
 				}
 			}
@@ -99,11 +101,13 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 				for (auto& entity : currMeshSet.second) {
 					glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-					check_gl_error("Def shader before draw");
+					if (DEBUG_MODE)
+						check_gl_error("Def shader before draw");
 
 					glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-					check_gl_error("Def shader after draw");
+					if (DEBUG_MODE)
+						check_gl_error("Def shader after draw");
 				}
 			}
 		}

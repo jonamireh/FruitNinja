@@ -49,8 +49,8 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 		map<MeshSet*, vector<GameEntity*>>::iterator meshItr = objectMeshes.find(ents[i]->mesh);
 		objectMeshes[ents[i]->mesh].push_back(ents[i]);
 	}
-
-	check_gl_error("Before geom pass");
+	if (DEBUG_MODE)
+		check_gl_error("Before geom pass");
 
 	gbuffer.BindForGeomPass();
 
@@ -107,11 +107,13 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 					for (auto& entity: currAnimation.second) {
 						glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-						check_gl_error("Def shader before draw");
+						if (DEBUG_MODE)
+							check_gl_error("Def shader before draw");
 
 						glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-						check_gl_error("Def shader after draw");
+						if (DEBUG_MODE)
+							check_gl_error("Def shader after draw");
 					}
 				}
 			}
@@ -122,11 +124,13 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 				for (auto& entity : currMeshSet.second) {
 					glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-					check_gl_error("Def shader before draw");
+					if (DEBUG_MODE)
+						check_gl_error("Def shader before draw");
 
 					glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-					check_gl_error("Def shader after draw");
+					if (DEBUG_MODE)
+						check_gl_error("Def shader after draw");
 				}
 			}
 
@@ -162,11 +166,13 @@ void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::ve
 		finalPass();
 		//shadowBufferShader.draw();
 	}
-		
-	if (keys[GLFW_KEY_4])
-		disp_mode = deferred;
-	if (keys[GLFW_KEY_5])
-		disp_mode = four_screen;
+	
+	if (DEBUG_MODE) {
+		if (keys[GLFW_KEY_4])
+			disp_mode = deferred;
+		if (keys[GLFW_KEY_5])
+			disp_mode = four_screen;
+	}
 }
 
 void DeferredShader::particlePass(Camera* camera, std::vector<Light*> lights, std::vector<GameEntity*> ents) {

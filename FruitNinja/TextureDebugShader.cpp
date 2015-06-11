@@ -65,20 +65,34 @@ void TextureDebugShader::drawTextureCentered(GLuint textureId, int xloc, int ylo
 	glUseProgram(getProgramID());
 
 	glViewport(xloc - width / 2, yloc - height / 2, width, height);
-	check_gl_error("TextureDebugShader error part");
+
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error part");
+
 	glBindVertexArray(VAO);
-	check_gl_error("TextureDebugShader error part 2");
+
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error part 2");
+
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
-	check_gl_error("TextureDebugShader error part 2.5555");
+
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error part 2.5555");
+
 	glBindTexture(GL_TEXTURE_2D, textureId);
-	check_gl_error("TextureDebugShader error part 3");
+
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error part 3");
+
 	// Set our "renderedTexture" sampler to user Texture Unit 0
 	glUniform1i(getUniformHandle("uTexture"), 0);
 	glUniform1f(getUniformHandle("percent"), percent);
 	//glUniform4fv(getUniformHandle("uColor"), 0, glm::value_ptr(color));
 
-	check_gl_error("TextureDebugShader error before");
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error before");
+
 	// Draw the triangles !
 	// You have to disable GL_COMPARE_R_TO_TEXTURE above in order to see anything !
 	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
@@ -87,7 +101,8 @@ void TextureDebugShader::drawTextureCentered(GLuint textureId, int xloc, int ylo
 	glBindVertexArray(0);
 	glUseProgram(0);
 
-	check_gl_error("TextureDebugShader error after");
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error after");
 }
 
 /*
@@ -98,20 +113,34 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	glUseProgram(getProgramID());
 	
 	glViewport(xloc, yloc, width, height);
-	check_gl_error("TextureDebugShader error part");
+
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error part");
+
 	glBindVertexArray(VAO);
-	check_gl_error("TextureDebugShader error part 2");
+
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error part 2");
+
 	// Bind our texture in Texture Unit 0
 	glActiveTexture(GL_TEXTURE0);
-	check_gl_error("TextureDebugShader error part 2.5555");
+
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error part 2.5555");
+
 	glBindTexture(GL_TEXTURE_2D, textureId);
-	check_gl_error("TextureDebugShader error part 3");
+
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error part 3");
+
 	// Set our "renderedTexture" sampler to user Texture Unit 0
 	glUniform1i(getUniformHandle("uTexture"), 0);
 	glUniform1f(getUniformHandle("percent"), percent);
 	//glUniform4fv(getUniformHandle("uColor"), GL_FALSE, glm::value_ptr(color));
 
-	check_gl_error("TextureDebugShader error before");
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error before");
+
 	// Draw the triangles !
 	// You have to disable GL_COMPARE_R_TO_TEXTURE above in order to see anything !
 	glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
@@ -120,7 +149,8 @@ void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int w
 	glBindVertexArray(0);
 	glUseProgram(0);
 
-	check_gl_error("TextureDebugShader error after");
+	if (DEBUG_MODE)
+		check_gl_error("TextureDebugShader error after");
 }
 
 void TextureDebugShader::drawTexture(GLuint textureId, int xloc, int yloc, int width, int height, const glm::vec4 &color)

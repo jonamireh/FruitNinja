@@ -16,6 +16,8 @@
 #include "HUD.h"
 #include "LoadingScreen.h"
 
+#define DEBUG_MODE true
+
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define GRAVITY 33
