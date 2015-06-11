@@ -60,7 +60,7 @@ void GuardEntity::update()
 
 bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entities)
 {
-	vec3 lookAt = bounding_box.center + 2.f * move_component.direction;
+	vec3 lookAt = bounding_box.center + 2.f * move_component.direction - vec3(0.f, .5f, 0.f);
     mat4 view = glm::lookAt(bounding_box.center + move_component.direction, lookAt, vec3(0.f, 1.f, 0.f));
 
 	vector<GameEntity*> just_chewy;
