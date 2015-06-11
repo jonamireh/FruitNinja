@@ -1440,7 +1440,7 @@ void World::update()
 		{
 			entities[i]->update();
 			GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
-			if (guard_temp != nullptr)
+			if (guard_temp != nullptr && !guard_temp->is_dying)
 			{
 				guards.push_back(entities[i]);
 			}
