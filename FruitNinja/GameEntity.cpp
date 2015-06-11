@@ -286,6 +286,7 @@ void GameEntity::update()
 		else
 		{
 			animate = false;
+			setPosition(animateCachePosition);
 		}
 	}
 }
@@ -294,6 +295,7 @@ void GameEntity::startAnimate()
 {
 	if (!animate)
 	{
+		animateCachePosition = getPosition();
 		animate = true;
 		time_elapsed = 0;
 		setPosition(getPosition() - vec3(0.f, wall_height, 0.f));

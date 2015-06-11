@@ -305,8 +305,10 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
+		//setup_level(level_path + "third_courtyard_button_two.txt");
         load_button(level_path + "third_courtyard_button_one.txt");
 		player_camera->movement(chewy);
+		//setup_cinematic_camera(level_path + "third_courtyard_cinematic.txt", true);
 		break;
 	case 4:
         setup_level(level_path + "fourth_courtyard.txt");
