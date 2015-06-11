@@ -1,6 +1,6 @@
 #include "FireEmitter.h"
 
-FireEmitter::FireEmitter() : Emitter("nice_fire.png", .02, 6, 6, 3.0, 3.0)
+FireEmitter::FireEmitter() : Emitter("nice_fire.png", .02, 6, 6, 1.0, 1.0)
 {
 	acceleration = glm::vec3(0.0, -GRAVITY, 0.0);
 }

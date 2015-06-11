@@ -8,7 +8,8 @@
 
 enum CollectableType {
 	ARROW_TYPE,
-	HEART_TYPE
+	HEART_TYPE,
+	FIRE_ARROW_TYPE
 };
 
 class CollectableEntity : public GameEntity

@@ -2,6 +2,7 @@
 #include "ChewyEntity.h"
 #include "World.h"
 #include "AudioManager.h"
+#include "main.h"
 
 CollectableEntity::CollectableEntity() {
 
@@ -34,6 +35,9 @@ void CollectableEntity::collision(GameEntity* entity) {
 		}
 		else if (_type == HEART_TYPE) {
 			health += number;
+		}
+		else if (_type == FIRE_ARROW_TYPE) {
+			world->enableFireArrows();
 		}
 		list = UNSET_DRAW(list);
 	}
