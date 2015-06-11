@@ -18,9 +18,9 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, S
 {
 	emitters.push_back(new FlameEmitter());
 	emitters.push_back(new FireEmitter());
-	emitters.push_back(new ExplosionEmitter("fire_atlas.png", .03, 4, 4, 8.0, 8.0, 10));
-	emitters.push_back(new ExplosionEmitter("explosion_fireball_atlas.png", .03, 4, 4, 8.0, 8.0, 30));
-	emitters.push_back(new ExplosionEmitter("smoke_atlas.png", .04, 4, 4, 10.0, 10.0, 8, glm::vec3(0.0, 10.0, 0.0)));
+	emitters.push_back(new ExplosionEmitter("fire_atlas.png", .03, 4, 4, 8.0, 8.0, 30));
+	emitters.push_back(new ExplosionEmitter("explosion_fireball_atlas.png", .03, 4, 4, 8.0, 8.0, 100));
+	emitters.push_back(new ExplosionEmitter("smoke_atlas.png", .04, 4, 4, 10.0, 10.0, 20, glm::vec3(0.0, 10.0, 0.0)));
 	gbuffer.Init(screen_width, screen_height);
 	dirShadowMapBuffer.init(screen_height, screen_height);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
