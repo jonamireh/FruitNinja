@@ -1338,6 +1338,17 @@ void World::update()
 		current_courtyard = 4;
 		setup_next_courtyard();
 	}
+	//jon's middle click doesn't work
+	if (keys[GLFW_KEY_7])
+	{
+		setup_next_courtyard();
+	}
+	//faster level design
+	if (keys[GLFW_KEY_8])
+	{
+		current_courtyard--;
+		setup_next_courtyard();
+	}
 	if (loading_screen == nullptr)
 	{
 

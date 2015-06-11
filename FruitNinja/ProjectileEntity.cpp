@@ -107,7 +107,6 @@ void ProjectileEntity::collision(GameEntity* entity)
 		{
 			world->convert_to_collectible(this);
 			list = UNSET_DRAW(list);
-			//movement.velocity = vec3(0.f, 0.f, 0.f);
 			game_speed = 1.0;
 			AudioManager::instance()->play3D(assetPath + "WW_Arrow_Hit.wav", getPosition(), 10.0f, false);
 		}
