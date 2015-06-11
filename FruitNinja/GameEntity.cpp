@@ -10,6 +10,8 @@
 #include <glm/detail/func_vector_relational.hpp>
 #include "World.h"
 
+#define ANIMATE_TIME 3.f
+
 using namespace glm;
 using namespace std;
 
@@ -266,9 +268,35 @@ glm::mat4 GameEntity::getRotMat()
 
 void GameEntity::update()
 {
+	//static glm::vec3 startingPosition = getPosition();
 	if (!setup_inner)
 	{
 		inner_bounding_box = bounding_box;
+	}
+
+	if (animate)
+	{
+		time_elapsed += seconds_passed;
+
+		if (time_elapsed < ANIMATE_TIME)
+		{
+			float m_change = wall_height / ANIMATE_TIME;
+			setPosition(getPosition() + vec3(0.f, m_change * seconds_passed, 0.f));
+		}
+		else
+		{
+			animate = false;
+		}
+	}
+}
+
+void GameEntity::startAnimate()
+{
+	if (!animate)
+	{
+		animate = true;
+		time_elapsed = 0;
+		setPosition(getPosition() - vec3(0.f, wall_height, 0.f));
 	}
 }
 
