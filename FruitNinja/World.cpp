@@ -439,6 +439,7 @@ void World::lose_condition()
 	setup_next_courtyard(false);
 	health--;
 	arrow_count = starting_arrow_count;
+	keys[GLFW_KEY_2] = true;
 }
 
 void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)

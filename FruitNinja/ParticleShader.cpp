@@ -46,7 +46,9 @@ void ParticleShader::draw(glm::mat4& view_mat, GameEntity* entity) {
 	printf("Don't call this either\n");
 }
 
-void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector<Light*> lights, std::vector<FireArrowEntity*> fireArrows) {
+void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector<Light*> lights,
+	std::vector<FireArrowEntity*> fireArrows, bool do_stuff_for_jon)
+{
 
 	check_gl_error("Particle beginning of draw function");
 
@@ -59,7 +61,7 @@ void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector
 		FlameEmitter* flem;
 		FireEmitter* fe;
 		if ((flem = dynamic_cast<FlameEmitter*>(emitters[i])) != nullptr) {
-			flem->update(seconds_passed, lights);
+			flem->update(seconds_passed, lights, do_stuff_for_jon);
 		}
 		else if ((fe = dynamic_cast<FireEmitter*>(emitters[i])) != nullptr){
 			fe->update(seconds_passed, fireArrows);

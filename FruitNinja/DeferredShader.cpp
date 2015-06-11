@@ -4,6 +4,7 @@
 #include "GuardEntity.h"
 #include "ArcheryCamera.h"
 #include "ExplosionEmitter.h"
+#include "LightEntity.h"
 
 using namespace glm;
 using namespace std;
@@ -176,14 +177,20 @@ void DeferredShader::particlePass(Camera* camera, std::vector<Light*> lights, st
 
 	std::vector<FireArrowEntity*> fireArrows;
 	FireArrowEntity* fa;
+	LightEntity* le;
+	bool do_stuff_for_jon = false;
 	for (int i = 0; i < ents.size(); i++) {
 		fa = dynamic_cast<FireArrowEntity*>(ents[i]);
 		if (fa) {
 			fireArrows.push_back(fa);
 		}
+		le = dynamic_cast<LightEntity*>(ents[i]);
+		if (le && le->animate) {
+			do_stuff_for_jon = true;
+		}
 	}
 
-	fireShader.draw(camera, emitters, lights, fireArrows);
+	fireShader.draw(camera, emitters, lights, fireArrows, do_stuff_for_jon);
 }
 
 void DeferredShader::archeryArcPass(Camera* camera) {
