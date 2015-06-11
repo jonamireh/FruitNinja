@@ -306,10 +306,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		break;
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
-		//setup_level(level_path + "third_courtyard_button_two.txt");
         load_button(level_path + "third_courtyard_button_one.txt");
 		player_camera->movement(chewy);
-		//setup_cinematic_camera(level_path + "third_courtyard_cinematic.txt", true);
 		break;
 	case 4:
         setup_level(level_path + "fourth_courtyard.txt");
@@ -322,6 +320,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_guard(level_path + "fourth_courtyard_third_guard.txt");
         load_button(level_path + "fourth_courtyard_button_one.txt");
         load_button(level_path + "fourth_courtyard_button_two.txt");
+		player_camera->movement(chewy);
+		setup_cinematic_camera(level_path + "fourth_courtyard_cinematic.txt", true);
 
         // these are supposedly the walls... lets hope the indices dont change!
         entities.at(3)->setScale(vec3(30.f, 40.f, 30.f));
@@ -1416,7 +1416,7 @@ void World::update()
 	static float start_time = 0.0;
 	if (keys[GLFW_KEY_6])
 	{
-		current_courtyard = 2;
+		current_courtyard = 3;
 		setup_next_courtyard();
 	}
 	//jon's middle click doesn't work
