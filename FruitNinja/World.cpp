@@ -439,6 +439,7 @@ void World::lose_condition()
 	setup_next_courtyard(false);
 	health--;
 	arrow_count = starting_arrow_count;
+	//set player camera sorta
 	keys[GLFW_KEY_2] = true;
 }
 
