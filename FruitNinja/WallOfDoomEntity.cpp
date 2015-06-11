@@ -16,7 +16,7 @@ void WallOfDoomEntity::update()
         return;
     if (distance_traveled > 240.f)
         list = UNSET_DRAW(list);
-    float delta_distance = 15.f * seconds_passed;
+    float delta_distance = 10.f * seconds_passed;
     setPosition(getPosition() + delta_distance * direction);
     distance_traveled += delta_distance;
 }

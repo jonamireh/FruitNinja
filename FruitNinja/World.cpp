@@ -102,6 +102,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("roof", new MeshSet(assetPath + "roof.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x1", new MeshSet(assetPath + "interiorWall_1x1.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x1", new MeshSet(assetPath + "interiorWall_1x1.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x2", new MeshSet(assetPath + "interiorWall_1x2.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x3", new MeshSet(assetPath + "interiorWall_1x3.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x4", new MeshSet(assetPath + "interiorWall_1x4.dae")));
@@ -817,7 +818,7 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		break;
     case'{':
-        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("box"), vec3(-1.f, 0.f, 0.f)));
+        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("box"), vec3(-1.f, 0.f, 0.f)));sdfsdf
         entities.back()->setScale(3.f);
         break;
     case '1':
