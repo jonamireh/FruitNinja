@@ -73,7 +73,7 @@ int current_courtyard = 0;
 static vector<std::function<void()>> debugShaderQueue;
 
 float bow_strength = .5f;
-int arrow_count = 100;
+int arrow_count = 9;
 int starting_arrow_count = arrow_count;
 
 float wall_height;
@@ -443,8 +443,13 @@ void World::delayed_lose_condition()
 void World::lose_condition()
 {
 	current_courtyard--;
+    health--;
+    if (health <= 0)
+    {
+        health = 4;
+        current_courtyard = 0;
+    }
 	setup_next_courtyard(false);
-	health--;
 	arrow_count = starting_arrow_count;
 	//set player camera sorta
 	camera = player_camera;
