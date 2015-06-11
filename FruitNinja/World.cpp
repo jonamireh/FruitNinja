@@ -1413,6 +1413,19 @@ void World::skip_level()
 		}
 	}
 }
+
+void World::flip_controls()
+{
+	if (player_camera != nullptr) {
+		if (keys[GLFW_KEY_G]) {
+			player_camera->flippedControls = false;
+		}
+		else if (keys[GLFW_KEY_H]) {
+			player_camera->flippedControls = true;
+		}
+	}
+}
+
 void World::cancel_cinematic()
 {
 	if (keys[GLFW_KEY_ENTER])
@@ -1437,6 +1450,7 @@ void World::update_key_callbacks()
 	else if (state != SPOTTED)
 	{
 		change_camera();
+		flip_controls();
 		skip_level();
 		if (DEBUG_MODE) {
 			enable_debugging();
@@ -1492,7 +1506,7 @@ void World::update()
 
 		if (!time_stopped)
 		{
-			seconds_passed = actual_seconds_passed;
+			seconds_passed = glm::min(actual_seconds_passed, MAX_TIME_STEP);
 		}
 		else
 		{

@@ -79,6 +79,7 @@ public:
     void change_camera();
     std::map<std::string, MeshSet*> meshes;
 	void enable_debugging();
+	void flip_controls();
 	void cancel_cinematic();
 	void skip_level();
     static void draw_line(glm::vec3 p1, glm::vec3 p2, glm::vec3 color);
