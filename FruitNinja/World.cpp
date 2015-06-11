@@ -108,6 +108,10 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x6", new MeshSet(assetPath + "interiorWall_1x6.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x7", new MeshSet(assetPath + "interiorWall_1x7.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
+    meshes.insert(pair<string, MeshSet*>("exploding_barrel", new MeshSet(assetPath + "explodingBarrel.dae")));
+    meshes.insert(pair<string, MeshSet*>("heart", new MeshSet(assetPath + "heart.dae")));
+    meshes.insert(pair<string, MeshSet*>("single_arrow_pickup", new MeshSet(assetPath + "arrowPickup_single.dae")));
+    meshes.insert(pair<string, MeshSet*>("triple_arrow_pickup", new MeshSet(assetPath + "arrowPickup_triple.dae")));
     meshes.insert(pair<string, MeshSet*>("spike", new MeshSet(assetPath + "spikes.dae")));
     meshes.insert(pair<string, MeshSet*>("spikes_floor", new MeshSet(assetPath + "spikes_floor.dae")));
     meshes.insert(pair<string, MeshSet*>("button", new MeshSet(assetPath + "button.dae")));
@@ -227,8 +231,8 @@ void World::init()
 	//entities.back()->setScale(3.f);
 	//entities.push_back(new ObstacleEntity(glm::vec3(35, 0, 35), meshes.at("gate_base")));
 	//entities.back()->setScale(3.f);
-	//AudioManager::instance()->playAmbient(assetPath + "zelda_music.mp3", 0.1f);
-	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
+	AudioManager::instance()->playAmbient(assetPath + "zelda_music.mp3", 0.1f);
+	//AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
 
 void World::set_puppeteer(int courtyard) {
@@ -326,7 +330,6 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		break;
 	case 5:
         setup_level(level_path + "fifth_courtyard.txt");
-        setup_moving_platform(level_path + "fifth_courtyard_platform_one.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_two.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_four.txt");
@@ -548,8 +551,14 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 	bool flag = false; // used for door orientation and accessability
 	switch (obj_to_place)
 	{
+    case 'a':
+		entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["single_arrow_pickup"], ARROW_TYPE));
+        entities.back()->setup_entity_box(meshes["arrow_pickup"]);
+        break;
     case 'A':
-		entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["arrow"], ARROW_TYPE));
+
+		entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["triple_arrow_pickup"], ARROW_TYPE, true, 3));
+        entities.back()->setup_entity_box(meshes["arrow_pickup"]);
         break;
     // dont' use 'B'
 	case 'C': // set chewy's position
@@ -659,6 +668,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setPosition(entities.back()->getPosition() + vec3(0.f, 0.f, 3.f - entities.back()->inner_bounding_box.half_depth));
         entities.back()->list = UNSET_OCTTREE((entities.back()->list));
         break;
+    case 'h': // heart pickup
+        entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["heart"], HEART_TYPE));
+        entities.back()->setup_entity_box(meshes["arrow_pickup"]);
+        break;
     case 'H': //3x3 inner wall
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_3x3"))); 
         if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
@@ -713,6 +726,15 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
+        break;
+    case 'P':
+        entities.push_back(new DoorEntity(placement_position, meshes.at("door"), true));
+        entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        entities.back()->setScale(3.f);
+        break;
+    case 'Q':
+        entities.push_back(new ExplosiveEntity(placement_position, meshes.at("exploding_barrel"), 6.f));
+        entities.back()->setScale(3.f);
         break;
     case 'R': // right facing lantern on wall
         entities.push_back(new LightEntity(placement_position,
@@ -998,6 +1020,7 @@ void World::setup_moving_platform(string file_path)
 	string current_line;
 	int current_row = 0;
     int height_level = -1;
+    bool tile = false;
 
 	vec3 control_points[10];
 	vec3 starting_position;
@@ -1018,6 +1041,10 @@ void World::setup_moving_platform(string file_path)
 			case 'P':
 				starting_position = world_position;
 				break;
+            case 'T':
+                starting_position = world_position;
+                tile = true;
+                break;
 			case '0':
 				control_points[0] = world_position;
 				break;
@@ -1063,7 +1090,10 @@ void World::setup_moving_platform(string file_path)
 			break;
 	}
     PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
-    platform->setScale(4.f);
+    if (tile)
+        platform->setScale(6.f);
+    else
+        platform->setScale(4.f);
     entities.push_back(platform);
 	level_file.close();
 }
