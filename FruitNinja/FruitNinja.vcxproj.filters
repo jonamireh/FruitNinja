@@ -214,6 +214,9 @@
     <ClCompile Include="ExplosiveEntity.cpp">
       <Filter>Fire</Filter>
     </ClCompile>
+    <ClCompile Include="WallOfDoomEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -711,6 +714,9 @@
     </ClInclude>
     <ClInclude Include="ExplosiveEntity.h">
       <Filter>Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="WallOfDoomEntity.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
