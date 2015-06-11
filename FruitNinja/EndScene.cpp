@@ -9,6 +9,7 @@
 EndScene::EndScene()
 {
 	world->entities.clear();
+
 	world->entities.push_back(new ChewyEntity(glm::vec3(0), world->meshes.at("chewy"), world->player_camera, world->player_camera));
 	world->entities.back()->list = UNSET_OCTTREE(world->entities.back()->list);
 	world->entities.push_back(new ObstacleEntity(glm::vec3(0, 0, -30), world->meshes.at("door_closed")));
@@ -73,4 +74,5 @@ void EndScene::draw()
 		TextShader shdr = TextShader(assetPath + "bonzai.ttf", 108);
 		shdr.draw_text_centered("Fruit-tastic!", glm::vec2(screen_width / 2, 50), glm::vec3(212 / 255.f, 175 / 255.f, 55 / 255.f));
 	}
+	glDisable(GL_BLEND);
 }

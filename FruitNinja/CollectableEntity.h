@@ -23,6 +23,7 @@ public:
 	void collision(GameEntity* entity) override;
 	void custom_rotate(glm::mat4& rot);
 	glm::mat4 getModelMat();
+	CollectableType getType();
 private:
 	glm::vec3 center;
 	double total_secs = 0.0;
