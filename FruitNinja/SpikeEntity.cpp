@@ -14,6 +14,8 @@ void SpikeEntity::update() {
 
 void SpikeEntity::collision(GameEntity* entity)
 {
-    if (typeid(ChewyEntity) == typeid(*entity))
-        world->lose_condition();
+	if (typeid(ChewyEntity) == typeid(*entity)) {
+		if (world->getState() == HIDDEN)
+			world->delayed_lose_condition();
+	}
 }

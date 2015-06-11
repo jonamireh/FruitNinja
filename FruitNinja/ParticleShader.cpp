@@ -46,9 +46,11 @@ void ParticleShader::draw(glm::mat4& view_mat, GameEntity* entity) {
 	printf("Don't call this either\n");
 }
 
-void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector<Light*> lights, std::vector<FireArrowEntity*> fireArrows) {
-
-	check_gl_error("Particle beginning of draw function");
+void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector<Light*> lights,
+	std::vector<FireArrowEntity*> fireArrows, bool do_stuff_for_jon)
+{
+	if (DEBUG_MODE)
+		check_gl_error("Particle beginning of draw function");
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -59,7 +61,7 @@ void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector
 		FlameEmitter* flem;
 		FireEmitter* fe;
 		if ((flem = dynamic_cast<FlameEmitter*>(emitters[i])) != nullptr) {
-			flem->update(seconds_passed, lights);
+			flem->update(seconds_passed, lights, do_stuff_for_jon);
 		}
 		else if ((fe = dynamic_cast<FireEmitter*>(emitters[i])) != nullptr){
 			fe->update(seconds_passed, fireArrows);
@@ -86,10 +88,13 @@ void ParticleShader::draw(Camera* camera, vector<Emitter*> emitters, std::vector
 
 			glBindVertexArray(emitters[i]->VAO);
 
+			if (DEBUG_MODE)
+				check_gl_error("Before particle draw");
 
-			check_gl_error("Before particle draw");
 			glDrawArrays(GL_POINTS, 0, emitters[i]->getNumParticles());
-			check_gl_error("After particle draw");
+
+			if (DEBUG_MODE)
+				check_gl_error("After particle draw");
 		}
 	}
 

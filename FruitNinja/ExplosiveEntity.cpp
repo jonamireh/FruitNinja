@@ -4,6 +4,7 @@
 #include "World.h"
 #include "main.h"
 #include "GuardEntity.h"
+#include "ButtonEntity.h"
 
 ExplosiveEntity::ExplosiveEntity() {}
 
@@ -42,6 +43,14 @@ void ExplosiveEntity::collision(GameEntity* entity) {
 		if (guard && !guard->is_dying()) {
 			guard->goAheadAndKillYourself();
 		}
-
+        ButtonEntity* button = dynamic_cast<ButtonEntity*>(entity);
+        if (button)
+        {
+            if (!button->pressed)
+            {
+                button->pressed = true;
+                button->button_pressed();
+            }
+        }
 	}
 }

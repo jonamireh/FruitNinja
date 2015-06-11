@@ -1,5 +1,6 @@
 M target_rotated
 P fourth_courtyard_platform_four.txt
+C fourth_courtyard_platform_four_cinematic.txt
 ________________________________________
 ________________________________________
 ________________________________________

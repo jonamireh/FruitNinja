@@ -5,6 +5,7 @@
 #include "ArcheryCamera.h"
 #include "ExplosionEmitter.h"
 #include "main.h"
+#include "LightEntity.h"
 
 using namespace glm;
 using namespace std;
@@ -18,9 +19,9 @@ DeferredShader::DeferredShader(std::string vertShader, std::string fragShader, S
 {
 	emitters.push_back(new FlameEmitter());
 	emitters.push_back(new FireEmitter());
-	emitters.push_back(new ExplosionEmitter("fire_atlas.png", .03, 4, 4, 8.0, 8.0, 10));
-	emitters.push_back(new ExplosionEmitter("explosion_fireball_atlas.png", .03, 4, 4, 8.0, 8.0, 30));
-	emitters.push_back(new ExplosionEmitter("smoke_atlas.png", .04, 4, 4, 10.0, 10.0, 8, glm::vec3(0.0, 10.0, 0.0)));
+	emitters.push_back(new ExplosionEmitter("fire_atlas.png", .03, 4, 4, 8.0, 8.0, 30));
+	emitters.push_back(new ExplosionEmitter("explosion_fireball_atlas.png", .03, 4, 4, 8.0, 8.0, 100));
+	emitters.push_back(new ExplosionEmitter("smoke_atlas.png", .04, 4, 4, 10.0, 10.0, 20, glm::vec3(0.0, 10.0, 0.0)));
 	gbuffer.Init(screen_width, screen_height);
 	dirShadowMapBuffer.init(screen_height, screen_height);
 	glBindAttribLocation(getProgramID(), 0, "aPosition");
@@ -49,8 +50,8 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 		map<MeshSet*, vector<GameEntity*>>::iterator meshItr = objectMeshes.find(ents[i]->mesh);
 		objectMeshes[ents[i]->mesh].push_back(ents[i]);
 	}
-
-	check_gl_error("Before geom pass");
+	if (DEBUG_MODE)
+		check_gl_error("Before geom pass");
 
 	gbuffer.BindForGeomPass();
 
@@ -107,11 +108,13 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 					for (auto& entity: currAnimation.second) {
 						glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-						check_gl_error("Def shader before draw");
+						if (DEBUG_MODE)
+							check_gl_error("Def shader before draw");
 
 						glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-						check_gl_error("Def shader after draw");
+						if (DEBUG_MODE)
+							check_gl_error("Def shader after draw");
 					}
 				}
 			}
@@ -122,11 +125,13 @@ void DeferredShader::geomPass(mat4& view_mat, std::vector<GameEntity*> ents)
 				for (auto& entity : currMeshSet.second) {
 					glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-					check_gl_error("Def shader before draw");
+					if (DEBUG_MODE)
+						check_gl_error("Def shader before draw");
 
 					glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-					check_gl_error("Def shader after draw");
+					if (DEBUG_MODE)
+						check_gl_error("Def shader after draw");
 				}
 			}
 
@@ -162,11 +167,13 @@ void DeferredShader::draw(Camera* camera, std::vector<GameEntity*> ents, std::ve
 		finalPass();
 		//shadowBufferShader.draw();
 	}
-		
-	if (keys[GLFW_KEY_4])
-		disp_mode = deferred;
-	if (keys[GLFW_KEY_5])
-		disp_mode = four_screen;
+	
+	if (DEBUG_MODE) {
+		if (keys[GLFW_KEY_4])
+			disp_mode = deferred;
+		if (keys[GLFW_KEY_5])
+			disp_mode = four_screen;
+	}
 }
 
 void DeferredShader::particlePass(Camera* camera, std::vector<Light*> lights, std::vector<GameEntity*> ents) {
@@ -177,14 +184,20 @@ void DeferredShader::particlePass(Camera* camera, std::vector<Light*> lights, st
 
 	std::vector<FireArrowEntity*> fireArrows;
 	FireArrowEntity* fa;
+	LightEntity* le;
+	bool do_stuff_for_jon = false;
 	for (int i = 0; i < ents.size(); i++) {
 		fa = dynamic_cast<FireArrowEntity*>(ents[i]);
 		if (fa) {
 			fireArrows.push_back(fa);
 		}
+		le = dynamic_cast<LightEntity*>(ents[i]);
+		if (le && le->animate) {
+			do_stuff_for_jon = true;
+		}
 	}
 
-	fireShader.draw(camera, emitters, lights, fireArrows);
+	fireShader.draw(camera, emitters, lights, fireArrows, do_stuff_for_jon);
 }
 
 void DeferredShader::archeryArcPass(Camera* camera) {

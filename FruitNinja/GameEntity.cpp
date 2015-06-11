@@ -12,10 +12,10 @@
 #include "AudioManager.h"
 #include "main.h"
 
+#define ANIMATE_TIME 3.f
+
 using namespace glm;
 using namespace std;
-
-#define ANIMATE_TIME 3.f
 
 GameEntity::GameEntity(glm::vec3 position, MeshSet* mesh, bool collision_response) : mesh(mesh), rotations(glm::vec3(0.f, 0.f, 0.f)),
 collision_response(collision_response)
@@ -286,24 +286,26 @@ void GameEntity::update()
 		{
 			float m_change = wall_height / ANIMATE_TIME;
 			setPosition(getPosition() + vec3(0.f, m_change * seconds_passed, 0.f));
-		} 
+		}
 		else
 		{
 			animate = false;
+			setPosition(animateCachePosition);
 		}
 	}
-}
-
-std::vector<std::vector<glm::mat4>>* GameEntity::getBoneTransformations() {
-	return NULL;
 }
 
 void GameEntity::startAnimate()
 {
 	if (!animate)
 	{
+		animateCachePosition = getPosition();
 		animate = true;
 		time_elapsed = 0;
 		setPosition(getPosition() - vec3(0.f, wall_height, 0.f));
 	}
+}
+
+std::vector<std::vector<glm::mat4>>* GameEntity::getBoneTransformations() {
+	return NULL;
 }

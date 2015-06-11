@@ -16,6 +16,7 @@ public:
 	ChewyMovementComponent moveComponent;
 	ChewyAnimationComponent animComponent;
 	bool isCaught;
+	bool isDead = false;
 	glm::mat4 getModelMat();
 	std::vector<std::vector<glm::mat4>>* getBoneTransformations() override;
 };

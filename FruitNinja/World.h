@@ -16,6 +16,8 @@
 #include "HUD.h"
 #include "LoadingScreen.h"
 
+#define DEBUG_MODE true
+
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define GRAVITY 33
@@ -53,7 +55,6 @@ extern int arrow_count;
 extern int current_courtyard;
 extern int health;
 extern glm::vec3 directional_light;
-extern int starting_arrow_count;
 extern float wall_height;
 
 enum GameState{
@@ -91,12 +92,13 @@ public:
 	void setup_next_courtyard(bool setup_cin_cam = true);
 	void push_courtyards(int current_courtyard);
 	void lose_condition();
+	void delayed_lose_condition();
 	void setup_cinematic_camera(string file_path, bool setup_cin_cam);
     void setup_level(string file_path, bool animate_elements = false);
     void load_button(string file_path);
     void setup_moving_platform(string file_path);
 	void convert_to_collectible(ProjectileEntity* p);
-	void zoom_on_guard(GuardEntity* g);
+	void zoom_on_guard(GameEntity* g);
 	void set_chewy_light_distance(float dist, float le_hv_length);
 
 	GameState getState();
@@ -105,6 +107,7 @@ public:
 
 	static void resize_window(GLFWwindow* window, int w, int h);
 	void addExplosion(glm::vec3 pos);
+	void enableFireArrows();
 
 	EndScene* endScene = nullptr;
 	DebugCamera* debug_camera;
@@ -133,6 +136,6 @@ private:
 	void set_puppeteer(int courtyard);
 	DeferredShader* defShader;
 
-	
+	bool _fiery_arrows = false;
 };
 

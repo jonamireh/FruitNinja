@@ -245,6 +245,7 @@
     <ClCompile Include="tdogl\stb_image.c" />
     <ClCompile Include="tdogl\Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="WallOfDoomEntity.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -414,6 +415,7 @@
     <ClInclude Include="tdogl\stb_image.h" />
     <ClInclude Include="tdogl\Texture.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="WallOfDoomEntity.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

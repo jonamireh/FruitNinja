@@ -17,6 +17,7 @@
 #include <functional>
 #include <queue>
 #include "LightEntity.h"
+#include "WallOfDoomEntity.h"
 #include "FallingEntity.h"
 #include "DoorEntity.h"
 #include "SpikeEntity.h"
@@ -73,12 +74,12 @@ static vector<std::function<void()>> debugShaderQueue;
 
 float bow_strength = .5f;
 int arrow_count = 100;
-int starting_arrow_count = 100;
+int starting_arrow_count = arrow_count;
+
+float wall_height;
 
 int health = MAX_HEALTH;
 glm::vec3 directional_light = glm::vec3(0);
-
-float wall_height;
 
 World::World()
 {
@@ -109,6 +110,11 @@ void World::init()
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x6", new MeshSet(assetPath + "interiorWall_1x6.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x7", new MeshSet(assetPath + "interiorWall_1x7.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
+    meshes.insert(pair<string, MeshSet*>("exploding_barrel", new MeshSet(assetPath + "explodingBarrel.dae")));
+    meshes.insert(pair<string, MeshSet*>("heart", new MeshSet(assetPath + "heart.dae")));
+    meshes.insert(pair<string, MeshSet*>("fire_arrow_pickup", new MeshSet(assetPath + "tempFireArrowPickup.dae")));
+    meshes.insert(pair<string, MeshSet*>("single_arrow_pickup", new MeshSet(assetPath + "arrowPickup_single.dae")));
+    meshes.insert(pair<string, MeshSet*>("triple_arrow_pickup", new MeshSet(assetPath + "arrowPickup_triple.dae")));
     meshes.insert(pair<string, MeshSet*>("spike", new MeshSet(assetPath + "spikes.dae")));
     meshes.insert(pair<string, MeshSet*>("spikes_floor", new MeshSet(assetPath + "spikes_floor.dae")));
     meshes.insert(pair<string, MeshSet*>("button", new MeshSet(assetPath + "button.dae")));
@@ -122,8 +128,8 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("ground", new MeshSet(assetPath + "ground.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
-	meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai2.dae")));
-	meshes.insert(pair<string, MeshSet*>("blue_guard", new MeshSet(assetPath + "blue_samurai2.dae")));
+	meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai.dae")));
+	meshes.insert(pair<string, MeshSet*>("blue_guard", new MeshSet(assetPath + "blue_samurai.dae")));
 	meshes.insert(pair<string, MeshSet*>("guard_bb", new MeshSet(assetPath + "samurai_bbox.obj")));
 	meshes.insert(pair<string, MeshSet*>("guard_outer_bb", new MeshSet(assetPath + "outer_samurai_bbox.obj")));
 	meshes.insert(pair<string, MeshSet*>("arrow", new MeshSet(assetPath + "arrow.dae")));
@@ -146,6 +152,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("fence", new MeshSet(assetPath + "fence.dae")));
 	meshes.insert(pair<string, MeshSet*>("pineapple", new MeshSet(assetPath + "pineapple.dae")));
 	meshes.insert(pair<string, MeshSet*>("ending_ground", new MeshSet(assetPath + "ending_ground.dae")));
+	meshes.insert(pair<string, MeshSet*>("fire_arrow_pickup", new MeshSet(assetPath + "tempFireArrowPickup.dae")));
 
 	archery_camera = new ArcheryCamera(meshes.at("unit_sphere")->getMeshes().at(0));
 
@@ -203,7 +210,6 @@ void World::init()
 	entities.push_back(wall_right);
 	entities.push_back(wall_front);
 	entities.push_back(wall_back);
-	wall_height = entities.back()->bounding_box.half_height;
 	entities.push_back(roof_left);
 	entities.push_back(roof_right);
 	entities.push_back(roof_front);
@@ -231,6 +237,7 @@ void World::init()
 	//entities.back()->setScale(3.f);
 	//entities.push_back(new ObstacleEntity(glm::vec3(35, 0, 35), meshes.at("gate_base")));
 	//entities.back()->setScale(3.f);
+
 	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
 
@@ -251,11 +258,15 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		should_del.push_back(entities[i]);
 	}
 	entities.erase(entities.begin() + NUM_PERSISTENT, entities.end());
+
 	//theoretically, you won the previous level
 	if (setup_cin_cam)
 	{
 		starting_arrow_count = arrow_count;
+		player_camera->theta = -90.f;
+		player_camera->phi = 0.f;
 	}
+
     current_courtyard++;
 
     // these are supposedly the walls... lets hope the indices dont change!
@@ -263,6 +274,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
     entities.at(4)->setScale(vec3(30.f));
     entities.at(5)->setScale(vec3(30.f));
     entities.at(6)->setScale(vec3(30.f));
+	wall_height = entities.at(6)->bounding_box.half_height;
 	// these are supposedly the roofs
 	entities.at(7)->setPosition(vec3(entities.at(7)->getPosition().x, 66.f, entities.at(7)->getPosition().z));
 	entities.at(8)->setPosition(vec3(entities.at(8)->getPosition().x, 66.f, entities.at(8)->getPosition().z));
@@ -281,9 +293,9 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	case 1:
 		setup_level(level_path + "first_courtyard.txt");
 		setup_guard(level_path + "first_courtyard_guard.txt");
-		setup_guard(level_path + "first_courtyard_second_guard.txt");
-		setup_guard(level_path + "first_courtyard_third_guard.txt");
-		setup_guard(level_path + "first_courtyard_fourth_guard.txt");
+		//setup_guard(level_path + "first_courtyard_second_guard.txt");
+		//setup_guard(level_path + "first_courtyard_third_guard.txt");
+		//setup_guard(level_path + "first_courtyard_fourth_guard.txt");
 		player_camera->movement(chewy);
 		setup_cinematic_camera(level_path + "first_courtyard_cinematic.txt", setup_cin_cam);
 		break;
@@ -314,6 +326,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_guard(level_path + "fourth_courtyard_third_guard.txt");
         load_button(level_path + "fourth_courtyard_button_one.txt");
         load_button(level_path + "fourth_courtyard_button_two.txt");
+		player_camera->movement(chewy);
+		setup_cinematic_camera(level_path + "fourth_courtyard_cinematic.txt", true);
 
         // these are supposedly the walls... lets hope the indices dont change!
         entities.at(3)->setScale(vec3(30.f, 40.f, 30.f));
@@ -329,11 +343,11 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		break;
 	case 5:
         setup_level(level_path + "fifth_courtyard.txt");
-        setup_moving_platform(level_path + "fifth_courtyard_platform_one.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_two.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_four.txt");
         load_button(level_path + "fifth_courtyard_button_one.txt");
+        load_button(level_path + "fifth_courtyard_gate_drop.txt");
 		break;
 	}
 }
@@ -413,12 +427,33 @@ void World::push_courtyards(int current_courtyard)
 	entities.at(2)->setPosition(vec3(entities.at(2)->getPosition().x, entities.at(2)->bounding_box.half_height + (1 - current_courtyard) * wall_scale, entities.at(2)->getPosition().z));
 }
 
+void World::delayed_lose_condition()
+{
+	state = SPOTTED;
+
+	vec3 p_pos = player_camera->cameraPosition;
+	vec3 look = player_camera->lookAtPoint;
+	vec3 g_dir = chewy->getPosition() - player_camera->lookAtPoint;
+	cinematic_camera->init({ p_pos, p_pos + vec3(0.0, 5.0, 0.0), look + vec3(0.0, 5.0, 0.0) + g_dir * .25f,
+		look + vec3(0.0, 5.0, 0.0) + g_dir * .5f},
+		{ look, look + g_dir * .5f, look + g_dir * .75f, chewy->getPosition()}, 10.f);
+	camera->in_use = false;
+	camera = cinematic_camera;
+	camera->in_use = true;
+	chewy->isDead = true;
+}
+
 void World::lose_condition()
 {
 	current_courtyard--;
 	setup_next_courtyard(false);
-	arrow_count = starting_arrow_count;
 	health--;
+	arrow_count = starting_arrow_count;
+	//set player camera sorta
+	camera = player_camera;
+	debug_camera->in_use = false;
+	player_camera->in_use = true;
+	archery_camera->in_use = false;
 }
 
 void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
@@ -472,17 +507,20 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 	camera_positions.push_back(player_camera->cameraPosition);
 	look_at_positions.push_back(player_camera->lookAtPoint);
 
-	if (!run_cinematic_camera)
+	if (!run_cinematic_camera || chewy->isDead)
 	{
 		camera->in_use = false;
 		camera = player_camera;
 		camera->in_use = true;
 	}
 	else {
+		if (camera != nullptr)
+		{
+			camera->in_use = false;
+		}
 		cinematic_camera->init(camera_positions, look_at_positions, 40.f);
 		camera = cinematic_camera;
 		cinematic_camera->in_use = true;
-		player_camera->in_use = false;
 	}
 
 	chewy->bounding_box.center.y = temp;
@@ -535,8 +573,14 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 	bool flag = false; // used for door orientation and accessability
 	switch (obj_to_place)
 	{
+    case 'a':
+		entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["single_arrow_pickup"], ARROW_TYPE));
+        entities.back()->setup_entity_box(meshes["arrow_pickup"]);
+        break;
     case 'A':
-		entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["arrow"]));
+
+		entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["triple_arrow_pickup"], ARROW_TYPE, true, 3));
+        entities.back()->setup_entity_box(meshes["arrow_pickup"]);
         break;
     // dont' use 'B'
 	case 'C': // set chewy's position
@@ -646,6 +690,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setPosition(entities.back()->getPosition() + vec3(0.f, 0.f, 3.f - entities.back()->inner_bounding_box.half_depth));
         entities.back()->list = UNSET_OCTTREE((entities.back()->list));
         break;
+    case 'h': // heart pickup
+        entities.push_back(new CollectableEntity(placement_position + vec3(0.0f, FILE_TO_WORLD_SCALE / 2.0f, 0.0f), meshes["heart"], HEART_TYPE));
+        entities.back()->setup_entity_box(meshes["arrow_pickup"]);
+        break;
     case 'H': //3x3 inner wall
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_3x3"))); 
         if (((((int)placement_position.x / (int)FILE_TO_WORLD_SCALE) % 2) && (((int)placement_position.z / (int)FILE_TO_WORLD_SCALE) % 2)) ||
@@ -700,6 +748,19 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("closedBarrel")));
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
+        break;
+    case 'p': //fire arrow pickup
+        entities.push_back(new CollectableEntity(placement_position, meshes.at("fire_arrow_pickup"), FIRE_ARROW_TYPE, true));
+        entities.back()->setup_entity_box(meshes["arrow_pickup"]);
+        break;
+    case 'P':
+        entities.push_back(new DoorEntity(placement_position, meshes.at("door"), true));
+        entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
+        entities.back()->setScale(3.f);
+        break;
+    case 'Q':
+        entities.push_back(new ExplosiveEntity(placement_position, meshes.at("exploding_barrel"), 6.f));
+        entities.back()->setScale(3.f);
         break;
     case 'R': // right facing lantern on wall
         entities.push_back(new LightEntity(placement_position,
@@ -759,6 +820,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->setScale(3.f);
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		break;
+    case'{':
+        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("box"), vec3(-1.f, 0.f, 0.f)));
+        entities.back()->setScale(3.f);
+        break;
     case '1':
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x1")));
         entities.back()->setScale(3.f);
@@ -833,6 +898,7 @@ void World::load_button(string file_path)
     int current_row = 0;
     int height_level = -1;
     bool open_gate = false;
+    bool wall_of_doom = false;
 
     while (!level_file.eof()) // runs through every line
     {
@@ -860,6 +926,9 @@ void World::load_button(string file_path)
             case 'G':
                 open_gate = true;
                 break;
+            case '{':
+                wall_of_doom = true;
+                break;
             }
         }
         if (current_line == "________________________________________")
@@ -874,12 +943,13 @@ void World::load_button(string file_path)
                 glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
                 if (current_line.at(i) == 'B')
                 {
-                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, open_gate));
+                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, open_gate, wall_of_doom));
                 }
             }
             current_row++;
         }
     }
+
     level_file.close();
 }
 
@@ -985,6 +1055,7 @@ void World::setup_moving_platform(string file_path)
 	string current_line;
 	int current_row = 0;
     int height_level = -1;
+    bool tile = false;
 
 	vec3 control_points[10];
 	vec3 starting_position;
@@ -1005,6 +1076,10 @@ void World::setup_moving_platform(string file_path)
 			case 'P':
 				starting_position = world_position;
 				break;
+            case 'T':
+                starting_position = world_position;
+                tile = true;
+                break;
 			case '0':
 				control_points[0] = world_position;
 				break;
@@ -1050,7 +1125,10 @@ void World::setup_moving_platform(string file_path)
 			break;
 	}
     PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
-    platform->setScale(4.f);
+    if (tile)
+        platform->setScale(6.f);
+    else
+        platform->setScale(4.f);
     entities.push_back(platform);
 	level_file.close();
 }
@@ -1076,7 +1154,12 @@ void World::shootArrows()
 	if (held && !(keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && arrow_count > 0)
 	{
 		//entities.push_back(new FireArrowEntity(meshes["arrow"], archery_camera));
-		entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
+		if (_fiery_arrows) {
+			entities.push_back(new FireArrowEntity(meshes["arrow"], archery_camera));
+		}
+		else {
+			entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
+		}
 		vec3 center = entities.back()->getPosition();
 		entities.back()->setup_entity_box(meshes.at("arrow_pickup"));
 		entities.back()->setup_inner_entity_box(meshes.at("arrow_bb"));
@@ -1229,7 +1312,7 @@ void World::mouse_button_callback(GLFWwindow* window, int button, int action, in
 
 void World::convert_to_collectible(ProjectileEntity* p)
 {
-	entities.push_back(new CollectableEntity(p->getPosition(), meshes.at("arrow"), false, 1));
+	entities.push_back(new CollectableEntity(p->getPosition(), meshes.at("arrow"), ARROW_TYPE, false, 1));
 	entities.back()->bounding_box = p->bounding_box;
 	entities.back()->inner_bounding_box = p->inner_bounding_box;
 	//entities.back()->inner_bounding_box.center -= p->dist * normalize(p->movement.velocity);
@@ -1255,7 +1338,7 @@ void World::set_chewy_light_distance(float dist, float le_hv_length)
 
 void World::change_camera()
 {
-	if (keys[GLFW_KEY_1])
+	if (keys[GLFW_KEY_1] && DEBUG_MODE)
 	{
 		camera = debug_camera;
 		debug_camera->in_use = true;
@@ -1303,15 +1386,43 @@ void World::enable_debugging()
 
 void World::skip_level()
 {
+	
 	if (mouse_buttons_pressed[2]) {
-		setup_next_courtyard();
+		if (DEBUG_MODE) {
+			setup_next_courtyard();
+		}
+		else {
+			if (keys[GLFW_KEY_PAGE_DOWN]) {
+				setup_next_courtyard();
+			}
+		}
+
+		mouse_buttons_pressed[2] = false;
 	}
 
-	mouse_buttons_pressed[2] = false;
+	if (DEBUG_MODE) {
+		//jon's middle click doesn't work
+		if (keys[GLFW_KEY_7])
+		{
+			current_courtyard = 3;
+			setup_next_courtyard();
+		}
+		if (keys[GLFW_KEY_6])
+		{
+			current_courtyard = 3;
+			setup_next_courtyard();
+		}
+		//faster level design
+		if (keys[GLFW_KEY_8])
+		{
+			current_courtyard--;
+			setup_next_courtyard();
+		}
+	}
 }
 void World::cancel_cinematic()
 {
-	if (keys[GLFW_KEY_0])
+	if (keys[GLFW_KEY_ENTER])
 	{
 		run_cinematic_camera = false;
 		camera = player_camera;
@@ -1320,7 +1431,6 @@ void World::cancel_cinematic()
 }
 void World::update_key_callbacks()
 {
-	camera->movement(chewy);
 	if (run_cinematic_camera)
 	{
 		cancel_cinematic();
@@ -1334,10 +1444,13 @@ void World::update_key_callbacks()
 	else if (state != SPOTTED)
 	{
 		change_camera();
-		enable_debugging();
 		skip_level();
-		stop_time();
+		if (DEBUG_MODE) {
+			enable_debugging();
+			stop_time();
+		}
 	}
+	camera->movement(chewy);
 	x_offset = 0;
 	y_offset = 0;
 }
@@ -1378,17 +1491,18 @@ void World::update()
 	{
 		if (loading_screen == nullptr)
 		{
-
 			shootArrows();
 			vector<GameEntity*> guards;
 
-			if (state == SPOTTED && cinematic_camera->pathing.done) {
-				lose_condition();
-				chewy->isCaught = false;
-				chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
-				chewy->animComponent.currentAnimtion = standing;
-				state = HIDDEN;
-			}
+			for (int i = 0; i < entities.size(); i++)
+				if (state == SPOTTED && cinematic_camera->pathing.done) {
+					lose_condition();
+					chewy->isCaught = false;
+					chewy->isDead = false;
+					chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
+					chewy->animComponent.currentAnimtion = standing;
+					state = HIDDEN;
+				}
 			if (_puppeteer){
 				_puppeteer->update();
 			}
@@ -1396,9 +1510,14 @@ void World::update()
 			{
 				entities[i]->update();
 				GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
-				if (guard_temp != nullptr)
+				if (guard_temp != nullptr && !guard_temp->is_dying())
 				{
-					guards.push_back(entities[i]);
+					entities[i]->update();
+					GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
+					if (guard_temp != nullptr)
+					{
+						guards.push_back(entities[i]);
+					}
 				}
 			}
 
@@ -1413,6 +1532,7 @@ void World::update()
 				seconds_passed = 0.f;
 			}
 			start_time = glfwGetTime();
+
 			guard_fov = min_guard_fov;
 			guard_far = min_guard_far;
 			cached_le_distance = FLT_MAX;
@@ -1476,7 +1596,7 @@ void World::update()
 	}
 }
 
-void World::zoom_on_guard(GuardEntity* guard_temp)
+void World::zoom_on_guard(GameEntity* guard_temp)
 {
 	AudioManager::instance()->play3D(assetPath + "jons_breakthrough_performance.wav", guard_temp->getPosition(), 10.0f, false);
 	state = SPOTTED;
@@ -1571,4 +1691,8 @@ void World::addExplosion(glm::vec3 pos) {
 void World::change_camera(Camera* newCamera)
 {
 	camera = newCamera;
+}
+
+void World::enableFireArrows() {
+	_fiery_arrows = true;
 }

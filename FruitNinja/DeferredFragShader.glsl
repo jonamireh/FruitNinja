@@ -23,6 +23,6 @@ void main()
 		DiffuseOut = UdColor;
 	}
 
-	NormalOut = vNormal; 
+	NormalOut = normalize(vNormal); 
     TexCoordOut = vec3(vTextCoord, 0.0); 
 }

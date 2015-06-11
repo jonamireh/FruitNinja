@@ -22,10 +22,10 @@ DirShadowMapShader::DirShadowMapShader(std::string vertShader, std::string fragS
 	uBonesHandle = getUniformHandle("uBones[0]");
 	//UdColorHandle = getUniformHandle("UdColor");
 
-	vec3 cameraPoint = vec3(115.0f, 0.0f, 115.0f) - normalize(lightDirection) * 100.0f;
+	vec3 cameraPoint = vec3(115.0f, 0.0f, 115.0f) - normalize(lightDirection) * 150.0f;
 
 	view_mat = lookAt(cameraPoint, cameraPoint + lightDirection, vec3(0.0f, 0.0f, 1.0f));
-	projection_mat = ortho(-200.0f, 200.0f, -200.0f, 200.0f, 1.0f, 175.0f);
+	projection_mat = ortho(-200.0f, 200.0f, -200.0f, 200.0f, 1.0f, 225.0f);
 	mat4 VP = projection_mat * view_mat;
 }
 
@@ -84,11 +84,13 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 					for (auto& entity : currAnimation.second) {
 						glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-						check_gl_error("Def shader before draw");
+						if (DEBUG_MODE)
+							check_gl_error("Def shader before draw");
 
 						glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-						check_gl_error("Def shader after draw");
+						if (DEBUG_MODE)
+							check_gl_error("Def shader after draw");
 					}
 				}
 			}
@@ -99,11 +101,13 @@ void DirShadowMapShader::draw(vector<GameEntity*> ents)
 				for (auto& entity : currMeshSet.second) {
 					glUniformMatrix4fv(uModelMatrixHandle, 1, GL_FALSE, value_ptr(entity->getModelMat()));
 
-					check_gl_error("Def shader before draw");
+					if (DEBUG_MODE)
+						check_gl_error("Def shader before draw");
 
 					glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, 0);
 
-					check_gl_error("Def shader after draw");
+					if (DEBUG_MODE)
+						check_gl_error("Def shader after draw");
 				}
 			}
 		}

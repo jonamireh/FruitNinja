@@ -37,9 +37,14 @@ void StencilShader::stencilPass(Camera* camera, GBuffer* gbuffer, Light* light)
 	glUniformMatrix4fv(proj_handle, 1, GL_FALSE, glm::value_ptr(projection));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, light->IND());
-	check_gl_error("stencil before");
+
+	if (DEBUG_MODE)
+		check_gl_error("stencil before");
+
 	glDrawElements(GL_TRIANGLES, light->indices_size(), GL_UNSIGNED_INT, 0);
-	check_gl_error("stencil after");
+
+	if (DEBUG_MODE)
+		check_gl_error("stencil after");
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

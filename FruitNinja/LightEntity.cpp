@@ -32,7 +32,8 @@ void LightEntity::update()
 	if (animate)
 	{
 		light->pos = getPosition();
-		light->_transform = glm::translate(glm::mat4(1.0f), light->pos) * light->calc_scale_mat();
+		light->_transform = translate(glm::mat4(1.0f), light->pos) * light->calc_scale_mat();
+
 	}
 }
 
