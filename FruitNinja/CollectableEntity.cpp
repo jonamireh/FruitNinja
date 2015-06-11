@@ -29,7 +29,6 @@ void CollectableEntity::collision(GameEntity* entity) {
 	if (typeid(*entity) == typeid(ChewyEntity)) {
 		AudioManager::instance()->play3D(assetPath + "Get_Item.wav", center, 10.0f, false);
 		arrow_count += number;
-		number = 0;
 		list = UNSET_DRAW(list);
 	}
 }
