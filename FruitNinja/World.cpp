@@ -343,8 +343,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fifth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_four.txt");
         load_button(level_path + "fifth_courtyard_button_one.txt");
-        // gate drop button
-        load_button(level_path + "wall_of_doom.txt");
+        load_button(level_path + "fifth_courtyard_gate_drop.txt");
 		break;
 	}
 }
