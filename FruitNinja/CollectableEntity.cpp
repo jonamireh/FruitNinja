@@ -11,9 +11,10 @@ CollectableEntity::~CollectableEntity() {
 
 }
 
-CollectableEntity::CollectableEntity(glm::vec3 position, MeshSet* mesh, bool animate, int numArrows) : GameEntity(position, mesh), animate(animate) {
+CollectableEntity::CollectableEntity(glm::vec3 position, MeshSet* mesh, CollectableType type, bool animate, int num) : GameEntity(position, mesh), animate(animate) {
 	center = getPosition();
-	number = numArrows;
+	number = num;
+	_type = type;
 }
 
 void CollectableEntity::update() {
@@ -28,8 +29,12 @@ void CollectableEntity::update() {
 void CollectableEntity::collision(GameEntity* entity) {
 	if (typeid(*entity) == typeid(ChewyEntity)) {
 		AudioManager::instance()->play3D(assetPath + "Get_Item.wav", center, 10.0f, false);
-		arrow_count += number;
-		number = 0;
+		if (_type == ARROW_TYPE) {
+			arrow_count += number;
+		}
+		else if (_type == HEART_TYPE) {
+			health += number;
+		}
 		list = UNSET_DRAW(list);
 	}
 }
