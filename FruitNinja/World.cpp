@@ -295,6 +295,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		//setup_guard(level_path + "first_courtyard_third_guard.txt");
 		//setup_guard(level_path + "first_courtyard_fourth_guard.txt");
 		player_camera->movement(chewy);
+		//if (setup_cin_cam)
+			//loading_screen = new LoadingScreen("LoadScreen0.png", "Light is the Enemy!");
 		setup_cinematic_camera(level_path + "first_courtyard_cinematic.txt", setup_cin_cam);
 		break;
 	case 2:
@@ -311,6 +313,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	case 3:
 		setup_level(level_path + "third_courtyard.txt");
         load_button(level_path + "third_courtyard_button_one.txt");
+		if (setup_cin_cam)
+			loading_screen = new LoadingScreen("LoadScreen2.png", "Surprises Around Every Corner");
 		player_camera->movement(chewy);
 		break;
 	case 4:
@@ -337,6 +341,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		entities.at(8)->setPosition(vec3(entities.at(8)->getPosition().x, 86.f, entities.at(8)->getPosition().z));
 		entities.at(9)->setPosition(vec3(entities.at(9)->getPosition().x, 86.f, entities.at(9)->getPosition().z));
 		entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 86.f, entities.at(10)->getPosition().z));
+		if (setup_cin_cam)
+			loading_screen = new LoadingScreen("LoadScreen3.png", "Tighter Security");
 		break;
 	case 5:
         setup_level(level_path + "fifth_courtyard.txt");
@@ -345,6 +351,8 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fifth_courtyard_platform_four.txt");
         load_button(level_path + "fifth_courtyard_button_one.txt");
         load_button(level_path + "fifth_courtyard_gate_drop.txt");
+		if (setup_cin_cam)
+			loading_screen = new LoadingScreen("LoadScreen4.png", "Don't Burn Yourself");
 		break;
 	}
 }
