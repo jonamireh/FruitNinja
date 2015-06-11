@@ -218,11 +218,11 @@ ________________________________________
 |                                  K   |
 |                                  K   |
 |2kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk2   |
-|  <     Qs                            |
-|  <     E        W                    |
-|P <              Q                    |
-|  <          e    n                   |
-|  <         WQn                       |
+|  <     QW                            |
+|  <Q    W                             |
+|P <w            A                     |
+|  <ww                                 |
+|  < Q                                 |
 |2kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk2   |
 |                                 {2   |
 |                                 {2   |

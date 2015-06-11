@@ -1,6 +1,7 @@
 M target
 B wall_of_doom.txt
 G open the gate to the pineapple
+C fifth_courtyard_cinematic_2.txt
 ________________________________________
 ________________________________________
 |                                      |

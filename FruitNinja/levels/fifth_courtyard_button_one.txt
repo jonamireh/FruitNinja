@@ -1,6 +1,7 @@
 M button
 L fifth_courtyard_button_one.txt
 P fifth_courtyard_platform_five.txt
+C fifth_courtyard_cinematic_1.txt
 ________________________________________
 |                                      |
 |                                      |

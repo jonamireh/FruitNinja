@@ -73,7 +73,7 @@ int current_courtyard = 0;
 static vector<std::function<void()>> debugShaderQueue;
 
 float bow_strength = .5f;
-int arrow_count = 100;
+int arrow_count = 9;
 int starting_arrow_count = arrow_count;
 
 float wall_height;
@@ -103,6 +103,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("roof", new MeshSet(assetPath + "roof.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x1", new MeshSet(assetPath + "interiorWall_1x1.dae")));
+    meshes.insert(pair<string, MeshSet*>("interior_wall_1x1", new MeshSet(assetPath + "interiorWall_1x1.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x2", new MeshSet(assetPath + "interiorWall_1x2.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x3", new MeshSet(assetPath + "interiorWall_1x3.dae")));
     meshes.insert(pair<string, MeshSet*>("interior_wall_1x4", new MeshSet(assetPath + "interiorWall_1x4.dae")));
@@ -112,6 +113,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
     meshes.insert(pair<string, MeshSet*>("exploding_barrel", new MeshSet(assetPath + "explodingBarrel.dae")));
     meshes.insert(pair<string, MeshSet*>("heart", new MeshSet(assetPath + "heart.dae")));
+    meshes.insert(pair<string, MeshSet*>("doom_wall", new MeshSet(assetPath + "spikes_rotated.dae")));
     meshes.insert(pair<string, MeshSet*>("fire_arrow_pickup", new MeshSet(assetPath + "tempFireArrowPickup.dae")));
     meshes.insert(pair<string, MeshSet*>("single_arrow_pickup", new MeshSet(assetPath + "arrowPickup_single.dae")));
     meshes.insert(pair<string, MeshSet*>("triple_arrow_pickup", new MeshSet(assetPath + "arrowPickup_triple.dae")));
@@ -281,10 +283,6 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	entities.at(9)->setPosition(vec3(entities.at(9)->getPosition().x, 66.f, entities.at(9)->getPosition().z));
 	entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 66.f, entities.at(10)->getPosition().z));	
 
-	// JUST FOR DEMO
-	if (current_courtyard == 6)
-		current_courtyard = 1;
-
 	push_courtyards(current_courtyard);
 
 	set_puppeteer(current_courtyard);
@@ -327,7 +325,6 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fourth_courtyard_platform_five.txt");
         setup_guard(level_path + "fourth_courtyard_first_guard.txt");
         setup_guard(level_path + "fourth_courtyard_second_guard.txt");
-        setup_guard(level_path + "fourth_courtyard_third_guard.txt");
         load_button(level_path + "fourth_courtyard_button_one.txt");
         load_button(level_path + "fourth_courtyard_button_two.txt");
 		player_camera->movement(chewy);
@@ -454,8 +451,13 @@ void World::delayed_lose_condition()
 void World::lose_condition()
 {
 	current_courtyard--;
+    health--;
+    if (health <= 0)
+    {
+        health = 4;
+        current_courtyard = 0;
+    }
 	setup_next_courtyard(false);
-	health--;
 	arrow_count = starting_arrow_count;
 	//set player camera sorta
 	camera = player_camera;
@@ -829,8 +831,9 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		break;
     case'{':
-        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("box"), vec3(-1.f, 0.f, 0.f)));
+        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("doom_wall"), vec3(-1.f, 0.f, 0.f)));
         entities.back()->setScale(3.f);
+        entities.back()->setRotations(vec3(0.f, -M_PI_2, 0.f));
         break;
     case '1':
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x1")));
@@ -1049,9 +1052,9 @@ void World::setup_guard(string file_path)
 		guard_ent = new GuardEntity(starting_position, meshes["blue_guard"], _puppeteer, spline_points, 4.f, linear, isArmored);
     else
 		guard_ent = new GuardEntity(starting_position, meshes["guard"], _puppeteer, spline_points, 4.f, linear);
+	entities.push_back(guard_ent);
 	entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 	entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-	entities.push_back(guard_ent);
 	level_file.close();
 }
 
@@ -1489,7 +1492,7 @@ void World::stop_time()
 void World::update()
 {
 	static float start_time = 0.0;
-	if (keys[GLFW_KEY_RIGHT_CONTROL])
+    if (keys[GLFW_KEY_RIGHT_CONTROL])
 	{
 		endScene = new EndScene();
 	}

@@ -7,6 +7,7 @@
 
 class Light {
 public:
+	Light(glm::vec3 pos);
 	Light(glm::vec3 pos, glm::vec3 color, float intensity, MeshSet* mesh);
 	glm::vec3 pos;
 	glm::vec3 color;
