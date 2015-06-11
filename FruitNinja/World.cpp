@@ -328,13 +328,10 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		break;
 	case 5:
         setup_level(level_path + "fifth_courtyard.txt");
-<<<<<<< HEAD
-=======
         setup_moving_platform(level_path + "fifth_courtyard_platform_two.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_four.txt");
         load_button(level_path + "fifth_courtyard_button_one.txt");
->>>>>>> 19d934af5d3b41548c45454498220765d6a8e270
 		break;
 	}
 }
@@ -1082,18 +1079,12 @@ void World::setup_moving_platform(string file_path)
 		else
 			break;
 	}
-<<<<<<< HEAD
-	PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
-	platform->setScale(4.f);
-	entities.push_back(platform);
-=======
     PlatformEntity* platform = new PlatformEntity(starting_position, meshes["platform"], spline_points, 10.f);
     if (tile)
         platform->setScale(6.f);
     else
         platform->setScale(4.f);
     entities.push_back(platform);
->>>>>>> 19d934af5d3b41548c45454498220765d6a8e270
 	level_file.close();
 }
 
