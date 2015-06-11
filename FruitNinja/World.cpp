@@ -1428,7 +1428,7 @@ void World::flip_controls()
 
 void World::cancel_cinematic()
 {
-	if (keys[GLFW_KEY_ENTER])
+	if (keys[GLFW_KEY_0])
 	{
 		run_cinematic_camera = false;
 		camera = player_camera;
