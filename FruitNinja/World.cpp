@@ -1703,6 +1703,7 @@ void World::resize_window(GLFWwindow* window, int w, int h) {
 
 void World::addExplosion(glm::vec3 pos) {
 	defShader->addExplosion(pos);
+	AudioManager::instance()->play3D(assetPath + "explosion.wav", pos, 20.0, false);
 }
 
 void World::change_camera(Camera* newCamera)
