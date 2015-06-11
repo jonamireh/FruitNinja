@@ -107,7 +107,6 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 		{
   			animComponent.setCurrentAnimation(IDLE);
 			static_movement = true;
-			
 			return true;
 		}
 	}

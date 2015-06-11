@@ -51,8 +51,6 @@ extern int arrow_count;
 extern int current_courtyard;
 extern int health;
 extern glm::vec3 directional_light;
-extern int starting_arrow_count;
-extern float wall_height;
 
 enum GameState{
 	HIDDEN,
@@ -90,7 +88,7 @@ public:
 	void lose_condition();
 	void delayed_lose_condition();
 	void setup_cinematic_camera(string file_path, bool setup_cin_cam);
-    void setup_level(string file_path, bool animate_elements = false);
+    void setup_level(string file_path);
     void load_button(string file_path);
     void setup_moving_platform(string file_path);
 	void convert_to_collectible(ProjectileEntity* p);
