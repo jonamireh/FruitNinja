@@ -21,4 +21,5 @@ public:
 	void reorient(std::vector<GameEntity*> entities, ChewyEntity* chewy);
 	glm::vec3* PlayerCamera::get_near_plane_corners();
 	glm::vec3 lookAtPoint;
+	bool flippedControls = false;
 };
