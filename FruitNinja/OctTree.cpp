@@ -58,13 +58,8 @@ OctTree::OctTree(Voxel vox, vector<GameEntity*> objects_in_section)
         {
             for (int i = 0; i < cur->objects.size() - 1; i++)
             {
-				for (int j = i + 1; j < cur->objects.size(); j++) {
-					GameEntity* first = cur->objects.at(i);
-					GameEntity* second = cur->objects.at(j);
-					if (first->collision_response || second->collision_response) {
-						collision_pairs.insert(pair<GameEntity*, GameEntity*>(first, second));
-					}
-				}
+                for (int j = i + 1; j < cur->objects.size(); j++)
+                    collision_pairs.insert(pair<GameEntity*, GameEntity*>(cur->objects.at(i), cur->objects.at(j)));
             }
         }
         else

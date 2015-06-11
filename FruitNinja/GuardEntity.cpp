@@ -105,7 +105,6 @@ bool GuardEntity::check_view(ChewyEntity* chewy, std::vector<GameEntity*> entiti
 		{
   			animComponent.setCurrentAnimation(IDLE);
 			static_movement = true;
-			
 			return true;
 		}
 	}
@@ -124,7 +123,6 @@ void GuardEntity::collision(GameEntity* entity)
 		static_movement = true;
 		world->zoom_on_guard(this);
 		bounding_box = inner_bounding_box;
-		setRotations(turnAngle(entity->getPosition() - getPosition()));
     }
 }
 

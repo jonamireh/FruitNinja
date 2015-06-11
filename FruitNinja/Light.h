@@ -16,14 +16,12 @@ public:
 	GLuint VAO();
 	size_t indices_size();
 	glm::mat4 transform();
-	glm::mat4 _transform;
-	glm::mat4 calc_scale_mat();
 private:
 	
-	
+	glm::mat4 calc_scale_mat();
 
 	GLuint _IND;
 	GLuint _VAO;
 	size_t _ind_size;
-	
+	glm::mat4 _transform;
 };

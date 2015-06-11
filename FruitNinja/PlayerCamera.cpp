@@ -97,7 +97,8 @@ float static cast_ray(vec3 ray_start, vec3 ray_end, vector<GameEntity*> entities
 	float ray_dist = glm::distance(ray_start, ray_end);
 	for (int i = 0; i < entities.size(); i++)
 	{
-		if (typeid(ChewyEntity) != typeid(*entities.at(i)) && IN_OCTTREE(entities.at(i)->list) && IS_WALL(entities.at(i)->list))
+		ChewyEntity* c_test = dynamic_cast<ChewyEntity*>(entities.at(i));
+		if (c_test == nullptr && IN_OCTTREE(entities.at(i)->list) && IS_WALL(entities.at(i)->list))
 		{
 			pair<bool, float> result = obb_ray(ray_start, glm::normalize(ray_end - ray_start), entities.at(i)->setup_inner ? entities.at(i)->inner_bounding_box : entities.at(i)->bounding_box);
 			if (result.first && result.second < ray_dist)
@@ -124,7 +125,6 @@ void PlayerCamera::reorient(vector<GameEntity*> entities, ChewyEntity* chewy)
 	}
 
 	vector<float> distances;
-	distances.reserve(5);
 	for (int i = 0; i < 5; i++)
 	{
 		distances.push_back(cast_ray(wzNear[i], wNear[i], entities));
