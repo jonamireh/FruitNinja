@@ -84,4 +84,5 @@ public:
 	bool animate = false;
 	void startAnimate();
 	float time_elapsed = 0;
+	glm::vec3 animateCachePosition;
 };
