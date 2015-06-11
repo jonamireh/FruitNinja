@@ -34,7 +34,7 @@ public:
 	float theta, phi;
 
 	Camera();
-	~Camera();
+	virtual ~Camera();
     virtual void movement(GameEntity* chewy) = 0;
 	virtual glm::mat4 getViewMatrix();
     virtual void update_radius(float delta){};

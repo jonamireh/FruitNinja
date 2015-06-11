@@ -6,6 +6,7 @@
 #include <iostream>
 #include <glm/gtc/matrix_access.inl>
 #include <glm/gtx/rotate_vector.hpp>
+#include "main.h"
 
 using namespace glm;
 using namespace std;
@@ -40,140 +41,143 @@ float angleDiff(float angle_a, float angle_b)
 
 void ChewyMovementComponent::update()
 {
-	bool jumped = false;
-	entity.last_position = entity.getPosition();
-
-	vec3 position = entity.getPosition();
-	vec3 rotations = entity.getRotations();
-	rotations.x = 0.f;
-
-	if (dynamic_cast<ChewyEntity&>(entity)._falling)
+	if (world->endScene == nullptr)
 	{
-		entity.velocity.y -= GRAVITY * seconds_passed;
-	}
-	else
-	{
-		entity.velocity = vec3(0.f);
-	}
+		bool jumped = false;
+		entity.last_position = entity.getPosition();
 
-	if (player_cam->in_use)// || archery_cam->in_use) 
-    {
-		direction.x = 0.f;
-		direction.y = 0.f;
-		direction.z = 0.f;
+		vec3 position = entity.getPosition();
+		vec3 rotations = entity.getRotations();
+		rotations.x = 0.f;
 
-		bool moved = false;
-
-		if (keys[GLFW_KEY_W]) {
-			direction += forwardDirection(player_cam);
-			moved = true;
-		}
-		if (keys[GLFW_KEY_S]) {
-			direction += backDirection(player_cam);
-			moved = true;
-		}
-		if (keys[GLFW_KEY_A]) {
-			direction += leftDirection(player_cam);
-			moved = true;
-		}
-		if (keys[GLFW_KEY_D]) {
-			direction += rightDirection(player_cam);
-			moved = true;
-		}
-
-		entity.moving = moved;
-
-        vec3 pos_offset;
-
-		if (length(direction) > 0) {
-			direction = normalize(direction * vec3(1, 0, 1));
-
-			pos_offset = direction * CHEWY_MOVE_SPEED * seconds_passed;
-
-			float toAngle = entity.turnAngle(direction).y;
-			float fromAngle = rotations.y;
-
-			if (toAngle - fromAngle < -M_PI)
-			{
-				toAngle += 2 * M_PI;
-				rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
-				if (rotations.y > M_PI)
-					rotations.y -= 2 * M_PI;
-			}
-			else if (toAngle - fromAngle > M_PI)
-			{
-				fromAngle += 2 * M_PI;
-				rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
-				if (rotations.y < -M_PI)
-					rotations.y += 2 * M_PI;
-			}
-			else
-				rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
-
-            position += pos_offset;
-		}
-        if (!dynamic_cast<ChewyEntity&>(entity)._falling && keys[GLFW_KEY_SPACE])
+		if (dynamic_cast<ChewyEntity&>(entity)._falling)
 		{
-			entity.velocity.y += 25;
-			jumped = true;
-		} 
-	}
-	else if(archery_cam->in_use) {
-		direction.x = 0.f;
-		direction.y = 0.f;
-		direction.z = 0.f;
-
-		bool moved = false;
-
-		if (keys[GLFW_KEY_W]) {
-			direction += forwardDirection(archery_cam);
-			moved = true;
+			entity.velocity.y -= GRAVITY * seconds_passed;
 		}
-		if (keys[GLFW_KEY_S]) {
-			direction += backDirection(archery_cam);
-			moved = true;
-		}
-		if (keys[GLFW_KEY_A]) {
-			direction += leftDirection(archery_cam);
-			moved = true;
-		}
-		if (keys[GLFW_KEY_D]) {
-			direction += rightDirection(archery_cam);
-			moved = true;
-		}
-
-		entity.moving = moved;
-
-		vec3 pos_offset;
-
-		if (length(direction) > 0)
+		else
 		{
-			direction = normalize(direction * vec3(1, 0, 1));
-
-			pos_offset = direction * CHEWY_MOVE_SPEED_ARCHERY * seconds_passed;
-
-			position += pos_offset;
+			entity.velocity = vec3(0.f);
 		}
-		rotations = entity.turnAngle(archery_cam->cameraFront);
-		rotations.x = -radians(archery_cam->phi);
-	}
-	else {
-		entity.moving = false;
-	}
 
-	position += entity.velocity * seconds_passed;
-	dynamic_cast<ChewyEntity&>(entity)._falling = true;
+		if (player_cam->in_use)// || archery_cam->in_use) 
+		{
+			direction.x = 0.f;
+			direction.y = 0.f;
+			direction.z = 0.f;
 
-	if (jumped) {
-		AudioManager::instance()->play3D(assetPath + "jump.wav", position, 5.0f, false);
-	}
-    // a clamp that happens if you've already fallen through the floor
-	if (position.y - entity.bounding_box.half_height < -0.5f) {
-		position.y = entity.bounding_box.half_height + 0.1f;
-		entity.velocity.y = 0;
-		dynamic_cast<ChewyEntity*>(&entity)->_falling = false;
-	}
+			bool moved = false;
 
-	entity.setPosition(position);
-	entity.setRotations(rotations);
+			if (keys[GLFW_KEY_W]) {
+				direction += forwardDirection(player_cam);
+				moved = true;
+			}
+			if (keys[GLFW_KEY_S]) {
+				direction += backDirection(player_cam);
+				moved = true;
+			}
+			if (keys[GLFW_KEY_A]) {
+				direction += leftDirection(player_cam);
+				moved = true;
+			}
+			if (keys[GLFW_KEY_D]) {
+				direction += rightDirection(player_cam);
+				moved = true;
+			}
+
+			entity.moving = moved;
+
+			vec3 pos_offset;
+
+			if (length(direction) > 0) {
+				direction = normalize(direction * vec3(1, 0, 1));
+
+				pos_offset = direction * CHEWY_MOVE_SPEED * seconds_passed;
+
+				float toAngle = entity.turnAngle(direction).y;
+				float fromAngle = rotations.y;
+
+				if (toAngle - fromAngle < -M_PI)
+				{
+					toAngle += 2 * M_PI;
+					rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
+					if (rotations.y > M_PI)
+						rotations.y -= 2 * M_PI;
+				}
+				else if (toAngle - fromAngle > M_PI)
+				{
+					fromAngle += 2 * M_PI;
+					rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
+					if (rotations.y < -M_PI)
+						rotations.y += 2 * M_PI;
+				}
+				else
+					rotations.y += (toAngle - fromAngle) * CHEWY_ROTATE_SPEED * seconds_passed;
+
+				position += pos_offset;
+			}
+			if (!dynamic_cast<ChewyEntity&>(entity)._falling && keys[GLFW_KEY_SPACE])
+			{
+				entity.velocity.y += 25;
+				jumped = true;
+			}
+		}
+		else if (archery_cam->in_use) {
+			direction.x = 0.f;
+			direction.y = 0.f;
+			direction.z = 0.f;
+
+			bool moved = false;
+
+			if (keys[GLFW_KEY_W]) {
+				direction += forwardDirection(archery_cam);
+				moved = true;
+			}
+			if (keys[GLFW_KEY_S]) {
+				direction += backDirection(archery_cam);
+				moved = true;
+			}
+			if (keys[GLFW_KEY_A]) {
+				direction += leftDirection(archery_cam);
+				moved = true;
+			}
+			if (keys[GLFW_KEY_D]) {
+				direction += rightDirection(archery_cam);
+				moved = true;
+			}
+
+			entity.moving = moved;
+
+			vec3 pos_offset;
+
+			if (length(direction) > 0)
+			{
+				direction = normalize(direction * vec3(1, 0, 1));
+
+				pos_offset = direction * CHEWY_MOVE_SPEED_ARCHERY * seconds_passed;
+
+				position += pos_offset;
+			}
+			rotations = entity.turnAngle(archery_cam->cameraFront);
+			rotations.x = -radians(archery_cam->phi);
+		}
+		else {
+			entity.moving = false;
+		}
+
+		position += entity.velocity * seconds_passed;
+		dynamic_cast<ChewyEntity&>(entity)._falling = true;
+
+		if (jumped) {
+			AudioManager::instance()->play3D(assetPath + "jump.wav", position, 5.0f, false);
+		}
+		// a clamp that happens if you've already fallen through the floor
+		if (position.y - entity.bounding_box.half_height < -0.5f) {
+			position.y = entity.bounding_box.half_height + 0.1f;
+			entity.velocity.y = 0;
+			dynamic_cast<ChewyEntity*>(&entity)->_falling = false;
+		}
+
+		entity.setPosition(position);
+		entity.setRotations(rotations);
+	}
 }

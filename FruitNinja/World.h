@@ -26,6 +26,8 @@
 #define GUARD_NEAR 0.1f
 
 #define MAX_HEALTH 4
+#include "fmodex/fmod.hpp"
+#include "EndScene.h"
 
 class ProjectileEntity;
 class ArcheryCamera;
@@ -76,6 +78,7 @@ public:
     static void mouse_callback(GLFWwindow* window, double x_position, double y_position);
 	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     void change_camera();
+	void change_camera(Camera* camera);
     std::map<std::string, MeshSet*> meshes;
 	void enable_debugging();
 	void cancel_cinematic();
@@ -103,12 +106,15 @@ public:
 	static void resize_window(GLFWwindow* window, int w, int h);
 	void addExplosion(glm::vec3 pos);
 
-private:
-    DebugCamera* debug_camera;
-    ArcheryCamera* archery_camera;
-    PlayerCamera* player_camera;
+	EndScene* endScene = nullptr;
+	DebugCamera* debug_camera;
+	ArcheryCamera* archery_camera;
+	PlayerCamera* player_camera;
 	CinematicCamera* cinematic_camera;
 	Skybox* _skybox;
+private:
+    
+	
 	HUD* hud;
 	void init();
     void setup_token(char obj_to_place, glm::vec3 file_index);
@@ -126,5 +132,7 @@ private:
 	GuardPuppeteer* _puppeteer = nullptr;
 	void set_puppeteer(int courtyard);
 	DeferredShader* defShader;
+
+	
 };
 

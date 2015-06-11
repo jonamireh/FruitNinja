@@ -214,6 +214,8 @@
     <ClCompile Include="ExplosiveEntity.cpp">
       <Filter>Fire</Filter>
     </ClCompile>
+    <ClCompile Include="EndScene.cpp" />
+    <ClCompile Include="StaticCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -712,6 +714,8 @@
     <ClInclude Include="ExplosiveEntity.h">
       <Filter>Fire</Filter>
     </ClInclude>
+    <ClInclude Include="EndScene.h" />
+    <ClInclude Include="StaticCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -842,6 +846,9 @@
     </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{9df291ef-c9cc-46b3-9bf6-1076117d9152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="End Scene">
+      <UniqueIdentifier>{1f0e0858-0a0c-4760-9b37-9f4c6f460024}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

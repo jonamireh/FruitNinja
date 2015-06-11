@@ -4,6 +4,7 @@
 #include "GuardEntity.h"
 #include "ArcheryCamera.h"
 #include "ExplosionEmitter.h"
+#include "main.h"
 
 using namespace glm;
 using namespace std;
@@ -209,7 +210,8 @@ void DeferredShader::skyboxPass(Camera* camera)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	skyShader.draw(camera->getViewMatrix(), skybox);
+	if (world->_skybox != nullptr)
+		skyShader.draw(camera->getViewMatrix(), skybox);
 }
 
 void DeferredShader::finalPass()

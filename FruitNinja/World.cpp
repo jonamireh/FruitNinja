@@ -35,6 +35,7 @@
 
 #define FILE_TO_WORLD_SCALE 6.f
 #define NUM_PERSISTENT 11
+#include "EndScene.h"
 
 using namespace std;
 using namespace glm;
@@ -136,12 +137,15 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("closedBarrel", new MeshSet(assetPath + "closedBarrel.dae")));
 	meshes.insert(pair<string, MeshSet*>("box", new MeshSet(assetPath + "Box.dae")));
 	meshes.insert(pair<string, MeshSet*>("skybox", new MeshSet(assetPath + "skybox.dae", GL_LINEAR, GL_CLAMP_TO_EDGE)));
+	meshes.insert(pair<string, MeshSet*>("skybox_black", new MeshSet(assetPath + "skybox_black.dae", GL_LINEAR, GL_CLAMP_TO_EDGE)));
 	meshes.insert(pair<string, MeshSet*>("flowerPlanter", new MeshSet(assetPath + "flowerPlanter.dae")));
 	meshes.insert(pair<string, MeshSet*>("bushes", new MeshSet(assetPath + "bushes.dae")));
 	meshes.insert(pair<string, MeshSet*>("bushes_boundingbox", new MeshSet(assetPath + "bushes_boundingbox.dae")));
 	meshes.insert(pair<string, MeshSet*>("statue", new MeshSet(assetPath + "statue.dae")));
 	meshes.insert(pair<string, MeshSet*>("platform", new MeshSet(assetPath + "platform.dae")));
 	meshes.insert(pair<string, MeshSet*>("fence", new MeshSet(assetPath + "fence.dae")));
+	meshes.insert(pair<string, MeshSet*>("pineapple", new MeshSet(assetPath + "pineapple.dae")));
+	meshes.insert(pair<string, MeshSet*>("ending_ground", new MeshSet(assetPath + "ending_ground.dae")));
 
 	archery_camera = new ArcheryCamera(meshes.at("unit_sphere")->getMeshes().at(0));
 
@@ -149,7 +153,7 @@ void World::init()
 	chewy->setup_entity_box(meshes.at("chewy_bb"));
 	chewy->list = SET_HIDE(chewy->list);
 
-	_skybox = new Skybox(&camera, meshes.at("skybox"));
+	_skybox= new Skybox(&camera, meshes.at("skybox"));
 	_skybox->setScale(750.f);
 	_skybox->list = UNSET_OCTTREE((_skybox->list));
 
@@ -1192,7 +1196,10 @@ void World::draw()
 		}
 		glUseProgram(0);
 
-		hud->draw();
+		if (endScene == nullptr)
+			hud->draw();
+		else
+			endScene->draw();
 	}
 	else
 		loading_screen->draw();
@@ -1347,6 +1354,10 @@ void World::stop_time()
 void World::update()
 {
 	static float start_time = 0.0;
+	if (keys[GLFW_KEY_RIGHT_CONTROL])
+	{
+		endScene = new EndScene();
+	}
 	if (keys[GLFW_KEY_6])
 	{
 		current_courtyard = 4;
@@ -1363,69 +1374,95 @@ void World::update()
 		current_courtyard--;
 		setup_next_courtyard(false);
 	}
-	if (loading_screen == nullptr)
+	if (endScene == nullptr)
 	{
-
-		shootArrows();
-		vector<GameEntity*> guards;
-
-		if (state == SPOTTED && cinematic_camera->pathing.done) {
-			lose_condition();
-			chewy->isCaught = false;
-			chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
-			chewy->animComponent.currentAnimtion = standing;
-			state = HIDDEN;
-		}
-		if (_puppeteer){
-			_puppeteer->update();
-		}
-		for (int i = 0; i < entities.size(); i++)
+		if (loading_screen == nullptr)
 		{
-			entities[i]->update();
-			GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
-			if (guard_temp != nullptr)
-			{
-				guards.push_back(entities[i]);
+
+			shootArrows();
+			vector<GameEntity*> guards;
+
+			if (state == SPOTTED && cinematic_camera->pathing.done) {
+				lose_condition();
+				chewy->isCaught = false;
+				chewy->animComponent.basicAnimation.changeToLoopingAnimation(STANDING_START, STANDING_START + STANDING_DURATION);
+				chewy->animComponent.currentAnimtion = standing;
+				state = HIDDEN;
 			}
-		}
+			if (_puppeteer){
+				_puppeteer->update();
+			}
+			for (int i = 0; i < entities.size(); i++)
+			{
+				entities[i]->update();
+				GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
+				if (guard_temp != nullptr)
+				{
+					guards.push_back(entities[i]);
+				}
+			}
 
-		actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
+			actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
 
-		if (!time_stopped)
-		{
-			seconds_passed = actual_seconds_passed;
+			if (!time_stopped)
+			{
+				seconds_passed = actual_seconds_passed;
+			}
+			else
+			{
+				seconds_passed = 0.f;
+			}
+			start_time = glfwGetTime();
+			guard_fov = min_guard_fov;
+			guard_far = min_guard_far;
+			cached_le_distance = FLT_MAX;
+			Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
+			OctTree world_oct_tree(vox, entities);
+			world_oct_tree.handle_collisions();
+			guard_projection = mat4(perspective((float)radians(guard_fov), screen_width / screen_height, GUARD_NEAR, guard_far));
+			for (int i = 0; i < guards.size(); i++)
+			{
+				GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(guards[i]);
+				if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
+					zoom_on_guard(guard_temp);
+				}
+			}
+			for (int i = 0; i < should_del.size(); i++) {
+				delete should_del[i];
+			}
+			should_del.clear();
+			update_key_callbacks();
+			if (_skybox != nullptr)
+				_skybox->update();
+
+			AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
 		}
 		else
 		{
-			seconds_passed = 0.f;
-		}
-		start_time = glfwGetTime();
-		guard_fov = min_guard_fov;
-		guard_far = min_guard_far;
-		cached_le_distance = FLT_MAX;
-		Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
-		OctTree world_oct_tree(vox, entities);
-		world_oct_tree.handle_collisions();
-		guard_projection = mat4(perspective((float)radians(guard_fov), screen_width / screen_height, GUARD_NEAR, guard_far));
-		for (int i = 0; i < guards.size(); i++)
-		{
-			GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(guards[i]);
-			if (guard_temp != nullptr && guard_temp->check_view(chewy, entities) && state != SPOTTED) {
-				zoom_on_guard(guard_temp);
+			actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
+			if (!time_stopped)
+			{
+				seconds_passed = actual_seconds_passed;
+			}
+			else
+			{
+				seconds_passed = 0.f;
+			}
+			start_time = glfwGetTime();
+
+			if (keys[GLFW_KEY_ENTER])
+			{
+
+				delete loading_screen;
+				loading_screen = nullptr;
+
 			}
 		}
-		for (int i = 0; i < should_del.size(); i++) {
-			delete should_del[i];
-		}
-		should_del.clear();
-		update_key_callbacks();
-		_skybox->update();
-
-		AudioManager::instance()->updateListener(camera->cameraPosition, camera->cameraFront, camera->cameraUp);
 	}
 	else
 	{
 		actual_seconds_passed = (glfwGetTime() - start_time) * game_speed;
+
 		if (!time_stopped)
 		{
 			seconds_passed = actual_seconds_passed;
@@ -1435,14 +1472,7 @@ void World::update()
 			seconds_passed = 0.f;
 		}
 		start_time = glfwGetTime();
-
-		if (keys[GLFW_KEY_ENTER])
-		{
-
-			delete loading_screen;
-			loading_screen = nullptr;
-
-		}
+		endScene->update();
 	}
 }
 
@@ -1536,4 +1566,9 @@ void World::resize_window(GLFWwindow* window, int w, int h) {
 
 void World::addExplosion(glm::vec3 pos) {
 	defShader->addExplosion(pos);
+}
+
+void World::change_camera(Camera* newCamera)
+{
+	camera = newCamera;
 }

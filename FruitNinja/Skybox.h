@@ -4,8 +4,8 @@
 
 class Skybox : public GameEntity
 {
-	Camera** _camera;
 public:
+	Camera** _camera;
 	void update() override;
 	Skybox(Camera** camera, MeshSet* mesh);
 	~Skybox();
