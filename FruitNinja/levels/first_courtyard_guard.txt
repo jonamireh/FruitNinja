@@ -11,10 +11,10 @@ ________________________________________
 |                                      |
 |                                      |
 |                                      |
-|       wWWWe 0          1 wWWWe       |
+|       wWWWe              wWWWe       |
 |        WWW       l        WWW        |
 |        WWW                WWW        |
-|        WWW                WWW        |
+|        WWW   0       1    WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
@@ -22,10 +22,10 @@ ________________________________________
 |        WWW                WWW        |
 |        WWW                WWW        |
 |        WWW                WWW        |
-|        WWW                WWW        |
+|        WWW   g       2    WWW        |
 |        WWW                WWW        |
 |        WWW       l        WWW        |
-|       wWWWe g          2  wWWWe      |
+|       wWWWe               wWWWe      |
 |                                      |
 |                                      |
 |                                      |
