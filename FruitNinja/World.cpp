@@ -72,6 +72,7 @@ static vector<std::function<void()>> debugShaderQueue;
 
 float bow_strength = .5f;
 int arrow_count = 100;
+int starting_arrow_count = 100;
 
 int health = MAX_HEALTH;
 glm::vec3 directional_light = glm::vec3(0);
@@ -244,7 +245,11 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		should_del.push_back(entities[i]);
 	}
 	entities.erase(entities.begin() + NUM_PERSISTENT, entities.end());
-
+	//theoretically, you won the previous level
+	if (setup_cin_cam)
+	{
+		starting_arrow_count = arrow_count;
+	}
     current_courtyard++;
 
     // these are supposedly the walls... lets hope the indices dont change!
@@ -405,6 +410,7 @@ void World::lose_condition()
 {
 	current_courtyard--;
 	setup_next_courtyard(false);
+	arrow_count = starting_arrow_count;
 	health--;
 }
 
@@ -1211,6 +1217,7 @@ void World::convert_to_collectible(ProjectileEntity* p)
 	//entities.back()->inner_bounding_box.center -= p->dist * normalize(p->movement.velocity);
 	entities.back()->setup_inner = true;
 	dynamic_cast<CollectableEntity*>(entities.back())->custom_rotate(p->rot);
+	entities.back()->list = UNSET_OCTTREE(entities.back()->list);
 }
 
 void World::set_chewy_light_distance(float dist, float le_hv_length)
@@ -1332,18 +1339,18 @@ void World::update()
 	if (keys[GLFW_KEY_6])
 	{
 		current_courtyard = 4;
-		setup_next_courtyard();
+		setup_next_courtyard(false);
 	}
 	//jon's middle click doesn't work
 	if (keys[GLFW_KEY_7])
 	{
-		setup_next_courtyard();
+		setup_next_courtyard(false);
 	}
 	//faster level design
 	if (keys[GLFW_KEY_8])
 	{
 		current_courtyard--;
-		setup_next_courtyard();
+		setup_next_courtyard(false);
 	}
 	if (loading_screen == nullptr)
 	{

@@ -51,6 +51,7 @@ extern int arrow_count;
 extern int current_courtyard;
 extern int health;
 extern glm::vec3 directional_light;
+extern int starting_arrow_count;
 
 enum GameState{
 	HIDDEN,
