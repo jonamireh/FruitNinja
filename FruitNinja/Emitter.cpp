@@ -1,11 +1,12 @@
 #include "Emitter.h"
 
-Emitter::Emitter(string filename, double tframe, int width, int height, float part_w, float part_h)
-	: num_frames(width * height), frame_time(tframe), atlas_width(width), atlas_height(height), 
+Emitter::Emitter(string filename, float tframe, int cols, int rows, float part_w, float part_h)
+	: num_frames(cols * rows), frame_time(tframe), columns(cols), rows(rows), 
 	particle_width(part_w), particle_height(part_h)
 {
 	//need one to bind, I know this is stupid
 	particles.position.push_back(glm::vec3(-200, -200, -200));
+	particles.velocity.push_back(glm::vec3(0, 0, 0));
 	particles.frame.push_back(0);
 
 	tdogl::Bitmap bmp = tdogl::Bitmap::bitmapFromFile(assetPath + filename);
@@ -20,7 +21,14 @@ Emitter::Emitter(string filename, double tframe, int width, int height, float pa
 		&particles.position[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(POS_ATTRIB);
 	glVertexAttribPointer(POS_ATTRIB, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
-	//bind more here
+	//velocity
+	glGenBuffers(1, &vel_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, vel_VBO);
+	glBufferData(GL_ARRAY_BUFFER, particles.velocity.size() * sizeof(glm::vec3),
+		&particles.velocity[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(VEL_ATTRIB);
+	glVertexAttribPointer(VEL_ATTRIB, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+	//start frame
 	glGenBuffers(1, &frame_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, frame_VBO);
 	glBufferData(GL_ARRAY_BUFFER, particles.frame.size() * sizeof(int),
@@ -28,6 +36,13 @@ Emitter::Emitter(string filename, double tframe, int width, int height, float pa
 	glEnableVertexAttribArray(FRAME_ATTRIB);
 	glVertexAttribIPointer(FRAME_ATTRIB, 1, GL_INT, sizeof(int), 0);
 
+	particles.position.clear();
+	particles.frame.clear();
+	particles.velocity.clear();
+
+	acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
+	max_time = num_frames * frame_time;
+	time_uniform = 0.0f;
 }
 
 
@@ -36,19 +51,10 @@ Emitter::~Emitter() {
 }
 
 void Emitter::update(double deltaTime) {
-	static double prev_frame_time = 0.0;
-	prev_frame_time += deltaTime;
-	if (prev_frame_time > frame_time) {
-		int inc = prev_frame_time / frame_time; //integer divide tells how many frames pass if any
-		prev_frame_time -= inc * frame_time; //should keep remainder
-		for (int i = 0; i < particles.frame.size(); i++) {
-			particles.frame[i] = (particles.frame[i] + inc) % num_frames;
-		}
+	time_uniform += deltaTime;
+	if (time_uniform > max_time) {
+		time_uniform = 0.0f;
 	}
-	
-	//not really sure how to do this on the gpu so I just send it every frame...
-	glBindBuffer(GL_ARRAY_BUFFER, frame_VBO);
-	glBufferData(GL_ARRAY_BUFFER, particles.frame.size() * sizeof(int), &particles.frame[0], GL_DYNAMIC_DRAW);
 }
 
 int Emitter::getNumParticles() {

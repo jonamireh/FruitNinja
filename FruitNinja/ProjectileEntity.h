@@ -21,5 +21,7 @@ public:
 	glm::mat4 rot;
 	float timeLeft;
 	float dist;
+	glm::vec3 getVelocity();
+private:
 	ProjectileMovementComponent movement;
 };

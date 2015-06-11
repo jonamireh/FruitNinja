@@ -1,57 +1,37 @@
 #include "FireEmitter.h"
-#include <random>
 
-std::default_random_engine generator;
-std::uniform_real_distribution<double> distribution(0.0, 1.0);
-
-FireEmitter::FireEmitter() : Emitter("fire_atlas.png", .02, 4, 4, 2.0, 2.0)
+FireEmitter::FireEmitter() : Emitter("nice_fire.png", .02, 6, 6, 3.0, 3.0)
 {
-particles.frame.clear();
-	particles.position.clear();
-	for (int i = 0; i < 1; i++) {
-		particles.position.push_back(glm::vec3(-50.0, -50.0, -50.0));
-		particles.frame.push_back(16);
-	}
-
-	glBindBuffer(GL_ARRAY_BUFFER, pos_VBO);
-	glBufferData(GL_ARRAY_BUFFER, particles.position.size() * sizeof(glm::vec3), &particles.position[0], GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, frame_VBO);
-	glBufferData(GL_ARRAY_BUFFER, particles.frame.size() * sizeof(int), &particles.frame[0], GL_DYNAMIC_DRAW);
+	acceleration = glm::vec3(0.0, -GRAVITY, 0.0);
 }
 
 FireEmitter::~FireEmitter() {
 }
 
-void FireEmitter::update(double deltaTime, std::vector<FireArrowEntity*> fireArrows) {
-	static double prev_frame_time = 0.0;
-	static double time2 = 0.0;
+void FireEmitter::update(double deltaTime, std::vector<FireArrowEntity*> fireArrows)
+{
+	if (prev_arrows != fireArrows.size()) {
+		time_uniform = 0.0f;
+		particles.position.clear();
+		particles.velocity.clear();
+		particles.frame.clear();
 
-	prev_frame_time += deltaTime;
-	if (prev_frame_time > frame_time) {
-		int inc = prev_frame_time / frame_time; //integer divide tells how many frames pass if any
-		prev_frame_time -= inc * frame_time; //should keep remainder
-		for (int i = 0; i < particles.frame.size(); i++) {
-			particles.frame[i] += inc;
-			//particles.position[i] += glm::vec3(distribution(generator) / 8.0, .1, distribution(generator) / 8.0) * (float)inc;
-			if (particles.frame[i] >= num_frames) {
-				particles.position.erase(particles.position.begin() + i);
-				particles.frame.erase(particles.frame.begin() + i);
-				i--;
-			}
-		}
 		for (int i = 0; i < fireArrows.size(); i++) {
 			particles.position.push_back(fireArrows[i]->getPosition() - glm::vec3(0.0, particle_height / 2.0, 0.0));
+			particles.velocity.push_back(fireArrows[i]->getVelocity());
 			particles.frame.push_back(0);
 		}
-
-		if (particles.position.size() > 0) {
+		if (getNumParticles() > 0) {
 			glBindBuffer(GL_ARRAY_BUFFER, pos_VBO);
-			glBufferData(GL_ARRAY_BUFFER, particles.position.size() * sizeof(glm::vec3), &particles.position[0], GL_DYNAMIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, particles.position.size() * sizeof(glm::vec3), &particles.position[0], GL_STATIC_DRAW);
 
-			//not really sure how to do this on the gpu so I just send it every frame...
+			glBindBuffer(GL_ARRAY_BUFFER, vel_VBO);
+			glBufferData(GL_ARRAY_BUFFER, particles.velocity.size() * sizeof(glm::vec3), &particles.velocity[0], GL_STATIC_DRAW);
+
 			glBindBuffer(GL_ARRAY_BUFFER, frame_VBO);
-			glBufferData(GL_ARRAY_BUFFER, particles.frame.size() * sizeof(int), &particles.frame[0], GL_DYNAMIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, particles.frame.size() * sizeof(glm::vec3), &particles.frame[0], GL_STATIC_DRAW);
 		}
+		prev_arrows = fireArrows.size();
 	}
+	time_uniform += deltaTime;
 }

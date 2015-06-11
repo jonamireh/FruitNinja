@@ -9,6 +9,7 @@ public:
 	FireArrowEntity();
 	virtual ~FireArrowEntity();
 	FireArrowEntity(MeshSet* mesh, Camera* camera);
+	void collision(GameEntity* entity) override;
 private:
 
 };

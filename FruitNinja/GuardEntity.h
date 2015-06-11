@@ -31,8 +31,9 @@ public:
 	std::vector<std::vector<glm::mat4>>* getBoneTransformations() override;
 	void stopMoving();
 	bool static_movement = false;
+	bool is_dying();
 private:
-	bool is_dying = false;
+	bool _is_dying = false;
 
 	FMOD::Channel *walk_channel;
 
