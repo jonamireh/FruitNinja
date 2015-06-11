@@ -103,6 +103,7 @@ public:
 
 	static void resize_window(GLFWwindow* window, int w, int h);
 	void addExplosion(glm::vec3 pos);
+	void enableFireArrows();
 
 private:
     DebugCamera* debug_camera;
@@ -127,5 +128,6 @@ private:
 	GuardPuppeteer* _puppeteer = nullptr;
 	void set_puppeteer(int courtyard);
 	DeferredShader* defShader;
+	bool _fiery_arrows = false;
 };
 

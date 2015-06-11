@@ -421,8 +421,8 @@ void World::delayed_lose_condition()
 	vec3 look = player_camera->lookAtPoint;
 	vec3 g_dir = chewy->getPosition() - player_camera->lookAtPoint;
 	cinematic_camera->init({ p_pos, p_pos + vec3(0.0, 5.0, 0.0), look + vec3(0.0, 5.0, 0.0) + g_dir * .25f,
-		look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f, look + vec3(0.0, 5.0, 0.0) + g_dir * .5f },
-		{ look, look + g_dir * .5f, look + g_dir * .75f, chewy->getPosition(), chewy->getPosition(), chewy->getPosition() }, 10.f);
+		look + vec3(0.0, 5.0, 0.0) + g_dir * .5f},
+		{ look, look + g_dir * .5f, look + g_dir * .75f, chewy->getPosition()}, 10.f);
 	camera->in_use = false;
 	camera = cinematic_camera;
 	camera->in_use = true;
@@ -488,7 +488,7 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 	camera_positions.push_back(player_camera->cameraPosition);
 	look_at_positions.push_back(player_camera->lookAtPoint);
 
-	if (!run_cinematic_camera)
+	if (!run_cinematic_camera || chewy->isDead)
 	{
 		camera->in_use = false;
 		camera = player_camera;
@@ -1119,7 +1119,12 @@ void World::shootArrows()
 	if (held && !(keys[GLFW_KEY_E] || mouse_buttons_pressed[0]) && arrow_count > 0)
 	{
 		//entities.push_back(new FireArrowEntity(meshes["arrow"], archery_camera));
-		entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
+		if (_fiery_arrows) {
+			entities.push_back(new FireArrowEntity(meshes["arrow"], archery_camera));
+		}
+		else {
+			entities.push_back(new ProjectileEntity(meshes["arrow"], archery_camera));
+		}
 		vec3 center = entities.back()->getPosition();
 		entities.back()->setup_entity_box(meshes.at("arrow_pickup"));
 		entities.back()->setup_inner_entity_box(meshes.at("arrow_bb"));
@@ -1584,4 +1589,8 @@ void World::resize_window(GLFWwindow* window, int w, int h) {
 
 void World::addExplosion(glm::vec3 pos) {
 	defShader->addExplosion(pos);
+}
+
+void World::enableFireArrows() {
+	_fiery_arrows = true;
 }
