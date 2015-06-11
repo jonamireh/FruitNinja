@@ -1040,9 +1040,9 @@ void World::setup_guard(string file_path)
 		guard_ent = new GuardEntity(starting_position, meshes["blue_guard"], _puppeteer, spline_points, 4.f, linear, isArmored);
     else
 		guard_ent = new GuardEntity(starting_position, meshes["guard"], _puppeteer, spline_points, 4.f, linear);
+	entities.push_back(guard_ent);
 	entities.back()->setup_entity_box(meshes["guard_outer_bb"]);
 	entities.back()->setup_inner_entity_box(meshes["guard_bb"]);
-	entities.push_back(guard_ent);
 	level_file.close();
 }
 
