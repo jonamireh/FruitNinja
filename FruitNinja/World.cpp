@@ -786,8 +786,8 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		break;
     case'{':
-        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("arrow_pickup"), vec3(-1.f, 0.f, 0.f)));
-        //entities.back()->setScale(3.f);
+        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("box"), vec3(-1.f, 0.f, 0.f)));
+        entities.back()->setScale(3.f);
         break;
     case '1':
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x1")));

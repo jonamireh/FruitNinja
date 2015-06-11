@@ -1,5 +1,6 @@
 #include "WallOfDoomEntity.h"
 #include "World.h"
+#include "main.h"
 
 WallOfDoomEntity::WallOfDoomEntity(glm::vec3 position, MeshSet* mesh, glm::vec3 direction) : GameEntity(position, mesh)
 {
@@ -22,8 +23,9 @@ void WallOfDoomEntity::update()
 
 void WallOfDoomEntity::collision(GameEntity* entity)
 {
-    if (typeid(*entity) == typeid(ChewyEntity))
+    if (typeid(ChewyEntity) == typeid(*entity))
     {
-        // call lose stuff for chewy
+        if (world->getState() == HIDDEN)
+            world->delayed_lose_condition();
     }
 }
