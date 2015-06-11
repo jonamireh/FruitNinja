@@ -283,10 +283,6 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	entities.at(9)->setPosition(vec3(entities.at(9)->getPosition().x, 66.f, entities.at(9)->getPosition().z));
 	entities.at(10)->setPosition(vec3(entities.at(10)->getPosition().x, 66.f, entities.at(10)->getPosition().z));	
 
-	// JUST FOR DEMO
-	if (current_courtyard == 6)
-		current_courtyard = 1;
-
 	push_courtyards(current_courtyard);
 
 	set_puppeteer(current_courtyard);
@@ -1484,7 +1480,7 @@ void World::stop_time()
 void World::update()
 {
 	static float start_time = 0.0;
-	if (keys[GLFW_KEY_RIGHT_CONTROL])
+    if (keys[GLFW_KEY_RIGHT_CONTROL])
 	{
 		endScene = new EndScene();
 	}
