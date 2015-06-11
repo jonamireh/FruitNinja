@@ -499,10 +499,13 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 		camera->in_use = true;
 	}
 	else {
+		if (camera != nullptr)
+		{
+			camera->in_use = false;
+		}
 		cinematic_camera->init(camera_positions, look_at_positions, 40.f);
 		camera = cinematic_camera;
 		cinematic_camera->in_use = true;
-		player_camera->in_use = false;
 	}
 
 	chewy->bounding_box.center.y = temp;
@@ -1369,7 +1372,6 @@ void World::cancel_cinematic()
 }
 void World::update_key_callbacks()
 {
-	camera->movement(chewy);
 	if (run_cinematic_camera)
 	{
 		cancel_cinematic();
@@ -1387,6 +1389,7 @@ void World::update_key_callbacks()
 		skip_level();
 		stop_time();
 	}
+	camera->movement(chewy);
 	x_offset = 0;
 	y_offset = 0;
 }
@@ -1440,7 +1443,7 @@ void World::update()
 		{
 			entities[i]->update();
 			GuardEntity* guard_temp = dynamic_cast<GuardEntity*>(entities[i]);
-			if (guard_temp != nullptr && !guard_temp->is_dying)
+			if (guard_temp != nullptr && !guard_temp->is_dying())
 			{
 				guards.push_back(entities[i]);
 			}
