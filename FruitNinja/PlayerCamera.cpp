@@ -42,8 +42,14 @@ void PlayerCamera::mouse_update()
 {
 	float sensitivity = 0.1;
 
-    theta -= x_offset * sensitivity;
-    phi -= y_offset * sensitivity;
+	if (flippedControls) {
+		theta += x_offset * sensitivity;
+		phi += y_offset * sensitivity;
+	}
+	else {
+		theta -= x_offset * sensitivity;
+		phi -= y_offset * sensitivity;
+	}
 
     if (phi > MaxVerticalAngle)
     {
