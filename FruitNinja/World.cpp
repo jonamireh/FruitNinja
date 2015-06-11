@@ -72,9 +72,12 @@ static vector<std::function<void()>> debugShaderQueue;
 
 float bow_strength = .5f;
 int arrow_count = 100;
+int starting_arrow_count = 100;
 
 int health = MAX_HEALTH;
 glm::vec3 directional_light = glm::vec3(0);
+
+float wall_height;
 
 World::World()
 {
@@ -118,8 +121,8 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("ground", new MeshSet(assetPath + "ground.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy", new MeshSet(assetPath + "ninja_final3.dae")));
 	meshes.insert(pair<string, MeshSet*>("chewy_bb", new MeshSet(assetPath + "ninja_boundingbox.dae")));
-	meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai.dae")));
-	meshes.insert(pair<string, MeshSet*>("blue_guard", new MeshSet(assetPath + "blue_samurai.dae")));
+	meshes.insert(pair<string, MeshSet*>("guard", new MeshSet(assetPath + "samurai2.dae")));
+	meshes.insert(pair<string, MeshSet*>("blue_guard", new MeshSet(assetPath + "blue_samurai2.dae")));
 	meshes.insert(pair<string, MeshSet*>("guard_bb", new MeshSet(assetPath + "samurai_bbox.obj")));
 	meshes.insert(pair<string, MeshSet*>("guard_outer_bb", new MeshSet(assetPath + "outer_samurai_bbox.obj")));
 	meshes.insert(pair<string, MeshSet*>("arrow", new MeshSet(assetPath + "arrow.dae")));
@@ -196,6 +199,7 @@ void World::init()
 	entities.push_back(wall_right);
 	entities.push_back(wall_front);
 	entities.push_back(wall_back);
+	wall_height = entities.back()->bounding_box.half_height;
 	entities.push_back(roof_left);
 	entities.push_back(roof_right);
 	entities.push_back(roof_front);
@@ -223,7 +227,6 @@ void World::init()
 	//entities.back()->setScale(3.f);
 	//entities.push_back(new ObstacleEntity(glm::vec3(35, 0, 35), meshes.at("gate_base")));
 	//entities.back()->setScale(3.f);
-
 	AudioManager::instance()->playAmbient(assetPath + "ynmg.mp3", 0.1f);
 }
 
@@ -244,7 +247,11 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 		should_del.push_back(entities[i]);
 	}
 	entities.erase(entities.begin() + NUM_PERSISTENT, entities.end());
-
+	//theoretically, you won the previous level
+	if (setup_cin_cam)
+	{
+		starting_arrow_count = arrow_count;
+	}
     current_courtyard++;
 
     // these are supposedly the walls... lets hope the indices dont change!
@@ -309,6 +316,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         entities.at(4)->setScale(vec3(30.f, 40.f, 30.f));
         entities.at(5)->setScale(vec3(30.f, 40.f, 30.f));
         entities.at(6)->setScale(vec3(30.f, 40.f, 30.f));
+		wall_height = entities.at(6)->bounding_box.half_height;
 		// these are supposedly the roofs
 		entities.at(7)->setPosition(vec3(entities.at(7)->getPosition().x, 86.f, entities.at(7)->getPosition().z));
 		entities.at(8)->setPosition(vec3(entities.at(8)->getPosition().x, 86.f, entities.at(8)->getPosition().z));
@@ -405,6 +413,7 @@ void World::lose_condition()
 {
 	current_courtyard--;
 	setup_next_courtyard(false);
+	arrow_count = starting_arrow_count;
 	health--;
 }
 
@@ -477,7 +486,7 @@ void World::setup_cinematic_camera(string file_path, bool setup_cin_cam)
 	level_file.close();
 }
 
-void World::setup_level(string file_path)
+void World::setup_level(string file_path, bool animate_elements)
 {
 	ifstream level_file;
 	level_file.open(file_path);
@@ -485,6 +494,7 @@ void World::setup_level(string file_path)
 	string current_line;
 	int current_row = 0;
 	int height_level = -1;
+	int animate_index = entities.size();
 
 	while (!level_file.eof()) // runs through every line
 	{
@@ -506,6 +516,13 @@ void World::setup_level(string file_path)
 	}
 	num_doors = 0;
 	level_file.close();
+	if (animate_elements && animate_index < entities.size())
+	{
+		for (int i = animate_index; i < entities.size(); i++)
+		{
+			entities.at(i)->startAnimate();
+		}
+	}
 }
 
 void World::setup_token(char obj_to_place, glm::vec3 placement_position)
@@ -1211,6 +1228,7 @@ void World::convert_to_collectible(ProjectileEntity* p)
 	//entities.back()->inner_bounding_box.center -= p->dist * normalize(p->movement.velocity);
 	entities.back()->setup_inner = true;
 	dynamic_cast<CollectableEntity*>(entities.back())->custom_rotate(p->rot);
+	entities.back()->list = UNSET_OCTTREE(entities.back()->list);
 }
 
 void World::set_chewy_light_distance(float dist, float le_hv_length)
@@ -1332,18 +1350,18 @@ void World::update()
 	if (keys[GLFW_KEY_6])
 	{
 		current_courtyard = 4;
-		setup_next_courtyard();
+		setup_next_courtyard(false);
 	}
 	//jon's middle click doesn't work
 	if (keys[GLFW_KEY_7])
 	{
-		setup_next_courtyard();
+		setup_next_courtyard(false);
 	}
 	//faster level design
 	if (keys[GLFW_KEY_8])
 	{
 		current_courtyard--;
-		setup_next_courtyard();
+		setup_next_courtyard(false);
 	}
 	if (loading_screen == nullptr)
 	{
