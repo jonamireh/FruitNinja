@@ -44,7 +44,7 @@ void FallingEntity::update()
 			if (soundTime > .5)
 			{
 				soundTime = 0;
-				AudioManager::instance()->play3D(assetPath + "OOT_DekuScrub_Crumble.wav", getPosition(), 5.0f, false);
+				AudioManager::instance()->play3D(assetPath + "OOT_DekuScrub_Crumble.wav", getPosition(), 2.0f, false);
 			}
         }
         if (rotationTime > .1)
@@ -65,7 +65,6 @@ void FallingEntity::collision(GameEntity* entity)
     if (typeid(ChewyEntity) == typeid(*entity))
     {
         stepped_on = true;
-        collision_response = true;
     }
 
     if (typeid(SpikeEntity) == typeid(*entity))

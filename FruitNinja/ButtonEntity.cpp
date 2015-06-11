@@ -4,11 +4,12 @@
 #include "main.h"
 #include "ObstacleEntity.h"
 #include "GateEntity.h"
+#include "WallOfDoomEntity.h"
 
 ButtonEntity::ButtonEntity() {}
 
 ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_press_levels, 
-    vector<string> on_press_platforms, vector<string> other_button_files, vector<string> on_press_cinematic_file, bool gate_open) : GameEntity(position, mesh)
+    vector<string> on_press_platforms, vector<string> other_button_files, vector<string> on_press_cinematic_file, bool gate_open, bool wall_of_doom) : GameEntity(position, mesh)
 {
     pressed = false;
     this->on_press_levels = on_press_levels;
@@ -16,6 +17,7 @@ ButtonEntity::ButtonEntity(glm::vec3 position, MeshSet* mesh, vector<string> on_
     this->other_button_files = other_button_files;
     this->on_press_cinematic_file = on_press_cinematic_file;
     this->gate_open = gate_open;
+    this->wall_of_doom = wall_of_doom;
 
     if (mesh == world->meshes["button"])
     {
@@ -49,6 +51,18 @@ void ButtonEntity::button_pressed()
         {
             if (typeid(GateEntity) == typeid(*world->entities.at(i)))
                 world->entities.at(i)->list = UNSET_DRAW(world->entities.at(i)->list);
+        }
+    }
+
+    if (wall_of_doom)
+    {
+        for (int i = 0; i < world->entities.size(); i++)
+        {
+            WallOfDoomEntity* doom_wall = dynamic_cast<WallOfDoomEntity*>(world->entities.at(i));
+            if (doom_wall)
+            {
+                doom_wall->enabled = true;
+            }
         }
     }
 }

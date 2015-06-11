@@ -5,7 +5,7 @@
 #include "PlatformEntity.h"
 using namespace std;
 
-#define MINIMUM_DIMENSION 5.f
+#define MINIMUM_DIMENSION 6.f
 
 OctTree::OctTree()
 {

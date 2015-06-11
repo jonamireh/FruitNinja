@@ -17,6 +17,7 @@
 #include <functional>
 #include <queue>
 #include "LightEntity.h"
+#include "WallOfDoomEntity.h"
 #include "FallingEntity.h"
 #include "DoorEntity.h"
 #include "SpikeEntity.h"
@@ -110,6 +111,7 @@ void World::init()
 	meshes.insert(pair<string, MeshSet*>("interior_wall_3x3", new MeshSet(assetPath + "interiorWall_3x3.dae")));
     meshes.insert(pair<string, MeshSet*>("exploding_barrel", new MeshSet(assetPath + "explodingBarrel.dae")));
     meshes.insert(pair<string, MeshSet*>("heart", new MeshSet(assetPath + "heart.dae")));
+    meshes.insert(pair<string, MeshSet*>("fire_arrow_pickup", new MeshSet(assetPath + "tempFireArrowPickup.dae")));
     meshes.insert(pair<string, MeshSet*>("single_arrow_pickup", new MeshSet(assetPath + "arrowPickup_single.dae")));
     meshes.insert(pair<string, MeshSet*>("triple_arrow_pickup", new MeshSet(assetPath + "arrowPickup_triple.dae")));
     meshes.insert(pair<string, MeshSet*>("spike", new MeshSet(assetPath + "spikes.dae")));
@@ -341,6 +343,7 @@ void World::setup_next_courtyard(bool setup_cin_cam)
         setup_moving_platform(level_path + "fifth_courtyard_platform_three.txt");
         setup_moving_platform(level_path + "fifth_courtyard_platform_four.txt");
         load_button(level_path + "fifth_courtyard_button_one.txt");
+        load_button(level_path + "fifth_courtyard_gate_drop.txt");
 		break;
 	}
 }
@@ -742,6 +745,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
         entities.back()->setScale(3.f);
         entities.back()->list = SET_HIDE((entities.back()->list));
         break;
+    case 'p': //fire arrow pickup
+        entities.push_back(new CollectableEntity(placement_position, meshes.at("fire_arrow_pickup"), FIRE_ARROW_TYPE, true));
+        entities.back()->setup_entity_box(meshes["arrow_pickup"]);
+        break;
     case 'P':
         entities.push_back(new DoorEntity(placement_position, meshes.at("door"), true));
         entities.back()->setRotations(vec3(0.f, M_PI_2, 0.f));
@@ -809,6 +816,10 @@ void World::setup_token(char obj_to_place, glm::vec3 placement_position)
 		entities.back()->setScale(3.f);
 		entities.back()->list = SET_HIDE((entities.back()->list));
 		break;
+    case'{':
+        entities.push_back(new WallOfDoomEntity(placement_position, meshes.at("box"), vec3(-1.f, 0.f, 0.f)));
+        entities.back()->setScale(3.f);
+        break;
     case '1':
         entities.push_back(new ObstacleEntity(placement_position, meshes.at("interior_wall_1x1")));
         entities.back()->setScale(3.f);
@@ -883,6 +894,7 @@ void World::load_button(string file_path)
     int current_row = 0;
     int height_level = -1;
     bool open_gate = false;
+    bool wall_of_doom = false;
 
     while (!level_file.eof()) // runs through every line
     {
@@ -910,6 +922,9 @@ void World::load_button(string file_path)
             case 'G':
                 open_gate = true;
                 break;
+            case '{':
+                wall_of_doom = true;
+                break;
             }
         }
         if (current_line == "________________________________________")
@@ -924,12 +939,13 @@ void World::load_button(string file_path)
                 glm::vec3 world_position = FILE_TO_WORLD_SCALE * vec3(i, height_level, current_row) + vec3(FILE_TO_WORLD_SCALE / 2.f, 0.f, FILE_TO_WORLD_SCALE / 2.f);
                 if (current_line.at(i) == 'B')
                 {
-                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, open_gate));
+                    entities.push_back(new ButtonEntity(world_position, meshes[mesh_name], on_press_levels, on_press_platforms, other_button_files, on_press_cinematic_file, open_gate, wall_of_doom));
                 }
             }
             current_row++;
         }
     }
+
     level_file.close();
 }
 
@@ -1471,7 +1487,7 @@ void World::update()
 		guard_fov = min_guard_fov;
 		guard_far = min_guard_far;
 		cached_le_distance = FLT_MAX;
-		Voxel vox(vec3(0, 0.f, 0.f), vec3(250.f, 250.f, 250.f));
+		Voxel vox(vec3(0, 0.f, 0.f), vec3(240.f, 120.f, 240.f));
 		OctTree world_oct_tree(vox, entities);
 		world_oct_tree.handle_collisions();
 		guard_projection = mat4(perspective((float)radians(guard_fov), screen_width / screen_height, GUARD_NEAR, guard_far));
