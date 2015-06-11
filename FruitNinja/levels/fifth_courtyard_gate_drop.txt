@@ -1,6 +1,6 @@
 M target
 B wall_of_doom.txt
-G
+G open the gate to the pineapple
 ________________________________________
 ________________________________________
 |                                      |

@@ -219,10 +219,10 @@ ________________________________________
 |                                  K   |
 |2kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk2   |
 |  <     Qs                            |
-|  <     E                             |
-|P <                                   |
-|  <          e  w                     |
-|  <          Qn                       |
+|  <     E        W                    |
+|P <              Q                    |
+|  <          e    n                   |
+|  <         WQn                       |
 |2kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk2   |
 |                                 {2   |
 |                                 {2   |
