@@ -23,7 +23,7 @@ void ChewyAnimationComponent::update()
 		basicAnimation.changeToSingleAnimation(BOWPULL_START + bow_strength * BOWPULL_DURATION, BOWPULL_START + BOWPULL_DURATION);
 		currentAnimtion = bowpull;
 	}
-	if (basicAnimation.animationComplete && currentAnimtion != caught)
+	if (basicAnimation.animationComplete && currentAnimtion != caught && currentAnimtion != death)
 	{
 		
 		if (static_cast<ChewyEntity*>(chewy)->isDead && currentAnimtion != death)
