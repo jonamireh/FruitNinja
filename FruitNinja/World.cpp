@@ -286,6 +286,12 @@ void World::setup_next_courtyard(bool setup_cin_cam)
 	push_courtyards(current_courtyard);
 
 	set_puppeteer(current_courtyard);
+    if (current_courtyard == 6)
+    {
+        endScene = new EndScene();
+        return;
+    }
+
 	switch (current_courtyard)
 	{
 	case 1:
