@@ -91,11 +91,6 @@ void World::init()
 	cinematic_camera = new CinematicCamera();
 
 	meshes.insert(pair<string, MeshSet*>("tower", new MeshSet(assetPath + "tower.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard1", new MeshSet(assetPath + "courtyard1.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard2", new MeshSet(assetPath + "courtyard2.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard3", new MeshSet(assetPath + "courtyard3.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard4", new MeshSet(assetPath + "courtyard4.dae")));
-	meshes.insert(pair<string, MeshSet*>("courtyard5", new MeshSet(assetPath + "courtyard5.dae")));
 	meshes.insert(pair<string, MeshSet*>("wall", new MeshSet(assetPath + "wall.dae")));
 	meshes.insert(pair<string, MeshSet*>("roof", new MeshSet(assetPath + "roof.dae")));
 	meshes.insert(pair<string, MeshSet*>("interior_wall", new MeshSet(assetPath + "interiorWall.dae")));
@@ -155,31 +150,6 @@ void World::init()
 	tower->setScale(30.0f);
 	tower->list = UNSET_OCTTREE((tower->list));
 	tower->collision_response = false;
-
-	/*GameEntity* courtyard1 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard1"));
-	courtyard1->setScale(30.0f);
-	courtyard1->list = UNSET_OCTTREE((courtyard1->list));
-	courtyard1->collision_response = false;
-
-	GameEntity* courtyard2 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard2"));
-	courtyard2->setScale(30.0f);
-	courtyard2->list = UNSET_OCTTREE((courtyard2->list));
-	courtyard2->collision_response = false;
-
-	GameEntity* courtyard3 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard3"));
-	courtyard3->setScale(30.0f);
-	courtyard3->list = UNSET_OCTTREE((courtyard3->list));
-	courtyard3->collision_response = false;
-
-	GameEntity* courtyard4 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard4"));
-	courtyard4->setScale(30.0f);
-	courtyard4->list = UNSET_OCTTREE((courtyard4->list));
-	courtyard4->collision_response = false;
-
-	GameEntity* courtyard5 = new ObstacleEntity(vec3(-9.0544f * 30.f + 120.f, 0.0, 120.f), meshes.at("courtyard5"));
-	courtyard5->setScale(30.0f);
-	courtyard5->list = UNSET_OCTTREE((courtyard5->list));
-	courtyard5->collision_response = false;*/
 
 	float wall_scale = 30.f;
 	GameEntity* wall_left = new ObstacleEntity(vec3(120.f, 0.f, 240.f), meshes.at("wall"));
@@ -365,38 +335,47 @@ void World::push_courtyards(int current_courtyard)
 		wall_left->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
 		wall_left->setRotations(vec3(0.f, angle, 0.f));
 		wall_left->setPosition(wall_left->getPosition() - offset_xz);
+		wall_left->list = UNSET_OCTTREE(wall_left->list);
 		GameEntity* wall_right = new ObstacleEntity(rotateY(vec3(120.f, 0.f, 0.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
 		wall_right->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
 		wall_right->setRotations(vec3(0.f, angle, 0.f));
 		wall_right->setPosition(wall_right->getPosition() - offset_xz);
+		wall_right->list = UNSET_OCTTREE(wall_right->list);
 		GameEntity* wall_front = new ObstacleEntity(rotateY(vec3(0.f, 0.f, 120.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
 		wall_front->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
 		wall_front->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
 		wall_front->setPosition(wall_front->getPosition() - offset_xz);
+		wall_front->list = UNSET_OCTTREE(wall_front->list);
 		GameEntity* wall_back = new ObstacleEntity(rotateY(vec3(240.f, 0.f, 120.f) + offset_xz + offset_wally, angle), meshes.at("wall"));
 		wall_back->setScale(vec3(wall_scale, wall_scale * (i / 2.f + 1.f), wall_scale));
 		wall_back->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
 		wall_back->setPosition(wall_back->getPosition() - offset_xz);
+		wall_back->list = UNSET_OCTTREE(wall_back->list);
 		GameEntity* roof_left = new ObstacleEntity(rotateY(vec3(120.f, 60.f, 240.f) + offset_xz + offset_y, angle), meshes.at("roof"));
 		roof_left->setScale(wall_scale);
 		roof_left->setRotations(vec3(0.f, angle, 0.f));
 		roof_left->setPosition(roof_left->getPosition() - offset_xz);
+		roof_left->list = UNSET_OCTTREE(roof_left->list);
 		GameEntity* roof_right = new ObstacleEntity(rotateY(vec3(120.f, 60.f, 0.f) + offset_xz + offset_y, angle), meshes.at("roof"));
 		roof_right->setScale(wall_scale);
 		roof_right->setRotations(vec3(0.f, angle, 0.f));
 		roof_right->setPosition(roof_right->getPosition() - offset_xz);
+		roof_right->list = UNSET_OCTTREE(roof_right->list);
 		GameEntity* roof_front = new ObstacleEntity(rotateY(vec3(0.f, 60.f, 120.f) + offset_xz + offset_y, angle), meshes.at("roof"));
 		roof_front->setScale(wall_scale);
 		roof_front->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
 		roof_front->setPosition(roof_front->getPosition() - offset_xz);
+		roof_front->list = UNSET_OCTTREE(roof_front->list);
 		GameEntity* roof_back = new ObstacleEntity(rotateY(vec3(240.f, 60.f, 120.f) + offset_xz + offset_y, angle), meshes.at("roof"));
 		roof_back->setScale(wall_scale);
 		roof_back->setRotations(vec3(0.f, M_PI_2 + angle, 0.f));
 		roof_back->setPosition(roof_back->getPosition() - offset_xz);
+		roof_back->list = UNSET_OCTTREE(roof_back->list);
 		GameEntity* ground = new ObstacleEntity(rotateY(vec3(120.f, -12.0f, 120.f) + offset_xz + offset_y, angle), meshes.at("ground"));
 		ground->setScale(wall_scale);
 		ground->setRotations(vec3(0.f, angle, 0.f));
 		ground->setPosition(ground->getPosition() - offset_xz);
+		ground->list = UNSET_OCTTREE(ground->list);
 
 		entities.push_back(wall_left);
 		entities.push_back(wall_right);
