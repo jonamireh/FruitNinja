@@ -118,6 +118,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)\Libs;</AdditionalLibraryDirectories>
       <AdditionalDependencies>freetype246.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;fmodex_vc.lib</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(SolutionDir)\Dlls\fmodex.dll" "$(OutputPath)"</Command>
@@ -382,6 +384,7 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PlatformEntity.h" />
     <ClInclude Include="PlatformMovementComponent.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RisingMovementComponent.h" />
     <ClInclude Include="ShadowBufferShader.h" />
     <ClInclude Include="SimpleTextureShader.h" />
@@ -417,6 +420,12 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="WallOfDoomEntity.h" />
     <ClInclude Include="World.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FruitNinja.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="favicon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
