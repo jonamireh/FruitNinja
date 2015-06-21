@@ -14,7 +14,7 @@ Cal Poly CPE 476 - Team Ninja
  - [Peter Godkin](https://github.com/petegodkin)
  - [Keenan Swafford](https://github.com/freakode)
 
-![Chewy's Epic Face](thumbnail.png)
+<p align="center"> <a href="thumbnail.png"><img src="thumbnail.png"></a></p>
 
 ## Game Concept
 
